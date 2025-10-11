@@ -1,0 +1,362 @@
+// lib/presentation/screens/home/widgets/walk_button_widget.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../services/tracking/step_tracking_service.dart';
+
+class WalkButtonWidget extends ConsumerWidget {
+  const WalkButtonWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final stepTrackingStateAsync = ref.watch(stepTrackingStateProvider);
+
+    return stepTrackingStateAsync.when(
+      data: (state) => _buildWalkButton(context, ref, theme, state),
+      loading: () => _buildLoadingButton(context, theme),
+      error: (error, stack) => _buildErrorButton(context, theme),
+    );
+  }
+
+  Widget _buildWalkButton(BuildContext context, WidgetRef ref, ThemeData theme, StepTrackingState state) {
+    final isWalking = state == StepTrackingState.walking;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isWalking
+              ? [
+                  Colors.red.shade400,
+                  Colors.red.shade600,
+                ]
+              : [
+                  theme.colorScheme.primary,
+                  theme.colorScheme.secondary,
+                ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.primary.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Icon(
+                  isWalking ? Icons.stop : Icons.directions_walk,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isWalking ? '산책 종료하기' : '산책 시작하기',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      isWalking
+                          ? '산책을 종료하고 보상을 받아보세요'
+                          : '펫과 함께 건강한 산책을 시작해보세요',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // 산책 버튼들
+          if (isWalking)
+            // 산책 종료 버튼
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _stopWalk(context, ref),
+                icon: const Icon(Icons.stop),
+                label: const Text('산책 종료'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.red.shade600,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            )
+          else
+            // 산책 시작 버튼들
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _startWalk(context, ref, false),
+                    icon: const Icon(Icons.home),
+                    label: const Text('실내 산책'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: theme.colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _startWalk(context, ref, true),
+                    icon: const Icon(Icons.location_on),
+                    label: const Text('실외 산책'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.2),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(
+                          color: Colors.white,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+          const SizedBox(height: 12),
+
+          // 팁 메시지
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  isWalking ? Icons.timer : Icons.lightbulb_outline,
+                  size: 16,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    isWalking
+                        ? '산책 중입니다! 걸음수가 실시간으로 기록되고 있어요.'
+                        : '실외 산책 시 보너스 간식을 더 많이 획득할 수 있어요!',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingButton(BuildContext context, ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '걸음수 센서 초기화 중...',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorButton(BuildContext context, ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.error_outline,
+            color: theme.colorScheme.error,
+            size: 48,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '걸음수 센서를 사용할 수 없습니다',
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.error,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '설정에서 활동 권한을 허용해주세요',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onErrorContainer,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _startWalk(BuildContext context, WidgetRef ref, bool isOutdoor) async {
+    final service = ref.read(stepTrackingServiceProvider);
+
+    try {
+      // 실외 산책일 때만 GPS 활성화
+      final success = await service.startWalkSession(enableGPS: isOutdoor);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isOutdoor
+                  ? '실외 산책을 시작합니다! 🌳\n위치 권한을 허용해주세요.'
+                  : '실내 산책을 시작합니다! 🏠',
+            ),
+            backgroundColor: Colors.green,
+            action: SnackBarAction(
+              label: '확인',
+              onPressed: () {},
+            ),
+          ),
+        );
+      } else {
+        _showErrorSnackBar(context, '산책을 시작할 수 없습니다. 권한을 확인해주세요.');
+      }
+    } catch (e) {
+      _showErrorSnackBar(context, '오류가 발생했습니다: $e');
+    }
+  }
+
+  Future<void> _stopWalk(BuildContext context, WidgetRef ref) async {
+    final service = ref.read(stepTrackingServiceProvider);
+
+    try {
+      // 산책 시작 전 펫 레벨 저장
+      final petBefore = await ref.read(stepTrackingServiceProvider).petUpdateStream.first;
+      final levelBefore = petBefore?.level ?? 1;
+
+      // 산책 종료
+      final walkSession = await service.stopWalkSession();
+      if (walkSession != null) {
+        // 산책 종료 후 펫 레벨 확인 (약간의 지연 후 최신 상태 가져오기)
+        await Future.delayed(const Duration(milliseconds: 300));
+        final petAfter = await ref.read(stepTrackingServiceProvider).petUpdateStream.first;
+        final levelAfter = petAfter?.level ?? 1;
+
+        // 레벨업 여부 확인
+        final levelsGained = levelAfter - levelBefore;
+        final didLevelUp = levelsGained > 0;
+
+        // 메시지 구성
+        String message = '산책 완료! ${walkSession.totalSteps}걸음 기록됨 🎉\n'
+            '간식 ${walkSession.treatsEarned}개, 행복도 +${walkSession.happinessGained}';
+
+        if (didLevelUp) {
+          message += '\n\n🎊 레벨 업! LV $levelBefore → LV $levelAfter';
+          if (levelsGained > 1) {
+            message += ' (+$levelsGained레벨)';
+          }
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: didLevelUp ? Colors.amber.shade700 : Colors.green,
+            duration: Duration(seconds: didLevelUp ? 6 : 4),
+            action: SnackBarAction(
+              label: '확인',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
+          ),
+        );
+      } else {
+        _showErrorSnackBar(context, '산책 종료 중 오류가 발생했습니다.');
+      }
+    } catch (e) {
+      _showErrorSnackBar(context, '오류가 발생했습니다: $e');
+    }
+  }
+
+  void _showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        action: SnackBarAction(
+          label: '확인',
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
