@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../../core/config/api_config.dart';
 import 'llm_service.dart';
 import 'fallback_responses.dart';
 
@@ -196,6 +197,3 @@ class ConversationService {
     _llmService.dispose();
   }
 }
-
-// ApiConfig import 추가 (debug logs용)
-import '../../core/config/api_config.dart';
