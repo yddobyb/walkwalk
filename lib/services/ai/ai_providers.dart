@@ -56,9 +56,10 @@ final llmServiceProvider = Provider<LLMService>((ref) {
 ///   error: (e, st) => Text('Error: $e'),
 /// );
 /// ```
-final llmInitializationProvider = FutureProvider<void>((ref) async {
+final llmInitializationProvider = FutureProvider<bool>((ref) async {
   final llmService = ref.watch(llmServiceProvider);
   await llmService.initialize();
+  return llmService.isInitialized;
 });
 
 // ==========================================================================

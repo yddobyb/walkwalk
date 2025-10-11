@@ -11,7 +11,7 @@ import 'package:flutter/foundation.dart';
 class ApiConfig {
   // OpenRouter API 기본 설정
   static const String openRouterBaseUrl = 'https://openrouter.ai/api/v1';
-  static const String model = 'deepseek/deepseek-r1';
+  static const String model = 'deepseek/deepseek-r1:free';
   static const int requestTimeout = 15; // 초
 
   // 레이트 리밋 (안전 마진 포함)
