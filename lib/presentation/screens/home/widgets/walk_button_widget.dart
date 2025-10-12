@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
+import 'pet_dialogue_widget.dart';
 
 class WalkButtonWidget extends ConsumerWidget {
   const WalkButtonWidget({super.key});
@@ -339,6 +340,143 @@ class WalkButtonWidget extends ConsumerWidget {
             ),
           ),
         );
+
+        // AI 대화 Bottom Sheet (walk_complete)
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (context.mounted) {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 드래그 핸들
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  // AI 대화
+                  PetDialogueWidget(
+                    context: 'walk_complete',
+                    contextData: {
+                      'steps': walkSession.totalSteps,
+                      'duration': walkSession.duration,
+                      'isOutdoor': walkSession.isOutdoor,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // 닫기 버튼
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text('닫기'),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          );
+
+          // 레벨업 발생 시 추가 AI 대화 Bottom Sheet (level_up)
+          if (didLevelUp) {
+            // walk_complete Bottom Sheet가 닫힐 때까지 대기
+            await Future.delayed(const Duration(milliseconds: 800));
+            if (context.mounted) {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.amber.shade100,
+                        Colors.amber.shade50,
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 드래그 핸들
+                      Container(
+                        width: 40,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade300,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      // 레벨업 축하 아이콘
+                      Icon(
+                        Icons.celebration,
+                        size: 64,
+                        color: Colors.amber.shade700,
+                      ),
+                      const SizedBox(height: 16),
+                      // AI 대화 (level_up)
+                      PetDialogueWidget(
+                        context: 'level_up',
+                        contextData: {
+                          'level': levelAfter,
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // 닫기 버튼
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.amber.shade700,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text('축하해요! 🎉'),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                ),
+              );
+            }
+          }
+        }
       } else {
         _showErrorSnackBar(context, '산책 종료 중 오류가 발생했습니다.');
       }

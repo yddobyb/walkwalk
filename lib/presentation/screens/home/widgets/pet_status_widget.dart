@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
+import 'pet_dialogue_widget.dart';
 
 class PetStatusWidget extends ConsumerWidget {
   const PetStatusWidget({super.key});
@@ -256,6 +257,64 @@ class PetStatusWidget extends ConsumerWidget {
         );
         // 펫 데이터 새로고침
         ref.invalidate(activePetProvider);
+
+        // AI 대화 Bottom Sheet (feed)
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (context.mounted) {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 드래그 핸들
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  // AI 대화 (feed)
+                  PetDialogueWidget(
+                    context: 'feed',
+                    contextData: {
+                      'amount': 1,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // 닫기 버튼
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text('닫기'),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
