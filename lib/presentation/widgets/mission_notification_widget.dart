@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/mission/mission_service.dart';
+import '../screens/home/widgets/pet_dialogue_widget.dart';
 
 /// 미션 완료 알림을 표시하는 위젯
 /// 홈 화면에 오버레이로 표시됨
@@ -215,10 +216,17 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
 
     _animationController.forward();
 
-    // 4초 후 자동으로 숨김
+    // 4초 후 자동으로 숨김 → 그 후 AI 대화 Bottom Sheet 표시
     Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         _hideNotification();
+
+        // 알림 애니메이션 완료 후 Bottom Sheet 표시
+        Future.delayed(const Duration(milliseconds: 700), () {
+          if (mounted) {
+            _showMissionCompleteDialog(notification);
+          }
+        });
       }
     });
   }
@@ -232,6 +240,64 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
         });
       }
     });
+  }
+
+  void _showMissionCompleteDialog(MissionCompletionNotification notification) {
+    final mission = notification.mission;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 드래그 핸들
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            // AI 대화 (mission_complete)
+            PetDialogueWidget(
+              context: 'mission_complete',
+              contextData: {
+                'missionTitle': mission.title,
+              },
+            ),
+            const SizedBox(height: 16),
+            // 닫기 버튼
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('닫기'),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
   }
 
   Color _getMissionTypeColor(String type) {

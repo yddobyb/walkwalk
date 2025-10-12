@@ -6,6 +6,8 @@ import '../settings/settings_screen.dart';
 import '../achievements/achievements_screen.dart';
 import '../walk/walk_screen.dart';
 import 'widgets/pet_avatar_widget.dart';
+import 'widgets/pet_dialogue_widget.dart';
+import 'widgets/conditional_low_happiness_dialogue.dart';
 import 'widgets/pet_status_widget.dart';
 import 'widgets/daily_stats_widget.dart';
 import 'widgets/walk_button_widget.dart';
@@ -102,11 +104,20 @@ class _HomeTabContent extends ConsumerWidget {
                 children: [
                   // 펫 아바타 영역
                   PetAvatarWidget(),
+                  SizedBox(height: 16),
+
+                  // AI 대화 영역 (인사)
+                  PetDialogueWidget(
+                    context: 'greeting',
+                  ),
                   SizedBox(height: 24),
 
                   // 펫 상태 영역
                   PetStatusWidget(),
                   SizedBox(height: 24),
+
+                  // AI 대화 영역 (행복도 낮음 - 조건부)
+                  ConditionalLowHappinessDialogue(),
 
                   // 오늘의 통계
                   DailyStatsWidget(),
