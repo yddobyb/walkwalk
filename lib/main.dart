@@ -3,15 +3,51 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
+import 'core/services/firebase_service.dart';
 import 'data/datasources/database_service.dart';
+import 'services/analytics/analytics_service.dart';
+import 'services/config/remote_config_service.dart';
 import 'services/tracking/step_tracking_service.dart';
 import 'services/pet/happiness_scheduler_service.dart';
 import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
+import 'services/ai/ai_providers.dart';
 import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Week 3: Firebase 초기화 (가장 먼저 실행)
+  debugPrint('════════════════════════════════════════');
+  debugPrint('  🔧 Starting Firebase initialization');
+  debugPrint('════════════════════════════════════════');
+
+  final firebaseInit = await FirebaseService.initialize();
+  if (!firebaseInit) {
+    debugPrint('❌ WARNING: Firebase initialization failed!');
+    debugPrint('   AI features may not work without Firebase Remote Config');
+  }
+
+  // Week 3: Firebase Remote Config 초기화
+  final remoteConfigInit = await RemoteConfigService.initialize();
+  if (!remoteConfigInit) {
+    debugPrint('❌ WARNING: Remote Config initialization failed!');
+    debugPrint('   Falling back to environment variables for API key');
+  }
+
+  // Week 3: Firebase Analytics 초기화
+  final analyticsInit = await AnalyticsService.initialize();
+  if (!analyticsInit) {
+    debugPrint('⚠️ WARNING: Analytics initialization failed!');
+    debugPrint('   App will continue without analytics tracking');
+  }
+
+  debugPrint('════════════════════════════════════════');
+  debugPrint('  Firebase Init Summary:');
+  debugPrint('    - Firebase Core: ${firebaseInit ? "✅" : "❌"}');
+  debugPrint('    - Remote Config: ${remoteConfigInit ? "✅" : "❌"}');
+  debugPrint('    - Analytics: ${analyticsInit ? "✅" : "❌"}');
+  debugPrint('════════════════════════════════════════');
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);
@@ -50,6 +86,9 @@ class WalkDogApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsAsync = ref.watch(settingsNotifierProvider);
+
+    // LLM 초기화 (백그라운드에서)
+    ref.watch(llmInitializationProvider);
 
     // 설정을 불러오는 동안 기본 테마로 표시
     final themeMode = settingsAsync.maybeWhen(
