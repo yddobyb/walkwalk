@@ -18,36 +18,36 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Week 3: Firebase 초기화 (가장 먼저 실행)
-  debugPrint('════════════════════════════════════════');
-  debugPrint('  🔧 Starting Firebase initialization');
-  debugPrint('════════════════════════════════════════');
+  print('════════════════════════════════════════');
+  print('  🔧 Starting Firebase initialization');
+  print('════════════════════════════════════════');
 
   final firebaseInit = await FirebaseService.initialize();
   if (!firebaseInit) {
-    debugPrint('❌ WARNING: Firebase initialization failed!');
-    debugPrint('   AI features may not work without Firebase Remote Config');
+    print('❌ WARNING: Firebase initialization failed!');
+    print('   AI features may not work without Firebase Remote Config');
   }
 
   // Week 3: Firebase Remote Config 초기화
   final remoteConfigInit = await RemoteConfigService.initialize();
   if (!remoteConfigInit) {
-    debugPrint('❌ WARNING: Remote Config initialization failed!');
-    debugPrint('   Falling back to environment variables for API key');
+    print('❌ WARNING: Remote Config initialization failed!');
+    print('   Falling back to environment variables for API key');
   }
 
   // Week 3: Firebase Analytics 초기화
   final analyticsInit = await AnalyticsService.initialize();
   if (!analyticsInit) {
-    debugPrint('⚠️ WARNING: Analytics initialization failed!');
-    debugPrint('   App will continue without analytics tracking');
+    print('⚠️ WARNING: Analytics initialization failed!');
+    print('   App will continue without analytics tracking');
   }
 
-  debugPrint('════════════════════════════════════════');
-  debugPrint('  Firebase Init Summary:');
-  debugPrint('    - Firebase Core: ${firebaseInit ? "✅" : "❌"}');
-  debugPrint('    - Remote Config: ${remoteConfigInit ? "✅" : "❌"}');
-  debugPrint('    - Analytics: ${analyticsInit ? "✅" : "❌"}');
-  debugPrint('════════════════════════════════════════');
+  print('════════════════════════════════════════');
+  print('  Firebase Init Summary:');
+  print('    - Firebase Core: ${firebaseInit ? "✅" : "❌"}');
+  print('    - Remote Config: ${remoteConfigInit ? "✅" : "❌"}');
+  print('    - Analytics: ${analyticsInit ? "✅" : "❌"}');
+  print('════════════════════════════════════════');
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);
