@@ -301,8 +301,11 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     final theme = Theme.of(context);
 
     // 걸음수 기반 미션인 경우 실시간 걸음수 가져오기
-    final dailyStepsAsync = mission.targetSteps > 0
-        ? ref.watch(dailyStepsProvider)
+    // 일일 미션: dailyStepsProvider, 주간 미션: weeklyStepsProvider
+    final stepsAsync = mission.targetSteps > 0
+        ? (mission.type == 'weekly'
+            ? ref.watch(weeklyStepsProvider)
+            : ref.watch(dailyStepsProvider))
         : null;
 
     return Container(
@@ -382,7 +385,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // 진행도 상세
-          _buildProgressSection(theme, dailyStepsAsync),
+          _buildProgressSection(theme, stepsAsync),
 
           const SizedBox(height: 24),
 
@@ -462,9 +465,9 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildProgressSection(ThemeData theme, AsyncValue<int>? dailyStepsAsync) {
+  Widget _buildProgressSection(ThemeData theme, AsyncValue<int>? stepsAsync) {
     // 실시간 진행도 계산
-    final currentProgress = _getCurrentProgress(dailyStepsAsync);
+    final currentProgress = _getCurrentProgress(stepsAsync);
     final progress = _calculateProgress(currentProgress);
     final isCompleted = mission.isCompleted;
 
@@ -677,10 +680,10 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
   }
 
   /// 현재 진행도 가져오기 (실시간 또는 DB 값)
-  int _getCurrentProgress(AsyncValue<int>? dailyStepsAsync) {
+  int _getCurrentProgress(AsyncValue<int>? stepsAsync) {
     // 걸음수 미션이고 실시간 데이터가 있으면 실시간 값 사용
-    if (mission.targetSteps > 0 && dailyStepsAsync != null) {
-      return dailyStepsAsync.when(
+    if (mission.targetSteps > 0 && stepsAsync != null) {
+      return stepsAsync.when(
         data: (steps) => steps,
         loading: () => mission.currentProgress, // 로딩 중에는 DB 값 사용
         error: (_, __) => mission.currentProgress, // 에러 시에는 DB 값 사용

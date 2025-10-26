@@ -10,10 +10,11 @@ import 'dart:math';
 /// - 컨텍스트 데이터 기반 동적 응답
 class FallbackResponses {
   final Random _random = Random();
+  final Set<String> _fallbackResponsesSet = {};
 
   /// 컨텍스트 기반 응답 가져오기
   ///
-  /// [context]: 대화 컨텍스트 (walk_complete, mission_complete, feed, level_up, low_happiness)
+  /// [context]: 대화 컨텍스트 (walk_complete, mission_complete, feed, level_up, low_happiness, greeting, greeting_static)
   /// [contextData]: 컨텍스트별 추가 데이터 (걸음수, 레벨 등)
   String getResponse(String context, Map<String, dynamic>? contextData) {
     switch (context) {
@@ -29,6 +30,8 @@ class FallbackResponses {
         return _getLowHappinessResponse();
       case 'greeting':
         return _getGreetingResponse();
+      case 'greeting_static':
+        return _getGreetingStaticResponse();
       default:
         return _getDefaultResponse();
     }
@@ -176,9 +179,23 @@ class FallbackResponses {
   }
 
   // ==========================================================================
-  // 6. 인사 응답
+  // 6. 인사 응답 (탭용 - 4가지 랜덤)
   // ==========================================================================
   String _getGreetingResponse() {
+    final responses = [
+      '멍멍! 반가워요!',
+      '오늘도 좋은 하루예요! 왈왈!',
+      '같이 산책 갈까요? 멍멍!',
+      '행복해요! 왈왈!',
+    ];
+
+    return responses[_random.nextInt(responses.length)];
+  }
+
+  // ==========================================================================
+  // 7. 정적 인사 응답 (홈 화면용 - 시간대별)
+  // ==========================================================================
+  String _getGreetingStaticResponse() {
     final hour = DateTime.now().hour;
 
     if (hour < 12) {
@@ -191,7 +208,7 @@ class FallbackResponses {
   }
 
   // ==========================================================================
-  // 7. 기본 응답 (알 수 없는 컨텍스트)
+  // 8. 기본 응답 (알 수 없는 컨텍스트)
   // ==========================================================================
   String _getDefaultResponse() {
     final responses = [
@@ -202,5 +219,37 @@ class FallbackResponses {
     ];
 
     return responses[_random.nextInt(responses.length)];
+  }
+
+  // ==========================================================================
+  // Analytics 지원 메서드
+  // ==========================================================================
+
+  /// 응답이 폴백에서 왔는지 확인
+  ///
+  /// Analytics를 위해 응답이 LLM이 아닌 폴백에서 왔는지 확인
+  ///
+  /// NOTE: 이 방법은 완벽하지 않지만, 폴백 응답은 대부분 "멍멍", "왈왈"을
+  /// 포함하므로 높은 정확도로 폴백 여부를 판단할 수 있습니다.
+  bool isFromFallback(String response) {
+    // 폴백 응답의 특징: "멍멍", "왈왈" 포함
+    // LLM 응답도 이를 포함할 수 있지만, 폴백 추적을 위해 사용
+    final containsDogSound = response.contains('멍멍') ||
+                              response.contains('왈왈') ||
+                              response.contains('멍멍!') ||
+                              response.contains('왈왈!');
+
+    // 짧은 응답 (< 50자)이면서 강아지 소리 포함 시 폴백으로 간주
+    if (containsDogSound && response.length < 50) {
+      return true;
+    }
+
+    // 저장된 폴백 응답 set에서 확인 (더 정확한 방법)
+    return _fallbackResponsesSet.contains(response);
+  }
+
+  /// 응답을 폴백 set에 추가 (생성 시 호출)
+  void _addToFallbackSet(String response) {
+    _fallbackResponsesSet.add(response);
   }
 }

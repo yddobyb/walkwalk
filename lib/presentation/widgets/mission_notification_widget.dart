@@ -275,7 +275,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
             PetDialogueWidget(
               context: 'mission_complete',
               contextData: {
-                'missionTitle': mission.title,
+                'title': mission.title, // fallback_responses.dart line 93과 일치
               },
             ),
             const SizedBox(height: 16),

@@ -1,6 +1,7 @@
 // lib/services/pet/pet_reward_service.dart
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/app_constants.dart';
@@ -187,29 +188,50 @@ class PetRewardService {
   }
 
   /// 일일 행복도 자연 감소 적용
+  /// 마지막 감소 적용일로부터 지난 일수만큼 누적 감소 적용
   Future<Pet?> applyDailyHappinessDecay(String petId) async {
     final pet = await _databaseService.getPetById(petId);
     if (pet == null) return null;
 
     final now = DateTime.now();
-    final lastUpdate = pet.lastUpdate;
+    final today = DateTime(now.year, now.month, now.day);
+    final lastDecayDate = pet.lastDecayDate;
 
-    // 마지막 업데이트가 오늘이 아닌 경우에만 감소 적용
-    if (lastUpdate.day != now.day ||
-        lastUpdate.month != now.month ||
-        lastUpdate.year != now.year) {
+    // 지난 일수 계산
+    int daysPassed = 0;
 
-      final updatedPet = pet.copyWith(
-        happiness: max(pet.happiness - AppConstants.happinessDecayPerDay, AppConstants.minHappiness),
-        stepsToday: 0, // 새로운 날이므로 오늘 걸음수 초기화
-        lastUpdate: now,
-      );
-
-      await _databaseService.savePet(updatedPet);
-      return updatedPet;
+    if (lastDecayDate == null) {
+      // 첫 감소 적용 (기존 데이터 호환)
+      // 생성일로부터 지난 일수 계산
+      final createdDay = DateTime(pet.createdAt.year, pet.createdAt.month, pet.createdAt.day);
+      daysPassed = today.difference(createdDay).inDays;
+    } else {
+      // lastDecayDate로부터 지난 일수 계산
+      final lastDecayDay = DateTime(lastDecayDate.year, lastDecayDate.month, lastDecayDate.day);
+      daysPassed = today.difference(lastDecayDay).inDays;
     }
 
-    return pet;
+    // 지난 일수가 0이면 이미 오늘 감소 적용됨
+    if (daysPassed <= 0) {
+      debugPrint('PetRewardService - No decay needed. Days passed: $daysPassed');
+      return pet;
+    }
+
+    // 누적 감소량 계산 (지난 일수 × 일일 감소량)
+    final totalDecay = daysPassed * AppConstants.happinessDecayPerDay;
+    final newHappiness = max(pet.happiness - totalDecay, AppConstants.minHappiness);
+
+    debugPrint('PetRewardService - Applying $daysPassed days of decay. Total decay: -$totalDecay (${pet.happiness} → $newHappiness)');
+
+    final updatedPet = pet.copyWith(
+      happiness: newHappiness,
+      stepsToday: 0, // 새로운 날이므로 오늘 걸음수 초기화
+      lastDecayDate: now, // 감소 적용 날짜 업데이트
+      lastUpdate: now,
+    );
+
+    await _databaseService.savePet(updatedPet);
+    return updatedPet;
   }
 
   /// 연속 산책 일수 업데이트

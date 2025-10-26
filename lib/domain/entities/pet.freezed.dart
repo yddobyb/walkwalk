@@ -32,6 +32,8 @@ mixin _$Pet {
   int get stepsToday => throw _privateConstructorUsedError;
   int get totalSteps => throw _privateConstructorUsedError;
   DateTime get lastUpdate => throw _privateConstructorUsedError;
+  DateTime? get lastDecayDate =>
+      throw _privateConstructorUsedError; // 마지막 행복도 감소 적용 날짜
   String? get stickerPath => throw _privateConstructorUsedError;
   String? get stickerUrl => throw _privateConstructorUsedError;
   DateTime? get stickerGeneratedAt => throw _privateConstructorUsedError;
@@ -65,6 +67,7 @@ abstract class $PetCopyWith<$Res> {
       int stepsToday,
       int totalSteps,
       DateTime lastUpdate,
+      DateTime? lastDecayDate,
       String? stickerPath,
       String? stickerUrl,
       DateTime? stickerGeneratedAt,
@@ -100,6 +103,7 @@ class _$PetCopyWithImpl<$Res, $Val extends Pet> implements $PetCopyWith<$Res> {
     Object? stepsToday = null,
     Object? totalSteps = null,
     Object? lastUpdate = null,
+    Object? lastDecayDate = freezed,
     Object? stickerPath = freezed,
     Object? stickerUrl = freezed,
     Object? stickerGeneratedAt = freezed,
@@ -159,6 +163,10 @@ class _$PetCopyWithImpl<$Res, $Val extends Pet> implements $PetCopyWith<$Res> {
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      lastDecayDate: freezed == lastDecayDate
+          ? _value.lastDecayDate
+          : lastDecayDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       stickerPath: freezed == stickerPath
           ? _value.stickerPath
           : stickerPath // ignore: cast_nullable_to_non_nullable
@@ -218,6 +226,7 @@ abstract class _$$PetImplCopyWith<$Res> implements $PetCopyWith<$Res> {
       int stepsToday,
       int totalSteps,
       DateTime lastUpdate,
+      DateTime? lastDecayDate,
       String? stickerPath,
       String? stickerUrl,
       DateTime? stickerGeneratedAt,
@@ -250,6 +259,7 @@ class __$$PetImplCopyWithImpl<$Res> extends _$PetCopyWithImpl<$Res, _$PetImpl>
     Object? stepsToday = null,
     Object? totalSteps = null,
     Object? lastUpdate = null,
+    Object? lastDecayDate = freezed,
     Object? stickerPath = freezed,
     Object? stickerUrl = freezed,
     Object? stickerGeneratedAt = freezed,
@@ -309,6 +319,10 @@ class __$$PetImplCopyWithImpl<$Res> extends _$PetCopyWithImpl<$Res, _$PetImpl>
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      lastDecayDate: freezed == lastDecayDate
+          ? _value.lastDecayDate
+          : lastDecayDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       stickerPath: freezed == stickerPath
           ? _value.stickerPath
           : stickerPath // ignore: cast_nullable_to_non_nullable
@@ -365,6 +379,7 @@ class _$PetImpl implements _Pet {
       required this.stepsToday,
       required this.totalSteps,
       required this.lastUpdate,
+      this.lastDecayDate,
       this.stickerPath,
       this.stickerUrl,
       this.stickerGeneratedAt,
@@ -403,6 +418,9 @@ class _$PetImpl implements _Pet {
   @override
   final DateTime lastUpdate;
   @override
+  final DateTime? lastDecayDate;
+// 마지막 행복도 감소 적용 날짜
+  @override
   final String? stickerPath;
   @override
   final String? stickerUrl;
@@ -423,7 +441,7 @@ class _$PetImpl implements _Pet {
 
   @override
   String toString() {
-    return 'Pet(petId: $petId, name: $name, breed: $breed, color: $color, accessory: $accessory, happiness: $happiness, treats: $treats, level: $level, experience: $experience, stepsToday: $stepsToday, totalSteps: $totalSteps, lastUpdate: $lastUpdate, stickerPath: $stickerPath, stickerUrl: $stickerUrl, stickerGeneratedAt: $stickerGeneratedAt, personality: $personality, isActive: $isActive, createdAt: $createdAt, consecutiveDays: $consecutiveDays, bestStreak: $bestStreak, avgDailySteps: $avgDailySteps)';
+    return 'Pet(petId: $petId, name: $name, breed: $breed, color: $color, accessory: $accessory, happiness: $happiness, treats: $treats, level: $level, experience: $experience, stepsToday: $stepsToday, totalSteps: $totalSteps, lastUpdate: $lastUpdate, lastDecayDate: $lastDecayDate, stickerPath: $stickerPath, stickerUrl: $stickerUrl, stickerGeneratedAt: $stickerGeneratedAt, personality: $personality, isActive: $isActive, createdAt: $createdAt, consecutiveDays: $consecutiveDays, bestStreak: $bestStreak, avgDailySteps: $avgDailySteps)';
   }
 
   @override
@@ -449,6 +467,8 @@ class _$PetImpl implements _Pet {
                 other.totalSteps == totalSteps) &&
             (identical(other.lastUpdate, lastUpdate) ||
                 other.lastUpdate == lastUpdate) &&
+            (identical(other.lastDecayDate, lastDecayDate) ||
+                other.lastDecayDate == lastDecayDate) &&
             (identical(other.stickerPath, stickerPath) ||
                 other.stickerPath == stickerPath) &&
             (identical(other.stickerUrl, stickerUrl) ||
@@ -485,6 +505,7 @@ class _$PetImpl implements _Pet {
         stepsToday,
         totalSteps,
         lastUpdate,
+        lastDecayDate,
         stickerPath,
         stickerUrl,
         stickerGeneratedAt,
@@ -524,6 +545,7 @@ abstract class _Pet implements Pet {
       required final int stepsToday,
       required final int totalSteps,
       required final DateTime lastUpdate,
+      final DateTime? lastDecayDate,
       final String? stickerPath,
       final String? stickerUrl,
       final DateTime? stickerGeneratedAt,
@@ -561,6 +583,8 @@ abstract class _Pet implements Pet {
   @override
   DateTime get lastUpdate;
   @override
+  DateTime? get lastDecayDate;
+  @override // 마지막 행복도 감소 적용 날짜
   String? get stickerPath;
   @override
   String? get stickerUrl;

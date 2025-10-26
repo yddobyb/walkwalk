@@ -79,7 +79,7 @@ class ConversationService {
 
   /// 간단한 인사 응답
   ///
-  /// 앱 시작 시 또는 펫 화면 진입 시 사용
+  /// 앱 시작 시 또는 펫 화면 진입 시 사용 (랜덤)
   Future<String> getGreeting({
     required String dogName,
     required String dogBreed,
@@ -90,6 +90,22 @@ class ConversationService {
       dogBreed: dogBreed,
       happinessLevel: happinessLevel,
       context: 'greeting',
+    );
+  }
+
+  /// 정적 인사 응답
+  ///
+  /// 홈 화면 접속 시 사용 (시간대별)
+  Future<String> getGreetingStatic({
+    required String dogName,
+    required String dogBreed,
+    required int happinessLevel,
+  }) async {
+    return await getResponse(
+      dogName: dogName,
+      dogBreed: dogBreed,
+      happinessLevel: happinessLevel,
+      context: 'greeting_static',
     );
   }
 

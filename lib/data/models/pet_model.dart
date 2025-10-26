@@ -25,6 +25,7 @@ class PetModel {
   late int stepsToday;
   late int totalSteps;
   late DateTime lastUpdate;
+  DateTime? lastDecayDate; // 마지막 행복도 감소 적용 날짜
 
   // 이미지 경로
   String? stickerPath; // 생성된 스티커 로컬 경로
@@ -59,6 +60,7 @@ class PetModel {
       stepsToday: stepsToday,
       totalSteps: totalSteps,
       lastUpdate: lastUpdate,
+      lastDecayDate: lastDecayDate,
       stickerPath: stickerPath,
       stickerUrl: stickerUrl,
       stickerGeneratedAt: stickerGeneratedAt,
@@ -86,6 +88,7 @@ class PetModel {
       ..stepsToday = pet.stepsToday
       ..totalSteps = pet.totalSteps
       ..lastUpdate = pet.lastUpdate
+      ..lastDecayDate = pet.lastDecayDate
       ..stickerPath = pet.stickerPath
       ..stickerUrl = pet.stickerUrl
       ..stickerGeneratedAt = pet.stickerGeneratedAt

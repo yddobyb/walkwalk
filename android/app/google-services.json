@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701057110809",
+    "project_id": "walkwalkddog",
+    "storage_bucket": "walkwalkddog.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701057110809:android:61d3ecd893ab595d9a2b88",
+        "android_client_info": {
+          "package_name": "com.walkdog.walk_dog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX-fH8S1VdIJ7GnrEC2KC0k7kjwUnc5CY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

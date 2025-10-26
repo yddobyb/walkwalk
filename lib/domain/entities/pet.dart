@@ -19,6 +19,7 @@ class Pet with _$Pet {
     required int stepsToday,
     required int totalSteps,
     required DateTime lastUpdate,
+    DateTime? lastDecayDate, // 마지막 행복도 감소 적용 날짜
     String? stickerPath,
     String? stickerUrl,
     DateTime? stickerGeneratedAt,

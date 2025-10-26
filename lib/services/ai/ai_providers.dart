@@ -2,19 +2,22 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../network/network_providers.dart';
 import 'fallback_responses.dart';
 import 'llm_service.dart';
 import 'conversation_service.dart';
 import 'dialogue_request.dart';
+import 'rate_limiter.dart';
 
 /// Week 3: AI 서비스 Riverpod Providers
 ///
 /// Provider 계층:
 /// 1. fallbackResponsesProvider - 기본 응답 시스템
-/// 2. llmServiceProvider - LLM API 호출
-/// 3. llmInitializationProvider - LLM 초기화 상태
-/// 4. conversationServiceProvider - 대화 통합 서비스
-/// 5. dialogueProvider - 대화 생성 (FutureProvider.family)
+/// 2. rateLimiterProvider - API 레이트 리밋 관리
+/// 3. llmServiceProvider - LLM API 호출
+/// 4. llmInitializationProvider - LLM 초기화 상태
+/// 5. conversationServiceProvider - 대화 통합 서비스
+/// 6. dialogueProvider - 대화 생성 (FutureProvider.family)
 
 // ==========================================================================
 // 1. FallbackResponses Provider
@@ -28,15 +31,33 @@ final fallbackResponsesProvider = Provider<FallbackResponses>((ref) {
 });
 
 // ==========================================================================
-// 2. LLMService Provider
+// 2. RateLimiter Provider
+// ==========================================================================
+
+/// API 레이트 리밋 관리 Provider
+///
+/// 일일 80회, 시간당 20회 제한
+final rateLimiterProvider = Provider<RateLimiter>((ref) {
+  return RateLimiter();
+});
+
+// ==========================================================================
+// 3. LLMService Provider
 // ==========================================================================
 
 /// LLM 서비스 Provider
 ///
-/// FallbackResponses를 의존성으로 주입
+/// FallbackResponses, RateLimiter, ConnectivityService를 의존성으로 주입
 final llmServiceProvider = Provider<LLMService>((ref) {
   final fallbackResponses = ref.watch(fallbackResponsesProvider);
-  return LLMService(fallbackResponses: fallbackResponses);
+  final rateLimiter = ref.watch(rateLimiterProvider);
+  final connectivityService = ref.watch(connectivityServiceProvider);
+
+  return LLMService(
+    fallbackResponses: fallbackResponses,
+    rateLimiter: rateLimiter,
+    connectivityService: connectivityService,
+  );
 });
 
 // ==========================================================================

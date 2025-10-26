@@ -108,7 +108,7 @@ class AchievementsWidget extends ConsumerWidget {
   Widget _buildAchievementBadge(BuildContext context, ThemeData theme, Achievement achievement) {
     return Container(
       width: 80,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: _getTierColor(achievement.tier).withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -122,14 +122,15 @@ class AchievementsWidget extends ConsumerWidget {
         children: [
           Text(
             _getAchievementEmoji(achievement.code),
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 22),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             achievement.title,
             style: theme.textTheme.bodySmall?.copyWith(
               color: _getTierColor(achievement.tier),
               fontWeight: FontWeight.bold,
+              fontSize: 10,
             ),
             textAlign: TextAlign.center,
             maxLines: 2,
