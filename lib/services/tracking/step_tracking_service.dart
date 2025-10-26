@@ -36,6 +36,9 @@ class StepTrackingService {
   final StreamController<int> _dailyStepsController =
       StreamController<int>.broadcast();
 
+  final StreamController<int> _weeklyStepsController =
+      StreamController<int>.broadcast();
+
   final StreamController<Pet?> _petUpdateController =
       StreamController<Pet?>.broadcast();
 
@@ -60,6 +63,16 @@ class StepTrackingService {
     yield* _dailyStepsController.stream;
   }
 
+  /// 주간 걸음수 스트림
+  /// 새로운 구독자는 즉시 현재 캐시된 값을 받고, 이후 업데이트를 스트림으로 받음
+  Stream<int> get weeklyStepsStream async* {
+    if (!_isInitialized) {
+      return;
+    }
+    yield _currentWeeklySteps;
+    yield* _weeklyStepsController.stream;
+  }
+
   /// 펫 업데이트 스트림
   /// 새로운 구독자는 즉시 현재 펫 정보를 받음
   Stream<Pet?> get petUpdateStream async* {
@@ -76,6 +89,7 @@ class StepTrackingService {
   DateTime? _sessionStartTime;
   Pet? _currentPet;
   int _currentDailySteps = 0;
+  int _currentWeeklySteps = 0;
   bool _isInitialized = false;
 
   // 미션 업데이트 throttling을 위한 변수들
@@ -87,6 +101,7 @@ class StepTrackingService {
   bool get isInitialized => _isInitialized;
   StepTrackingState get currentState => _currentState;
   int get currentDailySteps => _currentDailySteps;
+  int get currentWeeklySteps => _currentWeeklySteps;
 
   /// 서비스 초기화
   Future<bool> initialize() async {
@@ -143,6 +158,12 @@ class StepTrackingService {
     }
   }
 
+  /// 현재 펫 정보 강제 리로드 (외부에서 펫 데이터가 변경되었을 때 사용)
+  Future<void> reloadCurrentPet() async {
+    await _loadCurrentPet();
+    debugPrint('StepTrackingService - Pet data reloaded and stream updated');
+  }
+
   /// 오늘의 시작 걸음수 초기화
   Future<void> _initializeTodaySteps() async {
     try {
@@ -179,8 +200,13 @@ class StepTrackingService {
       final todaySteps = await _pedometerService.getTodaySteps();
       _currentDailySteps = todaySteps ?? 0;
 
+      // PedometerService에서 이번 주 걸음수 가져오기
+      final weeklySteps = await _pedometerService.getWeeklyStepsFromHealth();
+      _currentWeeklySteps = weeklySteps;
+
       _dailyStepsController.add(_currentDailySteps);
-      debugPrint('StepTrackingService - Initialized with actual steps from health: $_currentDailySteps');
+      _weeklyStepsController.add(_currentWeeklySteps);
+      debugPrint('StepTrackingService - Initialized with actual steps from health: daily=$_currentDailySteps, weekly=$_currentWeeklySteps');
     } catch (e) {
       debugPrint('StepTrackingService - Error initializing today steps: $e');
     }
@@ -201,7 +227,7 @@ class StepTrackingService {
 
 
   /// 걸음수 데이터 처리
-  void _handleStepCount(StepData stepData) {
+  void _handleStepCount(StepData stepData) async {
     // Health 패키지는 이미 오늘의 걸음수(자정부터 지금까지)를 반환하므로
     // 별도의 계산 없이 바로 사용
     final todaySteps = stepData.steps;
@@ -209,6 +235,12 @@ class StepTrackingService {
     // 일일 걸음수 업데이트
     _currentDailySteps = todaySteps;
     _dailyStepsController.add(_currentDailySteps);
+
+    // 주간 걸음수 업데이트 (일일 걸음수가 변경될 때마다)
+    final weeklySteps = await _pedometerService.getWeeklyStepsFromHealth();
+    _currentWeeklySteps = weeklySteps;
+    _weeklyStepsController.add(_currentWeeklySteps);
+    debugPrint('📊 StepTrackingService - Steps updated: daily=$_currentDailySteps, weekly=$_currentWeeklySteps');
 
     // 세션 중인 경우 세션 걸음수 계산
     if (_currentState == StepTrackingState.walking && _sessionStartSteps > 0) {
@@ -314,15 +346,41 @@ class StepTrackingService {
     }
 
     try {
+      // 최소 산책 시간 체크
+      final endTime = DateTime.now();
+      final duration = endTime.difference(_sessionStartTime!).inSeconds;
+
+      if (duration < AppConstants.minWalkDurationSeconds) {
+        debugPrint('StepTrackingService - Walk duration too short: ${duration}s (minimum: ${AppConstants.minWalkDurationSeconds}s)');
+        // 최소 시간 미달 시에도 산책 종료는 허용하되 경고 표시
+        // UI에서 SnackBar로 안내 메시지 표시 가능
+      }
+
+      // 첫 번째 쿼리: 즉시 걸음수 가져오기
       final currentStepCount = await _getCurrentStepCount();
       if (currentStepCount == null) {
         debugPrint('StepTrackingService - Could not get current step count');
         return null;
       }
 
-      final endTime = DateTime.now();
-      final sessionSteps = max(0, currentStepCount.steps - _sessionStartSteps);
-      final duration = endTime.difference(_sessionStartTime!).inSeconds;
+      int sessionSteps = max(0, currentStepCount.steps - _sessionStartSteps);
+
+      // Health Kit 동기화 대기 후 재쿼리 (짧은 산책 시 0걸음 방지)
+      // 3초 대기 (iOS Health Kit이 걸음수를 배치로 처리하므로)
+      debugPrint('StepTrackingService - Waiting 3 seconds for Health Kit sync...');
+      await Future.delayed(const Duration(seconds: 3));
+
+      // 두 번째 쿼리: Health Kit 동기화 후 최신 걸음수 가져오기
+      final updatedStepCount = await _getCurrentStepCount();
+      if (updatedStepCount != null) {
+        final updatedSessionSteps = max(0, updatedStepCount.steps - _sessionStartSteps);
+
+        // 재쿼리한 걸음수가 더 많으면 업데이트
+        if (updatedSessionSteps > sessionSteps) {
+          debugPrint('StepTrackingService - Step count updated after sync: $sessionSteps → $updatedSessionSteps');
+          sessionSteps = updatedSessionSteps;
+        }
+      }
 
       // GPS 위치 추적 중지 및 데이터 수집
       await _locationService.stopLocationTracking();
@@ -401,20 +459,40 @@ class StepTrackingService {
   }
 
   /// 현재 걸음수 가져오기 (단일 요청)
+  /// 즉시 Health Kit에서 최신 데이터를 가져옴 (캐시 사용 안 함)
   Future<StepData?> _getCurrentStepCount() async {
     try {
-      // PedometerService의 캐시된 값 먼저 확인
+      // Health Kit에서 즉시 최신 걸음수 가져오기
+      final steps = await _pedometerService.getTodaySteps();
+
+      if (steps != null) {
+        final stepData = StepData(
+          steps: steps,
+          timestamp: DateTime.now(),
+        );
+        debugPrint('StepTrackingService - Fetched fresh step data from Health Kit: $steps');
+        return stepData;
+      }
+
+      // Health Kit에서 데이터를 가져오지 못한 경우 캐시된 값 사용
       final cachedStepData = _pedometerService.lastStepData;
       if (cachedStepData != null) {
-        debugPrint('StepTrackingService - Using cached step data from PedometerService: ${cachedStepData.steps}');
+        debugPrint('StepTrackingService - Health Kit failed, using cached step data: ${cachedStepData.steps}');
         return cachedStepData;
       }
 
-      // 캐시된 값이 없으면 즉시 null 반환 (블로킹하지 않음)
-      debugPrint('StepTrackingService - No cached step data available, returning null');
+      debugPrint('StepTrackingService - No step data available');
       return null;
     } catch (e) {
       debugPrint('StepTrackingService - Error getting current step count: $e');
+
+      // 에러 발생 시 캐시된 값이라도 사용
+      final cachedStepData = _pedometerService.lastStepData;
+      if (cachedStepData != null) {
+        debugPrint('StepTrackingService - Error occurred, using cached step data: ${cachedStepData.steps}');
+        return cachedStepData;
+      }
+
       return null;
     }
   }
@@ -635,6 +713,13 @@ final stepTrackingStateProvider = StreamProvider<StepTrackingState>((ref) {
 final dailyStepsProvider = StreamProvider<int>((ref) {
   final service = ref.watch(stepTrackingServiceProvider);
   return service.dailyStepsStream;
+});
+
+/// 주간 걸음수 Provider
+/// 이번 주 월요일부터 오늘까지의 총 걸음수 계산 (HealthKit에서 실시간 조회)
+final weeklyStepsProvider = StreamProvider<int>((ref) {
+  final service = ref.watch(stepTrackingServiceProvider);
+  return service.weeklyStepsStream;
 });
 
 /// 펫 업데이트 Provider

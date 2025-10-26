@@ -255,8 +255,8 @@ class PetStatusWidget extends ConsumerWidget {
             backgroundColor: Colors.green,
           ),
         );
-        // 펫 데이터 새로고침
-        ref.invalidate(activePetProvider);
+        // 펫 데이터 새로고침 - StepTrackingService에서 펫 데이터 리로드
+        await ref.read(stepTrackingServiceProvider).reloadCurrentPet();
 
         // AI 대화 Bottom Sheet (feed)
         await Future.delayed(const Duration(milliseconds: 500));
@@ -291,7 +291,7 @@ class PetStatusWidget extends ConsumerWidget {
                   PetDialogueWidget(
                     context: 'feed',
                     contextData: {
-                      'amount': 1,
+                      'treatCount': 1, // fallback_responses.dart line 112와 일치
                     },
                   ),
                   const SizedBox(height: 16),

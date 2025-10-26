@@ -68,59 +68,64 @@ const PetModelSchema = CollectionSchema(
       name: r'isActive',
       type: IsarType.bool,
     ),
-    r'lastUpdate': PropertySchema(
+    r'lastDecayDate': PropertySchema(
       id: 10,
+      name: r'lastDecayDate',
+      type: IsarType.dateTime,
+    ),
+    r'lastUpdate': PropertySchema(
+      id: 11,
       name: r'lastUpdate',
       type: IsarType.dateTime,
     ),
     r'level': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'level',
       type: IsarType.long,
     ),
     r'name': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'name',
       type: IsarType.string,
     ),
     r'personality': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'personality',
       type: IsarType.string,
       enumMap: _PetModelpersonalityEnumValueMap,
     ),
     r'petId': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'petId',
       type: IsarType.string,
     ),
     r'stepsToday': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'stepsToday',
       type: IsarType.long,
     ),
     r'stickerGeneratedAt': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'stickerGeneratedAt',
       type: IsarType.dateTime,
     ),
     r'stickerPath': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'stickerPath',
       type: IsarType.string,
     ),
     r'stickerUrl': PropertySchema(
-      id: 18,
+      id: 19,
       name: r'stickerUrl',
       type: IsarType.string,
     ),
     r'totalSteps': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'totalSteps',
       type: IsarType.long,
     ),
     r'treats': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'treats',
       type: IsarType.long,
     )
@@ -196,17 +201,18 @@ void _petModelSerialize(
   writer.writeLong(offsets[7], object.experience);
   writer.writeLong(offsets[8], object.happiness);
   writer.writeBool(offsets[9], object.isActive);
-  writer.writeDateTime(offsets[10], object.lastUpdate);
-  writer.writeLong(offsets[11], object.level);
-  writer.writeString(offsets[12], object.name);
-  writer.writeString(offsets[13], object.personality.name);
-  writer.writeString(offsets[14], object.petId);
-  writer.writeLong(offsets[15], object.stepsToday);
-  writer.writeDateTime(offsets[16], object.stickerGeneratedAt);
-  writer.writeString(offsets[17], object.stickerPath);
-  writer.writeString(offsets[18], object.stickerUrl);
-  writer.writeLong(offsets[19], object.totalSteps);
-  writer.writeLong(offsets[20], object.treats);
+  writer.writeDateTime(offsets[10], object.lastDecayDate);
+  writer.writeDateTime(offsets[11], object.lastUpdate);
+  writer.writeLong(offsets[12], object.level);
+  writer.writeString(offsets[13], object.name);
+  writer.writeString(offsets[14], object.personality.name);
+  writer.writeString(offsets[15], object.petId);
+  writer.writeLong(offsets[16], object.stepsToday);
+  writer.writeDateTime(offsets[17], object.stickerGeneratedAt);
+  writer.writeString(offsets[18], object.stickerPath);
+  writer.writeString(offsets[19], object.stickerUrl);
+  writer.writeLong(offsets[20], object.totalSteps);
+  writer.writeLong(offsets[21], object.treats);
 }
 
 PetModel _petModelDeserialize(
@@ -229,19 +235,20 @@ PetModel _petModelDeserialize(
   object.happiness = reader.readLong(offsets[8]);
   object.id = id;
   object.isActive = reader.readBool(offsets[9]);
-  object.lastUpdate = reader.readDateTime(offsets[10]);
-  object.level = reader.readLong(offsets[11]);
-  object.name = reader.readString(offsets[12]);
+  object.lastDecayDate = reader.readDateTimeOrNull(offsets[10]);
+  object.lastUpdate = reader.readDateTime(offsets[11]);
+  object.level = reader.readLong(offsets[12]);
+  object.name = reader.readString(offsets[13]);
   object.personality =
-      _PetModelpersonalityValueEnumMap[reader.readStringOrNull(offsets[13])] ??
+      _PetModelpersonalityValueEnumMap[reader.readStringOrNull(offsets[14])] ??
           PetPersonality.cheerful;
-  object.petId = reader.readString(offsets[14]);
-  object.stepsToday = reader.readLong(offsets[15]);
-  object.stickerGeneratedAt = reader.readDateTimeOrNull(offsets[16]);
-  object.stickerPath = reader.readStringOrNull(offsets[17]);
-  object.stickerUrl = reader.readStringOrNull(offsets[18]);
-  object.totalSteps = reader.readLong(offsets[19]);
-  object.treats = reader.readLong(offsets[20]);
+  object.petId = reader.readString(offsets[15]);
+  object.stepsToday = reader.readLong(offsets[16]);
+  object.stickerGeneratedAt = reader.readDateTimeOrNull(offsets[17]);
+  object.stickerPath = reader.readStringOrNull(offsets[18]);
+  object.stickerUrl = reader.readStringOrNull(offsets[19]);
+  object.totalSteps = reader.readLong(offsets[20]);
+  object.treats = reader.readLong(offsets[21]);
   return object;
 }
 
@@ -274,28 +281,30 @@ P _petModelDeserializeProp<P>(
     case 9:
       return (reader.readBool(offset)) as P;
     case 10:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 11:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 13:
+      return (reader.readString(offset)) as P;
+    case 14:
       return (_PetModelpersonalityValueEnumMap[
               reader.readStringOrNull(offset)] ??
           PetPersonality.cheerful) as P;
-    case 14:
-      return (reader.readString(offset)) as P;
     case 15:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 16:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 17:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 18:
       return (reader.readStringOrNull(offset)) as P;
     case 19:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 20:
+      return (reader.readLong(offset)) as P;
+    case 21:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1301,6 +1310,78 @@ extension PetModelQueryFilter
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isActive',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition>
+      lastDecayDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastDecayDate',
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition>
+      lastDecayDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastDecayDate',
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition> lastDecayDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastDecayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition>
+      lastDecayDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastDecayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition> lastDecayDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastDecayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterFilterCondition> lastDecayDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastDecayDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -2461,6 +2542,18 @@ extension PetModelQuerySortBy on QueryBuilder<PetModel, PetModel, QSortBy> {
     });
   }
 
+  QueryBuilder<PetModel, PetModel, QAfterSortBy> sortByLastDecayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDecayDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterSortBy> sortByLastDecayDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDecayDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<PetModel, PetModel, QAfterSortBy> sortByLastUpdate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdate', Sort.asc);
@@ -2729,6 +2822,18 @@ extension PetModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<PetModel, PetModel, QAfterSortBy> thenByLastDecayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDecayDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PetModel, PetModel, QAfterSortBy> thenByLastDecayDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastDecayDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<PetModel, PetModel, QAfterSortBy> thenByLastUpdate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastUpdate', Sort.asc);
@@ -2928,6 +3033,12 @@ extension PetModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PetModel, PetModel, QDistinct> distinctByLastDecayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastDecayDate');
+    });
+  }
+
   QueryBuilder<PetModel, PetModel, QDistinct> distinctByLastUpdate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'lastUpdate');
@@ -3065,6 +3176,12 @@ extension PetModelQueryProperty
   QueryBuilder<PetModel, bool, QQueryOperations> isActiveProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isActive');
+    });
+  }
+
+  QueryBuilder<PetModel, DateTime?, QQueryOperations> lastDecayDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastDecayDate');
     });
   }
 

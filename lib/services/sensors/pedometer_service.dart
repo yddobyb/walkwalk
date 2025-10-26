@@ -153,13 +153,44 @@ class PedometerService {
     }
   }
 
+  /// 이번 주 총 걸음수 가져오기 (월요일부터 오늘까지, HealthKit 직접 조회)
+  Future<int> getWeeklyStepsFromHealth() async {
+    try {
+      debugPrint('🔍 PedometerService - Starting weekly steps calculation...');
+
+      final now = DateTime.now();
+      final weekday = now.weekday; // 1 = Monday, 7 = Sunday
+      final mondayDate = now.subtract(Duration(days: weekday - 1));
+      final monday = DateTime(mondayDate.year, mondayDate.month, mondayDate.day);
+
+      debugPrint('📅 Today: ${now.toString().split(' ')[0]}, Weekday: $weekday');
+      debugPrint('📅 Monday: ${monday.toString().split(' ')[0]}');
+
+      int totalWeeklySteps = 0;
+
+      // 월요일부터 오늘까지 각 날짜의 걸음수를 HealthKit에서 가져오기
+      for (int i = 0; i < weekday; i++) {
+        final currentDay = monday.add(Duration(days: i));
+        final daySteps = await getStepsForDate(currentDay);
+        totalWeeklySteps += daySteps ?? 0;
+        debugPrint('  Day ${i + 1}/7 (${currentDay.toString().split(' ')[0]}): ${daySteps ?? 0} steps');
+      }
+
+      debugPrint('✅ Weekly total: $totalWeeklySteps steps');
+      return totalWeeklySteps;
+    } catch (e) {
+      debugPrint('❌ PedometerService - Error getting weekly steps: $e');
+      return 0;
+    }
+  }
+
   /// 걸음수 폴링 시작 (정기적으로 걸음수 체크)
   Future<void> _startStepCountPolling() async {
     // 즉시 한 번 실행
     await _fetchAndEmitStepCount();
 
-    // 5초마다 업데이트
-    _stepCountTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    // 2초마다 업데이트 (실시간 반응성 개선)
+    _stepCountTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
       await _fetchAndEmitStepCount();
     });
   }

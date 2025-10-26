@@ -2,6 +2,8 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../../services/config/remote_config_service.dart';
+
 /// OpenRouter API 설정
 ///
 /// Week 3: 클라우드 AI 대화 시스템
@@ -24,29 +26,50 @@ class ApiConfig {
 
   /// Firebase Remote Config에서 API 키 가져오기
   ///
-  /// 현재는 하드코딩 (테스트용), 나중에 Firebase Remote Config로 대체
+  /// Week 3: Remote Config 우선, 환경 변수 폴백
   ///
-  /// TODO: Firebase Remote Config 연동
-  /// ```dart
-  /// final remoteConfig = FirebaseRemoteConfig.instance;
-  /// await remoteConfig.fetchAndActivate();
-  /// return remoteConfig.getString('openrouter_api_key');
-  /// ```
+  /// 우선순위:
+  /// 1. Firebase Remote Config (openrouter_api_key)
+  /// 2. 환경 변수 (--dart-define=OPENROUTER_API_KEY)
+  /// 3. 에러 발생
   static Future<String> getOpenRouterApiKey() async {
-    // ⚠️ 임시 하드코딩 - 테스트 후 Firebase Remote Config로 이동 필수!
-    // 실제 API 키는 절대 소스코드에 포함하지 말 것
-    const apiKey = String.fromEnvironment(
-      'OPENROUTER_API_KEY',
-      defaultValue: '', // 환경 변수가 없으면 빈 문자열
-    );
+    try {
+      // 1. Firebase Remote Config에서 가져오기 시도
+      if (RemoteConfigService.isInitialized) {
+        final remoteKey = RemoteConfigService.getOpenRouterApiKey();
+        if (remoteKey.isNotEmpty && isValidApiKey(remoteKey)) {
+          debugPrint('✅ ApiConfig - Using API key from Firebase Remote Config');
+          return remoteKey;
+        } else if (remoteKey.isNotEmpty) {
+          debugPrint('⚠️ ApiConfig - Invalid API key from Remote Config');
+        }
+      } else {
+        debugPrint('⚠️ ApiConfig - RemoteConfigService not initialized');
+      }
 
-    if (apiKey.isEmpty) {
-      debugPrint('⚠️ ApiConfig - OPENROUTER_API_KEY not set');
-      debugPrint('Set it via: flutter run --dart-define=OPENROUTER_API_KEY=your_key');
+      // 2. 환경 변수로 폴백
+      const envKey = String.fromEnvironment(
+        'OPENROUTER_API_KEY',
+        defaultValue: '',
+      );
+
+      if (envKey.isNotEmpty && isValidApiKey(envKey)) {
+        debugPrint('✅ ApiConfig - Using API key from environment variable');
+        return envKey;
+      } else if (envKey.isNotEmpty) {
+        debugPrint('⚠️ ApiConfig - Invalid API key from environment variable');
+      }
+
+      // 3. API 키가 설정되지 않았으면 에러
+      debugPrint('❌ ApiConfig - OPENROUTER_API_KEY not configured');
+      debugPrint('   Set it via:');
+      debugPrint('   - Firebase Remote Config (openrouter_api_key)');
+      debugPrint('   - Environment variable: flutter run --dart-define=OPENROUTER_API_KEY=your_key');
       throw Exception('OpenRouter API key not configured');
+    } catch (e) {
+      debugPrint('❌ ApiConfig - Failed to get API key: $e');
+      rethrow;
     }
-
-    return apiKey;
   }
 
   /// API 키 유효성 검증

@@ -106,9 +106,9 @@ class _HomeTabContent extends ConsumerWidget {
                   PetAvatarWidget(),
                   SizedBox(height: 16),
 
-                  // AI 대화 영역 (인사)
+                  // AI 대화 영역 (인사 - 정적 화면용)
                   PetDialogueWidget(
-                    context: 'greeting',
+                    context: 'greeting_static',
                   ),
                   SizedBox(height: 24),
 

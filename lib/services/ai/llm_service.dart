@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../../core/config/api_config.dart';
+import '../analytics/analytics_service.dart';
+import '../network/connectivity_service.dart';
 import 'fallback_responses.dart';
+import 'rate_limiter.dart';
 
 /// OpenRouter API 기반 LLM 서비스
 ///
@@ -14,13 +17,22 @@ import 'fallback_responses.dart';
 /// - HTTP POST 요청으로 OpenRouter API 호출
 /// - 15초 타임아웃
 /// - 자동 폴백 (에러 시 FallbackResponses 사용)
+/// - 레이트 리밋 관리 (일일 80회, 시간당 20회)
+/// - 네트워크 체크 (인터넷 연결 확인 후 API 호출)
 class LLMService {
   final FallbackResponses _fallbackResponses;
+  final RateLimiter _rateLimiter;
+  final ConnectivityService? _connectivityService;
   String? _apiKey;
   bool _isInitialized = false;
 
-  LLMService({required FallbackResponses fallbackResponses})
-      : _fallbackResponses = fallbackResponses;
+  LLMService({
+    required FallbackResponses fallbackResponses,
+    required RateLimiter rateLimiter,
+    ConnectivityService? connectivityService,
+  })  : _fallbackResponses = fallbackResponses,
+        _rateLimiter = rateLimiter,
+        _connectivityService = connectivityService;
 
   /// 서비스 초기화 (API 키 로드)
   ///
@@ -58,58 +70,85 @@ class LLMService {
   ///
   /// Returns: AI 응답 문자열
   ///
-  /// 에러 발생 시 자동으로 FallbackResponses 사용
+  /// Throws: Exception - API 키 없음, 네트워크 연결 실패, 레이트 리밋 초과, API 에러 등
   Future<String> generateResponse({
     required String systemPrompt,
     required String userMessage,
     int? maxTokens,
     double? temperature,
   }) async {
-    // API 키가 없으면 폴백
+    // API 키가 없으면 예외 발생
     if (!_isInitialized || _apiKey == null) {
-      debugPrint('⚠️ LLMService - Not initialized, using fallback');
-      return _fallbackResponses.getRandomResponse();
+      debugPrint('⚠️ LLMService - Not initialized');
+      throw Exception('LLM not initialized');
     }
 
-    try {
-      final response = await http
-          .post(
-            Uri.parse('${ApiConfig.openRouterBaseUrl}/chat/completions'),
-            headers: ApiConfig.getHeaders(_apiKey!),
-            body: jsonEncode({
-              'model': ApiConfig.model,
-              'messages': [
-                {'role': 'system', 'content': systemPrompt},
-                {'role': 'user', 'content': userMessage},
-              ],
-              'max_tokens': maxTokens ?? ApiConfig.maxTokens,
-              'temperature': temperature ?? ApiConfig.temperature,
-            }),
-          )
-          .timeout(
-            Duration(seconds: ApiConfig.requestTimeout),
-            onTimeout: () {
-              debugPrint('⏱️ LLMService - Request timeout');
-              throw Exception('Request timeout');
-            },
-          );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final content = data['choices'][0]['message']['content'] as String;
-
-        if (ApiConfig.enableDebugLogs) {
-          debugPrint('✅ LLMService - Generated: ${content.substring(0, content.length > 50 ? 50 : content.length)}...');
-        }
-
-        return content.trim();
-      } else {
-        debugPrint('❌ LLMService - API Error ${response.statusCode}: ${response.body}');
-        return _fallbackResponses.getRandomResponse();
+    // 네트워크 연결 체크
+    if (_connectivityService != null) {
+      final isConnected = await _connectivityService!.isConnected();
+      if (!isConnected) {
+        final connectionType = await _connectivityService!.getConnectionTypeString();
+        debugPrint('📡 LLMService - No internet connection ($connectionType)');
+        throw Exception('No internet connection');
       }
-    } catch (e) {
-      debugPrint('❌ LLMService - Exception: $e');
-      return _fallbackResponses.getRandomResponse();
+
+      // WiFi vs 모바일 데이터 로그
+      if (ApiConfig.enableDebugLogs) {
+        final isWifi = await _connectivityService!.isWifi();
+        debugPrint('📡 LLMService - Connected via ${isWifi ? "WiFi" : "Mobile Data"}');
+      }
+    }
+
+    // 레이트 리밋 체크
+    final canProceed = await _rateLimiter.canMakeRequest();
+    if (!canProceed) {
+      final dailyRemaining = await _rateLimiter.getRemainingDailyQuota();
+      final hourlyRemaining = await _rateLimiter.getRemainingHourlyQuota();
+      debugPrint('🚫 LLMService - Rate limit exceeded (daily: $dailyRemaining, hourly: $hourlyRemaining)');
+      throw Exception('Rate limit exceeded');
+    }
+
+    // 레이트 리밋 카운트 증가
+    await _rateLimiter.incrementDailyCount();
+    await _rateLimiter.incrementHourlyCount();
+
+    final response = await http
+        .post(
+          Uri.parse('${ApiConfig.openRouterBaseUrl}/chat/completions'),
+          headers: ApiConfig.getHeaders(_apiKey!),
+          body: jsonEncode({
+            'model': ApiConfig.model,
+            'messages': [
+              {'role': 'system', 'content': systemPrompt},
+              {'role': 'user', 'content': userMessage},
+            ],
+            'max_tokens': maxTokens ?? ApiConfig.maxTokens,
+            'temperature': temperature ?? ApiConfig.temperature,
+          }),
+        )
+        .timeout(
+          Duration(seconds: ApiConfig.requestTimeout),
+          onTimeout: () {
+            debugPrint('⏱️ LLMService - Request timeout');
+            throw Exception('Request timeout');
+          },
+        );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final content = data['choices'][0]['message']['content'] as String;
+
+      // DeepSeek R1 응답 필터링 (생각 과정 제거)
+      final cleanedContent = _filterDeepSeekThinking(content);
+
+      if (ApiConfig.enableDebugLogs) {
+        debugPrint('✅ LLMService - Generated: ${cleanedContent.substring(0, cleanedContent.length > 50 ? 50 : cleanedContent.length)}...');
+      }
+
+      return cleanedContent.trim();
+    } else {
+      debugPrint('❌ LLMService - API Error ${response.statusCode}: ${response.body}');
+      throw Exception('API Error: ${response.statusCode}');
     }
   }
 
@@ -129,24 +168,80 @@ class LLMService {
     required String context,
     Map<String, dynamic>? contextData,
   }) async {
-    // 시스템 프롬프트 생성
-    final systemPrompt = _buildSystemPrompt(
+    // Analytics: LLM 요청 시작 이벤트
+    await AnalyticsService.logLlmRequestStarted(
+      context: context,
       dogName: dogName,
       dogBreed: dogBreed,
       happinessLevel: happinessLevel,
     );
 
-    // 사용자 메시지 생성
-    final userMessage = _buildUserMessage(
-      context: context,
-      contextData: contextData,
-    );
+    final startTime = DateTime.now();
+    bool usedFallback = false;
+    String? errorType;
+    String? errorMessage;
 
-    // API 호출 (실패 시 자동 폴백)
-    return await generateResponse(
-      systemPrompt: systemPrompt,
-      userMessage: userMessage,
-    );
+    try {
+      // 시스템 프롬프트 생성
+      final systemPrompt = _buildSystemPrompt(
+        dogName: dogName,
+        dogBreed: dogBreed,
+        happinessLevel: happinessLevel,
+      );
+
+      // 사용자 메시지 생성
+      final userMessage = _buildUserMessage(
+        context: context,
+        contextData: contextData,
+      );
+
+      // API 호출 (실패 시 자동 폴백)
+      final response = await generateResponse(
+        systemPrompt: systemPrompt,
+        userMessage: userMessage,
+      );
+
+      // 폴백 사용 여부 확인 (FallbackResponses에서 온 응답인지)
+      usedFallback = _fallbackResponses.isFromFallback(response);
+
+      // Analytics: LLM 요청 완료 이벤트
+      final responseTimeMs = DateTime.now().difference(startTime).inMilliseconds;
+      await AnalyticsService.logLlmRequestCompleted(
+        context: context,
+        responseTimeMs: responseTimeMs,
+        usedFallback: usedFallback,
+        responseLength: response.length,
+      );
+
+      if (usedFallback) {
+        await AnalyticsService.logFallbackUsed(
+          context: context,
+          reason: 'llm_unavailable',
+        );
+      }
+
+      return response;
+    } catch (e) {
+      usedFallback = true;
+      errorType = 'exception';
+      errorMessage = e.toString();
+
+      // Analytics: LLM 요청 실패 이벤트
+      await AnalyticsService.logLlmRequestFailed(
+        context: context,
+        errorType: errorType,
+        errorMessage: errorMessage,
+        usedFallback: true,
+      );
+
+      await AnalyticsService.logFallbackUsed(
+        context: context,
+        reason: errorType,
+      );
+
+      // 폴백 응답 반환 (컨텍스트 유지)
+      return _fallbackResponses.getResponse(context, contextData);
+    }
   }
 
   /// 시스템 프롬프트 생성
@@ -211,6 +306,16 @@ class LLMService {
           return '좋은 저녁이에요! 오늘 하루 어땠어요?';
         }
 
+      case 'greeting_static':
+        final hour = DateTime.now().hour;
+        if (hour < 12) {
+          return '좋은 아침이에요! 오늘도 산책 갈까요?';
+        } else if (hour < 18) {
+          return '좋은 오후예요! 신나는 하루 보내요!';
+        } else {
+          return '좋은 저녁이에요! 오늘 하루 어땠어요?';
+        }
+
       default:
         return '안녕! 무슨 일이에요?';
     }
@@ -229,6 +334,57 @@ class LLMService {
     } else {
       return '매우 슬픔 (외로움)';
     }
+  }
+
+  /// DeepSeek R1 응답 필터링
+  ///
+  /// DeepSeek R1은 reasoning model로, 때때로 응답에 생각 과정을 포함합니다.
+  /// 이 메서드는 다음과 같은 패턴을 제거합니다:
+  /// - "**생각 과정:**" 섹션
+  /// - "1. **...**" 형태의 사고 단계
+  /// - `<think>...</think>` XML 태그
+  /// - `<answer>...</answer>` XML 태그 (내용만 추출)
+  ///
+  /// [content]: 원본 API 응답
+  /// Returns: 필터링된 응답 (강아지 대화만)
+  String _filterDeepSeekThinking(String content) {
+    String filtered = content;
+
+    // 1. <think>...</think> 태그 제거 (XML 형식)
+    filtered = filtered.replaceAll(RegExp(r'<think>.*?</think>', dotAll: true), '');
+
+    // 2. <answer>...</answer> 태그에서 내용만 추출
+    final answerMatch = RegExp(r'<answer>(.*?)</answer>', dotAll: true).firstMatch(filtered);
+    if (answerMatch != null) {
+      filtered = answerMatch.group(1) ?? filtered;
+    }
+
+    // 3. "**생각 과정:**" 섹션 전체 제거
+    filtered = filtered.replaceAll(RegExp(r'\*\*생각 과정:?\*\*.*?(?=\n\n|\*\*|$)', dotAll: true), '');
+
+    // 4. 번호 매겨진 사고 단계 제거 (예: "1. **강아지 말투 준수**...")
+    filtered = filtered.replaceAll(RegExp(r'^\d+\.\s*\*\*.*?\*\*.*?$', multiLine: true), '');
+
+    // 5. 남은 ** 볼드 마커 제거 (사고 과정 잔여물)
+    filtered = filtered.replaceAll(RegExp(r'\*\*[^*]*\*\*:?'), '');
+
+    // 6. 빈 줄 정리 (연속된 줄바꿈 제거)
+    filtered = filtered.replaceAll(RegExp(r'\n\s*\n+'), '\n').trim();
+
+    // 7. 필터링 후 내용이 없으면 원본 반환
+    if (filtered.isEmpty || filtered.length < 5) {
+      debugPrint('⚠️ LLMService - Filtering removed all content, using original');
+      return content.trim();
+    }
+
+    // 8. 디버그: 필터링 전후 비교
+    if (ApiConfig.enableDebugLogs && content != filtered) {
+      debugPrint('🔧 LLMService - Filtered thinking process:');
+      debugPrint('   Before: ${content.substring(0, content.length > 100 ? 100 : content.length)}...');
+      debugPrint('   After: ${filtered.substring(0, filtered.length > 100 ? 100 : filtered.length)}...');
+    }
+
+    return filtered;
   }
 
   /// 서비스 정리

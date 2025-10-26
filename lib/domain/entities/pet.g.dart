@@ -19,6 +19,9 @@ _$PetImpl _$$PetImplFromJson(Map<String, dynamic> json) => _$PetImpl(
       stepsToday: (json['stepsToday'] as num).toInt(),
       totalSteps: (json['totalSteps'] as num).toInt(),
       lastUpdate: DateTime.parse(json['lastUpdate'] as String),
+      lastDecayDate: json['lastDecayDate'] == null
+          ? null
+          : DateTime.parse(json['lastDecayDate'] as String),
       stickerPath: json['stickerPath'] as String?,
       stickerUrl: json['stickerUrl'] as String?,
       stickerGeneratedAt: json['stickerGeneratedAt'] == null
@@ -45,6 +48,7 @@ Map<String, dynamic> _$$PetImplToJson(_$PetImpl instance) => <String, dynamic>{
       'stepsToday': instance.stepsToday,
       'totalSteps': instance.totalSteps,
       'lastUpdate': instance.lastUpdate.toIso8601String(),
+      'lastDecayDate': instance.lastDecayDate?.toIso8601String(),
       'stickerPath': instance.stickerPath,
       'stickerUrl': instance.stickerUrl,
       'stickerGeneratedAt': instance.stickerGeneratedAt?.toIso8601String(),

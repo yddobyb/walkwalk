@@ -62,6 +62,14 @@ dependencies:
   # HTTP Client (Week 3 - AI Integration)
   http: ^1.1.0
 
+  # Firebase (Week 3 - Remote Config & Analytics)
+  firebase_core: ^3.8.1
+  firebase_remote_config: ^5.1.8
+  firebase_analytics: ^11.3.8
+
+  # Network (Week 3 - Optimization)
+  connectivity_plus: ^6.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

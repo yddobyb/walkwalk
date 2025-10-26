@@ -12,6 +12,7 @@ class AppConstants {
   static const int maxHappiness = 100;
   static const int minHappiness = 0;
   static const int stepsPerHappiness = 100;
+  static const int minWalkDurationSeconds = 10; // 최소 산책 시간 (초)
 
   // 보상 시스템
   static const int stepsPerTreat = 300; // 300걸음 = 1간식

@@ -80,6 +80,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
         stepsToday: 0,
         totalSteps: 0,
         lastUpdate: now,
+        lastDecayDate: now, // 생성일에는 감소하지 않음
         personality: _selectedPersonality,
         isActive: true,
         createdAt: now,

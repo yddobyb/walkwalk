@@ -301,11 +301,35 @@ class WalkButtonWidget extends ConsumerWidget {
     final service = ref.read(stepTrackingServiceProvider);
 
     try {
+      // 산책 종료 안내 메시지 (걸음수 동기화 대기 중)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text('산책을 종료하는 중입니다...\n걸음수가 반영될 때까지 잠시만 기다려주세요'),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.blue.shade700,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+
       // 산책 시작 전 펫 레벨 저장
       final petBefore = await ref.read(stepTrackingServiceProvider).petUpdateStream.first;
       final levelBefore = petBefore?.level ?? 1;
 
-      // 산책 종료
+      // 산책 종료 (3초 동기화 대기 포함)
       final walkSession = await service.stopWalkSession();
       if (walkSession != null) {
         // 산책 종료 후 펫 레벨 확인 (약간의 지연 후 최신 상태 가져오기)

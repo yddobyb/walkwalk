@@ -73,7 +73,13 @@ class MissionService {
       // 미션 타입에 따른 진행도 계산
       if (mission.targetSteps > 0) {
         // 걸음수 미션
-        newProgress = totalSteps;
+        if (mission.type == 'weekly') {
+          // 주간 미션: 이번 주 전체 걸음수로 업데이트
+          newProgress = await _getWeeklyTotalSteps();
+        } else {
+          // 일일 미션: 오늘 걸음수로 업데이트
+          newProgress = totalSteps;
+        }
         shouldUpdate = true;
       } else if (mission.targetDuration > 0) {
         // 시간 미션 (누적)
@@ -411,6 +417,27 @@ class MissionService {
       debugPrint('MissionService - Error updating missions for new goal: $e');
       rethrow;
     }
+  }
+
+  /// 이번 주 총 걸음수 계산 (월요일부터 오늘까지)
+  Future<int> _getWeeklyTotalSteps() async {
+    final now = DateTime.now();
+    final weekday = now.weekday; // 1 = Monday, 7 = Sunday
+    final mondayDate = now.subtract(Duration(days: weekday - 1));
+    final monday = DateTime(mondayDate.year, mondayDate.month, mondayDate.day);
+
+    int totalWeeklySteps = 0;
+
+    // 월요일부터 오늘까지의 모든 Walk Session 가져오기
+    for (int i = 0; i < weekday; i++) {
+      final currentDay = monday.add(Duration(days: i));
+      final sessions = await _databaseService.getWalkSessionsByDate(currentDay);
+      final daySteps = sessions.fold<int>(0, (sum, session) => sum + session.totalSteps);
+      totalWeeklySteps += daySteps;
+    }
+
+    debugPrint('MissionService - Weekly total steps calculated: $totalWeeklySteps');
+    return totalWeeklySteps;
   }
 
   /// 서비스 해제
