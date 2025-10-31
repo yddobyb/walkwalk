@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -17,37 +18,44 @@ import 'presentation/screens/splash/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 🔥 TEST: 코드 배포 확인용 로그 (가장 먼저!) - developer.log는 release 모드에서도 작동!
+  developer.log('');
+  developer.log('╔═══════════════════════════════════════════════════╗');
+  developer.log('║  🚀 MAIN.DART STARTED - VERSION 2025-10-30       ║');
+  developer.log('╚═══════════════════════════════════════════════════╝');
+  developer.log('');
+
   // Week 3: Firebase 초기화 (가장 먼저 실행)
-  print('════════════════════════════════════════');
-  print('  🔧 Starting Firebase initialization');
-  print('════════════════════════════════════════');
+  developer.log('════════════════════════════════════════');
+  developer.log('  🔧 Starting Firebase initialization');
+  developer.log('════════════════════════════════════════');
 
   final firebaseInit = await FirebaseService.initialize();
   if (!firebaseInit) {
-    print('❌ WARNING: Firebase initialization failed!');
-    print('   AI features may not work without Firebase Remote Config');
+    debugPrint('❌ WARNING: Firebase initialization failed!');
+    debugPrint('   AI features may not work without Firebase Remote Config');
   }
 
   // Week 3: Firebase Remote Config 초기화
   final remoteConfigInit = await RemoteConfigService.initialize();
   if (!remoteConfigInit) {
-    print('❌ WARNING: Remote Config initialization failed!');
-    print('   Falling back to environment variables for API key');
+    debugPrint('❌ WARNING: Remote Config initialization failed!');
+    debugPrint('   Falling back to environment variables for API key');
   }
 
   // Week 3: Firebase Analytics 초기화
   final analyticsInit = await AnalyticsService.initialize();
   if (!analyticsInit) {
-    print('⚠️ WARNING: Analytics initialization failed!');
-    print('   App will continue without analytics tracking');
+    debugPrint('⚠️ WARNING: Analytics initialization failed!');
+    debugPrint('   App will continue without analytics tracking');
   }
 
-  print('════════════════════════════════════════');
-  print('  Firebase Init Summary:');
-  print('    - Firebase Core: ${firebaseInit ? "✅" : "❌"}');
-  print('    - Remote Config: ${remoteConfigInit ? "✅" : "❌"}');
-  print('    - Analytics: ${analyticsInit ? "✅" : "❌"}');
-  print('════════════════════════════════════════');
+  debugPrint('════════════════════════════════════════');
+  debugPrint('  Firebase Init Summary:');
+  debugPrint('    - Firebase Core: ${firebaseInit ? "✅" : "❌"}');
+  debugPrint('    - Remote Config: ${remoteConfigInit ? "✅" : "❌"}');
+  debugPrint('    - Analytics: ${analyticsInit ? "✅" : "❌"}');
+  debugPrint('════════════════════════════════════════');
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);
@@ -55,21 +63,28 @@ void main() async {
   // 데이터베이스 초기화
   await DatabaseService.instance;
 
-  // 걸음수 트래킹 서비스 초기화 (UI 로드 전에 완료)
-  await StepTrackingService().initialize().catchError((error) {
-    debugPrint('Step tracking service initialization failed: $error');
-    return false; // Return a default value for bool
+  // 🔥 행복도 스케줄러 초기화를 먼저! (StepTrackingService가 블로킹할 수 있음)
+  developer.log('════════════════════════════════════════');
+  developer.log('  🔧 Starting HappinessScheduler initialization');
+  developer.log('════════════════════════════════════════');
+  await HappinessSchedulerService.instance.initialize().catchError((error) {
+    developer.log('❌ Happiness scheduler initialization failed: $error');
+    // 실패해도 앱 실행은 계속 진행 (일일 감소만 동작하지 않음)
+    return null;
   });
+  developer.log('════════════════════════════════════════');
+  developer.log('  ✅ HappinessScheduler initialization completed');
+  developer.log('════════════════════════════════════════');
 
-  // 행복도 스케줄러 초기화 (백그라운드에서)
-  HappinessSchedulerService.instance.initialize().catchError((error) {
-    debugPrint('Happiness scheduler initialization failed: $error');
-    return null; // Return void
+  // 걸음수 트래킹 서비스 초기화 (스케줄러 이후에 실행)
+  await StepTrackingService().initialize().catchError((error) {
+    debugPrint('❌ Step tracking service initialization failed: $error');
+    return false; // Return a default value for bool
   });
 
   // 미션 서비스 초기화 (백그라운드에서)
   MissionService.instance.initialize().catchError((error) {
-    debugPrint('Mission service initialization failed: $error');
+    debugPrint('❌ Mission service initialization failed: $error');
     return null; // Return void
   });
 

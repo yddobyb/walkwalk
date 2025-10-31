@@ -250,8 +250,9 @@ class DatabaseService {
       await isar.writeTxn(() async {
         await isar.petModels.put(petModel);
       });
+      print('✅ DatabaseService - Pet saved successfully: ${pet.name} (happiness: ${pet.happiness})');
     } catch (e) {
-      debugPrint('Failed to save pet: $e');
+      print('❌ DatabaseService - Failed to save pet: $e');
       rethrow;
     }
   }

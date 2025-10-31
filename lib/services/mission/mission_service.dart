@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/constants/app_constants.dart';
 import '../../domain/entities/mission.dart';
 import '../../data/datasources/database_service.dart';
+import '../../data/models/mission_model.dart';
 import '../pet/pet_reward_service.dart';
 import '../achievement/achievement_service.dart';
 
@@ -313,7 +314,7 @@ class MissionService {
         'happinessReward': 18,
       },
       {
-        'title': '아침 산책',
+        'title': '조기 달성',
         'description': '3000걸음 조기 달성',
         'targetSteps': 3000,
         'targetDuration': 0,
@@ -478,22 +479,35 @@ final activeMissionsStreamProvider = StreamProvider<List<Mission>>((ref) {
   return databaseService.watchActiveMissions();
 });
 
-/// 일일 미션 Provider
-final dailyMissionsProvider = FutureProvider<List<Mission>>((ref) async {
-  final missionService = ref.read(missionServiceProvider);
-  return await missionService.getMissionsByType('daily');
+/// 일일 미션 Provider (Stream - 실시간 DB 감시)
+final dailyMissionsProvider = StreamProvider<List<Mission>>((ref) async* {
+  final databaseService = DatabaseService();
+  await for (final missions in databaseService.watchActiveMissions()) {
+    // 일일 미션만 필터링
+    yield missions.where((m) => m.type == 'daily').toList();
+  }
 });
 
-/// 주간 미션 Provider
-final weeklyMissionsProvider = FutureProvider<List<Mission>>((ref) async {
-  final missionService = ref.read(missionServiceProvider);
-  return await missionService.getMissionsByType('weekly');
+/// 주간 미션 Provider (Stream - 실시간 DB 감시)
+final weeklyMissionsProvider = StreamProvider<List<Mission>>((ref) async* {
+  final databaseService = DatabaseService();
+  await for (final missions in databaseService.watchActiveMissions()) {
+    // 주간 미션만 필터링
+    yield missions.where((m) => m.type == 'weekly').toList();
+  }
 });
 
-/// 완료된 미션 Provider
-final completedMissionsProvider = FutureProvider<List<Mission>>((ref) async {
-  final missionService = ref.read(missionServiceProvider);
-  return await missionService.getCompletedMissions();
+/// 완료된 미션 Provider (Stream - 실시간 DB 감시)
+final completedMissionsProvider = StreamProvider<List<Mission>>((ref) async* {
+  final databaseService = DatabaseService();
+  final isar = await DatabaseService.instance;
+
+  // Isar의 watch 기능을 사용하여 실시간 업데이트
+  await for (final _ in isar.missionModels.watchLazy()) {
+    // 완료된 미션을 DB에서 조회
+    final missions = await databaseService.getCompletedMissions();
+    yield missions;
+  }
 });
 
 /// 미션 완료 알림 Provider (Stream)
