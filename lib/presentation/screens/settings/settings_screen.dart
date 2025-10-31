@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
+import '../../../test_happiness_decay.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -196,6 +197,29 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   _showCacheDialog(context);
+                },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // 개발자 도구 (테스트용)
+          _SettingsSection(
+            title: '개발자 도구',
+            children: [
+              _SettingsTile(
+                icon: Icons.bug_report,
+                title: '행복도 감소 테스트',
+                subtitle: 'DB 저장/로드 검증',
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HappinessDecayTestScreen(),
+                    ),
+                  );
                 },
               ),
             ],

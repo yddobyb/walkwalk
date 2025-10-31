@@ -96,10 +96,13 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
       if (!mounted) return;
 
-      // 홈 화면으로 이동
+      // 🐛 DEBUG: 펫 생성 완료, HomeScreen으로 전달할 Pet 정보
+      debugPrint('🐛 PetCreationScreen - Created Pet: ${pet.name}, happiness: ${pet.happiness}, treats: ${pet.treats}');
+
+      // 홈 화면으로 이동 (생성된 Pet 객체 전달)
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => HomeScreen(initialPet: pet),
         ),
         (route) => false,
       );

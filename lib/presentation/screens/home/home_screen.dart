@@ -1,9 +1,9 @@
 // lib/presentation/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../domain/entities/pet.dart';
 import '../customize/customize_screen.dart';
 import '../settings/settings_screen.dart';
-import '../achievements/achievements_screen.dart';
 import '../walk/walk_screen.dart';
 import 'widgets/pet_avatar_widget.dart';
 import 'widgets/pet_dialogue_widget.dart';
@@ -20,7 +20,11 @@ import '../../widgets/achievement_notification_widget.dart';
 import '../../widgets/mission_notification_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  /// Optional: 펫 생성 직후 전달받은 Pet 객체
+  /// 이 값이 있으면 StepTrackingService 로딩을 기다리지 않고 즉시 표시
+  final Pet? initialPet;
+
+  const HomeScreen({super.key, this.initialPet});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -29,17 +33,25 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const _HomeTabContent(),
-    const WalkScreen(),
-    const CustomizeScreen(),
-    const SettingsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // 🐛 DEBUG: HomeScreen build - initialPet 전달 상태
+    if (widget.initialPet != null) {
+      debugPrint('🐛 HomeScreen - Received initialPet: ${widget.initialPet!.name}, happiness: ${widget.initialPet!.happiness}, treats: ${widget.initialPet!.treats}');
+    } else {
+      debugPrint('🐛 HomeScreen - No initialPet received');
+    }
+
+    // initialPet을 사용하기 위해 _screens를 build 메서드 안으로 이동
+    final List<Widget> screens = [
+      _HomeTabContent(initialPet: widget.initialPet),
+      const WalkScreen(),
+      const CustomizeScreen(),
+      const SettingsScreen(),
+    ];
+
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -72,7 +84,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _HomeTabContent extends ConsumerWidget {
-  const _HomeTabContent();
+  /// Optional: 펫 생성 직후 전달받은 Pet 객체
+  final Pet? initialPet;
+
+  const _HomeTabContent({this.initialPet});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,54 +112,54 @@ class _HomeTabContent extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            const SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 펫 아바타 영역
-                  PetAvatarWidget(),
-                  SizedBox(height: 16),
+                  const PetAvatarWidget(),
+                  const SizedBox(height: 16),
 
                   // AI 대화 영역 (인사 - 정적 화면용)
-                  PetDialogueWidget(
+                  const PetDialogueWidget(
                     context: 'greeting_static',
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // 펫 상태 영역
-                  PetStatusWidget(),
-                  SizedBox(height: 24),
+                  PetStatusWidget(initialPet: initialPet),
+                  const SizedBox(height: 24),
 
                   // AI 대화 영역 (행복도 낮음 - 조건부)
-                  ConditionalLowHappinessDialogue(),
+                  const ConditionalLowHappinessDialogue(),
 
                   // 오늘의 통계
-                  DailyStatsWidget(),
-                  SizedBox(height: 24),
+                  const DailyStatsWidget(),
+                  const SizedBox(height: 24),
 
                   // 산책 시작 버튼
-                  WalkButtonWidget(),
-                  SizedBox(height: 24),
+                  const WalkButtonWidget(),
+                  const SizedBox(height: 24),
 
                   // 오늘의 미션
-                  MissionSummaryWidget(),
-                  SizedBox(height: 24),
+                  const MissionSummaryWidget(),
+                  const SizedBox(height: 24),
 
                   // 연속 산책 일수
-                  StreakWidget(),
-                  SizedBox(height: 24),
+                  const StreakWidget(),
+                  const SizedBox(height: 24),
 
                   // 주간 활동 차트
-                  WeeklyChartWidget(),
-                  SizedBox(height: 24),
+                  const WeeklyChartWidget(),
+                  const SizedBox(height: 24),
 
                   // 월간 추세 차트
-                  MonthlyChartWidget(),
-                  SizedBox(height: 24),
+                  const MonthlyChartWidget(),
+                  const SizedBox(height: 24),
 
                   // 최근 배지
-                  AchievementsWidget(),
+                  const AchievementsWidget(),
                 ],
               ),
             ),
