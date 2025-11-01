@@ -116,6 +116,9 @@ class PetRewardService {
 
       await _databaseService.savePet(updatedPet);
 
+
+      
+
       // 다중 레벨업 처리 (경험치가 여러 레벨을 넘길 경우)
       return await checkAndApplyLevelUp(updatedPet);
     }
@@ -190,11 +193,9 @@ class PetRewardService {
   /// 일일 행복도 자연 감소 적용
   /// 마지막 감소 적용일로부터 지난 일수만큼 누적 감소 적용
   Future<Pet?> applyDailyHappinessDecay(String petId) async {
-    print('📅 PetRewardService - applyDailyHappinessDecay() called for petId: $petId');
-
     final pet = await _databaseService.getPetById(petId);
     if (pet == null) {
-      print('❌ PetRewardService - Pet not found with id: $petId');
+      debugPrint('❌ PetRewardService - Pet not found with id: $petId');
       return null;
     }
 
@@ -202,31 +203,21 @@ class PetRewardService {
     final today = DateTime(now.year, now.month, now.day);
     final lastDecayDate = pet.lastDecayDate;
 
-    print('🕐 Now: $now');
-    print('🕐 Today (midnight): $today');
-    print('🕐 LastDecayDate: $lastDecayDate');
-    print('🕐 CreatedAt: ${pet.createdAt}');
-    print('💚 Current happiness: ${pet.happiness}');
-
     // 지난 일수 계산
     int daysPassed = 0;
 
     if (lastDecayDate == null) {
       // 첫 감소 적용 (기존 데이터 호환)
-      // 생성일로부터 지난 일수 계산
       final createdDay = DateTime(pet.createdAt.year, pet.createdAt.month, pet.createdAt.day);
       daysPassed = today.difference(createdDay).inDays;
-      print('📊 Calculating from createdAt: createdDay=$createdDay, daysPassed=$daysPassed');
     } else {
       // lastDecayDate로부터 지난 일수 계산
       final lastDecayDay = DateTime(lastDecayDate.year, lastDecayDate.month, lastDecayDate.day);
       daysPassed = today.difference(lastDecayDay).inDays;
-      print('📊 Calculating from lastDecayDate: lastDecayDay=$lastDecayDay, daysPassed=$daysPassed');
     }
 
     // 지난 일수가 0이면 이미 오늘 감소 적용됨
     if (daysPassed <= 0) {
-      print('⏭️ PetRewardService - No decay needed. Days passed: $daysPassed');
       return pet;
     }
 
@@ -234,7 +225,7 @@ class PetRewardService {
     final totalDecay = daysPassed * AppConstants.happinessDecayPerDay;
     final newHappiness = max(pet.happiness - totalDecay, AppConstants.minHappiness);
 
-    print('⬇️ PetRewardService - Applying $daysPassed days of decay. Total decay: -$totalDecay (${pet.happiness} → $newHappiness)');
+    debugPrint('⬇️ Happiness decay applied: $daysPassed days, ${pet.happiness} → $newHappiness');
 
     final updatedPet = pet.copyWith(
       happiness: newHappiness,
@@ -243,12 +234,7 @@ class PetRewardService {
       lastUpdate: now,
     );
 
-    print('💾 PetRewardService - Saving updated pet to database...');
-    print('   Before save: happiness=${pet.happiness}, lastDecayDate=${pet.lastDecayDate}');
-    print('   After save: happiness=${updatedPet.happiness}, lastDecayDate=${updatedPet.lastDecayDate}');
-
     await _databaseService.savePet(updatedPet);
-
     print('✅ PetRewardService - Pet saved, verifying...');
     final verifyPet = await _databaseService.getPetById(pet.petId);
     if (verifyPet != null) {

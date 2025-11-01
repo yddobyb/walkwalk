@@ -166,8 +166,8 @@ gantt
 - ✅ **추가**: 레벨 시스템 (경험치/레벨업/알림, iOS/Android 테스트 완료) ✅ **완료**
 - ✅ **추가**: 실시간 미션 진행도 표시 (홈/리스트/상세, iOS/Android 테스트 완료) ✅ **완료**
 
-### Week 3: AI 통합 (OpenRouter)  ✅ **완료**
-**목표:** 클라우드 API 기반 대화 시스템 구현 (DeepSeek R1)
+### Week 3: AI 통합 (OpenRouter) + 행복도 시스템 버그 수정  ✅ **완료**
+**목표:** 클라우드 API 기반 대화 시스템 구현 (DeepSeek R1) + 일일 감소 시스템 디버깅
 
 **아키텍처 변경**: 로컬 LLM(MLC-LLM) → OpenRouter API (무료 DeepSeek R1)
 - ✅ 빠른 구현 (3-5일)
@@ -366,6 +366,34 @@ gantt
    - 사용자 속성 설정
    - 화면 조회 이벤트
 
+**Phase 6: 행복도 시스템 버그 수정 (2일)** ✅ **완료 (2025-10-30 ~ 2025-11-01)**
+- [x] 버그 진단 및 원인 분석
+  - [x] HappinessScheduler 초기화 안됨 확인
+  - [x] Release 모드 로깅 문제 발견 (print/debugPrint 제거됨)
+  - [x] main.dart 초기화 순서 문제 식별
+- [x] 수정 사항 적용
+  - [x] 모든 로깅을 developer.log()로 변경 (release 모드 지원)
+  - [x] main.dart 초기화 순서 변경 (HappinessScheduler → StepTrackingService)
+  - [x] StepTrackingService가 블로킹하여 HappinessScheduler 실행 안되는 문제 해결
+- [x] 검증 및 테스트
+  - [x] 3일 경과 시나리오 테스트 (100 → 85)
+  - [x] 2일 추가 경과 테스트 (85 → 75)
+  - [x] 일일 감소 로직 검증 (자정 기준 일수 계산)
+  - [x] 산책/간식 증가 시 lastDecayDate 미변경 확인
+- [x] 코드 정리
+  - [x] 설정 화면에서 "행복도 감소 테스트" 섹션 제거
+  - [x] test_happiness_decay.dart 파일 삭제
+  - [x] test_remote_config.dart 파일 삭제
+  - [x] pet_reward_service.dart 디버그 로그 정리
+  - [x] happiness_scheduler_service.dart 디버그 로그 정리
+  - [x] main.dart 디버그 로그 정리
+
+**버그 수정 결과:**
+- ✅ 일일 자동 감소 정상 작동 (하루 -5)
+- ✅ 산책 시 행복도 증가 정상 작동 (100걸음 = +1)
+- ✅ 간식 주기 시 행복도 증가 정상 작동 (간식 1개 = +10)
+- ✅ lastDecayDate 업데이트 로직 정상 작동
+- ✅ 시나리오 검증 완료: Day1(100) → Day2(95) → 산책(98) → Day3(93)
 
 #### 예상 일정
 - **총 소요 기간**: 5-6일
