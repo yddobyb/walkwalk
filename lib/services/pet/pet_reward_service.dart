@@ -116,9 +116,6 @@ class PetRewardService {
 
       await _databaseService.savePet(updatedPet);
 
-
-      
-
       // 다중 레벨업 처리 (경험치가 여러 레벨을 넘길 경우)
       return await checkAndApplyLevelUp(updatedPet);
     }
@@ -235,13 +232,6 @@ class PetRewardService {
     );
 
     await _databaseService.savePet(updatedPet);
-    print('✅ PetRewardService - Pet saved, verifying...');
-    final verifyPet = await _databaseService.getPetById(pet.petId);
-    if (verifyPet != null) {
-      print('✅ PetRewardService - Verification: happiness=${verifyPet.happiness}, lastDecayDate=${verifyPet.lastDecayDate}');
-    } else {
-      print('❌ PetRewardService - Verification failed: Pet not found!');
-    }
 
     return updatedPet;
   }
