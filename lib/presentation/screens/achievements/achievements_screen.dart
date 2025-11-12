@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/entities/achievement.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/achievement/achievement_service.dart';
 
 class AchievementsScreen extends ConsumerWidget {
@@ -15,7 +16,7 @@ class AchievementsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('배지 모음'),
+        title: Text(AppLocalizations.of(context).badgesCollectionTitle),
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
       ),
@@ -83,14 +84,14 @@ class AchievementsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '배지 수집 현황',
+                      AppLocalizations.of(context).badgesCollectionStatus,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '$unlockedCount / $totalCount 개 달성',
+                      AppLocalizations.of(context).badgesAchieved(unlockedCount, totalCount),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.white70,
                       ),
@@ -137,7 +138,7 @@ class AchievementsScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                _getTierName(tier),
+                _getTierName(tier, context),
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: _getTierColor(tier),
@@ -219,7 +220,7 @@ class AchievementsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            achievement.title,
+            _getAchievementTitle(achievement.code, AppLocalizations.of(context)),
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: isUnlocked ? null : theme.colorScheme.outline,
@@ -230,7 +231,7 @@ class AchievementsScreen extends ConsumerWidget {
           const SizedBox(height: 4),
           Flexible(
             child: Text(
-              achievement.description,
+              _getAchievementDescription(achievement.code, AppLocalizations.of(context)),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: isUnlocked ? theme.colorScheme.onSurface.withOpacity(0.7) : theme.colorScheme.outline.withOpacity(0.7),
               ),
@@ -261,7 +262,7 @@ class AchievementsScreen extends ConsumerWidget {
           ] else if (achievement.unlockedAt != null) ...[
             const SizedBox(height: 8),
             Text(
-              '달성일: ${_formatDate(achievement.unlockedAt!)}',
+              AppLocalizations.of(context).achievementUnlockedDate(_formatDate(achievement.unlockedAt!)),
               style: theme.textTheme.bodySmall?.copyWith(
                 color: _getTierColor(achievement.tier),
                 fontSize: 10,
@@ -285,14 +286,14 @@ class AchievementsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '아직 배지가 없어요',
+            AppLocalizations.of(context).noBadgesYet,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.outline,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            '산책을 시작해서 첫 번째 배지를 획득해보세요!',
+            AppLocalizations.of(context).startWalkingForFirstBadge,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.outline,
             ),
@@ -315,14 +316,14 @@ class AchievementsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '배지 정보를 불러올 수 없어요',
+            AppLocalizations.of(context).badgesLoadError,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.error,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            '잠시 후 다시 시도해주세요',
+            AppLocalizations.of(context).tryAgainLater,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.outline,
             ),
@@ -340,16 +341,17 @@ class AchievementsScreen extends ConsumerWidget {
     return grouped;
   }
 
-  String _getTierName(AchievementTier tier) {
+  String _getTierName(AchievementTier tier, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (tier) {
       case AchievementTier.bronze:
-        return '브론즈';
+        return l10n.tierBronze;
       case AchievementTier.silver:
-        return '실버';
+        return l10n.tierSilver;
       case AchievementTier.gold:
-        return '골드';
+        return l10n.tierGold;
       case AchievementTier.platinum:
-        return '플래티넘';
+        return l10n.tierPlatinum;
     }
   }
 
@@ -403,6 +405,60 @@ class AchievementsScreen extends ConsumerWidget {
         return '📏';
       default:
         return '🏆';
+    }
+  }
+
+  String _getAchievementTitle(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkTitle;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kTitle;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kTitle;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kTitle;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Title;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Title;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstTitle;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Title;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Title;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmTitle;
+      default:
+        return '';
+    }
+  }
+
+  String _getAchievementDescription(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkDescription;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kDescription;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kDescription;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kDescription;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Description;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Description;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstDescription;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Description;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Description;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmDescription;
+      default:
+        return '';
     }
   }
 

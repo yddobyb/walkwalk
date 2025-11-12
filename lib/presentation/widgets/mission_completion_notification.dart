@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/mission.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 미션 완료 알림 위젯
 /// 미션 완료 시 애니메이션과 함께 보상 정보를 표시
@@ -167,7 +168,7 @@ class _MissionCompletionNotificationState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '미션 완료!',
+                                  AppLocalizations.of(context).missionComplete,
                                   style: theme.textTheme.titleLarge?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -205,7 +206,7 @@ class _MissionCompletionNotificationState
                         child: Column(
                           children: [
                             Text(
-                              '획득한 보상',
+                              AppLocalizations.of(context).rewardsEarned,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -216,9 +217,10 @@ class _MissionCompletionNotificationState
                               children: [
                                 Expanded(
                                   child: _buildRewardItem(
+                                    context: context,
                                     icon: Icons.pets,
-                                    value: '${widget.mission.treatReward}개',
-                                    label: '간식',
+                                    value: AppLocalizations.of(context).missionTreatsCount(widget.mission.treatReward),
+                                    label: AppLocalizations.of(context).missionTreatsLabel,
                                   ),
                                 ),
                                 Container(
@@ -228,9 +230,10 @@ class _MissionCompletionNotificationState
                                 ),
                                 Expanded(
                                   child: _buildRewardItem(
+                                    context: context,
                                     icon: Icons.favorite,
                                     value: '+${widget.mission.happinessReward}',
-                                    label: '행복도',
+                                    label: AppLocalizations.of(context).missionHappinessLabel,
                                   ),
                                 ),
                               ],
@@ -243,7 +246,7 @@ class _MissionCompletionNotificationState
 
                       // 축하 메시지
                       Text(
-                        '축하합니다! 🎉',
+                        AppLocalizations.of(context).congratulations,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: Colors.white.withOpacity(0.9),
                           fontWeight: FontWeight.w600,
@@ -262,6 +265,7 @@ class _MissionCompletionNotificationState
   }
 
   Widget _buildRewardItem({
+    required BuildContext context,
     required IconData icon,
     required String value,
     required String label,

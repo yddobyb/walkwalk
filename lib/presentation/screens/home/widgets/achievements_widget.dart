@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../domain/entities/achievement.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/achievement/achievement_service.dart';
 import '../../achievements/achievements_screen.dart';
 
@@ -42,7 +43,7 @@ class AchievementsWidget extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '배지',
+                    AppLocalizations.of(context).achievementsTitle,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -51,7 +52,7 @@ class AchievementsWidget extends ConsumerWidget {
               ),
               TextButton(
                 onPressed: () => _navigateToAchievements(context),
-                child: const Text('전체보기'),
+                child: Text(AppLocalizations.of(context).viewAll),
               ),
             ],
           ),
@@ -126,7 +127,7 @@ class AchievementsWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            achievement.title,
+            _getAchievementTitle(achievement.code, AppLocalizations.of(context)),
             style: theme.textTheme.bodySmall?.copyWith(
               color: _getTierColor(achievement.tier),
               fontWeight: FontWeight.bold,
@@ -207,14 +208,14 @@ class AchievementsWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '첫 번째 배지를 획득해보세요!',
+            AppLocalizations.of(context).firstBadgePrompt,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.outline,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            '산책을 시작하면 배지를 얻을 수 있어요',
+            AppLocalizations.of(context).badgesWalkHint,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.outline,
             ),
@@ -256,7 +257,7 @@ class AchievementsWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '배지 정보를 불러올 수 없어요',
+            AppLocalizations.of(context).badgesLoadError,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.error,
             ),
@@ -311,6 +312,60 @@ class AchievementsWidget extends ConsumerWidget {
         return '📏';
       default:
         return '🏆';
+    }
+  }
+
+  String _getAchievementTitle(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkTitle;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kTitle;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kTitle;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kTitle;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Title;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Title;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstTitle;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Title;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Title;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmTitle;
+      default:
+        return '';
+    }
+  }
+
+  String _getAchievementDescription(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkDescription;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kDescription;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kDescription;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kDescription;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Description;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Description;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstDescription;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Description;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Description;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmDescription;
+      default:
+        return '';
     }
   }
 }

@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/ai/ai_providers.dart';
 import '../../../../services/ai/dialogue_request.dart';
+import '../../../../services/settings/settings_service.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 
 /// 펫 대화 위젯
@@ -30,12 +32,22 @@ class PetDialogueWidget extends ConsumerWidget {
     // Pet 정보 가져오기 (petTrackingProvider 사용)
     final petAsync = ref.watch(petTrackingProvider);
 
+    // 설정 정보 가져오기 (언어 설정)
+    final settingsAsync = ref.watch(settingsNotifierProvider);
+
     return petAsync.when(
       data: (pet) {
         // Pet이 null이면 빈 상태 표시
         if (pet == null) {
-          return _buildEmptyState(theme);
+          return _buildEmptyState(context, theme);
         }
+
+        // 설정에서 locale 추출 (기본값: 'ko')
+        final locale = settingsAsync.when(
+          data: (settings) => settings.locale,
+          loading: () => 'ko', // 로딩 중에는 한국어 기본값
+          error: (_, __) => 'ko', // 오류 시에도 한국어 기본값
+        );
 
         // 대화 요청 생성
         final request = DialogueRequest(
@@ -44,20 +56,22 @@ class PetDialogueWidget extends ConsumerWidget {
           happinessLevel: pet.happiness,
           context: this.context,
           contextData: this.contextData,
+          locale: locale,
         );
 
         // 대화 생성
         final dialogueAsync = ref.watch(dialogueProvider(request));
 
-        return _buildDialogueBubble(theme, dialogueAsync);
+        return _buildDialogueBubble(context, theme, dialogueAsync);
       },
       loading: () => _buildLoadingState(theme),
-      error: (_, __) => _buildEmptyState(theme),
+      error: (_, __) => _buildEmptyState(context, theme),
     );
   }
 
   /// 대화 말풍선 위젯
   Widget _buildDialogueBubble(
+    BuildContext context,
     ThemeData theme,
     AsyncValue<String> dialogueAsync,
   ) {
@@ -146,7 +160,7 @@ class PetDialogueWidget extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '멍멍! 왈왈!',
+                AppLocalizations.of(context).dogBark,
                 style: theme.textTheme.bodyLarge,
               ),
             ),
@@ -157,12 +171,12 @@ class PetDialogueWidget extends ConsumerWidget {
   }
 
   /// 빈 상태 (Pet 없음)
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(BuildContext context, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
-        '강아지 정보를 불러오는 중...',
+        AppLocalizations.of(context).loadingDogInfo,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurface.withOpacity(0.6),
         ),

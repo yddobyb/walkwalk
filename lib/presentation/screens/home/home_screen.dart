@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/pet.dart';
+import '../../../l10n/app_localizations.dart';
 import '../customize/customize_screen.dart';
 import '../settings/settings_screen.dart';
 import '../walk/walk_screen.dart';
@@ -60,22 +61,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
+            icon: const Icon(Icons.home),
+            label: AppLocalizations.of(context).tabHome,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_walk),
-            label: '산책',
+            icon: const Icon(Icons.directions_walk),
+            label: AppLocalizations.of(context).tabWalk,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.palette),
-            label: '커스터마이즈',
+            icon: const Icon(Icons.palette),
+            label: AppLocalizations.of(context).tabCustomize,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '설정',
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context).tabSettings,
           ),
         ],
       ),
@@ -101,8 +102,8 @@ class _HomeTabContent extends ConsumerWidget {
             onPressed: () {
               // TODO: 알림 화면으로 이동
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('알림 기능은 곧 구현될 예정입니다!'),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context).notificationComingSoon),
                 ),
               );
             },

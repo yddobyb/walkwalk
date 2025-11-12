@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/pet.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
   const CustomizeScreen({super.key});
@@ -19,7 +20,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('커스터마이즈'),
+        title: Text(AppLocalizations.of(context).customizeTitle),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -66,7 +67,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '멍멍이',
+                    AppLocalizations.of(context).defaultPetName,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -79,7 +80,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
 
             // 액세서리 선택
             Text(
-              '액세서리',
+              AppLocalizations.of(context).accessoriesTitle,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -137,7 +138,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          _getAccessoryName(accessory),
+                          _getAccessoryName(accessory, context),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: isSelected
                                 ? Colors.white
@@ -180,7 +181,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'AI 스티커 생성',
+                        AppLocalizations.of(context).aiStickerGeneration,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -189,7 +190,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'AI가 생성한 나만의 펫 스티커를 만들어보세요!',
+                    AppLocalizations.of(context).aiStickerDescription,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurface.withOpacity(0.7),
                     ),
@@ -202,7 +203,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                         _generateSticker();
                       },
                       icon: const Icon(Icons.image),
-                      label: const Text('스티커 생성하기'),
+                      label: Text(AppLocalizations.of(context).generateSticker),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
@@ -234,44 +235,48 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
   }
 
-  String _getAccessoryName(PetAccessory accessory) {
+  String _getAccessoryName(PetAccessory accessory, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (accessory) {
       case PetAccessory.none:
-        return '없음';
+        return l10n.accessoryNone;
       case PetAccessory.bandana:
-        return '반다나';
+        return l10n.accessoryBandana;
       case PetAccessory.glasses:
-        return '안경';
+        return l10n.accessoryGlasses;
       case PetAccessory.bowtie:
-        return '나비넥타이';
+        return l10n.accessoryBowtie;
       case PetAccessory.hat:
-        return '모자';
+        return l10n.accessoryHat;
       case PetAccessory.collar:
-        return '목걸이';
+        return l10n.accessoryCollar;
     }
   }
 
   void _showApplyDialog() {
+    final l10n = AppLocalizations.of(context);
+    final accessoryName = _getAccessoryName(_selectedAccessory, context);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('액세서리 적용'),
-        content: Text('${_getAccessoryName(_selectedAccessory)}을(를) 적용하시겠습니까?'),
+        title: Text(l10n.applyAccessoryTitle),
+        content: Text(l10n.applyAccessoryConfirm(accessoryName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('취소'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${_getAccessoryName(_selectedAccessory)}이(가) 적용되었습니다!'),
+                  content: Text(l10n.accessoryAppliedSuccess(accessoryName)),
                 ),
               );
             },
-            child: const Text('적용'),
+            child: Text(l10n.apply),
           ),
         ],
       ),
@@ -280,8 +285,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
 
   void _generateSticker() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('AI 스티커 생성 기능은 곧 구현될 예정입니다! 🎨'),
+      SnackBar(
+        content: Text(AppLocalizations.of(context).stickerComingSoon),
       ),
     );
   }

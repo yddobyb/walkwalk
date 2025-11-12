@@ -108,6 +108,19 @@ class SettingsService {
     }
   }
 
+  /// 언어 설정 변경 (Week 3 - Localization)
+  Future<void> updateLocale(String localeCode) async {
+    try {
+      final settings = await loadSettings();
+      settings.locale = localeCode;
+      await _databaseService.saveSettings(settings);
+      debugPrint('SettingsService - Updated locale to $localeCode');
+    } catch (e) {
+      debugPrint('SettingsService - Error updating locale: $e');
+      rethrow;
+    }
+  }
+
   /// 설정 스트림 (실시간 업데이트용)
   Stream<SettingsModel> watchSettings() async* {
     while (true) {
@@ -173,6 +186,11 @@ class SettingsNotifier extends StateNotifier<AsyncValue<SettingsModel>> {
 
   Future<void> updateDailyStepGoal(int goal) async {
     await _service.updateDailyStepGoal(goal);
+    await _loadSettings();
+  }
+
+  Future<void> updateLocale(String localeCode) async {
+    await _service.updateLocale(localeCode);
     await _loadSettings();
   }
 }

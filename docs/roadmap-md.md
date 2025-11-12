@@ -155,6 +155,17 @@ gantt
   - [x] AsyncValue 에러/로딩 상태 처리 (DB 폴백)
   - [x] iOS 플랫폼 테스트 완료 (iPhone 실기기)
   - [x] Android 플랫폼 테스트 완료 (Release 빌드)
+- [x] **국제화 (Internationalization)** ✅ **완료 (iOS 테스트 완료)**
+  - [x] flutter_localizations 패키지 통합
+  - [x] l10n.yaml 설정 파일 생성
+  - [x] 한국어/영어 ARB 파일 생성 (app_ko.arb, app_en.arb)
+  - [x] 배지(업적) 시스템 실시간 번역 구현
+    - [x] AchievementNotificationWidget 다국어 지원
+    - [x] AchievementsScreen 다국어 지원
+    - [x] AchievementsWidget 다국어 지원
+  - [x] 배지 타이틀 및 설명 번역 (10개 배지, 4개 티어)
+  - [x] 시스템 언어 기반 자동 전환
+  - [x] iOS 플랫폼 실시간 언어 전환 테스트 완료
 
 #### 산출물
 - ✅ 완전한 걸음수 트래킹 시스템
@@ -165,6 +176,7 @@ gantt
 - ✅ **추가**: 연속 산책 추적 시스템
 - ✅ **추가**: 레벨 시스템 (경험치/레벨업/알림, iOS/Android 테스트 완료) ✅ **완료**
 - ✅ **추가**: 실시간 미션 진행도 표시 (홈/리스트/상세, iOS/Android 테스트 완료) ✅ **완료**
+- ✅ **추가**: 국제화 시스템 (한국어/영어, 배지 시스템 실시간 번역, iOS 테스트 완료) ✅ **완료**
 
 ### Week 3: AI 통합 (OpenRouter) + 행복도 시스템 버그 수정  ✅ **완료**
 **목표:** 클라우드 API 기반 대화 시스템 구현 (DeepSeek R1) + 일일 감소 시스템 디버깅

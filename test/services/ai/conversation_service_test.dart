@@ -44,6 +44,7 @@ void main() {
         dogName: 'Max',
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -69,6 +70,7 @@ void main() {
         steps: 5000,
         duration: 1800,
         isOutdoor: true,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -92,6 +94,7 @@ void main() {
         steps: 3000,
         duration: 1200,
         isOutdoor: false,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -117,6 +120,7 @@ void main() {
         happinessLevel: 85,
         missionTitle: '첫 산책 완료',
         treatReward: 10,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -140,6 +144,7 @@ void main() {
         dogBreed: 'Husky',
         happinessLevel: 90,
         treatCount: 15,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -160,6 +165,7 @@ void main() {
         dogBreed: 'Chihuahua',
         happinessLevel: 50,
         treatCount: 3,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -184,6 +190,7 @@ void main() {
         happinessLevel: 95,
         newLevel: 5,
         experience: 500,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -205,6 +212,7 @@ void main() {
         happinessLevel: 70,
         newLevel: 2,
         experience: 100,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -227,6 +235,7 @@ void main() {
         dogName: 'Daisy',
         dogBreed: 'Bulldog',
         happinessLevel: 25,
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -250,6 +259,7 @@ void main() {
         dogBreed: 'Labrador',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -275,6 +285,7 @@ void main() {
           'duration': 2400,
           'isOutdoor': true,
         },
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -325,6 +336,7 @@ void main() {
         dogName: 'Test',
         dogBreed: 'Test Breed',
         happinessLevel: 70,
+        locale: 'ko',
       );
 
       final walkComplete = await conversationService.getWalkCompleteResponse(
@@ -334,6 +346,7 @@ void main() {
         steps: 5000,
         duration: 1800,
         isOutdoor: true,
+        locale: 'ko',
       );
 
       final missionComplete = await conversationService.getMissionCompleteResponse(
@@ -342,6 +355,7 @@ void main() {
         happinessLevel: 70,
         missionTitle: '테스트 미션',
         treatReward: 10,
+        locale: 'ko',
       );
 
       final feed = await conversationService.getFeedResponse(
@@ -349,6 +363,7 @@ void main() {
         dogBreed: 'Test Breed',
         happinessLevel: 70,
         treatCount: 15,
+        locale: 'ko',
       );
 
       final levelUp = await conversationService.getLevelUpResponse(
@@ -357,12 +372,14 @@ void main() {
         happinessLevel: 70,
         newLevel: 3,
         experience: 200,
+        locale: 'ko',
       );
 
       final lowHappiness = await conversationService.getLowHappinessResponse(
         dogName: 'Test',
         dogBreed: 'Test Breed',
         happinessLevel: 20,
+        locale: 'ko',
       );
 
       // Then: 모두 응답 생성됨
@@ -393,6 +410,7 @@ void main() {
         dogName: 'Fallback Test',
         dogBreed: 'Test Breed',
         happinessLevel: 50,
+        locale: 'ko',
       );
 
       // Then: 폴백 응답 생성됨

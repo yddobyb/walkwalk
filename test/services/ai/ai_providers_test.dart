@@ -152,6 +152,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // When: dialogueProvider 읽기 (FutureProvider.family)
@@ -184,6 +185,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // Given: 두 번째 DialogueRequest (다른 dogName)
@@ -192,6 +194,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // When: 두 개의 다른 DialogueRequest로 대화 생성
@@ -222,6 +225,7 @@ void main() {
         dogBreed: 'Beagle',
         happinessLevel: 75,
         context: 'greeting', // 실제로는 무시됨 (내부에서 greeting 고정)
+        locale: 'ko',
       );
 
       // When: greetingDialogueProvider 호출
@@ -252,6 +256,7 @@ void main() {
           'duration': 2400,
           'isOutdoor': true,
         },
+        locale: 'ko',
       );
 
       // When: walkCompleteDialogueProvider 호출
@@ -282,6 +287,7 @@ void main() {
           'title': '주간 목표 달성',
           'treatReward': 20,
         },
+        locale: 'ko',
       );
 
       // When: missionCompleteDialogueProvider 호출
@@ -311,6 +317,7 @@ void main() {
         contextData: {
           'treatCount': 15,
         },
+        locale: 'ko',
       );
 
       // When: feedDialogueProvider 호출
@@ -341,6 +348,7 @@ void main() {
           'level': 10,
           'experience': 1500,
         },
+        locale: 'ko',
       );
 
       // When: levelUpDialogueProvider 호출
@@ -367,6 +375,7 @@ void main() {
         dogBreed: 'Bulldog',
         happinessLevel: 20,
         context: 'low_happiness',
+        locale: 'ko',
       );
 
       // When: lowHappinessDialogueProvider 호출
@@ -396,6 +405,7 @@ void main() {
         dogBreed: 'Test Breed',
         happinessLevel: 70,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // When: 6개 Provider 모두 호출
@@ -468,6 +478,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // When: 같은 DialogueRequest로 두 번 호출
@@ -491,6 +502,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       final request2 = DialogueRequest(
@@ -498,6 +510,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // Then: equals/hashCode 동작 확인

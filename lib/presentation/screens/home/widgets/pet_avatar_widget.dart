@@ -2,24 +2,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../domain/entities/pet.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import 'pet_dialogue_widget.dart';
 
 class PetAvatarWidget extends ConsumerWidget {
   const PetAvatarWidget({super.key});
 
-  String _getPersonalityText(PetPersonality personality) {
+  String _getPersonalityText(PetPersonality personality, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (personality) {
       case PetPersonality.cheerful:
-        return '명랑한 성격';
+        return l10n.personalityCheerfulDesc;
       case PetPersonality.calm:
-        return '차분한 성격';
+        return l10n.personalityCalmDesc;
       case PetPersonality.energetic:
-        return '활발한 성격';
+        return l10n.personalityEnergeticDesc;
       case PetPersonality.shy:
-        return '수줍은 성격';
+        return l10n.personalityShyDesc;
       case PetPersonality.playful:
-        return '장난기 많은 성격';
+        return l10n.personalityPlayfulDesc;
     }
   }
 
@@ -30,9 +32,10 @@ class PetAvatarWidget extends ConsumerWidget {
 
     return activePetAsync.when(
       data: (pet) {
-        final petName = pet?.name ?? '멍멍이';
-        final petBreed = pet?.breed ?? '골든 리트리버';
-        final petPersonality = pet != null ? _getPersonalityText(pet.personality) : '명랑한 성격';
+        final l10n = AppLocalizations.of(context);
+        final petName = pet?.name ?? l10n.defaultPetName;
+        final petBreed = pet?.breed ?? l10n.defaultPetBreed;
+        final petPersonality = pet != null ? _getPersonalityText(pet.personality, context) : l10n.personalityCheerfulDesc;
 
         return Container(
           width: double.infinity,
@@ -107,7 +110,7 @@ class PetAvatarWidget extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '펫을 터치해서 대화해보세요!',
+                  l10n.tapPetToChat,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.primary,
                     fontWeight: FontWeight.w500,
@@ -160,7 +163,7 @@ class PetAvatarWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              '펫 정보를 불러올 수 없습니다',
+              AppLocalizations.of(context).petInfoLoadError,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.error,
               ),
@@ -217,7 +220,7 @@ class PetAvatarWidget extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('닫기'),
+                  child: Text(AppLocalizations.of(context).close),
                 ),
               ),
               const SizedBox(height: 8),

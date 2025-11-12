@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,6 +12,7 @@ import '../../data/datasources/database_service.dart';
 import '../../data/models/mission_model.dart';
 import '../pet/pet_reward_service.dart';
 import '../achievement/achievement_service.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 미션 시스템을 관리하는 서비스
 /// - 일일/주간 미션 생성 및 관리
@@ -43,6 +45,14 @@ class MissionService {
     await _generateMissionsIfNeeded();
     _schedulePeriodicMissionGeneration();
     await _cleanupExpiredMissions();
+  }
+
+  /// 현재 설정된 locale에 맞는 AppLocalizations 가져오기
+  Future<AppLocalizations> _getLocalizations() async {
+    final settings = await _databaseService.getSettings();
+    final localeString = settings?.locale ?? 'ko';
+    final locale = Locale(localeString);
+    return await AppLocalizations.delegate.load(locale);
   }
 
   /// 활성 미션 가져오기
@@ -182,9 +192,10 @@ class MissionService {
 
   /// 일일 미션 생성
   Future<void> _generateDailyMissions() async {
-    // 설정값 불러오기
+    // 설정값 및 번역 불러오기
     final settings = await _databaseService.getSettings();
     final dailyStepGoal = settings?.dailyStepGoal ?? AppConstants.dailyStepGoal;
+    final l10n = await _getLocalizations();
 
     final missions = <Mission>[];
     final now = DateTime.now();
@@ -194,8 +205,8 @@ class MissionService {
     missions.add(Mission(
       missionId: _uuid.v4(),
       type: 'daily',
-      title: '오늘의 걸음수 목표',
-      description: '${dailyStepGoal}걸음 걷기',
+      title: l10n.missionDailyStepsTitle,
+      description: l10n.missionDailyStepsDescription(dailyStepGoal),
       targetSteps: dailyStepGoal,
       targetDuration: 0,
       targetDistance: 0.0,
@@ -208,7 +219,7 @@ class MissionService {
     ));
 
     // 랜덤 추가 미션
-    final additionalMissions = _generateRandomDailyMissions(endOfToday);
+    final additionalMissions = await _generateRandomDailyMissions(endOfToday, l10n);
     missions.addAll(additionalMissions);
 
     await _databaseService.saveMissions(missions);
@@ -216,9 +227,10 @@ class MissionService {
 
   /// 주간 미션 생성
   Future<void> _generateWeeklyMissions() async {
-    // 설정값 불러오기
+    // 설정값 및 번역 불러오기
     final settings = await _databaseService.getSettings();
     final dailyStepGoal = settings?.dailyStepGoal ?? AppConstants.dailyStepGoal;
+    final l10n = await _getLocalizations();
 
     final now = DateTime.now();
     final weekEnd = _getWeekStart(now).add(const Duration(days: 7));
@@ -254,8 +266,8 @@ class MissionService {
     missions.add(Mission(
       missionId: _uuid.v4(),
       type: 'weekly',
-      title: '이번 주 걸음수 챌린지',
-      description: '${dailyStepGoal * 7}걸음 걷기',
+      title: l10n.missionWeeklyStepsTitle,
+      description: l10n.missionWeeklyStepsDescription(dailyStepGoal * 7),
       targetSteps: dailyStepGoal * 7,
       targetDuration: 0,
       targetDistance: 0.0,
@@ -271,8 +283,8 @@ class MissionService {
     missions.add(Mission(
       missionId: _uuid.v4(),
       type: 'weekly',
-      title: '활동적인 한 주',
-      description: '총 180분 산책하기',
+      title: l10n.missionActiveWeekTitle,
+      description: l10n.missionActiveWeekDescription,
       targetSteps: 0,
       targetDuration: 180 * 60, // 180분을 초로 변환
       targetDistance: 0.0,
@@ -289,15 +301,15 @@ class MissionService {
   }
 
   /// 랜덤 일일 미션 생성
-  List<Mission> _generateRandomDailyMissions(DateTime expiresAt) {
+  Future<List<Mission>> _generateRandomDailyMissions(DateTime expiresAt, AppLocalizations l10n) async {
     final missions = <Mission>[];
     final random = Random();
 
     // 미션 템플릿
     final templates = [
       {
-        'title': '빠른 걸음으로',
-        'description': '30분 연속 산책하기',
+        'title': l10n.missionQuickWalkTitle,
+        'description': l10n.missionQuickWalkDescription,
         'targetSteps': 0,
         'targetDuration': 30 * 60,
         'targetDistance': 0.0,
@@ -305,8 +317,8 @@ class MissionService {
         'happinessReward': 15,
       },
       {
-        'title': '거리 도전',
-        'description': '2km 이상 걷기',
+        'title': l10n.missionDistanceChallengeTitle,
+        'description': l10n.missionDistanceChallengeDescription,
         'targetSteps': 0,
         'targetDuration': 0,
         'targetDistance': 2000.0,
@@ -314,8 +326,8 @@ class MissionService {
         'happinessReward': 18,
       },
       {
-        'title': '조기 달성',
-        'description': '3000걸음 조기 달성',
+        'title': l10n.missionEarlyAchievementTitle,
+        'description': l10n.missionEarlyAchievementDescription,
         'targetSteps': 3000,
         'targetDuration': 0,
         'targetDistance': 0.0,
@@ -323,8 +335,8 @@ class MissionService {
         'happinessReward': 12,
       },
       {
-        'title': '꾸준한 운동',
-        'description': '45분 활동하기',
+        'title': l10n.missionConsistentExerciseTitle,
+        'description': l10n.missionConsistentExerciseDescription,
         'targetSteps': 0,
         'targetDuration': 45 * 60,
         'targetDistance': 0.0,

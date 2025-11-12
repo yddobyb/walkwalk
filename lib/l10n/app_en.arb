@@ -1,0 +1,2042 @@
+{
+  "@@locale": "en",
+
+  "appName": "WalkDog",
+  "@appName": {
+    "description": "The application name"
+  },
+
+  "appDescription": "Walk your virtual pet, stay healthy!",
+  "@appDescription": {
+    "description": "The application description"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings screen title"
+  },
+
+  "gameSettings": "Game Settings",
+  "@gameSettings": {
+    "description": "Game settings section title"
+  },
+
+  "outdoorMode": "Outdoor Mode",
+  "@outdoorMode": {
+    "description": "Outdoor mode toggle label"
+  },
+
+  "outdoorModeDescription": "GPS-based outdoor walk detection",
+  "@outdoorModeDescription": {
+    "description": "Outdoor mode toggle description"
+  },
+
+  "dailyGoal": "Daily Goal",
+  "@dailyGoal": {
+    "description": "Daily goal label"
+  },
+
+  "dailyGoalSteps": "{steps} steps",
+  "@dailyGoalSteps": {
+    "description": "Daily goal with step count",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      }
+    }
+  },
+
+  "badgesAndAchievements": "Badges & Achievements",
+  "@badgesAndAchievements": {
+    "description": "Badges and achievements label"
+  },
+
+  "badgesDescription": "View earned badges",
+  "@badgesDescription": {
+    "description": "Badges description"
+  },
+
+  "aiSettings": "AI Settings",
+  "@aiSettings": {
+    "description": "AI settings section title"
+  },
+
+  "localAIChat": "Local AI Chat",
+  "@localAIChat": {
+    "description": "Local AI chat toggle label"
+  },
+
+  "localAIChatDescription": "On-device AI conversation",
+  "@localAIChatDescription": {
+    "description": "Local AI chat description"
+  },
+
+  "cloudImageGeneration": "Cloud Image Generation",
+  "@cloudImageGeneration": {
+    "description": "Cloud image generation toggle label"
+  },
+
+  "cloudImageGenerationDescription": "AI-powered sticker generation online",
+  "@cloudImageGenerationDescription": {
+    "description": "Cloud image generation description"
+  },
+
+  "aiModelManagement": "AI Model Management",
+  "@aiModelManagement": {
+    "description": "AI model management label"
+  },
+
+  "aiModelManagementDescription": "Download and manage local AI models",
+  "@aiModelManagementDescription": {
+    "description": "AI model management description"
+  },
+
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications section title and toggle label"
+  },
+
+  "notificationsDescription": "Walk reminders and alerts",
+  "@notificationsDescription": {
+    "description": "Notifications toggle description"
+  },
+
+  "notificationTime": "Notification Time",
+  "@notificationTime": {
+    "description": "Notification time label"
+  },
+
+  "notificationTimeDescription": "Morning 09:00, Evening 18:00",
+  "@notificationTimeDescription": {
+    "description": "Notification time description"
+  },
+
+  "appSettings": "App Settings",
+  "@appSettings": {
+    "description": "App settings section title"
+  },
+
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode toggle label"
+  },
+
+  "darkModeDescription": "Use dark theme",
+  "@darkModeDescription": {
+    "description": "Dark mode toggle description"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Language selection label"
+  },
+
+  "languageKorean": "Korean",
+  "@languageKorean": {
+    "description": "Korean language option"
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+
+  "cacheManagement": "Cache Management",
+  "@cacheManagement": {
+    "description": "Cache management label"
+  },
+
+  "cacheManagementDescription": "Clear image and data cache",
+  "@cacheManagementDescription": {
+    "description": "Cache management description"
+  },
+
+  "information": "Information",
+  "@information": {
+    "description": "Information section title"
+  },
+
+  "appInfo": "App Info",
+  "@appInfo": {
+    "description": "App info label"
+  },
+
+  "appInfoVersion": "Version {version}",
+  "@appInfoVersion": {
+    "description": "App version info",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+
+  "help": "Help",
+  "@help": {
+    "description": "Help label"
+  },
+
+  "helpDescription": "How to use and FAQ",
+  "@helpDescription": {
+    "description": "Help description"
+  },
+
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "Privacy policy label"
+  },
+
+  "privacyPolicyDescription": "Data handling and privacy protection",
+  "@privacyPolicyDescription": {
+    "description": "Privacy policy description"
+  },
+
+  "comingSoon": "Coming soon!",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button"
+  },
+
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button"
+  },
+
+  "dailyGoalDialogTitle": "Set Daily Goal",
+  "@dailyGoalDialogTitle": {
+    "description": "Daily goal dialog title"
+  },
+
+  "dailyGoalDialogDescription": "Set your target step count",
+  "@dailyGoalDialogDescription": {
+    "description": "Daily goal dialog description"
+  },
+
+  "dailyGoalDialogRange": "(1,000 ~ 30,000 steps)",
+  "@dailyGoalDialogRange": {
+    "description": "Daily goal valid range"
+  },
+
+  "dailyGoalDialogLabel": "Steps",
+  "@dailyGoalDialogLabel": {
+    "description": "Daily goal input label"
+  },
+
+  "dailyGoalDialogSuffix": "steps",
+  "@dailyGoalDialogSuffix": {
+    "description": "Daily goal input suffix"
+  },
+
+  "dailyGoalErrorEmpty": "Please enter step count",
+  "@dailyGoalErrorEmpty": {
+    "description": "Error message for empty step count"
+  },
+
+  "dailyGoalErrorInvalid": "Please enter a valid number",
+  "@dailyGoalErrorInvalid": {
+    "description": "Error message for invalid number"
+  },
+
+  "dailyGoalErrorRange": "Please enter a value between 1,000 and 30,000",
+  "@dailyGoalErrorRange": {
+    "description": "Error message for out of range value"
+  },
+
+  "dailyGoalUpdated": "Daily goal set to {steps} steps",
+  "@dailyGoalUpdated": {
+    "description": "Daily goal updated success message",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      }
+    }
+  },
+
+  "dailyGoalUpdateError": "Error setting goal: {error}",
+  "@dailyGoalUpdateError": {
+    "description": "Daily goal update error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+
+  "cacheDialogTitle": "Clear Cache",
+  "@cacheDialogTitle": {
+    "description": "Cache dialog title"
+  },
+
+  "cacheDialogDescription": "Clear image cache and temporary data?",
+  "@cacheDialogDescription": {
+    "description": "Cache dialog description"
+  },
+
+  "cacheCleared": "Cache cleared!",
+  "@cacheCleared": {
+    "description": "Cache cleared success message"
+  },
+
+  "languageDialogTitle": "Select Language",
+  "@languageDialogTitle": {
+    "description": "Language selection dialog title"
+  },
+
+  "languageUpdated": "Language changed to {language}",
+  "@languageUpdated": {
+    "description": "Language updated success message",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "English"
+      }
+    }
+  },
+
+  "createPet": "Create Pet",
+  "@createPet": {
+    "description": "Pet creation screen title and button"
+  },
+
+  "petName": "Name",
+  "@petName": {
+    "description": "Pet name label"
+  },
+
+  "petNameHint": "Enter your pet's name",
+  "@petNameHint": {
+    "description": "Pet name input hint"
+  },
+
+  "petNameError": "Please enter a name",
+  "@petNameError": {
+    "description": "Pet name required error message"
+  },
+
+  "petNameLengthError": "Name must be 10 characters or less",
+  "@petNameLengthError": {
+    "description": "Pet name length error message"
+  },
+
+  "petBreed": "Breed",
+  "@petBreed": {
+    "description": "Pet breed label"
+  },
+
+  "petColor": "Color",
+  "@petColor": {
+    "description": "Pet color label"
+  },
+
+  "petPersonality": "Personality",
+  "@petPersonality": {
+    "description": "Pet personality label"
+  },
+
+  "noName": "No Name",
+  "@noName": {
+    "description": "Text displayed when name is empty"
+  },
+
+  "petCreationError": "Error creating pet: {error}",
+  "@petCreationError": {
+    "description": "Pet creation error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+
+  "breedGoldenRetriever": "Golden Retriever",
+  "@breedGoldenRetriever": {
+    "description": "Breed: Golden Retriever"
+  },
+
+  "breedLabrador": "Labrador",
+  "@breedLabrador": {
+    "description": "Breed: Labrador"
+  },
+
+  "breedShiba": "Shiba Inu",
+  "@breedShiba": {
+    "description": "Breed: Shiba Inu"
+  },
+
+  "breedPomeranian": "Pomeranian",
+  "@breedPomeranian": {
+    "description": "Breed: Pomeranian"
+  },
+
+  "breedHusky": "Husky",
+  "@breedHusky": {
+    "description": "Breed: Husky"
+  },
+
+  "breedBeagle": "Beagle",
+  "@breedBeagle": {
+    "description": "Breed: Beagle"
+  },
+
+  "breedBulldog": "Bulldog",
+  "@breedBulldog": {
+    "description": "Breed: Bulldog"
+  },
+
+  "breedPoodle": "Poodle",
+  "@breedPoodle": {
+    "description": "Breed: Poodle"
+  },
+
+  "colorGolden": "Golden",
+  "@colorGolden": {
+    "description": "Color: Golden"
+  },
+
+  "colorBrown": "Brown",
+  "@colorBrown": {
+    "description": "Color: Brown"
+  },
+
+  "colorBlack": "Black",
+  "@colorBlack": {
+    "description": "Color: Black"
+  },
+
+  "colorWhite": "White",
+  "@colorWhite": {
+    "description": "Color: White"
+  },
+
+  "colorGray": "Gray",
+  "@colorGray": {
+    "description": "Color: Gray"
+  },
+
+  "colorCream": "Cream",
+  "@colorCream": {
+    "description": "Color: Cream"
+  },
+
+  "personalityCheerful": "Cheerful",
+  "@personalityCheerful": {
+    "description": "Personality: Cheerful"
+  },
+
+  "personalityCalm": "Calm",
+  "@personalityCalm": {
+    "description": "Personality: Calm"
+  },
+
+  "personalityEnergetic": "Energetic",
+  "@personalityEnergetic": {
+    "description": "Personality: Energetic"
+  },
+
+  "personalityShy": "Shy",
+  "@personalityShy": {
+    "description": "Personality: Shy"
+  },
+
+  "personalityPlayful": "Playful",
+  "@personalityPlayful": {
+    "description": "Personality: Playful"
+  },
+
+  "streakTitle": "Walk Streak",
+  "@streakTitle": {
+    "description": "Streak widget title"
+  },
+
+  "daysInARow": "days in a row",
+  "@daysInARow": {
+    "description": "Days in a row unit"
+  },
+
+  "longestStreak": "Longest Streak",
+  "@longestStreak": {
+    "description": "Longest streak label"
+  },
+
+  "streakDays": "{days} days",
+  "@streakDays": {
+    "description": "Streak days display",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+
+  "lastWalk": "Last Walk",
+  "@lastWalk": {
+    "description": "Last walk label"
+  },
+
+  "noRecord": "No Record",
+  "@noRecord": {
+    "description": "No walk record"
+  },
+
+  "dataLoadError": "Unable to load data",
+  "@dataLoadError": {
+    "description": "Data load error message"
+  },
+
+  "today": "Today",
+  "@today": {
+    "description": "Today"
+  },
+
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday"
+  },
+
+  "daysAgo": "{days} days ago",
+  "@daysAgo": {
+    "description": "Days ago display",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "streakEncouragement0": "Start walking today and build your streak!",
+  "@streakEncouragement0": {
+    "description": "Streak encouragement message for 0 days"
+  },
+
+  "streakEncouragement1": "Great start! Keep it up tomorrow! 💪",
+  "@streakEncouragement1": {
+    "description": "Streak encouragement message for 1 day"
+  },
+
+  "streakEncouragementUnder7": "Awesome! You're on your way to a 7-day streak! 🔥",
+  "@streakEncouragementUnder7": {
+    "description": "Streak encouragement message for under 7 days"
+  },
+
+  "streakEncouragement7": "Wow! 7-day streak achieved! Amazing! 🎉",
+  "@streakEncouragement7": {
+    "description": "Streak encouragement message for 7 days"
+  },
+
+  "streakEncouragementUnder30": "Incredible! {days} days until a month streak! 🌟",
+  "@streakEncouragementUnder30": {
+    "description": "Streak encouragement message for under 30 days",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+
+  "streakEncouragement30Plus": "Legendary! Over a month streak! 👑",
+  "@streakEncouragement30Plus": {
+    "description": "Streak encouragement message for 30+ days"
+  },
+
+  "nextGoal3Days": "{remaining} days until 3-day streak!",
+  "@nextGoal3Days": {
+    "description": "Next goal message for 3 days",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+
+  "nextGoalWeek": "{remaining} days until 1-week streak!",
+  "@nextGoalWeek": {
+    "description": "Next goal message for 1 week",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "nextGoalTwoWeeks": "{remaining} days until 2-week streak!",
+  "@nextGoalTwoWeeks": {
+    "description": "Next goal message for 2 weeks",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "nextGoalMonth": "{remaining} days until 1-month streak!",
+  "@nextGoalMonth": {
+    "description": "Next goal message for 1 month",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+
+  "keepGoingMessage": "Keep up this amazing streak!",
+  "@keepGoingMessage": {
+    "description": "Keep going message for 30+ days"
+  },
+
+  "walkEndWalk": "End Walk",
+  "@walkEndWalk": {
+    "description": "End walk button title"
+  },
+
+  "walkStartWalk": "Start Walk",
+  "@walkStartWalk": {
+    "description": "Start walk button title"
+  },
+
+  "walkEndWalkDescription": "End your walk and get rewards",
+  "@walkEndWalkDescription": {
+    "description": "End walk button description"
+  },
+
+  "walkStartWalkDescription": "Start a healthy walk with your pet",
+  "@walkStartWalkDescription": {
+    "description": "Start walk button description"
+  },
+
+  "walkEndButton": "End Walk",
+  "@walkEndButton": {
+    "description": "End walk button label"
+  },
+
+  "walkIndoor": "Indoor Walk",
+  "@walkIndoor": {
+    "description": "Indoor walk button"
+  },
+
+  "walkOutdoor": "Outdoor Walk",
+  "@walkOutdoor": {
+    "description": "Outdoor walk button"
+  },
+
+  "walkingNow": "You're walking! Steps are being recorded in real-time.",
+  "@walkingNow": {
+    "description": "Walking now tip message"
+  },
+
+  "walkOutdoorBonus": "You can earn more bonus treats with outdoor walks!",
+  "@walkOutdoorBonus": {
+    "description": "Outdoor walk bonus tip message"
+  },
+
+  "walkSensorInitializing": "Initializing step sensor...",
+  "@walkSensorInitializing": {
+    "description": "Sensor initialization loading message"
+  },
+
+  "walkSensorUnavailable": "Step sensor unavailable",
+  "@walkSensorUnavailable": {
+    "description": "Sensor unavailable error title"
+  },
+
+  "walkPermissionRequired": "Please allow activity permissions in Settings",
+  "@walkPermissionRequired": {
+    "description": "Permission required message"
+  },
+
+  "walkStartedOutdoor": "Outdoor walk started! 🌳\nPlease allow location permissions.",
+  "@walkStartedOutdoor": {
+    "description": "Outdoor walk started success message"
+  },
+
+  "walkStartedIndoor": "Indoor walk started! 🏠",
+  "@walkStartedIndoor": {
+    "description": "Indoor walk started success message"
+  },
+
+  "walkStartFailed": "Cannot start walk. Please check permissions.",
+  "@walkStartFailed": {
+    "description": "Walk start failed error message"
+  },
+
+  "walkEndingMessage": "Ending walk...\nPlease wait while steps are being recorded",
+  "@walkEndingMessage": {
+    "description": "Walk ending in progress message"
+  },
+
+  "walkCompleted": "Walk complete! {steps} steps recorded 🎉\n{treats} treats, happiness +{happiness}",
+  "@walkCompleted": {
+    "description": "Walk completed success message",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      },
+      "treats": {
+        "type": "int",
+        "example": "10"
+      },
+      "happiness": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+
+  "walkLevelUp": "🎊 Level Up! LV {levelBefore} → LV {levelAfter}",
+  "@walkLevelUp": {
+    "description": "Level up notification message",
+    "placeholders": {
+      "levelBefore": {
+        "type": "int",
+        "example": "5"
+      },
+      "levelAfter": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+
+  "walkLevelUpMultiple": "(+{levels} levels)",
+  "@walkLevelUpMultiple": {
+    "description": "Multiple level up indicator",
+    "placeholders": {
+      "levels": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+
+  "walkEndError": "An error occurred while ending walk.",
+  "@walkEndError": {
+    "description": "Walk end failed error message"
+  },
+
+  "errorOccurred": "An error occurred: {error}",
+  "@errorOccurred": {
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+
+  "close": "Close",
+  "@close": {
+    "description": "Close button"
+  },
+
+  "congratulations": "Congratulations! 🎉",
+  "@congratulations": {
+    "description": "Congratulations message"
+  },
+
+  "tabHome": "Home",
+  "@tabHome": {
+    "description": "Home tab label"
+  },
+
+  "tabWalk": "Walk",
+  "@tabWalk": {
+    "description": "Walk tab label"
+  },
+
+  "tabCustomize": "Customize",
+  "@tabCustomize": {
+    "description": "Customize tab label"
+  },
+
+  "tabSettings": "Settings",
+  "@tabSettings": {
+    "description": "Settings tab label"
+  },
+
+  "notificationComingSoon": "Notification feature coming soon!",
+  "@notificationComingSoon": {
+    "description": "Notification feature coming soon message"
+  },
+
+  "petStatus": "Pet Status",
+  "@petStatus": {
+    "description": "Pet status section title"
+  },
+
+  "happiness": "Happiness",
+  "@happiness": {
+    "description": "Happiness label"
+  },
+
+  "experience": "Experience",
+  "@experience": {
+    "description": "Experience label"
+  },
+
+  "treats": "Treats",
+  "@treats": {
+    "description": "Treats label"
+  },
+
+  "treatsCount": "{count} treats",
+  "@treatsCount": {
+    "description": "Treats count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "giveTreat": "Give Treat",
+  "@giveTreat": {
+    "description": "Give treat button"
+  },
+
+  "statusVeryHappy": "Very happy! 😆",
+  "@statusVeryHappy": {
+    "description": "Pet status message - very happy (90+)"
+  },
+
+  "statusHappy": "Feeling good! 😊",
+  "@statusHappy": {
+    "description": "Pet status message - happy (80-89)"
+  },
+
+  "statusNeutral": "Feeling okay 😐",
+  "@statusNeutral": {
+    "description": "Pet status message - neutral (60-79)"
+  },
+
+  "statusSad": "Looks a bit sad 😔",
+  "@statusSad": {
+    "description": "Pet status message - a bit sad (40-59)"
+  },
+
+  "statusVerySad": "Very sad 😢",
+  "@statusVerySad": {
+    "description": "Pet status message - very sad (20-39)"
+  },
+
+  "statusDepressed": "Deeply depressed... 😭",
+  "@statusDepressed": {
+    "description": "Pet status message - depressed (0-19)"
+  },
+
+  "petInfoLoadError": "Unable to load pet information",
+  "@petInfoLoadError": {
+    "description": "Pet information loading failure message"
+  },
+
+  "treatFeedSuccess": "Yum! Delicious! 🐕 (Happiness +10)",
+  "@treatFeedSuccess": {
+    "description": "Treat feeding success message"
+  },
+
+  "treatFeedError": "Cannot give treat",
+  "@treatFeedError": {
+    "description": "Treat feeding failure message"
+  },
+
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "description": "Error message (with exception)",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+
+  "personalityCheerfulDesc": "Cheerful personality",
+  "@personalityCheerfulDesc": {
+    "description": "Personality description - cheerful"
+  },
+
+  "personalityCalmDesc": "Calm personality",
+  "@personalityCalmDesc": {
+    "description": "Personality description - calm"
+  },
+
+  "personalityEnergeticDesc": "Energetic personality",
+  "@personalityEnergeticDesc": {
+    "description": "Personality description - energetic"
+  },
+
+  "personalityShyDesc": "Shy personality",
+  "@personalityShyDesc": {
+    "description": "Personality description - shy"
+  },
+
+  "personalityPlayfulDesc": "Playful personality",
+  "@personalityPlayfulDesc": {
+    "description": "Personality description - playful"
+  },
+
+  "defaultPetName": "Doggy",
+  "@defaultPetName": {
+    "description": "Default pet name"
+  },
+
+  "defaultPetBreed": "Golden Retriever",
+  "@defaultPetBreed": {
+    "description": "Default pet breed"
+  },
+
+  "tapPetToChat": "Tap your pet to chat!",
+  "@tapPetToChat": {
+    "description": "Pet interaction hint message"
+  },
+
+  "customizeTitle": "Customize",
+  "@customizeTitle": {
+    "description": "Customize screen title"
+  },
+  "accessoriesTitle": "Accessories",
+  "@accessoriesTitle": {
+    "description": "Accessories section title"
+  },
+  "aiStickerGeneration": "AI Sticker Generation",
+  "@aiStickerGeneration": {
+    "description": "AI sticker generation section title"
+  },
+  "aiStickerDescription": "Create your own unique pet stickers with AI!",
+  "@aiStickerDescription": {
+    "description": "AI sticker generation description"
+  },
+  "generateSticker": "Generate Sticker",
+  "@generateSticker": {
+    "description": "Generate sticker button label"
+  },
+  "accessoryNone": "None",
+  "@accessoryNone": {
+    "description": "Accessory - None"
+  },
+  "accessoryBandana": "Bandana",
+  "@accessoryBandana": {
+    "description": "Accessory - Bandana"
+  },
+  "accessoryGlasses": "Glasses",
+  "@accessoryGlasses": {
+    "description": "Accessory - Glasses"
+  },
+  "accessoryBowtie": "Bowtie",
+  "@accessoryBowtie": {
+    "description": "Accessory - Bowtie"
+  },
+  "accessoryHat": "Hat",
+  "@accessoryHat": {
+    "description": "Accessory - Hat"
+  },
+  "accessoryCollar": "Collar",
+  "@accessoryCollar": {
+    "description": "Accessory - Collar"
+  },
+  "applyAccessoryTitle": "Apply Accessory",
+  "@applyAccessoryTitle": {
+    "description": "Apply accessory dialog title"
+  },
+  "applyAccessoryConfirm": "Would you like to apply {accessoryName}?",
+  "@applyAccessoryConfirm": {
+    "description": "Apply accessory confirmation message",
+    "placeholders": {
+      "accessoryName": {
+        "type": "String",
+        "example": "Bandana"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "accessoryAppliedSuccess": "{accessoryName} has been applied!",
+  "@accessoryAppliedSuccess": {
+    "description": "Accessory applied success message",
+    "placeholders": {
+      "accessoryName": {
+        "type": "String",
+        "example": "Bandana"
+      }
+    }
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button"
+  },
+  "stickerComingSoon": "AI sticker generation feature coming soon! 🎨",
+  "@stickerComingSoon": {
+    "description": "AI sticker generation not implemented message"
+  },
+
+  "walkTitle": "Walk",
+  "@walkTitle": {
+    "description": "Walk screen title"
+  },
+  "todaySteps": "Today's Steps",
+  "@todaySteps": {
+    "description": "Today's steps title"
+  },
+  "stepsUnit": "steps",
+  "@stepsUnit": {
+    "description": "Steps unit"
+  },
+  "walkGuideTitle": "Walking Guide",
+  "@walkGuideTitle": {
+    "description": "Walking guide title"
+  },
+  "guideAutoRecording": "Your steps are automatically recorded when you walk with your phone",
+  "@guideAutoRecording": {
+    "description": "Walking guide - auto recording"
+  },
+  "guideTreatReward": "Earn 1 treat for every 300 steps",
+  "@guideTreatReward": {
+    "description": "Walking guide - treat reward"
+  },
+  "guideHappinessIncrease": "Your pet's happiness increases as you walk",
+  "@guideHappinessIncrease": {
+    "description": "Walking guide - happiness increase"
+  },
+  "guideMissionReward": "Complete missions to receive additional rewards",
+  "@guideMissionReward": {
+    "description": "Walking guide - mission reward"
+  },
+  "comingSoonTitle": "Coming Soon",
+  "@comingSoonTitle": {
+    "description": "Coming soon features title"
+  },
+  "featureGPSTracking": "Real-time GPS Tracking",
+  "@featureGPSTracking": {
+    "description": "Feature - GPS tracking"
+  },
+  "featureWalkHistory": "Walk History & Records",
+  "@featureWalkHistory": {
+    "description": "Feature - walk history"
+  },
+  "featureOutdoorBonus": "Outdoor Bonus System",
+  "@featureOutdoorBonus": {
+    "description": "Feature - outdoor bonus"
+  },
+  "featureMissionProgress": "Mission Progress During Walk",
+  "@featureMissionProgress": {
+    "description": "Feature - mission progress"
+  },
+  "featureStatistics": "Walk Statistics & Graphs",
+  "@featureStatistics": {
+    "description": "Feature - statistics"
+  },
+  "badgeWeek3": "Week 3",
+  "@badgeWeek3": {
+    "description": "Badge - Week 3"
+  },
+  "badgeWeek4": "Week 4",
+  "@badgeWeek4": {
+    "description": "Badge - Week 4"
+  },
+
+  "achievementsTitle": "Badges",
+  "@achievementsTitle": {
+    "description": "Achievements section title"
+  },
+  "viewAll": "View All",
+  "@viewAll": {
+    "description": "View all button"
+  },
+  "firstBadgePrompt": "Earn your first badge!",
+  "@firstBadgePrompt": {
+    "description": "Empty state - first badge prompt"
+  },
+  "badgesWalkHint": "Start walking to earn badges",
+  "@badgesWalkHint": {
+    "description": "Empty state - walking hint"
+  },
+  "badgesLoadError": "Unable to load badges",
+  "@badgesLoadError": {
+    "description": "Badge load error message"
+  },
+
+  "settingsLoadError": "Unable to load settings: {error}",
+  "@settingsLoadError": {
+    "description": "Settings load error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTimeHint": "Set morning and evening notification times",
+  "@notificationTimeHint": {
+    "description": "Notification time setting hint"
+  },
+  "languageChangeError": "Error occurred while changing language: {error}",
+  "@languageChangeError": {
+    "description": "Language change error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "badgesCollectionTitle": "Badge Collection",
+  "@badgesCollectionTitle": {
+    "description": "Badge collection screen title"
+  },
+  "badgesCollectionStatus": "Badge Collection Status",
+  "@badgesCollectionStatus": {
+    "description": "Badge collection status title"
+  },
+  "badgesAchieved": "{unlockedCount} / {totalCount} achieved",
+  "@badgesAchieved": {
+    "description": "Number of badges achieved",
+    "placeholders": {
+      "unlockedCount": {
+        "type": "int"
+      },
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "achievementUnlockedDate": "Unlocked: {date}",
+  "@achievementUnlockedDate": {
+    "description": "Achievement unlock date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "noBadgesYet": "No badges yet",
+  "@noBadgesYet": {
+    "description": "Message when no badges"
+  },
+  "startWalkingForFirstBadge": "Start walking to earn your first badge!",
+  "@startWalkingForFirstBadge": {
+    "description": "First badge acquisition guide"
+  },
+  "tryAgainLater": "Please try again later",
+  "@tryAgainLater": {
+    "description": "Retry guidance message"
+  },
+  "tierBronze": "Bronze",
+  "@tierBronze": {
+    "description": "Bronze tier"
+  },
+  "tierSilver": "Silver",
+  "@tierSilver": {
+    "description": "Silver tier"
+  },
+  "tierGold": "Gold",
+  "@tierGold": {
+    "description": "Gold tier"
+  },
+  "tierPlatinum": "Platinum",
+  "@tierPlatinum": {
+    "description": "Platinum tier"
+  },
+  "welcomeHeadline": "Walk together with\nyour virtual pet!",
+  "@welcomeHeadline": {
+    "description": "Welcome screen headline"
+  },
+  "featureStepTrackingTitle": "Step Tracking",
+  "@featureStepTrackingTitle": {
+    "description": "Step tracking feature title"
+  },
+  "featureStepTrackingDesc": "Your pet gets happier with every walk",
+  "@featureStepTrackingDesc": {
+    "description": "Step tracking feature description"
+  },
+  "featureRewardSystemTitle": "Reward System",
+  "@featureRewardSystemTitle": {
+    "description": "Reward system feature title"
+  },
+  "featureRewardSystemDesc": "Earn treats and badges based on your steps",
+  "@featureRewardSystemDesc": {
+    "description": "Reward system feature description"
+  },
+  "featureAiChatTitle": "AI Chat",
+  "@featureAiChatTitle": {
+    "description": "AI chat feature title"
+  },
+  "featureAiChatDesc": "Chat and connect with your pet in real-time",
+  "@featureAiChatDesc": {
+    "description": "AI chat feature description"
+  },
+  "createPet": "Create Pet",
+  "@createPet": {
+    "description": "Create pet button"
+  },
+  "comingSoon": "Coming soon!",
+  "@comingSoon": {
+    "description": "Coming soon message"
+  },
+  "loadExistingPet": "Load Existing Pet",
+  "@loadExistingPet": {
+    "description": "Load existing pet button"
+  },
+  "missionCompleted": "Completed",
+  "@missionCompleted": {
+    "description": "Mission completed status"
+  },
+  "missionProgress": "Progress",
+  "@missionProgress": {
+    "description": "Mission progress label"
+  },
+  "missionTreatsCount": "{count} treats",
+  "@missionTreatsCount": {
+    "description": "Treats count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionTreatsLabel": "Treats",
+  "@missionTreatsLabel": {
+    "description": "Treats label"
+  },
+  "missionHappinessLabel": "Happiness",
+  "@missionHappinessLabel": {
+    "description": "Happiness label"
+  },
+  "missionExpired": "Expired",
+  "@missionExpired": {
+    "description": "Mission expired"
+  },
+  "missionDaysRemaining": "{days} days left",
+  "@missionDaysRemaining": {
+    "description": "Mission days remaining",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "missionHoursRemaining": "{hours} hours left",
+  "@missionHoursRemaining": {
+    "description": "Mission hours remaining",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "missionMinutesRemaining": "{minutes} min left",
+  "@missionMinutesRemaining": {
+    "description": "Mission minutes remaining",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "missionStepsUnit": "{steps} steps",
+  "@missionStepsUnit": {
+    "description": "Steps unit",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+  "missionMinutesUnit": "{minutes} min",
+  "@missionMinutesUnit": {
+    "description": "Minutes unit",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "missionComplete": "Mission Complete!",
+  "@missionComplete": {
+    "description": "Mission completion notification title"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "todaysMissions": "Today's Missions",
+  "@todaysMissions": {
+    "description": "Today's missions title"
+  },
+  "viewAll": "View All",
+  "@viewAll": {
+    "description": "View all button text"
+  },
+  "moreAvailable": "{count} more available",
+  "@moreAvailable": {
+    "description": "Indicates more items available",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cannotLoadMissions": "Cannot load missions",
+  "@cannotLoadMissions": {
+    "description": "Error message when missions cannot be loaded"
+  },
+  "newMissionsComingSoon": "New missions coming soon!",
+  "@newMissionsComingSoon": {
+    "description": "Empty state message"
+  },
+  "missions": "Missions",
+  "@missions": {
+    "description": "Missions title"
+  },
+  "stepsUnitLabel": "steps",
+  "@stepsUnitLabel": {
+    "description": "Steps unit label"
+  },
+  "minutesUnitLabel": "min",
+  "@minutesUnitLabel": {
+    "description": "Minutes unit label"
+  },
+  "rewardsEarned": "Rewards Earned",
+  "@rewardsEarned": {
+    "description": "Rewards earned title"
+  },
+  "congratulations": "Congratulations! 🎉",
+  "@congratulations": {
+    "description": "Congratulations message"
+  },
+
+  "todaysActivity": "Today's Activity",
+  "@todaysActivity": {
+    "description": "Today's activity title"
+  },
+
+  "goalAchieved": "Goal Achieved! 🎉",
+  "@goalAchieved": {
+    "description": "Goal achieved message"
+  },
+
+  "stepsToGoal": "{steps} steps to goal",
+  "@stepsToGoal": {
+    "description": "Steps remaining to goal",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "distance": "Distance",
+  "@distance": {
+    "description": "Distance label"
+  },
+
+  "activeTime": "Active Time",
+  "@activeTime": {
+    "description": "Active time label"
+  },
+
+  "loadingSteps": "Loading step data...",
+  "@loadingSteps": {
+    "description": "Loading step data message"
+  },
+
+  "cannotLoadSteps": "Cannot load step data",
+  "@cannotLoadSteps": {
+    "description": "Cannot load step data error message"
+  },
+
+  "checkActivityPermissions": "Please check activity permissions in Settings",
+  "@checkActivityPermissions": {
+    "description": "Activity permission check message"
+  },
+
+  "trackingStateMonitoring": "Monitoring",
+  "@trackingStateMonitoring": {
+    "description": "Tracking state - monitoring"
+  },
+
+  "trackingStateWalking": "Walking",
+  "@trackingStateWalking": {
+    "description": "Tracking state - walking"
+  },
+
+  "trackingStateStopped": "Stopped",
+  "@trackingStateStopped": {
+    "description": "Tracking state - stopped"
+  },
+
+  "trackingStateError": "Error",
+  "@trackingStateError": {
+    "description": "Tracking state - error"
+  },
+
+  "streakMessageZero": "Start walking today and build your streak!",
+  "@streakMessageZero": {
+    "description": "Streak message for 0 days"
+  },
+
+  "streakMessageOne": "Great start! Keep it up tomorrow! 💪",
+  "@streakMessageOne": {
+    "description": "Streak message for 1 day"
+  },
+
+  "streakMessageActive": "You've achieved {days} days in a row! {remaining} days until a week!",
+  "@streakMessageActive": {
+    "description": "Streak message for active streak under 7 days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+
+  "streakMessageLong": "Wow! {days} days in a row! Amazing! 🎊",
+  "@streakMessageLong": {
+    "description": "Streak message for long streak (7+ days)",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+
+  "weeklyActivity": "Weekly Activity",
+  "@weeklyActivity": {
+    "description": "Weekly activity title"
+  },
+
+  "last7Days": "Last 7 Days",
+  "@last7Days": {
+    "description": "Last 7 days label"
+  },
+
+  "chartTooltipTotal": "Total: {steps} steps",
+  "@chartTooltipTotal": {
+    "description": "Chart tooltip total steps",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "chartTooltipAppWalk": "App walk: {steps} steps",
+  "@chartTooltipAppWalk": {
+    "description": "Chart tooltip app walk steps",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "average": "Average",
+  "@average": {
+    "description": "Average label"
+  },
+
+  "maximum": "Maximum",
+  "@maximum": {
+    "description": "Maximum/peak label"
+  },
+
+  "cannotLoadData": "Cannot load data",
+  "@cannotLoadData": {
+    "description": "Cannot load data error message"
+  },
+
+  "noRecordsYet": "No records yet",
+  "@noRecordsYet": {
+    "description": "No records yet message"
+  },
+
+  "mondayShort": "Mon",
+  "@mondayShort": {
+    "description": "Monday abbreviation"
+  },
+
+  "tuesdayShort": "Tue",
+  "@tuesdayShort": {
+    "description": "Tuesday abbreviation"
+  },
+
+  "wednesdayShort": "Wed",
+  "@wednesdayShort": {
+    "description": "Wednesday abbreviation"
+  },
+
+  "thursdayShort": "Thu",
+  "@thursdayShort": {
+    "description": "Thursday abbreviation"
+  },
+
+  "fridayShort": "Fri",
+  "@fridayShort": {
+    "description": "Friday abbreviation"
+  },
+
+  "saturdayShort": "Sat",
+  "@saturdayShort": {
+    "description": "Saturday abbreviation"
+  },
+
+  "sundayShort": "Sun",
+  "@sundayShort": {
+    "description": "Sunday abbreviation"
+  },
+
+  "monthlyTrend": "Monthly Trend",
+  "@monthlyTrend": {
+    "description": "Monthly trend title"
+  },
+
+  "last30Days": "Last 30 Days",
+  "@last30Days": {
+    "description": "Last 30 days label"
+  },
+
+  "totalSteps": "Total Steps",
+  "@totalSteps": {
+    "description": "Total steps label"
+  },
+
+  "dailyAverage": "Daily Average",
+  "@dailyAverage": {
+    "description": "Daily average label"
+  },
+
+  "dogBark": "Woof! Bark!",
+  "@dogBark": {
+    "description": "Dog bark fallback message"
+  },
+
+  "loadingDogInfo": "Loading dog information...",
+  "@loadingDogInfo": {
+    "description": "Loading dog information message"
+  },
+
+  "gpsStatus": "GPS Status",
+  "@gpsStatus": {
+    "description": "GPS status title"
+  },
+
+  "gpsTracking": "GPS Tracking",
+  "@gpsTracking": {
+    "description": "GPS tracking active"
+  },
+
+  "gpsWaiting": "GPS Standby",
+  "@gpsWaiting": {
+    "description": "GPS waiting"
+  },
+
+  "outdoorMode": "Outdoor Mode",
+  "@outdoorMode": {
+    "description": "Outdoor mode"
+  },
+
+  "indoorMode": "Indoor Mode",
+  "@indoorMode": {
+    "description": "Indoor mode"
+  },
+
+  "detecting": "Detecting...",
+  "@detecting": {
+    "description": "Detecting status"
+  },
+
+  "errorStatus": "Error",
+  "@errorStatus": {
+    "description": "Error status"
+  },
+
+  "searchingGpsSignal": "Searching for GPS signal...",
+  "@searchingGpsSignal": {
+    "description": "Searching for GPS signal"
+  },
+
+  "locationSamples": "Location Samples",
+  "@locationSamples": {
+    "description": "Location samples label"
+  },
+
+  "countItems": "{count} items",
+  "@countItems": {
+    "description": "Count items",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "outdoorSignals": "Outdoor Signals",
+  "@outdoorSignals": {
+    "description": "Outdoor signals label"
+  },
+
+  "outdoorRatio": "Outdoor Ratio",
+  "@outdoorRatio": {
+    "description": "Outdoor ratio label"
+  },
+
+  "doubleBonusApplied": "2x Bonus Applied!",
+  "@doubleBonusApplied": {
+    "description": "Double bonus applied message"
+  },
+
+  "outdoorBonusRequirement": "2x bonus for 50%+ outdoor",
+  "@outdoorBonusRequirement": {
+    "description": "Outdoor bonus requirement message"
+  },
+
+  "locationPermissionError": "Error requesting location permission: {error}",
+  "@locationPermissionError": {
+    "description": "Location permission request error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "gpsOutdoorMode": "GPS Outdoor Mode",
+  "@gpsOutdoorMode": {
+    "description": "GPS outdoor mode"
+  },
+
+  "locationPermissionGranted": "Location Permission Granted",
+  "@locationPermissionGranted": {
+    "description": "Location permission granted"
+  },
+
+  "locationPermissionGrantedDesc": "GPS can automatically detect outdoor walks and earn bonus rewards.",
+  "@locationPermissionGrantedDesc": {
+    "description": "Location permission granted description"
+  },
+
+  "locationPermissionRequired": "Location Permission Required",
+  "@locationPermissionRequired": {
+    "description": "Location permission required"
+  },
+
+  "locationPermissionRequiredDesc": "Location permission is required for outdoor walk detection and bonus rewards.",
+  "@locationPermissionRequiredDesc": {
+    "description": "Location permission required description"
+  },
+
+  "locationPermissionDenied": "Location Permission Denied",
+  "@locationPermissionDenied": {
+    "description": "Location permission denied"
+  },
+
+  "locationPermissionDeniedDesc": "Please allow location permission in Settings.",
+  "@locationPermissionDeniedDesc": {
+    "description": "Location permission denied description"
+  },
+
+  "checkingPermissionStatus": "Checking permission status...",
+  "@checkingPermissionStatus": {
+    "description": "Checking permission status"
+  },
+
+  "outdoorModeBenefits": "Outdoor Mode Benefits",
+  "@outdoorModeBenefits": {
+    "description": "Outdoor mode benefits title"
+  },
+
+  "doubleReward": "2x Rewards",
+  "@doubleReward": {
+    "description": "Double reward"
+  },
+
+  "doubleRewardDesc": "Get double treats and happiness during outdoor walks",
+  "@doubleRewardDesc": {
+    "description": "Double reward description"
+  },
+
+  "accurateDistanceTracking": "Accurate Distance Tracking",
+  "@accurateDistanceTracking": {
+    "description": "Accurate distance tracking"
+  },
+
+  "accurateDistanceTrackingDesc": "Precisely measure actual distance and speed with GPS",
+  "@accurateDistanceTrackingDesc": {
+    "description": "Accurate distance tracking description"
+  },
+
+  "specialBadges": "Special Badges",
+  "@specialBadges": {
+    "description": "Special badges"
+  },
+
+  "specialBadgesDesc": "Unlock exclusive outdoor walk badges and achievements",
+  "@specialBadgesDesc": {
+    "description": "Special badges description"
+  },
+
+  "refreshPermissionStatus": "Refresh Permission Status",
+  "@refreshPermissionStatus": {
+    "description": "Refresh permission status button"
+  },
+
+  "allowPermissionInSettings": "Allow Permission in Settings",
+  "@allowPermissionInSettings": {
+    "description": "Allow permission in settings button"
+  },
+
+  "requestingPermission": "Requesting permission...",
+  "@requestingPermission": {
+    "description": "Requesting permission message"
+  },
+
+  "activateGpsOutdoorMode": "Activate GPS Outdoor Mode",
+  "@activateGpsOutdoorMode": {
+    "description": "Activate GPS outdoor mode button"
+  },
+
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily mission tab label"
+  },
+
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly mission tab label"
+  },
+
+  "noDailyMissions": "No daily missions today",
+  "@noDailyMissions": {
+    "description": "Empty state message for daily missions"
+  },
+
+  "errorLoadingDailyMissions": "Error loading daily missions",
+  "@errorLoadingDailyMissions": {
+    "description": "Error message when daily missions fail to load"
+  },
+
+  "noWeeklyMissions": "No missions this week",
+  "@noWeeklyMissions": {
+    "description": "Empty state message for weekly missions"
+  },
+
+  "newWeeklyMissionsComingSoon": "New weekly missions coming soon!",
+  "@newWeeklyMissionsComingSoon": {
+    "description": "Empty state subtitle for weekly missions"
+  },
+
+  "errorLoadingWeeklyMissions": "Error loading weekly missions",
+  "@errorLoadingWeeklyMissions": {
+    "description": "Error message when weekly missions fail to load"
+  },
+
+  "noCompletedMissions": "No completed missions",
+  "@noCompletedMissions": {
+    "description": "Empty state message for completed missions"
+  },
+
+  "completeToGetRewards": "Complete missions to get rewards!",
+  "@completeToGetRewards": {
+    "description": "Empty state subtitle for completed missions"
+  },
+
+  "errorLoadingCompletedMissions": "Error loading completed missions",
+  "@errorLoadingCompletedMissions": {
+    "description": "Error message when completed missions fail to load"
+  },
+
+  "loadingMissions": "Loading missions...",
+  "@loadingMissions": {
+    "description": "Loading message for missions"
+  },
+
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button label"
+  },
+
+  "dailyMissionType": "Daily Mission",
+  "@dailyMissionType": {
+    "description": "Daily mission type label"
+  },
+
+  "weeklyMissionType": "Weekly Mission",
+  "@weeklyMissionType": {
+    "description": "Weekly mission type label"
+  },
+
+  "specialMissionType": "Special Mission",
+  "@specialMissionType": {
+    "description": "Special mission type label"
+  },
+
+  "rewardsLabel": "Rewards",
+  "@rewardsLabel": {
+    "description": "Rewards section label"
+  },
+
+  "targetLabel": "Target",
+  "@targetLabel": {
+    "description": "Target section label"
+  },
+
+  "percentComplete": "{percent}% Complete",
+  "@percentComplete": {
+    "description": "Progress percentage label",
+    "placeholders": {
+      "percent": {
+        "type": "int",
+        "example": "75"
+      }
+    }
+  },
+
+  "missionInfoTitle": "Mission Info",
+  "@missionInfoTitle": {
+    "description": "Mission information section title"
+  },
+
+  "expiryTime": "Expiry Time",
+  "@expiryTime": {
+    "description": "Mission expiry time label"
+  },
+
+  "remainingTime": "Remaining Time",
+  "@remainingTime": {
+    "description": "Mission remaining time label"
+  },
+
+  "completionTime": "Completion Time",
+  "@completionTime": {
+    "description": "Mission completion time label"
+  },
+
+  "daysUnit": "day(s)",
+  "@daysUnit": {
+    "description": "Days unit label"
+  },
+
+  "hoursUnit": "hour(s)",
+  "@hoursUnit": {
+    "description": "Hours unit label"
+  },
+
+  "badgeAchieved": "Badge Achieved!",
+  "@badgeAchieved": {
+    "description": "Badge achievement notification title"
+  },
+
+  "petCreationComingSoon": "Pet creation screen coming soon!",
+  "@petCreationComingSoon": {
+    "description": "Pet creation coming soon message"
+  },
+
+  "petLoadingComingSoon": "Pet loading feature coming soon!",
+  "@petLoadingComingSoon": {
+    "description": "Pet loading coming soon message"
+  },
+
+  "missionDailyStepsTitle": "Daily Step Goal",
+  "@missionDailyStepsTitle": {
+    "description": "Daily steps mission title"
+  },
+
+  "missionDailyStepsDescription": "Walk {steps} steps",
+  "@missionDailyStepsDescription": {
+    "description": "Daily steps mission description",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "missionWeeklyStepsTitle": "Weekly Steps Challenge",
+  "@missionWeeklyStepsTitle": {
+    "description": "Weekly steps mission title"
+  },
+
+  "missionWeeklyStepsDescription": "Walk {steps} steps",
+  "@missionWeeklyStepsDescription": {
+    "description": "Weekly steps mission description",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "missionActiveWeekTitle": "Active Week",
+  "@missionActiveWeekTitle": {
+    "description": "Active week mission title"
+  },
+
+  "missionActiveWeekDescription": "Walk for 180 minutes total",
+  "@missionActiveWeekDescription": {
+    "description": "Active week mission description"
+  },
+
+  "missionQuickWalkTitle": "Quick Walk",
+  "@missionQuickWalkTitle": {
+    "description": "Quick walk mission title"
+  },
+
+  "missionQuickWalkDescription": "Walk for 30 minutes continuously",
+  "@missionQuickWalkDescription": {
+    "description": "Quick walk mission description"
+  },
+
+  "missionDistanceChallengeTitle": "Distance Challenge",
+  "@missionDistanceChallengeTitle": {
+    "description": "Distance challenge mission title"
+  },
+
+  "missionEarlyAchievementTitle": "Early Achiever",
+  "@missionEarlyAchievementTitle": {
+    "description": "Early achievement mission title"
+  },
+
+  "missionConsistentExerciseTitle": "Consistent Exercise",
+  "@missionConsistentExerciseTitle": {
+    "description": "Consistent exercise mission title"
+  },
+
+  "missionDistanceChallengeDescription": "Walk more than 2km",
+  "@missionDistanceChallengeDescription": {
+    "description": "Distance challenge mission description"
+  },
+
+  "missionEarlyAchievementDescription": "Achieve 3000 steps early",
+  "@missionEarlyAchievementDescription": {
+    "description": "Early achievement mission description"
+  },
+
+  "missionConsistentExerciseDescription": "Stay active for 45 minutes",
+  "@missionConsistentExerciseDescription": {
+    "description": "Consistent exercise mission description"
+  },
+
+  "achievementFirstWalkTitle": "First Walk",
+  "@achievementFirstWalkTitle": {
+    "description": "First walk achievement title"
+  },
+
+  "achievementFirstWalkDescription": "Completed your first walk!",
+  "@achievementFirstWalkDescription": {
+    "description": "First walk achievement description"
+  },
+
+  "achievementSteps1kTitle": "1,000 Steps",
+  "@achievementSteps1kTitle": {
+    "description": "1,000 steps achievement title"
+  },
+
+  "achievementSteps1kDescription": "Reached 1,000 cumulative steps!",
+  "@achievementSteps1kDescription": {
+    "description": "1,000 steps achievement description"
+  },
+
+  "achievementSteps5kTitle": "5,000 Steps",
+  "@achievementSteps5kTitle": {
+    "description": "5,000 steps achievement title"
+  },
+
+  "achievementSteps5kDescription": "Reached 5,000 cumulative steps!",
+  "@achievementSteps5kDescription": {
+    "description": "5,000 steps achievement description"
+  },
+
+  "achievementSteps10kTitle": "10,000 Steps",
+  "@achievementSteps10kTitle": {
+    "description": "10,000 steps achievement title"
+  },
+
+  "achievementSteps10kDescription": "Reached 10,000 cumulative steps!",
+  "@achievementSteps10kDescription": {
+    "description": "10,000 steps achievement description"
+  },
+
+  "achievementStreak3Title": "3-Day Streak",
+  "@achievementStreak3Title": {
+    "description": "3-day streak achievement title"
+  },
+
+  "achievementStreak3Description": "Walked for 3 days in a row!",
+  "@achievementStreak3Description": {
+    "description": "3-day streak achievement description"
+  },
+
+  "achievementStreak7Title": "1-Week Streak",
+  "@achievementStreak7Title": {
+    "description": "7-day streak achievement title"
+  },
+
+  "achievementStreak7Description": "Walked for 7 days in a row!",
+  "@achievementStreak7Description": {
+    "description": "7-day streak achievement description"
+  },
+
+  "achievementOutdoorFirstTitle": "First Outdoor Walk",
+  "@achievementOutdoorFirstTitle": {
+    "description": "First outdoor walk achievement title"
+  },
+
+  "achievementOutdoorFirstDescription": "Completed your first outdoor walk!",
+  "@achievementOutdoorFirstDescription": {
+    "description": "First outdoor walk achievement description"
+  },
+
+  "achievementHappy100Title": "Maximum Happiness",
+  "@achievementHappy100Title": {
+    "description": "Max happiness achievement title"
+  },
+
+  "achievementHappy100Description": "Reached happiness level 100!",
+  "@achievementHappy100Description": {
+    "description": "Max happiness achievement description"
+  },
+
+  "achievementTreats100Title": "Treat Collector",
+  "@achievementTreats100Title": {
+    "description": "100 treats achievement title"
+  },
+
+  "achievementTreats100Description": "Collected 100 treats!",
+  "@achievementTreats100Description": {
+    "description": "100 treats achievement description"
+  },
+
+  "achievementDistance1kmTitle": "1km Achievement",
+  "@achievementDistance1kmTitle": {
+    "description": "1km distance achievement title"
+  },
+
+  "achievementDistance1kmDescription": "Walked 1km in total!",
+  "@achievementDistance1kmDescription": {
+    "description": "1km distance achievement description"
+  }
+}

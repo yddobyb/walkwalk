@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 import '../../../../services/statistics/statistics_service.dart';
 import '../../../../services/settings/settings_service.dart';
@@ -83,7 +84,7 @@ class DailyStatsWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '오늘의 활동',
+                AppLocalizations.of(context).todaysActivity,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -108,7 +109,7 @@ class DailyStatsWidget extends ConsumerWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            _getStateText(state),
+                            _getStateText(context, state),
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: _getStateColor(state),
                               fontWeight: FontWeight.w600,
@@ -174,7 +175,7 @@ class DailyStatsWidget extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          '걸음',
+                          AppLocalizations.of(context).stepsUnitLabel,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurface.withOpacity(0.7),
                           ),
@@ -186,8 +187,8 @@ class DailyStatsWidget extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(
                   stepProgress >= 1.0
-                      ? '목표 달성! 🎉'
-                      : '목표까지 ${goalSteps - todaySteps}걸음',
+                      ? AppLocalizations.of(context).goalAchieved
+                      : AppLocalizations.of(context).stepsToGoal(goalSteps - todaySteps),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: stepProgress >= 1.0
                         ? Colors.green
@@ -207,7 +208,7 @@ class DailyStatsWidget extends ConsumerWidget {
               Expanded(
                 child: _StatItem(
                   icon: Icons.straighten,
-                  label: '거리',
+                  label: AppLocalizations.of(context).distance,
                   value: '${distance.toStringAsFixed(1)}km',
                   color: theme.colorScheme.secondary,
                 ),
@@ -220,8 +221,8 @@ class DailyStatsWidget extends ConsumerWidget {
               Expanded(
                 child: _StatItem(
                   icon: Icons.timer,
-                  label: '활동 시간',
-                  value: '${activeMinutes}분',
+                  label: AppLocalizations.of(context).activeTime,
+                  value: '$activeMinutes${AppLocalizations.of(context).minutesUnitLabel}',
                   color: theme.colorScheme.tertiary,
                 ),
               ),
@@ -249,7 +250,7 @@ class DailyStatsWidget extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      _getStreakMessage(streakData),
+                      _getStreakMessage(context, streakData),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -289,7 +290,7 @@ class DailyStatsWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              '걸음수 데이터를 불러오는 중...',
+              AppLocalizations.of(context).loadingSteps,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -324,7 +325,7 @@ class DailyStatsWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              '걸음수 데이터를 불러올 수 없습니다',
+              AppLocalizations.of(context).cannotLoadSteps,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.error,
                 fontWeight: FontWeight.bold,
@@ -332,7 +333,7 @@ class DailyStatsWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '설정에서 활동 권한을 확인해주세요',
+              AppLocalizations.of(context).checkActivityPermissions,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -370,16 +371,16 @@ class DailyStatsWidget extends ConsumerWidget {
     }
   }
 
-  String _getStateText(StepTrackingState state) {
+  String _getStateText(BuildContext context, StepTrackingState state) {
     switch (state) {
       case StepTrackingState.monitoring:
-        return '모니터링';
+        return AppLocalizations.of(context).trackingStateMonitoring;
       case StepTrackingState.walking:
-        return '산책 중';
+        return AppLocalizations.of(context).trackingStateWalking;
       case StepTrackingState.stopped:
-        return '중지됨';
+        return AppLocalizations.of(context).trackingStateStopped;
       case StepTrackingState.error:
-        return '오류';
+        return AppLocalizations.of(context).trackingStateError;
     }
   }
 
@@ -389,15 +390,18 @@ class DailyStatsWidget extends ConsumerWidget {
     return Colors.green;
   }
 
-  String _getStreakMessage(StreakData streakData) {
+  String _getStreakMessage(BuildContext context, StreakData streakData) {
     if (streakData.currentStreak == 0) {
-      return '오늘 산책을 시작하고 연속 기록을 세워보세요!';
+      return AppLocalizations.of(context).streakMessageZero;
     } else if (streakData.currentStreak == 1) {
-      return '좋은 시작! 내일도 계속해보세요!';
+      return AppLocalizations.of(context).streakMessageOne;
     } else if (streakData.currentStreak < 7) {
-      return '${streakData.currentStreak}일 연속 달성 중! 일주일까지 ${7 - streakData.currentStreak}일 남았어요!';
+      return AppLocalizations.of(context).streakMessageActive(
+        streakData.currentStreak,
+        7 - streakData.currentStreak,
+      );
     } else {
-      return '${streakData.currentStreak}일 연속 달성 중! 계속 화이팅!';
+      return AppLocalizations.of(context).streakMessageLong(streakData.currentStreak);
     }
   }
 }

@@ -84,6 +84,7 @@ void main() {
         dogBreed: 'Golden Retriever',
         happinessLevel: 80,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // Then: 폴백 응답 반환
@@ -111,6 +112,7 @@ void main() {
           'duration': 1800,
           'isOutdoor': true,
         },
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -136,6 +138,7 @@ void main() {
           'title': '첫 산책 완료',
           'treatReward': 10,
         },
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -159,6 +162,7 @@ void main() {
         contextData: {
           'treatCount': 15,
         },
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -183,6 +187,7 @@ void main() {
           'level': 5,
           'experience': 500,
         },
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -203,6 +208,7 @@ void main() {
         dogBreed: 'Chihuahua',
         happinessLevel: 25,
         context: 'low_happiness',
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -223,6 +229,7 @@ void main() {
         dogBreed: 'Maltese',
         happinessLevel: 75,
         context: 'greeting',
+        locale: 'ko',
       );
 
       // Then: 응답 생성됨
@@ -257,6 +264,7 @@ void main() {
           dogBreed: 'Test Breed',
           happinessLevel: scenario['happiness'] as int,
           context: 'greeting',
+          locale: 'ko',
         );
 
         // Then: 응답 생성됨

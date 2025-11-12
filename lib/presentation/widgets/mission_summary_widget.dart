@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/mission.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/mission/mission_service.dart';
 import '../../services/tracking/step_tracking_service.dart';
 import 'mission_list_widget.dart';
@@ -61,7 +62,7 @@ class MissionSummaryWidget extends ConsumerWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  '오늘의 미션',
+                  AppLocalizations.of(context).todaysMissions,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -70,7 +71,7 @@ class MissionSummaryWidget extends ConsumerWidget {
                 if (showViewAllButton)
                   TextButton(
                     onPressed: () => _navigateToMissionList(context),
-                    child: Text('전체보기'),
+                    child: Text(AppLocalizations.of(context).viewAll),
                   ),
               ],
             ),
@@ -81,7 +82,7 @@ class MissionSummaryWidget extends ConsumerWidget {
             activeMissionsAsync.when(
               data: (missions) => _buildMissionContent(context, theme, missions, dailyStepsAsync),
               loading: () => _buildLoadingContent(),
-              error: (error, stackTrace) => _buildErrorContent(theme),
+              error: (error, stackTrace) => _buildErrorContent(context, theme),
             ),
           ],
         ),
@@ -91,7 +92,7 @@ class MissionSummaryWidget extends ConsumerWidget {
 
   Widget _buildMissionContent(BuildContext context, ThemeData theme, List<Mission> missions, AsyncValue<int> dailyStepsAsync) {
     if (missions.isEmpty) {
-      return _buildEmptyContent(theme);
+      return _buildEmptyContent(context, theme);
     }
 
     // 일일 미션만 표시 (최대 3개)
@@ -101,12 +102,12 @@ class MissionSummaryWidget extends ConsumerWidget {
         .toList();
 
     if (dailyMissions.isEmpty) {
-      return _buildEmptyContent(theme);
+      return _buildEmptyContent(context, theme);
     }
 
     return Column(
       children: [
-        ...dailyMissions.map((mission) => _buildMissionItem(theme, mission, dailyStepsAsync)),
+        ...dailyMissions.map((mission) => _buildMissionItem(context, theme, mission, dailyStepsAsync)),
 
         if (missions.length > 3) ...[
           const SizedBox(height: 12),
@@ -126,7 +127,7 @@ class MissionSummaryWidget extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${missions.length - 3}개 더 있음',
+                  AppLocalizations.of(context).moreAvailable(missions.length - 3),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -139,7 +140,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildMissionItem(ThemeData theme, Mission mission, AsyncValue<int> dailyStepsAsync) {
+  Widget _buildMissionItem(BuildContext context, ThemeData theme, Mission mission, AsyncValue<int> dailyStepsAsync) {
     // 실시간 진행도 계산
     final currentProgress = _getCurrentProgress(mission, dailyStepsAsync);
     final progress = _calculateProgress(mission, currentProgress);
@@ -215,7 +216,7 @@ class MissionSummaryWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _formatProgress(mission, currentProgress),
+                _formatProgress(context, mission, currentProgress),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -284,7 +285,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorContent(ThemeData theme) {
+  Widget _buildErrorContent(BuildContext context, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -301,7 +302,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              '미션을 불러올 수 없습니다',
+              AppLocalizations.of(context).cannotLoadMissions,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.red,
               ),
@@ -312,7 +313,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyContent(ThemeData theme) {
+  Widget _buildEmptyContent(BuildContext context, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -329,7 +330,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              '새로운 미션이 곧 생성됩니다!',
+              AppLocalizations.of(context).newMissionsComingSoon,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -345,7 +346,7 @@ class MissionSummaryWidget extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(
-            title: const Text('미션'),
+            title: Text(AppLocalizations.of(context).missions),
             elevation: 0,
           ),
           body: const MissionListWidget(),
@@ -382,15 +383,15 @@ class MissionSummaryWidget extends ConsumerWidget {
     return 1;
   }
 
-  String _formatProgress(Mission mission, int currentProgress) {
+  String _formatProgress(BuildContext context, Mission mission, int currentProgress) {
     final target = _getTargetProgress(mission);
 
     if (mission.targetSteps > 0) {
-      return '$currentProgress / ${mission.targetSteps} 걸음';
+      return '$currentProgress / ${mission.targetSteps} ${AppLocalizations.of(context).stepsUnitLabel}';
     } else if (mission.targetDuration > 0) {
       final currentMinutes = currentProgress ~/ 60;
       final targetMinutes = mission.targetDuration ~/ 60;
-      return '$currentMinutes / $targetMinutes 분';
+      return '$currentMinutes / $targetMinutes ${AppLocalizations.of(context).minutesUnitLabel}';
     } else if (mission.targetDistance > 0) {
       final currentKm = currentProgress / 1000;
       final targetKm = mission.targetDistance / 1000;

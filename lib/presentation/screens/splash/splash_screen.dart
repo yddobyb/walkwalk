@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../home/home_screen.dart';
 import '../onboarding/welcome_screen.dart';
@@ -150,7 +151,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
                     // 앱 설명
                     Text(
-                      AppConstants.appDescription,
+                      AppLocalizations.of(context).appDescription,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.onPrimary.withOpacity(0.8),
                       ),

@@ -1,0 +1,345 @@
+// test/services/ai/fallback_responses_test.dart
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:walk_dog/services/ai/fallback_responses.dart';
+
+/// Week 3 Test 4: FallbackResponses 테스트
+///
+/// 테스트 항목:
+/// 1. 7개 컨텍스트별 응답 생성 확인
+/// 2. 각 컨텍스트마다 다른 메시지 확인
+/// 3. contextData에 따른 동적 응답 확인
+/// 4. 랜덤 응답 다양성 확인
+void main() {
+  late FallbackResponses fallbackResponses;
+
+  setUp(() {
+    fallbackResponses = FallbackResponses();
+  });
+
+  group('FallbackResponses Tests', () {
+    // ==========================================================================
+    // 1. greeting_static (시간대별 인사)
+    // ==========================================================================
+    test('greeting_static - 시간대별 다른 인사 (아침/오후/저녁)', () {
+      // Given: greeting_static 컨텍스트
+      const context = 'greeting_static';
+
+      // When: 여러 번 호출 (같은 시간대이므로 모두 동일)
+      final responses = List.generate(
+        10,
+        (_) => fallbackResponses.getResponse(context, null, 'ko'),
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(responses.every((r) => r.isNotEmpty), true);
+
+      // Then: 현재 시간대에 맞는 응답 반환
+      final hour = DateTime.now().hour;
+      final expectedResponse = hour < 12
+          ? '좋은 아침이에요! 오늘도 산책 갈까요? 멍멍!'
+          : hour < 18
+              ? '좋은 오후예요! 신나는 하루 보내요! 왈왈!'
+              : '좋은 저녁이에요! 오늘 하루 어땠어요? 멍멍!';
+
+      // Then: 모두 같은 응답 (시간대가 고정되어 있으므로)
+      for (final response in responses) {
+        expect(response, expectedResponse);
+      }
+
+      print('✅ greeting_static 시간대별 인사 확인 완료');
+      print('   - 현재 시간대: ${hour < 12 ? "아침" : hour < 18 ? "오후" : "저녁"}');
+      print('   - 응답: $expectedResponse');
+    });
+
+    // ==========================================================================
+    // 2. greeting (랜덤 인사)
+    // ==========================================================================
+    test('greeting - 랜덤 인사 (4가지)', () {
+      // Given: greeting 컨텍스트
+      const context = 'greeting';
+
+      // When: 20번 호출하여 다양성 확인
+      final responses = List.generate(
+        20,
+        (_) => fallbackResponses.getResponse(context, null, 'ko'),
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(responses.every((r) => r.isNotEmpty), true);
+
+      // Then: 최소 2가지 이상의 다른 응답 (랜덤성 확인)
+      final uniqueResponses = responses.toSet();
+      expect(uniqueResponses.length, greaterThanOrEqualTo(2));
+
+      print('✅ greeting 랜덤 인사 확인 완료');
+      print('   - 총 호출 수: ${responses.length}');
+      print('   - 유니크 응답 수: ${uniqueResponses.length}');
+      print('   - 응답 예시:');
+      for (final response in uniqueResponses.take(3)) {
+        print('     * $response');
+      }
+    });
+
+    // ==========================================================================
+    // 3. walk_complete (걸음수별 다른 응답)
+    // ==========================================================================
+    test('walk_complete - 걸음수별 다른 응답 (저/중/고)', () {
+      // Given: walk_complete 컨텍스트
+
+      // When: 3가지 걸음수 시나리오
+      final lowSteps = fallbackResponses.getResponse(
+        'walk_complete',
+        {'steps': 3000, 'duration': 1200, 'isOutdoor': false},
+      );
+      final midSteps = fallbackResponses.getResponse(
+        'walk_complete',
+        {'steps': 7000, 'duration': 2400, 'isOutdoor': false},
+      );
+      final highSteps = fallbackResponses.getResponse(
+        'walk_complete',
+        {'steps': 12000, 'duration': 3600, 'isOutdoor': false},
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(lowSteps.isNotEmpty, true);
+      expect(midSteps.isNotEmpty, true);
+      expect(highSteps.isNotEmpty, true);
+
+      print('✅ walk_complete 걸음수별 응답 확인 완료');
+      print('   - 저걸음 (3,000): $lowSteps');
+      print('   - 중걸음 (7,000): $midSteps');
+      print('   - 고걸음 (12,000): $highSteps');
+    });
+
+    test('walk_complete - 실외 산책 보너스 응답', () {
+      // Given: outdoor 플래그
+
+      // When: 실외 산책
+      final outdoorResponse = fallbackResponses.getResponse(
+        'walk_complete',
+        {'steps': 5000, 'duration': 1800, 'isOutdoor': true},
+      );
+
+      // When: 실내 산책
+      final indoorResponse = fallbackResponses.getResponse(
+        'walk_complete',
+        {'steps': 5000, 'duration': 1800, 'isOutdoor': false},
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(outdoorResponse.isNotEmpty, true);
+      expect(indoorResponse.isNotEmpty, true);
+
+      print('✅ walk_complete 실외/실내 응답 확인 완료');
+      print('   - 실외 (isOutdoor: true): $outdoorResponse');
+      print('   - 실내 (isOutdoor: false): $indoorResponse');
+    });
+
+    // ==========================================================================
+    // 4. mission_complete (미션 제목 동적 삽입)
+    // ==========================================================================
+    test('mission_complete - 미션 제목 동적 삽입', () {
+      // Given: mission_complete 컨텍스트
+
+      // When: 3가지 미션 시나리오
+      final mission1 = fallbackResponses.getResponse(
+        'mission_complete',
+        {'title': '첫 산책 완료', 'treatReward': 10},
+      );
+      final mission2 = fallbackResponses.getResponse(
+        'mission_complete',
+        {'title': '5000걸음 도전', 'treatReward': 5},
+      );
+      final mission3 = fallbackResponses.getResponse(
+        'mission_complete',
+        {'title': '주간 목표 달성', 'treatReward': 20},
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(mission1.isNotEmpty, true);
+      expect(mission2.isNotEmpty, true);
+      expect(mission3.isNotEmpty, true);
+
+      print('✅ mission_complete 미션 제목 동적 삽입 확인 완료');
+      print('   - 미션 1: $mission1');
+      print('   - 미션 2: $mission2');
+      print('   - 미션 3: $mission3');
+    });
+
+    // ==========================================================================
+    // 5. feed (간식 수량별 응답)
+    // ==========================================================================
+    test('feed - 간식 수량별 다른 응답 (저/중/고)', () {
+      // Given: feed 컨텍스트
+
+      // When: 3가지 간식 수량 시나리오
+      final lowTreats = fallbackResponses.getResponse(
+        'feed',
+        {'treatCount': 3},
+      );
+      final midTreats = fallbackResponses.getResponse(
+        'feed',
+        {'treatCount': 15},
+      );
+      final highTreats = fallbackResponses.getResponse(
+        'feed',
+        {'treatCount': 35},
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(lowTreats.isNotEmpty, true);
+      expect(midTreats.isNotEmpty, true);
+      expect(highTreats.isNotEmpty, true);
+
+      print('✅ feed 간식 수량별 응답 확인 완료');
+      print('   - 저간식 (3개): $lowTreats');
+      print('   - 중간식 (15개): $midTreats');
+      print('   - 고간식 (35개): $highTreats');
+    });
+
+    // ==========================================================================
+    // 6. level_up (레벨 동적 삽입)
+    // ==========================================================================
+    test('level_up - 레벨 동적 삽입', () {
+      // Given: level_up 컨텍스트
+
+      // When: 3가지 레벨 시나리오
+      final level2 = fallbackResponses.getResponse(
+        'level_up',
+        {'level': 2, 'experience': 100},
+      );
+      final level5 = fallbackResponses.getResponse(
+        'level_up',
+        {'level': 5, 'experience': 500},
+      );
+      final level10 = fallbackResponses.getResponse(
+        'level_up',
+        {'level': 10, 'experience': 1500},
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(level2.isNotEmpty, true);
+      expect(level5.isNotEmpty, true);
+      expect(level10.isNotEmpty, true);
+
+      print('✅ level_up 레벨 동적 삽입 확인 완료');
+      print('   - 레벨 2: $level2');
+      print('   - 레벨 5: $level5');
+      print('   - 레벨 10: $level10');
+    });
+
+    // ==========================================================================
+    // 7. low_happiness (슬픈 톤)
+    // ==========================================================================
+    test('low_happiness - 슬픈 톤의 응답', () {
+      // Given: low_happiness 컨텍스트
+
+      // When: 여러 번 호출
+      final responses = List.generate(
+        10,
+        (_) => fallbackResponses.getResponse('low_happiness', null, 'ko'),
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(responses.every((r) => r.isNotEmpty), true);
+
+      // Then: 최소 2가지 이상의 다른 응답
+      final uniqueResponses = responses.toSet();
+      expect(uniqueResponses.length, greaterThanOrEqualTo(2));
+
+      print('✅ low_happiness 슬픈 톤 응답 확인 완료');
+      print('   - 총 호출 수: ${responses.length}');
+      print('   - 유니크 응답 수: ${uniqueResponses.length}');
+      print('   - 응답 예시:');
+      for (final response in uniqueResponses.take(3)) {
+        print('     * $response');
+      }
+    });
+
+    // ==========================================================================
+    // 8. 잘못된 컨텍스트 처리
+    // ==========================================================================
+    test('invalid_context - 기본 응답 반환', () {
+      // Given: 존재하지 않는 컨텍스트
+      const invalidContext = 'invalid_context_12345';
+
+      // When: 응답 요청
+      final response = fallbackResponses.getResponse(invalidContext, null, 'ko');
+
+      // Then: 기본 응답 반환
+      expect(response.isNotEmpty, true);
+
+      print('✅ invalid_context 기본 응답 확인 완료');
+      print('   - 기본 응답: $response');
+    });
+
+    // ==========================================================================
+    // 9. getRandomResponse() 테스트
+    // ==========================================================================
+    test('getRandomResponse - 랜덤 일반 응답', () {
+      // When: 여러 번 호출
+      final responses = List.generate(
+        20,
+        (_) => fallbackResponses.getRandomResponse(),
+      );
+
+      // Then: 모두 비어있지 않음
+      expect(responses.every((r) => r.isNotEmpty), true);
+
+      // Then: 최소 2가지 이상의 다른 응답
+      final uniqueResponses = responses.toSet();
+      expect(uniqueResponses.length, greaterThanOrEqualTo(2));
+
+      print('✅ getRandomResponse 랜덤 응답 확인 완료');
+      print('   - 총 호출 수: ${responses.length}');
+      print('   - 유니크 응답 수: ${uniqueResponses.length}');
+      print('   - 응답 예시:');
+      for (final response in uniqueResponses.take(3)) {
+        print('     * $response');
+      }
+    });
+
+    // ==========================================================================
+    // 10. 7개 컨텍스트 모두 다른 응답 확인
+    // ==========================================================================
+    test('7개 컨텍스트 모두 다른 응답 생성 확인', () {
+      // Given: 7개 컨텍스트
+      final contexts = {
+        'greeting_static': null,
+        'greeting': null,
+        'walk_complete': {'steps': 5000, 'duration': 1800, 'isOutdoor': false},
+        'mission_complete': {'title': '테스트 미션', 'treatReward': 10},
+        'feed': {'treatCount': 10},
+        'level_up': {'level': 3, 'experience': 200},
+        'low_happiness': null,
+      };
+
+      // When: 각 컨텍스트별 응답 생성
+      final responses = contexts.map(
+        (context, data) => MapEntry(
+          context,
+          fallbackResponses.getResponse(context, data),
+        ),
+      );
+
+      // Then: 모두 비어있지 않음
+      for (final entry in responses.entries) {
+        expect(entry.value.isNotEmpty, true,
+            reason: '${entry.key} 응답이 비어있음');
+      }
+
+      // Then: 7개 응답 모두 다름 (적어도 5개 이상은 달라야 함)
+      final uniqueResponses = responses.values.toSet();
+      expect(uniqueResponses.length, greaterThanOrEqualTo(5));
+
+      print('✅ 7개 컨텍스트 차별화 확인 완료');
+      print('   - 총 컨텍스트 수: ${contexts.length}');
+      print('   - 유니크 응답 수: ${uniqueResponses.length}');
+      print('   - 컨텍스트별 응답:');
+      for (final entry in responses.entries) {
+        print('     * ${entry.key}: ${entry.value.substring(0, entry.value.length > 40 ? 40 : entry.value.length)}...');
+      }
+    });
+  });
+}
