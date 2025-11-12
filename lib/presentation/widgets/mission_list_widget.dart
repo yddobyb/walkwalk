@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/mission.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/mission/mission_service.dart';
 import '../../services/tracking/step_tracking_service.dart';
 import 'mission_card_widget.dart';
@@ -61,7 +62,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   children: [
                     Icon(Icons.today, size: 16),
                     const SizedBox(width: 8),
-                    Text('일일'),
+                    Text(AppLocalizations.of(context).daily),
                   ],
                 ),
               ),
@@ -71,7 +72,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   children: [
                     Icon(Icons.date_range, size: 16),
                     const SizedBox(width: 8),
-                    Text('주간'),
+                    Text(AppLocalizations.of(context).weekly),
                   ],
                 ),
               ),
@@ -81,7 +82,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   children: [
                     Icon(Icons.check_circle, size: 16),
                     const SizedBox(width: 8),
-                    Text('완료'),
+                    Text(AppLocalizations.of(context).missionCompleted),
                   ],
                 ),
               ),
@@ -114,15 +115,15 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         if (missions.isEmpty) {
           return _buildEmptyState(
             icon: Icons.today,
-            title: '오늘의 미션이 없습니다',
-            subtitle: '새로운 미션이 곧 생성됩니다!',
+            title: AppLocalizations.of(context).noDailyMissions,
+            subtitle: AppLocalizations.of(context).newMissionsComingSoon,
           );
         }
 
         return _buildMissionList(missions);
       },
       loading: () => _buildLoadingState(),
-      error: (error, stackTrace) => _buildErrorState('일일 미션을 불러오는 중 오류가 발생했습니다'),
+      error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingDailyMissions),
     );
   }
 
@@ -134,15 +135,15 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         if (missions.isEmpty) {
           return _buildEmptyState(
             icon: Icons.date_range,
-            title: '이번 주 미션이 없습니다',
-            subtitle: '새로운 주간 미션이 곧 생성됩니다!',
+            title: AppLocalizations.of(context).noWeeklyMissions,
+            subtitle: AppLocalizations.of(context).newWeeklyMissionsComingSoon,
           );
         }
 
         return _buildMissionList(missions);
       },
       loading: () => _buildLoadingState(),
-      error: (error, stackTrace) => _buildErrorState('주간 미션을 불러오는 중 오류가 발생했습니다'),
+      error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingWeeklyMissions),
     );
   }
 
@@ -154,8 +155,8 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         if (missions.isEmpty) {
           return _buildEmptyState(
             icon: Icons.emoji_events,
-            title: '완료된 미션이 없습니다',
-            subtitle: '미션을 완료하여 보상을 받아보세요!',
+            title: AppLocalizations.of(context).noCompletedMissions,
+            subtitle: AppLocalizations.of(context).completeToGetRewards,
           );
         }
 
@@ -171,7 +172,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         return _buildMissionList(sortedMissions);
       },
       loading: () => _buildLoadingState(),
-      error: (error, stackTrace) => _buildErrorState('완료된 미션을 불러오는 중 오류가 발생했습니다'),
+      error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingCompletedMissions),
     );
   }
 
@@ -198,13 +199,13 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
   }
 
   Widget _buildLoadingState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 16),
-          Text('미션을 불러오는 중...'),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 16),
+          Text(AppLocalizations.of(context).loadingMissions),
         ],
       ),
     );
@@ -235,7 +236,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
               ref.invalidate(weeklyMissionsProvider);
               ref.invalidate(completedMissionsProvider);
             },
-            child: const Text('다시 시도'),
+            child: Text(AppLocalizations.of(context).retry),
           ),
         ],
       ),
@@ -330,7 +331,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
           // 미션 타이틀과 상태
           Row(
             children: [
-              _buildMissionTypeIcon(theme),
+              _buildMissionTypeIcon(context, theme),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -370,7 +371,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '완료',
+                        AppLocalizations.of(context).missionCompleted,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: Colors.green,
                           fontWeight: FontWeight.w600,
@@ -385,17 +386,17 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // 진행도 상세
-          _buildProgressSection(theme, stepsAsync),
+          _buildProgressSection(context, theme, stepsAsync),
 
           const SizedBox(height: 24),
 
           // 보상 정보
-          _buildRewardSection(theme),
+          _buildRewardSection(context, theme),
 
           const SizedBox(height: 24),
 
           // 미션 정보
-          _buildMissionInfoSection(theme),
+          _buildMissionInfoSection(context, theme),
 
           const SizedBox(height: 24),
 
@@ -404,7 +405,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('닫기'),
+              child: Text(AppLocalizations.of(context).close),
             ),
           ),
         ],
@@ -412,7 +413,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildMissionTypeIcon(ThemeData theme) {
+  Widget _buildMissionTypeIcon(BuildContext context, ThemeData theme) {
     IconData icon;
     Color color;
     String typeText;
@@ -421,22 +422,22 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
       case 'daily':
         icon = Icons.today;
         color = Colors.blue;
-        typeText = '일일 미션';
+        typeText = AppLocalizations.of(context).dailyMissionType;
         break;
       case 'weekly':
         icon = Icons.date_range;
         color = Colors.purple;
-        typeText = '주간 미션';
+        typeText = AppLocalizations.of(context).weeklyMissionType;
         break;
       case 'special':
         icon = Icons.star;
         color = Colors.amber;
-        typeText = '특별 미션';
+        typeText = AppLocalizations.of(context).specialMissionType;
         break;
       default:
         icon = Icons.flag;
         color = theme.colorScheme.primary;
-        typeText = '미션';
+        typeText = AppLocalizations.of(context).missions;
     }
 
     return Column(
@@ -465,7 +466,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildProgressSection(ThemeData theme, AsyncValue<int>? stepsAsync) {
+  Widget _buildProgressSection(BuildContext context, ThemeData theme, AsyncValue<int>? stepsAsync) {
     // 실시간 진행도 계산
     final currentProgress = _getCurrentProgress(stepsAsync);
     final progress = _calculateProgress(currentProgress);
@@ -475,7 +476,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '진행도',
+          AppLocalizations.of(context).missionProgress,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -485,14 +486,14 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              _formatProgress(currentProgress),
+              _formatProgress(currentProgress, context),
               style: theme.textTheme.titleLarge?.copyWith(
                 color: isCompleted ? Colors.green : theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              '목표: ${_formatTargetProgress()}',
+              '${AppLocalizations.of(context).targetLabel}: ${_formatTargetProgress(context)}',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -510,7 +511,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          '${(progress * 100).toInt()}% 완료',
+          AppLocalizations.of(context).percentComplete((progress * 100).toInt()),
           style: theme.textTheme.bodySmall?.copyWith(
             color: isCompleted ? Colors.green : theme.colorScheme.primary,
             fontWeight: FontWeight.w600,
@@ -520,12 +521,12 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildRewardSection(ThemeData theme) {
+  Widget _buildRewardSection(BuildContext context, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '보상',
+          AppLocalizations.of(context).rewardsLabel,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -550,14 +551,14 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${mission.treatReward}개',
+                      '${mission.treatReward}',
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '간식',
+                      AppLocalizations.of(context).missionTreatsLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.orange.withOpacity(0.7),
                       ),
@@ -591,7 +592,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      '행복도',
+                      AppLocalizations.of(context).missionHappinessLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.red.withOpacity(0.7),
                       ),
@@ -606,7 +607,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildMissionInfoSection(ThemeData theme) {
+  Widget _buildMissionInfoSection(BuildContext context, ThemeData theme) {
     final now = DateTime.now();
     final timeRemaining = mission.expiresAt.difference(now);
     final isExpired = timeRemaining.isNegative;
@@ -615,7 +616,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '미션 정보',
+          AppLocalizations.of(context).missionInfoTitle,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -623,21 +624,21 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
         const SizedBox(height: 12),
         _buildInfoRow(
           icon: Icons.schedule,
-          label: '만료 일시',
+          label: AppLocalizations.of(context).expiryTime,
           value: _formatDate(mission.expiresAt),
         ),
         const SizedBox(height: 8),
         _buildInfoRow(
           icon: isExpired ? Icons.error : Icons.timer,
-          label: '남은 시간',
-          value: isExpired ? '만료됨' : _formatTimeRemaining(timeRemaining),
+          label: AppLocalizations.of(context).remainingTime,
+          value: isExpired ? AppLocalizations.of(context).missionExpired : _formatTimeRemaining(timeRemaining, context),
           valueColor: isExpired ? Colors.red : null,
         ),
         if (mission.completedAt != null) ...[
           const SizedBox(height: 8),
           _buildInfoRow(
             icon: Icons.check_circle,
-            label: '완료 일시',
+            label: AppLocalizations.of(context).completionTime,
             value: _formatDate(mission.completedAt!),
             valueColor: Colors.green,
           ),
@@ -707,12 +708,12 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     return 1;
   }
 
-  String _formatProgress(int progress) {
+  String _formatProgress(int progress, BuildContext context) {
     if (mission.targetSteps > 0) {
-      return '$progress걸음';
+      return '$progress ${AppLocalizations.of(context).stepsUnitLabel}';
     } else if (mission.targetDuration > 0) {
       final minutes = progress ~/ 60;
-      return '${minutes}분';
+      return '$minutes ${AppLocalizations.of(context).minutesUnitLabel}';
     } else if (mission.targetDistance > 0) {
       final km = progress / 1000;
       return '${km.toStringAsFixed(1)}km';
@@ -720,12 +721,12 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     return '$progress';
   }
 
-  String _formatTargetProgress() {
+  String _formatTargetProgress(BuildContext context) {
     if (mission.targetSteps > 0) {
-      return '${mission.targetSteps}걸음';
+      return '${mission.targetSteps} ${AppLocalizations.of(context).stepsUnitLabel}';
     } else if (mission.targetDuration > 0) {
       final minutes = mission.targetDuration ~/ 60;
-      return '${minutes}분';
+      return '$minutes ${AppLocalizations.of(context).minutesUnitLabel}';
     } else if (mission.targetDistance > 0) {
       final km = mission.targetDistance / 1000;
       return '${km.toStringAsFixed(1)}km';
@@ -737,13 +738,13 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
     return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  String _formatTimeRemaining(Duration duration) {
+  String _formatTimeRemaining(Duration duration, BuildContext context) {
     if (duration.inDays > 0) {
-      return '${duration.inDays}일 ${duration.inHours % 24}시간';
+      return '${duration.inDays} ${AppLocalizations.of(context).daysUnit} ${duration.inHours % 24} ${AppLocalizations.of(context).hoursUnit}';
     } else if (duration.inHours > 0) {
-      return '${duration.inHours}시간 ${duration.inMinutes % 60}분';
+      return '${duration.inHours} ${AppLocalizations.of(context).hoursUnit} ${duration.inMinutes % 60} ${AppLocalizations.of(context).minutesUnitLabel}';
     } else {
-      return '${duration.inMinutes}분';
+      return '${duration.inMinutes} ${AppLocalizations.of(context).minutesUnitLabel}';
     }
   }
 }

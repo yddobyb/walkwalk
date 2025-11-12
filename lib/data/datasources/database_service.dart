@@ -1,5 +1,6 @@
 // lib/data/datasources/database_service.dart
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/pet_model.dart';
@@ -11,6 +12,7 @@ import '../../domain/entities/achievement.dart';
 import '../../domain/entities/mission.dart';
 import '../../domain/entities/walk_session.dart';
 import '../../core/constants/app_constants.dart';
+import '../../l10n/app_localizations.dart';
 
 class DatabaseService {
   static Isar? _isar;
@@ -98,11 +100,17 @@ class DatabaseService {
   static Future<void> _initializeDefaultAchievements() async {
     if (_isar == null) return;
 
+    // 현재 설정된 locale에 맞는 AppLocalizations 가져오기
+    final settings = await _isar!.settingsModels.get(AppConstants.settingsId);
+    final localeString = settings?.locale ?? 'ko';
+    final locale = Locale(localeString);
+    final l10n = await AppLocalizations.delegate.load(locale);
+
     final achievements = [
       AchievementModel()
         ..code = "FIRST_WALK"
-        ..title = "첫 산책"
-        ..description = "첫 번째 산책을 완료했어요!"
+        ..title = l10n.achievementFirstWalkTitle
+        ..description = l10n.achievementFirstWalkDescription
         ..iconPath = "assets/badges/first_walk.png"
         ..tier = AchievementTier.bronze
         ..isUnlocked = false
@@ -113,8 +121,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "STEPS_1K"
-        ..title = "천 걸음"
-        ..description = "누적 1,000걸음 달성!"
+        ..title = l10n.achievementSteps1kTitle
+        ..description = l10n.achievementSteps1kDescription
         ..iconPath = "assets/badges/steps_1k.png"
         ..tier = AchievementTier.bronze
         ..isUnlocked = false
@@ -125,8 +133,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "STEPS_5K"
-        ..title = "오천 걸음"
-        ..description = "누적 5,000걸음 달성!"
+        ..title = l10n.achievementSteps5kTitle
+        ..description = l10n.achievementSteps5kDescription
         ..iconPath = "assets/badges/steps_5k.png"
         ..tier = AchievementTier.silver
         ..isUnlocked = false
@@ -137,8 +145,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "STEPS_10K"
-        ..title = "만 걸음"
-        ..description = "누적 10,000걸음 달성!"
+        ..title = l10n.achievementSteps10kTitle
+        ..description = l10n.achievementSteps10kDescription
         ..iconPath = "assets/badges/steps_10k.png"
         ..tier = AchievementTier.gold
         ..isUnlocked = false
@@ -149,8 +157,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "STREAK_3"
-        ..title = "3일 연속"
-        ..description = "3일 연속 산책 완료!"
+        ..title = l10n.achievementStreak3Title
+        ..description = l10n.achievementStreak3Description
         ..iconPath = "assets/badges/streak_3.png"
         ..tier = AchievementTier.bronze
         ..isUnlocked = false
@@ -161,8 +169,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "STREAK_7"
-        ..title = "1주일 연속"
-        ..description = "7일 연속 산책 완료!"
+        ..title = l10n.achievementStreak7Title
+        ..description = l10n.achievementStreak7Description
         ..iconPath = "assets/badges/streak_7.png"
         ..tier = AchievementTier.silver
         ..isUnlocked = false
@@ -173,8 +181,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "OUTDOOR_FIRST"
-        ..title = "첫 실외 산책"
-        ..description = "첫 번째 실외 산책을 완료했어요!"
+        ..title = l10n.achievementOutdoorFirstTitle
+        ..description = l10n.achievementOutdoorFirstDescription
         ..iconPath = "assets/badges/outdoor_first.png"
         ..tier = AchievementTier.bronze
         ..isUnlocked = false
@@ -185,8 +193,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "HAPPY_100"
-        ..title = "최고 행복도"
-        ..description = "행복도 100에 도달했어요!"
+        ..title = l10n.achievementHappy100Title
+        ..description = l10n.achievementHappy100Description
         ..iconPath = "assets/badges/happy_100.png"
         ..tier = AchievementTier.gold
         ..isUnlocked = false
@@ -197,8 +205,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "TREATS_100"
-        ..title = "간식 부자"
-        ..description = "간식 100개를 모았어요!"
+        ..title = l10n.achievementTreats100Title
+        ..description = l10n.achievementTreats100Description
         ..iconPath = "assets/badges/treats_100.png"
         ..tier = AchievementTier.silver
         ..isUnlocked = false
@@ -209,8 +217,8 @@ class DatabaseService {
 
       AchievementModel()
         ..code = "DISTANCE_1KM"
-        ..title = "1km 달성"
-        ..description = "누적 1km 산책 완료!"
+        ..title = l10n.achievementDistance1kmTitle
+        ..description = l10n.achievementDistance1kmDescription
         ..iconPath = "assets/badges/distance_1km.png"
         ..tier = AchievementTier.bronze
         ..isUnlocked = false

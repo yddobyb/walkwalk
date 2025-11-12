@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/mission.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/tracking/step_tracking_service.dart';
 
 /// 미션 카드 위젯
@@ -95,7 +96,7 @@ class MissionCardWidget extends ConsumerWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '완료',
+                            AppLocalizations.of(context).missionCompleted,
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.green,
                               fontWeight: FontWeight.w600,
@@ -117,13 +118,13 @@ class MissionCardWidget extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '진행도',
+                        AppLocalizations.of(context).missionProgress,
                         style: theme.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        '${_formatProgress(currentProgress)} / ${_formatTargetProgress()}',
+                        '${_formatProgress(context, currentProgress)} / ${_formatTargetProgress(context)}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: isCompleted ? Colors.green : theme.colorScheme.primary,
                           fontWeight: FontWeight.w600,
@@ -149,20 +150,22 @@ class MissionCardWidget extends ConsumerWidget {
               Row(
                 children: [
                   _buildRewardItem(
+                    context: context,
                     icon: Icons.pets,
-                    value: '${mission.treatReward}개',
-                    label: '간식',
+                    value: AppLocalizations.of(context).missionTreatsCount(mission.treatReward),
+                    label: AppLocalizations.of(context).missionTreatsLabel,
                     color: Colors.orange,
                   ),
                   const SizedBox(width: 16),
                   _buildRewardItem(
+                    context: context,
                     icon: Icons.favorite,
                     value: '+${mission.happinessReward}',
-                    label: '행복도',
+                    label: AppLocalizations.of(context).missionHappinessLabel,
                     color: Colors.red,
                   ),
                   const Spacer(),
-                  _buildMissionExpiryInfo(theme),
+                  _buildMissionExpiryInfo(context, theme),
                 ],
               ),
             ],
@@ -209,6 +212,7 @@ class MissionCardWidget extends ConsumerWidget {
   }
 
   Widget _buildRewardItem({
+    required BuildContext context,
     required IconData icon,
     required String value,
     required String label,
@@ -247,7 +251,7 @@ class MissionCardWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildMissionExpiryInfo(ThemeData theme) {
+  Widget _buildMissionExpiryInfo(BuildContext context, ThemeData theme) {
     final now = DateTime.now();
     final timeRemaining = mission.expiresAt.difference(now);
     final isExpired = timeRemaining.isNegative;
@@ -260,7 +264,7 @@ class MissionCardWidget extends ConsumerWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
-          '만료됨',
+          AppLocalizations.of(context).missionExpired,
           style: theme.textTheme.bodySmall?.copyWith(
             color: Colors.red,
             fontSize: 10,
@@ -271,11 +275,11 @@ class MissionCardWidget extends ConsumerWidget {
 
     String timeText;
     if (timeRemaining.inDays > 0) {
-      timeText = '${timeRemaining.inDays}일 남음';
+      timeText = AppLocalizations.of(context).missionDaysRemaining(timeRemaining.inDays);
     } else if (timeRemaining.inHours > 0) {
-      timeText = '${timeRemaining.inHours}시간 남음';
+      timeText = AppLocalizations.of(context).missionHoursRemaining(timeRemaining.inHours);
     } else {
-      timeText = '${timeRemaining.inMinutes}분 남음';
+      timeText = AppLocalizations.of(context).missionMinutesRemaining(timeRemaining.inMinutes);
     }
 
     return Container(
@@ -322,12 +326,12 @@ class MissionCardWidget extends ConsumerWidget {
     return 1;
   }
 
-  String _formatProgress(int progress) {
+  String _formatProgress(BuildContext context, int progress) {
     if (mission.targetSteps > 0) {
-      return '$progress걸음';
+      return AppLocalizations.of(context).missionStepsUnit(progress);
     } else if (mission.targetDuration > 0) {
       final minutes = progress ~/ 60;
-      return '${minutes}분';
+      return AppLocalizations.of(context).missionMinutesUnit(minutes);
     } else if (mission.targetDistance > 0) {
       final km = progress / 1000;
       return '${km.toStringAsFixed(1)}km';
@@ -335,12 +339,12 @@ class MissionCardWidget extends ConsumerWidget {
     return '$progress';
   }
 
-  String _formatTargetProgress() {
+  String _formatTargetProgress(BuildContext context) {
     if (mission.targetSteps > 0) {
-      return '${mission.targetSteps}걸음';
+      return AppLocalizations.of(context).missionStepsUnit(mission.targetSteps);
     } else if (mission.targetDuration > 0) {
       final minutes = mission.targetDuration ~/ 60;
-      return '${minutes}분';
+      return AppLocalizations.of(context).missionMinutesUnit(minutes);
     } else if (mission.targetDistance > 0) {
       final km = mission.targetDistance / 1000;
       return '${km.toStringAsFixed(1)}km';

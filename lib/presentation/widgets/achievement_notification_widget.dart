@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/achievement.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/achievement/achievement_service.dart';
 
 /// 새로 해제된 배지 알림을 표시하는 위젯
@@ -138,7 +139,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '배지 달성!',
+                                    AppLocalizations.of(context).badgeAchieved,
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: Colors.white70,
                                       fontWeight: FontWeight.w600,
@@ -147,7 +148,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                                 ],
                               ),
                               Text(
-                                achievement.title,
+                                _getAchievementTitle(achievement.code, AppLocalizations.of(context)),
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -168,7 +169,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      achievement.description,
+                      _getAchievementDescription(achievement.code, AppLocalizations.of(context)),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withOpacity(0.9),
                       ),
@@ -286,6 +287,60 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
         return '📏';
       default:
         return '🏆';
+    }
+  }
+
+  String _getAchievementTitle(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkTitle;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kTitle;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kTitle;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kTitle;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Title;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Title;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstTitle;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Title;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Title;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmTitle;
+      default:
+        return '';
+    }
+  }
+
+  String _getAchievementDescription(String code, AppLocalizations l10n) {
+    switch (code) {
+      case 'FIRST_WALK':
+        return l10n.achievementFirstWalkDescription;
+      case 'STEPS_1K':
+        return l10n.achievementSteps1kDescription;
+      case 'STEPS_5K':
+        return l10n.achievementSteps5kDescription;
+      case 'STEPS_10K':
+        return l10n.achievementSteps10kDescription;
+      case 'STREAK_3':
+        return l10n.achievementStreak3Description;
+      case 'STREAK_7':
+        return l10n.achievementStreak7Description;
+      case 'OUTDOOR_FIRST':
+        return l10n.achievementOutdoorFirstDescription;
+      case 'HAPPY_100':
+        return l10n.achievementHappy100Description;
+      case 'TREATS_100':
+        return l10n.achievementTreats100Description;
+      case 'DISTANCE_1KM':
+        return l10n.achievementDistance1kmDescription;
+      default:
+        return '';
     }
   }
 }

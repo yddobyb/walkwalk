@@ -31,6 +31,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Localization (Week 3 - Language Support)
+  flutter_localizations:
+    sdk: flutter
+
   # UI & Icons
   cupertino_icons: ^1.0.8
 
@@ -54,7 +58,7 @@ dependencies:
   json_annotation: ^4.9.0
   uuid: ^4.4.0
   shared_preferences: ^2.2.2
-  intl: ^0.19.0
+  intl: ^0.20.2
 
   # Charts
   fl_chart: ^0.69.0
@@ -84,12 +88,18 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   isar_generator: ^3.1.0+1
 
+  # App Icon Generator (Latest: 0.14.3)
+  flutter_launcher_icons: ^0.14.3
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+
+  # Enable code generation for localization (Week 3)
+  generate: true
 
   # Assets
   assets:
@@ -121,3 +131,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# App Icon Configuration (flutter_launcher_icons 0.14.3)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+  # Android Adaptive Icon (동그란 아이콘 지원)
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"

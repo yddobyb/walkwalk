@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/statistics/statistics_service.dart';
 
 /// 주간 걸음수 차트 위젯
@@ -34,7 +35,7 @@ class WeeklyChartWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '주간 활동',
+                AppLocalizations.of(context).weeklyActivity,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -46,7 +47,7 @@ class WeeklyChartWidget extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '최근 7일',
+                  AppLocalizations.of(context).last7Days,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,
@@ -59,7 +60,7 @@ class WeeklyChartWidget extends ConsumerWidget {
           weeklyStatsAsync.when(
             data: (stats) => _buildChart(context, theme, stats),
             loading: () => _buildLoadingState(),
-            error: (error, stack) => _buildErrorState(theme),
+            error: (error, stack) => _buildErrorState(context, theme),
           ),
         ],
       ),
@@ -68,7 +69,7 @@ class WeeklyChartWidget extends ConsumerWidget {
 
   Widget _buildChart(BuildContext context, ThemeData theme, List<DailyStatistics> stats) {
     if (stats.isEmpty) {
-      return _buildEmptyState(theme);
+      return _buildEmptyState(context, theme);
     }
 
     // HealthKit 전체 걸음수 기준으로 차트 생성
@@ -133,7 +134,7 @@ class WeeklyChartWidget extends ConsumerWidget {
                         return const SizedBox.shrink();
                       }
                       final date = stats[index].date;
-                      final dayName = _getWeekdayName(date.weekday);
+                      final dayName = _getWeekdayName(context, date.weekday);
 
                       return Padding(
                         padding: const EdgeInsets.only(top: 8),
@@ -161,9 +162,9 @@ class WeeklyChartWidget extends ConsumerWidget {
                     final appSteps = stat.appSessionSteps;
 
                     // 앱 세션이 있으면 구분하여 표시
-                    String tooltipText = '${DateFormat('M/d').format(date)}\n전체: $totalSteps걸음';
+                    String tooltipText = '${DateFormat('M/d').format(date)}\n${AppLocalizations.of(context).chartTooltipTotal(totalSteps)}';
                     if (appSteps > 0) {
-                      tooltipText += '\n앱 산책: $appSteps걸음';
+                      tooltipText += '\n${AppLocalizations.of(context).chartTooltipAppWalk(appSteps)}';
                     }
 
                     return BarTooltipItem(
@@ -186,7 +187,7 @@ class WeeklyChartWidget extends ConsumerWidget {
           children: [
             _buildStatItem(
               theme,
-              '평균',
+              AppLocalizations.of(context).average,
               '${averageSteps.round()}',
               Icons.trending_up,
               theme.colorScheme.primary,
@@ -198,7 +199,7 @@ class WeeklyChartWidget extends ConsumerWidget {
             ),
             _buildStatItem(
               theme,
-              '최고',
+              AppLocalizations.of(context).maximum,
               '$maxSteps',
               Icons.military_tech,
               Colors.amber,
@@ -276,12 +277,12 @@ class WeeklyChartWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(ThemeData theme) {
+  Widget _buildErrorState(BuildContext context, ThemeData theme) {
     return SizedBox(
       height: 200,
       child: Center(
         child: Text(
-          '데이터를 불러올 수 없습니다',
+          AppLocalizations.of(context).cannotLoadData,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.error,
           ),
@@ -290,7 +291,7 @@ class WeeklyChartWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(BuildContext context, ThemeData theme) {
     return SizedBox(
       height: 200,
       child: Center(
@@ -304,7 +305,7 @@ class WeeklyChartWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '아직 기록이 없습니다',
+              AppLocalizations.of(context).noRecordsYet,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
@@ -327,23 +328,23 @@ class WeeklyChartWidget extends ConsumerWidget {
     return number.toString();
   }
 
-  /// 요일 번호를 한국어 요일명으로 변환 (Locale 의존성 제거)
-  String _getWeekdayName(int weekday) {
+  /// 요일 번호를 현지화된 요일명으로 변환
+  String _getWeekdayName(BuildContext context, int weekday) {
     switch (weekday) {
       case DateTime.monday:
-        return '월';
+        return AppLocalizations.of(context).mondayShort;
       case DateTime.tuesday:
-        return '화';
+        return AppLocalizations.of(context).tuesdayShort;
       case DateTime.wednesday:
-        return '수';
+        return AppLocalizations.of(context).wednesdayShort;
       case DateTime.thursday:
-        return '목';
+        return AppLocalizations.of(context).thursdayShort;
       case DateTime.friday:
-        return '금';
+        return AppLocalizations.of(context).fridayShort;
       case DateTime.saturday:
-        return '토';
+        return AppLocalizations.of(context).saturdayShort;
       case DateTime.sunday:
-        return '일';
+        return AppLocalizations.of(context).sundayShort;
       default:
         return '';
     }

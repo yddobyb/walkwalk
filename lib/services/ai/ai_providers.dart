@@ -135,6 +135,7 @@ final dialogueProvider =
     context: request.context,
     contextData: request.contextData,
     userMessage: request.userMessage,
+    locale: request.locale,
   );
 });
 
@@ -156,6 +157,7 @@ final greetingDialogueProvider =
     dogName: request.dogName,
     dogBreed: request.dogBreed,
     happinessLevel: request.happinessLevel,
+    locale: request.locale,
   );
 });
 
@@ -171,6 +173,7 @@ final walkCompleteDialogueProvider =
     steps: request.contextData?['steps'] ?? 0,
     duration: request.contextData?['duration'] ?? 0,
     isOutdoor: request.contextData?['isOutdoor'] ?? false,
+    locale: request.locale,
   );
 });
 
@@ -185,6 +188,7 @@ final missionCompleteDialogueProvider =
     happinessLevel: request.happinessLevel,
     missionTitle: request.contextData?['title'] ?? 'Mission',
     treatReward: request.contextData?['treatReward'] ?? 0,
+    locale: request.locale,
   );
 });
 
@@ -198,6 +202,7 @@ final feedDialogueProvider =
     dogBreed: request.dogBreed,
     happinessLevel: request.happinessLevel,
     treatCount: request.contextData?['treatCount'] ?? 0,
+    locale: request.locale,
   );
 });
 
@@ -212,6 +217,7 @@ final levelUpDialogueProvider =
     happinessLevel: request.happinessLevel,
     newLevel: request.contextData?['level'] ?? 1,
     experience: request.contextData?['experience'] ?? 0,
+    locale: request.locale,
   );
 });
 
@@ -224,5 +230,6 @@ final lowHappinessDialogueProvider =
     dogName: request.dogName,
     dogBreed: request.dogBreed,
     happinessLevel: request.happinessLevel,
+    locale: request.locale,
   );
 });

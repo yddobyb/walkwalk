@@ -11,6 +11,7 @@ class DialogueRequest {
   final String context;
   final Map<String, dynamic>? contextData;
   final String? userMessage;
+  final String locale; // 다국어 지원: 'ko' 또는 'en'
 
   const DialogueRequest({
     required this.dogName,
@@ -19,6 +20,7 @@ class DialogueRequest {
     required this.context,
     this.contextData,
     this.userMessage,
+    required this.locale,
   });
 
   @override
@@ -31,7 +33,8 @@ class DialogueRequest {
         other.happinessLevel == happinessLevel &&
         other.context == context &&
         _mapEquals(other.contextData, contextData) &&
-        other.userMessage == userMessage;
+        other.userMessage == userMessage &&
+        other.locale == locale;
   }
 
   @override
@@ -43,6 +46,7 @@ class DialogueRequest {
       context,
       contextData,
       userMessage,
+      locale,
     );
   }
 
@@ -63,7 +67,7 @@ class DialogueRequest {
 
   @override
   String toString() {
-    return 'DialogueRequest(dogName: $dogName, breed: $dogBreed, happiness: $happinessLevel, context: $context)';
+    return 'DialogueRequest(dogName: $dogName, breed: $dogBreed, happiness: $happinessLevel, context: $context, locale: $locale)';
   }
 
   /// 복사 생성자
@@ -74,6 +78,7 @@ class DialogueRequest {
     String? context,
     Map<String, dynamic>? contextData,
     String? userMessage,
+    String? locale,
   }) {
     return DialogueRequest(
       dogName: dogName ?? this.dogName,
@@ -82,6 +87,7 @@ class DialogueRequest {
       context: context ?? this.context,
       contextData: contextData ?? this.contextData,
       userMessage: userMessage ?? this.userMessage,
+      locale: locale ?? this.locale,
     );
   }
 }

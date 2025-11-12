@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/firebase_service.dart';
@@ -63,10 +65,16 @@ class WalkDogApp extends ConsumerWidget {
     // LLM 초기화 (백그라운드에서)
     ref.watch(llmInitializationProvider);
 
-    // 설정을 불러오는 동안 기본 테마로 표시
+    // 설정을 불러오는 동안 기본 테마 및 locale로 표시
     final themeMode = settingsAsync.maybeWhen(
       data: (settings) => settings.darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       orElse: () => ThemeMode.light,
+    );
+
+    // Week 3: 설정된 locale 가져오기 (기본값: 한국어)
+    final locale = settingsAsync.maybeWhen(
+      data: (settings) => Locale(settings.locale),
+      orElse: () => const Locale('ko'),
     );
 
     return MaterialApp(
@@ -75,6 +83,18 @@ class WalkDogApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      // Week 3: Localization 설정
+      locale: locale,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko'), // 한국어
+        Locale('en'), // 영어
+      ],
       home: const SplashScreen(),
     );
   }
@@ -108,7 +128,7 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             Text(
-              AppConstants.appDescription,
+              AppLocalizations.of(context).appDescription,
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
@@ -118,12 +138,12 @@ class WelcomeScreen extends StatelessWidget {
               onPressed: () {
                 // TODO: 펫 생성 화면으로 이동
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('곧 펫 생성 화면이 준비될 예정입니다!'),
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context).petCreationComingSoon),
                   ),
                 );
               },
-              child: const Text('펫 만들기'),
+              child: Text(AppLocalizations.of(context).createPet),
             ),
             const SizedBox(height: 16),
 
@@ -131,12 +151,12 @@ class WelcomeScreen extends StatelessWidget {
               onPressed: () {
                 // TODO: 기존 펫 불러오기
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('곧 펫 불러오기 기능이 준비될 예정입니다!'),
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context).petLoadingComingSoon),
                   ),
                 );
               },
-              child: const Text('기존 펫 불러오기'),
+              child: Text(AppLocalizations.of(context).loadExistingPet),
             ),
 
             const Spacer(),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/location/location_service.dart';
 
 /// GPS 상태 및 실외/실내 모드를 표시하는 위젯
@@ -42,7 +43,7 @@ class GPSStatusWidget extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'GPS 상태',
+                AppLocalizations.of(context).gpsStatus,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -100,7 +101,7 @@ class GPSStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            isTracking ? 'GPS 추적중' : 'GPS 대기',
+            isTracking ? AppLocalizations.of(context).gpsTracking : AppLocalizations.of(context).gpsWaiting,
             style: theme.textTheme.bodySmall?.copyWith(
               color: isTracking ? Colors.green : Colors.grey,
               fontWeight: FontWeight.w600,
@@ -135,7 +136,7 @@ class GPSStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            isOutdoor ? '실외 모드' : '실내 모드',
+            isOutdoor ? AppLocalizations.of(context).outdoorMode : AppLocalizations.of(context).indoorMode,
             style: theme.textTheme.bodySmall?.copyWith(
               color: isOutdoor ? Colors.blue : Colors.orange,
               fontWeight: FontWeight.w600,
@@ -167,7 +168,7 @@ class GPSStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '감지 중...',
+            AppLocalizations.of(context).detecting,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.grey,
               fontWeight: FontWeight.w600,
@@ -196,7 +197,7 @@ class GPSStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '오류',
+            AppLocalizations.of(context).errorStatus,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.red,
               fontWeight: FontWeight.w600,
@@ -230,7 +231,7 @@ class GPSStatusWidget extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'GPS 신호를 찾는 중...',
+              AppLocalizations.of(context).searchingGpsSignal,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -254,21 +255,21 @@ class GPSStatusWidget extends ConsumerWidget {
               _buildLocationStat(
                 context,
                 theme,
-                '위치 샘플',
-                '${samples.length}개',
+                AppLocalizations.of(context).locationSamples,
+                AppLocalizations.of(context).countItems(samples.length),
                 Icons.location_on,
               ),
               _buildLocationStat(
                 context,
                 theme,
-                '실외 신호',
-                '${validOutdoorSamples}개',
+                AppLocalizations.of(context).outdoorSignals,
+                AppLocalizations.of(context).countItems(validOutdoorSamples),
                 Icons.nature,
               ),
               _buildLocationStat(
                 context,
                 theme,
-                '실외 비율',
+                AppLocalizations.of(context).outdoorRatio,
                 '${(outdoorRatio * 100).toInt()}%',
                 Icons.pie_chart,
               ),
@@ -343,7 +344,7 @@ class GPSStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            isEligibleForBonus ? '2배 보너스 적용!' : '실외 50% 이상 시 2배 보너스',
+            isEligibleForBonus ? AppLocalizations.of(context).doubleBonusApplied : AppLocalizations.of(context).outdoorBonusRequirement,
             style: theme.textTheme.bodySmall?.copyWith(
               color: isEligibleForBonus ? Colors.green : Colors.orange,
               fontWeight: FontWeight.w600,

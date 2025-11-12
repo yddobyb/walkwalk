@@ -28,7 +28,7 @@ void main() {
       // When: 여러 번 호출 (같은 시간대이므로 모두 동일)
       final responses = List.generate(
         10,
-        (_) => fallbackResponses.getResponse(context, null),
+        (_) => fallbackResponses.getResponse(context, null, 'ko'),
       );
 
       // Then: 모두 비어있지 않음
@@ -62,7 +62,7 @@ void main() {
       // When: 20번 호출하여 다양성 확인
       final responses = List.generate(
         20,
-        (_) => fallbackResponses.getResponse(context, null),
+        (_) => fallbackResponses.getResponse(context, null, 'ko'),
       );
 
       // Then: 모두 비어있지 않음
@@ -91,14 +91,17 @@ void main() {
       final lowSteps = fallbackResponses.getResponse(
         'walk_complete',
         {'steps': 3000, 'duration': 1200, 'isOutdoor': false},
+        'ko',
       );
       final midSteps = fallbackResponses.getResponse(
         'walk_complete',
         {'steps': 7000, 'duration': 2400, 'isOutdoor': false},
+        'ko',
       );
       final highSteps = fallbackResponses.getResponse(
         'walk_complete',
         {'steps': 12000, 'duration': 3600, 'isOutdoor': false},
+        'ko',
       );
 
       // Then: 모두 비어있지 않음
@@ -119,12 +122,14 @@ void main() {
       final outdoorResponse = fallbackResponses.getResponse(
         'walk_complete',
         {'steps': 5000, 'duration': 1800, 'isOutdoor': true},
+        'ko',
       );
 
       // When: 실내 산책
       final indoorResponse = fallbackResponses.getResponse(
         'walk_complete',
         {'steps': 5000, 'duration': 1800, 'isOutdoor': false},
+        'ko',
       );
 
       // Then: 모두 비어있지 않음
@@ -146,14 +151,17 @@ void main() {
       final mission1 = fallbackResponses.getResponse(
         'mission_complete',
         {'title': '첫 산책 완료', 'treatReward': 10},
+        'ko',
       );
       final mission2 = fallbackResponses.getResponse(
         'mission_complete',
         {'title': '5000걸음 도전', 'treatReward': 5},
+        'ko',
       );
       final mission3 = fallbackResponses.getResponse(
         'mission_complete',
         {'title': '주간 목표 달성', 'treatReward': 20},
+        'ko',
       );
 
       // Then: 모두 비어있지 않음
@@ -177,14 +185,17 @@ void main() {
       final lowTreats = fallbackResponses.getResponse(
         'feed',
         {'treatCount': 3},
+        'ko',
       );
       final midTreats = fallbackResponses.getResponse(
         'feed',
         {'treatCount': 15},
+        'ko',
       );
       final highTreats = fallbackResponses.getResponse(
         'feed',
         {'treatCount': 35},
+        'ko',
       );
 
       // Then: 모두 비어있지 않음
@@ -208,14 +219,17 @@ void main() {
       final level2 = fallbackResponses.getResponse(
         'level_up',
         {'level': 2, 'experience': 100},
+        'ko',
       );
       final level5 = fallbackResponses.getResponse(
         'level_up',
         {'level': 5, 'experience': 500},
+        'ko',
       );
       final level10 = fallbackResponses.getResponse(
         'level_up',
         {'level': 10, 'experience': 1500},
+        'ko',
       );
 
       // Then: 모두 비어있지 않음
@@ -238,7 +252,7 @@ void main() {
       // When: 여러 번 호출
       final responses = List.generate(
         10,
-        (_) => fallbackResponses.getResponse('low_happiness', null),
+        (_) => fallbackResponses.getResponse('low_happiness', null, 'ko'),
       );
 
       // Then: 모두 비어있지 않음
@@ -265,7 +279,7 @@ void main() {
       const invalidContext = 'invalid_context_12345';
 
       // When: 응답 요청
-      final response = fallbackResponses.getResponse(invalidContext, null);
+      final response = fallbackResponses.getResponse(invalidContext, null, 'ko');
 
       // Then: 기본 응답 반환
       expect(response.isNotEmpty, true);
@@ -319,7 +333,7 @@ void main() {
       final responses = contexts.map(
         (context, data) => MapEntry(
           context,
-          fallbackResponses.getResponse(context, data),
+          fallbackResponses.getResponse(context, data, 'ko'),
         ),
       );
 

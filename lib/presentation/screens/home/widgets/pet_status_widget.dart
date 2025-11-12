@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../domain/entities/pet.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 import 'pet_dialogue_widget.dart';
@@ -93,7 +94,7 @@ class PetStatusWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '펫 상태',
+                AppLocalizations.of(context).petStatus,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -124,7 +125,7 @@ class PetStatusWidget extends ConsumerWidget {
           // 행복도
           _StatusBar(
             icon: '😊',
-            label: '행복도',
+            label: AppLocalizations.of(context).happiness,
             value: happiness,
             maxValue: 100,
             color: theme.colorScheme.primary,
@@ -135,7 +136,7 @@ class PetStatusWidget extends ConsumerWidget {
           // 경험치
           _StatusBar(
             icon: '⭐',
-            label: '경험치',
+            label: AppLocalizations.of(context).experience,
             value: experience,
             maxValue: requiredExp,
             color: Colors.amber,
@@ -163,13 +164,13 @@ class PetStatusWidget extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '간식',
+                      AppLocalizations.of(context).treats,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
-                      '$treats개',
+                      AppLocalizations.of(context).treatsCount(treats),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
@@ -180,7 +181,7 @@ class PetStatusWidget extends ConsumerWidget {
               ElevatedButton.icon(
                 onPressed: treats > 0 ? () => _feedTreat(context, ref, pet) : null,
                 icon: const Icon(Icons.favorite, size: 16),
-                label: const Text('간식 주기'),
+                label: Text(AppLocalizations.of(context).giveTreat),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
@@ -199,7 +200,7 @@ class PetStatusWidget extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              _getStatusMessage(happiness),
+              _getStatusMessage(happiness, context),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: _getStatusMessageColor(happiness, theme),
                 fontWeight: FontWeight.w500,
@@ -219,13 +220,14 @@ class PetStatusWidget extends ConsumerWidget {
     return theme.colorScheme.error;
   }
 
-  String _getStatusMessage(int happiness) {
-    if (happiness >= 90) return '아주 행복해해요! 😆';
-    if (happiness >= 80) return '기분이 좋아 보여요! 😊';
-    if (happiness >= 60) return '보통이에요 😐';
-    if (happiness >= 40) return '조금 우울해 보여요 😔';
-    if (happiness >= 20) return '많이 슬퍼해요 😢';
-    return '매우 우울해해요... 😭';
+  String _getStatusMessage(int happiness, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (happiness >= 90) return l10n.statusVeryHappy;
+    if (happiness >= 80) return l10n.statusHappy;
+    if (happiness >= 60) return l10n.statusNeutral;
+    if (happiness >= 40) return l10n.statusSad;
+    if (happiness >= 20) return l10n.statusVerySad;
+    return l10n.statusDepressed;
   }
 
   Widget _buildLoadingStatus(BuildContext context, ThemeData theme) {
@@ -271,7 +273,7 @@ class PetStatusWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '펫 정보를 불러올 수 없습니다',
+            AppLocalizations.of(context).petInfoLoadError,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.error,
             ),
@@ -291,7 +293,7 @@ class PetStatusWidget extends ConsumerWidget {
       if (updatedPet != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('냠냠! 맛있어! 🐕 (행복도 +10)'),
+            content: Text(AppLocalizations.of(context).treatFeedSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -346,7 +348,7 @@ class PetStatusWidget extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('닫기'),
+                      child: Text(AppLocalizations.of(context).close),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -357,8 +359,8 @@ class PetStatusWidget extends ConsumerWidget {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('간식을 줄 수 없습니다'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context).treatFeedError),
             backgroundColor: Colors.red,
           ),
         );
@@ -366,7 +368,7 @@ class PetStatusWidget extends ConsumerWidget {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('오류: $e'),
+          content: Text(AppLocalizations.of(context).errorWithMessage(e.toString())),
           backgroundColor: Colors.red,
         ),
       );

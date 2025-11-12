@@ -5,7 +5,6 @@ class AppConstants {
   // 앱 정보
   static const String appName = 'WalkDog';
   static const String appVersion = '1.0.0';
-  static const String appDescription = '걸음수 기반 가상 반려견 앱';
 
   // 걸음수 관련
   static const int dailyStepGoal = 8000;

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../domain/entities/pet.dart';
 import '../../../data/models/pet_model.dart';
 import '../../../data/datasources/database_service.dart';
@@ -18,39 +19,51 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
   final _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  String _selectedBreed = '골든 리트리버';
-  String _selectedColor = '골든';
+  String _selectedBreed = 'goldenRetriever'; // ARB key identifier
+  String _selectedColor = 'golden'; // ARB key identifier
   PetPersonality _selectedPersonality = PetPersonality.cheerful;
 
-  final List<String> _breeds = [
-    '골든 리트리버',
-    '래브라도',
-    '시바견',
-    '포메라니안',
-    '허스키',
-    '비글',
-    '불독',
-    '푸들',
-  ];
-
-  final List<String> _colors = [
-    '골든',
-    '브라운',
-    '블랙',
-    '화이트',
-    '그레이',
-    '크림',
-  ];
-
-  final Map<PetPersonality, String> _personalityNames = {
-    PetPersonality.cheerful: '명랑한',
-    PetPersonality.calm: '차분한',
-    PetPersonality.energetic: '활발한',
-    PetPersonality.shy: '수줍은',
-    PetPersonality.playful: '장난기 많은',
-  };
-
   bool _isCreating = false;
+
+  // 품종 매핑 (키 -> 표시 이름)
+  Map<String, String> _getBreedMap(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return {
+      'goldenRetriever': l10n.breedGoldenRetriever,
+      'labrador': l10n.breedLabrador,
+      'shiba': l10n.breedShiba,
+      'pomeranian': l10n.breedPomeranian,
+      'husky': l10n.breedHusky,
+      'beagle': l10n.breedBeagle,
+      'bulldog': l10n.breedBulldog,
+      'poodle': l10n.breedPoodle,
+    };
+  }
+
+  // 색상 매핑 (키 -> 표시 이름)
+  Map<String, String> _getColorMap(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return {
+      'golden': l10n.colorGolden,
+      'brown': l10n.colorBrown,
+      'black': l10n.colorBlack,
+      'white': l10n.colorWhite,
+      'gray': l10n.colorGray,
+      'cream': l10n.colorCream,
+    };
+  }
+
+  // 성격 매핑
+  Map<PetPersonality, String> _getPersonalityMap(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return {
+      PetPersonality.cheerful: l10n.personalityCheerful,
+      PetPersonality.calm: l10n.personalityCalm,
+      PetPersonality.energetic: l10n.personalityEnergetic,
+      PetPersonality.shy: l10n.personalityShy,
+      PetPersonality.playful: l10n.personalityPlayful,
+    };
+  }
 
   @override
   void dispose() {
@@ -67,11 +80,14 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
     try {
       final now = DateTime.now();
+      final breedMap = _getBreedMap(context);
+      final colorMap = _getColorMap(context);
+
       final pet = Pet(
         petId: const Uuid().v4(),
         name: _nameController.text.trim(),
-        breed: _selectedBreed,
-        color: _selectedColor,
+        breed: breedMap[_selectedBreed] ?? _selectedBreed,
+        color: colorMap[_selectedColor] ?? _selectedColor,
         accessory: PetAccessory.none,
         happiness: 100, // 초기 행복도 100
         treats: 10, // 시작 간식 10개
@@ -111,7 +127,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('펫 생성 중 오류가 발생했습니다: $e'),
+          content: Text(AppLocalizations.of(context).petCreationError(e.toString())),
           backgroundColor: Colors.red,
         ),
       );
@@ -130,7 +146,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('펫 만들기'),
+        title: Text(AppLocalizations.of(context).createPet),
         centerTitle: true,
       ),
       body: Form(
@@ -163,16 +179,24 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    _nameController.text.isEmpty ? '이름 없음' : _nameController.text,
+                    _nameController.text.isEmpty ? AppLocalizations.of(context).noName : _nameController.text,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    '$_selectedColor $_selectedBreed',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
-                    ),
+                  Builder(
+                    builder: (context) {
+                      final colorMap = _getColorMap(context);
+                      final breedMap = _getBreedMap(context);
+                      final colorName = colorMap[_selectedColor] ?? '';
+                      final breedName = breedMap[_selectedBreed] ?? '';
+                      return Text(
+                        '$colorName $breedName',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -182,7 +206,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
             // 이름 입력
             Text(
-              '이름',
+              AppLocalizations.of(context).petName,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -190,16 +214,16 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
             const SizedBox(height: 8),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                hintText: '펫의 이름을 입력하세요',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context).petNameHint,
+                border: const OutlineInputBorder(),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return '이름을 입력해주세요';
+                  return AppLocalizations.of(context).petNameError;
                 }
                 if (value.trim().length > 10) {
-                  return '이름은 10자 이하로 입력해주세요';
+                  return AppLocalizations.of(context).petNameLengthError;
                 }
                 return null;
               },
@@ -212,29 +236,34 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
             // 품종 선택
             Text(
-              '품종',
+              AppLocalizations.of(context).petBreed,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              value: _selectedBreed,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              items: _breeds.map((breed) {
-                return DropdownMenuItem(
-                  value: breed,
-                  child: Text(breed),
+            Builder(
+              builder: (context) {
+                final breedMap = _getBreedMap(context);
+                return DropdownButtonFormField<String>(
+                  value: _selectedBreed,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: breedMap.entries.map((entry) {
+                    return DropdownMenuItem(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedBreed = value;
+                      });
+                    }
+                  },
                 );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedBreed = value;
-                  });
-                }
               },
             ),
 
@@ -242,56 +271,66 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
 
             // 색상 선택
             Text(
-              '색상',
+              AppLocalizations.of(context).petColor,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: _colors.map((color) {
-                final isSelected = _selectedColor == color;
-                return ChoiceChip(
-                  label: Text(color),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    if (selected) {
-                      setState(() {
-                        _selectedColor = color;
-                      });
-                    }
-                  },
+            Builder(
+              builder: (context) {
+                final colorMap = _getColorMap(context);
+                return Wrap(
+                  spacing: 8,
+                  children: colorMap.entries.map((entry) {
+                    final isSelected = _selectedColor == entry.key;
+                    return ChoiceChip(
+                      label: Text(entry.value),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() {
+                            _selectedColor = entry.key;
+                          });
+                        }
+                      },
+                    );
+                  }).toList(),
                 );
-              }).toList(),
+              },
             ),
 
             const SizedBox(height: 24),
 
             // 성격 선택
             Text(
-              '성격',
+              AppLocalizations.of(context).petPersonality,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: PetPersonality.values.map((personality) {
-                final isSelected = _selectedPersonality == personality;
-                return ChoiceChip(
-                  label: Text(_personalityNames[personality]!),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    if (selected) {
-                      setState(() {
-                        _selectedPersonality = personality;
-                      });
-                    }
-                  },
+            Builder(
+              builder: (context) {
+                final personalityMap = _getPersonalityMap(context);
+                return Wrap(
+                  spacing: 8,
+                  children: personalityMap.entries.map((entry) {
+                    final isSelected = _selectedPersonality == entry.key;
+                    return ChoiceChip(
+                      label: Text(entry.value),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() {
+                            _selectedPersonality = entry.key;
+                          });
+                        }
+                      },
+                    );
+                  }).toList(),
                 );
-              }).toList(),
+              },
             ),
 
             const SizedBox(height: 40),
@@ -313,9 +352,9 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text(
-                        '펫 만들기',
-                        style: TextStyle(
+                    : Text(
+                        AppLocalizations.of(context).createPet,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),

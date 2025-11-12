@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../l10n/app_localizations.dart';
 import '../home/home_screen.dart';
 import 'pet_creation_screen.dart';
 
@@ -46,7 +47,7 @@ class WelcomeScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      '나만의 가상 반려견과\n함께 걸어보세요!',
+                      AppLocalizations.of(context).welcomeHeadline,
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -69,7 +70,7 @@ class WelcomeScreen extends ConsumerWidget {
               const SizedBox(height: 16),
 
               Text(
-                AppConstants.appDescription,
+                AppLocalizations.of(context).appDescription,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withOpacity(0.7),
                 ),
@@ -81,20 +82,20 @@ class WelcomeScreen extends ConsumerWidget {
               // 기능 소개
               _FeatureItem(
                 icon: '👟',
-                title: '걸음수 트래킹',
-                description: '산책할 때마다 펫이 행복해해요',
+                title: AppLocalizations.of(context).featureStepTrackingTitle,
+                description: AppLocalizations.of(context).featureStepTrackingDesc,
               ),
               const SizedBox(height: 12),
               _FeatureItem(
                 icon: '🎁',
-                title: '보상 시스템',
-                description: '걸음수에 따라 간식과 배지를 획득',
+                title: AppLocalizations.of(context).featureRewardSystemTitle,
+                description: AppLocalizations.of(context).featureRewardSystemDesc,
               ),
               const SizedBox(height: 12),
               _FeatureItem(
                 icon: '🤖',
-                title: 'AI 대화',
-                description: '펫과 실시간으로 대화하고 교감',
+                title: AppLocalizations.of(context).featureAiChatTitle,
+                description: AppLocalizations.of(context).featureAiChatDesc,
               ),
 
               const SizedBox(height: 40),
@@ -116,9 +117,9 @@ class WelcomeScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(28),
                     ),
                   ),
-                  child: const Text(
-                    '펫 만들기',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context).createPet,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -132,13 +133,13 @@ class WelcomeScreen extends ConsumerWidget {
               TextButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('곧 구현될 예정입니다!'),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context).comingSoon),
                     ),
                   );
                 },
                 child: Text(
-                  '기존 펫 불러오기',
+                  AppLocalizations.of(context).loadExistingPet,
                   style: TextStyle(
                     color: theme.colorScheme.onSurface.withOpacity(0.6),
                   ),

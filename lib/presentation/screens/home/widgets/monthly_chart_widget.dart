@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/statistics/statistics_service.dart';
 
 /// 월간 걸음수 추세 차트 위젯
@@ -34,7 +35,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '월간 추세',
+                AppLocalizations.of(context).monthlyTrend,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -46,7 +47,7 @@ class MonthlyChartWidget extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '최근 30일',
+                  AppLocalizations.of(context).last30Days,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.w600,
@@ -59,7 +60,7 @@ class MonthlyChartWidget extends ConsumerWidget {
           monthlyStatsAsync.when(
             data: (stats) => _buildChart(context, theme, stats),
             loading: () => _buildLoadingState(),
-            error: (error, stack) => _buildErrorState(theme),
+            error: (error, stack) => _buildErrorState(context, theme),
           ),
         ],
       ),
@@ -68,7 +69,7 @@ class MonthlyChartWidget extends ConsumerWidget {
 
   Widget _buildChart(BuildContext context, ThemeData theme, List<DailyStatistics> stats) {
     if (stats.isEmpty) {
-      return _buildEmptyState(theme);
+      return _buildEmptyState(context, theme);
     }
 
     final maxSteps = stats.map((s) => s.steps).reduce((a, b) => a > b ? a : b);
@@ -198,9 +199,9 @@ class MonthlyChartWidget extends ConsumerWidget {
                       final appSteps = stat.appSessionSteps;
 
                       // 앱 세션이 있으면 구분하여 표시
-                      String tooltipText = '${DateFormat('M/d').format(date)}\n전체: $totalSteps걸음';
+                      String tooltipText = '${DateFormat('M/d').format(date)}\n${AppLocalizations.of(context).chartTooltipTotal(totalSteps)}';
                       if (appSteps > 0) {
-                        tooltipText += '\n앱 산책: $appSteps걸음';
+                        tooltipText += '\n${AppLocalizations.of(context).chartTooltipAppWalk(appSteps)}';
                       }
 
                       return LineTooltipItem(
@@ -224,7 +225,7 @@ class MonthlyChartWidget extends ConsumerWidget {
           children: [
             _buildStatItem(
               theme,
-              '총 걸음',
+              AppLocalizations.of(context).totalSteps,
               _formatNumber(totalSteps),
               Icons.directions_walk,
               theme.colorScheme.secondary,
@@ -236,7 +237,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             ),
             _buildStatItem(
               theme,
-              '일평균',
+              AppLocalizations.of(context).dailyAverage,
               '${averageSteps.round()}',
               Icons.trending_up,
               theme.colorScheme.tertiary,
@@ -248,7 +249,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             ),
             _buildStatItem(
               theme,
-              '최고',
+              AppLocalizations.of(context).maximum,
               '$maxSteps',
               Icons.military_tech,
               Colors.amber,
@@ -304,12 +305,12 @@ class MonthlyChartWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(ThemeData theme) {
+  Widget _buildErrorState(BuildContext context, ThemeData theme) {
     return SizedBox(
       height: 200,
       child: Center(
         child: Text(
-          '데이터를 불러올 수 없습니다',
+          AppLocalizations.of(context).cannotLoadData,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.error,
           ),
@@ -318,7 +319,7 @@ class MonthlyChartWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(BuildContext context, ThemeData theme) {
     return SizedBox(
       height: 200,
       child: Center(
@@ -332,7 +333,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '아직 기록이 없습니다',
+              AppLocalizations.of(context).noRecordsYet,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),

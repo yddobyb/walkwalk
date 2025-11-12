@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/location/location_service.dart';
 
 /// 위치 권한 상태 및 요청 위젯
@@ -68,7 +69,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('위치 권한 요청 중 오류가 발생했습니다: $e'),
+            content: Text(AppLocalizations.of(context).locationPermissionError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -111,7 +112,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
             ),
             const SizedBox(width: 8),
             Text(
-              'GPS 실외 모드',
+              AppLocalizations.of(context).gpsOutdoorMode,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.green,
                 fontWeight: FontWeight.w600,
@@ -139,7 +140,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
           ),
           const SizedBox(width: 8),
           Text(
-            '실내 모드',
+            AppLocalizations.of(context).indoorMode,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.orange,
               fontWeight: FontWeight.w600,
@@ -178,7 +179,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
               ),
               const SizedBox(width: 8),
               Text(
-                'GPS 실외 모드',
+                AppLocalizations.of(context).gpsOutdoorMode,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -207,30 +208,32 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
     String statusText;
     String statusDescription;
 
+    final l10n = AppLocalizations.of(context);
+
     switch (_currentPermission) {
       case LocationPermission.always:
       case LocationPermission.whileInUse:
         statusColor = Colors.green;
         statusIcon = Icons.check_circle;
-        statusText = '위치 권한 허용됨';
-        statusDescription = 'GPS를 사용하여 실외 산책을 자동으로 감지하고 보너스 보상을 받을 수 있습니다.';
+        statusText = l10n.locationPermissionGranted;
+        statusDescription = l10n.locationPermissionGrantedDesc;
         break;
       case LocationPermission.denied:
         statusColor = Colors.orange;
         statusIcon = Icons.warning;
-        statusText = '위치 권한 필요';
-        statusDescription = '실외 산책 감지와 보너스 보상을 위해 위치 권한이 필요합니다.';
+        statusText = l10n.locationPermissionRequired;
+        statusDescription = l10n.locationPermissionRequiredDesc;
         break;
       case LocationPermission.deniedForever:
         statusColor = Colors.red;
         statusIcon = Icons.error;
-        statusText = '위치 권한 거부됨';
-        statusDescription = '설정에서 직접 위치 권한을 허용해주세요.';
+        statusText = l10n.locationPermissionDenied;
+        statusDescription = l10n.locationPermissionDeniedDesc;
         break;
       default:
         statusColor = Colors.grey;
         statusIcon = Icons.help;
-        statusText = '권한 상태 확인 중...';
+        statusText = l10n.checkingPermissionStatus;
         statusDescription = '';
     }
 
@@ -272,11 +275,13 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
   }
 
   Widget _buildBenefitsSection(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '실외 모드 혜택',
+          l10n.outdoorModeBenefits,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -287,8 +292,8 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
           context,
           theme,
           icon: Icons.pets,
-          title: '2배 보상',
-          description: '실외 산책 시 간식과 행복도를 2배로 획득',
+          title: l10n.doubleReward,
+          description: l10n.doubleRewardDesc,
         ),
 
         const SizedBox(height: 8),
@@ -297,8 +302,8 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
           context,
           theme,
           icon: Icons.timeline,
-          title: '정확한 거리 측정',
-          description: 'GPS로 실제 이동 거리와 속도를 정확히 측정',
+          title: l10n.accurateDistanceTracking,
+          description: l10n.accurateDistanceTrackingDesc,
         ),
 
         const SizedBox(height: 8),
@@ -307,8 +312,8 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
           context,
           theme,
           icon: Icons.emoji_events,
-          title: '특별 배지',
-          description: '실외 산책 전용 배지와 업적 해제 가능',
+          title: l10n.specialBadges,
+          description: l10n.specialBadgesDesc,
         ),
       ],
     );
@@ -361,6 +366,8 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
   }
 
   Widget _buildActionButtons(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context);
+
     if (_currentPermission == LocationPermission.whileInUse ||
         _currentPermission == LocationPermission.always) {
       return SizedBox(
@@ -368,7 +375,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
         child: ElevatedButton.icon(
           onPressed: _checkPermission,
           icon: const Icon(Icons.refresh),
-          label: const Text('권한 상태 새로고침'),
+          label: Text(l10n.refreshPermissionStatus),
         ),
       );
     }
@@ -379,7 +386,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
         child: ElevatedButton.icon(
           onPressed: _openAppSettings,
           icon: const Icon(Icons.settings),
-          label: const Text('설정에서 권한 허용'),
+          label: Text(l10n.allowPermissionInSettings),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.orange,
             foregroundColor: Colors.white,
@@ -399,7 +406,7 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
               child: CircularProgressIndicator(strokeWidth: 2),
             )
           : const Icon(Icons.location_on),
-        label: Text(_isLoading ? '권한 요청 중...' : 'GPS 실외 모드 활성화'),
+        label: Text(_isLoading ? l10n.requestingPermission : l10n.activateGpsOutdoorMode),
       ),
     );
   }

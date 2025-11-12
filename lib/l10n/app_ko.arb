@@ -1,0 +1,2025 @@
+{
+  "@@locale": "ko",
+
+  "appName": "WalkDog",
+  "@appName": {
+    "description": "애플리케이션 이름"
+  },
+
+  "appDescription": "가상 반려견과 산책하며 건강해지세요!",
+  "@appDescription": {
+    "description": "애플리케이션 설명"
+  },
+
+  "settings": "설정",
+  "@settings": {
+    "description": "설정 화면 제목"
+  },
+
+  "gameSettings": "게임 설정",
+  "@gameSettings": {
+    "description": "게임 설정 섹션 제목"
+  },
+
+  "outdoorMode": "실외 모드",
+  "@outdoorMode": {
+    "description": "실외 모드 토글 레이블"
+  },
+
+  "outdoorModeDescription": "GPS를 사용한 실외 산책 감지",
+  "@outdoorModeDescription": {
+    "description": "실외 모드 토글 설명"
+  },
+
+  "dailyGoal": "일일 목표",
+  "@dailyGoal": {
+    "description": "일일 목표 레이블"
+  },
+
+  "dailyGoalSteps": "{steps}걸음",
+  "@dailyGoalSteps": {
+    "description": "걸음수가 포함된 일일 목표",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      }
+    }
+  },
+
+  "badgesAndAchievements": "배지 및 업적",
+  "@badgesAndAchievements": {
+    "description": "배지 및 업적 레이블"
+  },
+
+  "badgesDescription": "획득한 배지 확인",
+  "@badgesDescription": {
+    "description": "배지 설명"
+  },
+
+  "aiSettings": "AI 설정",
+  "@aiSettings": {
+    "description": "AI 설정 섹션 제목"
+  },
+
+  "localAIChat": "로컬 AI 대화",
+  "@localAIChat": {
+    "description": "로컬 AI 대화 토글 레이블"
+  },
+
+  "localAIChatDescription": "기기 내에서 실행되는 AI 대화",
+  "@localAIChatDescription": {
+    "description": "로컬 AI 대화 설명"
+  },
+
+  "cloudImageGeneration": "클라우드 이미지 생성",
+  "@cloudImageGeneration": {
+    "description": "클라우드 이미지 생성 토글 레이블"
+  },
+
+  "cloudImageGenerationDescription": "온라인 AI를 통한 스티커 생성",
+  "@cloudImageGenerationDescription": {
+    "description": "클라우드 이미지 생성 설명"
+  },
+
+  "aiModelManagement": "AI 모델 관리",
+  "@aiModelManagement": {
+    "description": "AI 모델 관리 레이블"
+  },
+
+  "aiModelManagementDescription": "로컬 AI 모델 다운로드 및 관리",
+  "@aiModelManagementDescription": {
+    "description": "AI 모델 관리 설명"
+  },
+
+  "notifications": "알림",
+  "@notifications": {
+    "description": "알림 섹션 제목 및 토글 레이블"
+  },
+
+  "notificationsDescription": "산책 리마인더 및 알림",
+  "@notificationsDescription": {
+    "description": "알림 토글 설명"
+  },
+
+  "notificationTime": "알림 시간 설정",
+  "@notificationTime": {
+    "description": "알림 시간 레이블"
+  },
+
+  "notificationTimeDescription": "아침 09:00, 저녁 18:00",
+  "@notificationTimeDescription": {
+    "description": "알림 시간 설명"
+  },
+
+  "appSettings": "앱 설정",
+  "@appSettings": {
+    "description": "앱 설정 섹션 제목"
+  },
+
+  "darkMode": "다크 모드",
+  "@darkMode": {
+    "description": "다크 모드 토글 레이블"
+  },
+
+  "darkModeDescription": "어두운 테마 사용",
+  "@darkModeDescription": {
+    "description": "다크 모드 토글 설명"
+  },
+
+  "language": "언어",
+  "@language": {
+    "description": "언어 선택 레이블"
+  },
+
+  "languageKorean": "한국어",
+  "@languageKorean": {
+    "description": "한국어 옵션"
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "영어 옵션"
+  },
+
+  "cacheManagement": "캐시 관리",
+  "@cacheManagement": {
+    "description": "캐시 관리 레이블"
+  },
+
+  "cacheManagementDescription": "이미지 및 데이터 캐시 정리",
+  "@cacheManagementDescription": {
+    "description": "캐시 관리 설명"
+  },
+
+  "information": "정보",
+  "@information": {
+    "description": "정보 섹션 제목"
+  },
+
+  "appInfo": "앱 정보",
+  "@appInfo": {
+    "description": "앱 정보 레이블"
+  },
+
+  "appInfoVersion": "Version {version}",
+  "@appInfoVersion": {
+    "description": "앱 버전 정보",
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+
+  "help": "도움말",
+  "@help": {
+    "description": "도움말 레이블"
+  },
+
+  "helpDescription": "사용법 및 FAQ",
+  "@helpDescription": {
+    "description": "도움말 설명"
+  },
+
+  "privacyPolicy": "개인정보 처리방침",
+  "@privacyPolicy": {
+    "description": "개인정보 처리방침 레이블"
+  },
+
+  "privacyPolicyDescription": "데이터 처리 및 개인정보 보호",
+  "@privacyPolicyDescription": {
+    "description": "개인정보 처리방침 설명"
+  },
+
+  "comingSoon": "곧 구현될 예정입니다!",
+  "@comingSoon": {
+    "description": "곧 구현될 예정 메시지"
+  },
+
+  "cancel": "취소",
+  "@cancel": {
+    "description": "취소 버튼"
+  },
+
+  "ok": "확인",
+  "@ok": {
+    "description": "확인 버튼"
+  },
+
+  "confirm": "확인",
+  "@confirm": {
+    "description": "확인 버튼"
+  },
+
+  "dailyGoalDialogTitle": "일일 목표 설정",
+  "@dailyGoalDialogTitle": {
+    "description": "일일 목표 다이얼로그 제목"
+  },
+
+  "dailyGoalDialogDescription": "목표 걸음수를 설정하세요",
+  "@dailyGoalDialogDescription": {
+    "description": "일일 목표 다이얼로그 설명"
+  },
+
+  "dailyGoalDialogRange": "(1,000 ~ 30,000 걸음)",
+  "@dailyGoalDialogRange": {
+    "description": "일일 목표 유효 범위"
+  },
+
+  "dailyGoalDialogLabel": "걸음수",
+  "@dailyGoalDialogLabel": {
+    "description": "일일 목표 입력 레이블"
+  },
+
+  "dailyGoalDialogSuffix": "걸음",
+  "@dailyGoalDialogSuffix": {
+    "description": "일일 목표 입력 접미사"
+  },
+
+  "dailyGoalErrorEmpty": "걸음수를 입력해주세요",
+  "@dailyGoalErrorEmpty": {
+    "description": "빈 걸음수 에러 메시지"
+  },
+
+  "dailyGoalErrorInvalid": "올바른 숫자를 입력해주세요",
+  "@dailyGoalErrorInvalid": {
+    "description": "잘못된 숫자 에러 메시지"
+  },
+
+  "dailyGoalErrorRange": "1,000 ~ 30,000 사이의 값을 입력해주세요",
+  "@dailyGoalErrorRange": {
+    "description": "범위 초과 에러 메시지"
+  },
+
+  "dailyGoalUpdated": "일일 목표가 {steps}걸음으로 설정되었습니다",
+  "@dailyGoalUpdated": {
+    "description": "일일 목표 업데이트 성공 메시지",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      }
+    }
+  },
+
+  "dailyGoalUpdateError": "목표 설정 중 오류가 발생했습니다: {error}",
+  "@dailyGoalUpdateError": {
+    "description": "일일 목표 업데이트 에러 메시지",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "네트워크 오류"
+      }
+    }
+  },
+
+  "cacheDialogTitle": "캐시 정리",
+  "@cacheDialogTitle": {
+    "description": "캐시 다이얼로그 제목"
+  },
+
+  "cacheDialogDescription": "이미지 캐시와 임시 데이터를 정리하시겠습니까?",
+  "@cacheDialogDescription": {
+    "description": "캐시 다이얼로그 설명"
+  },
+
+  "cacheCleared": "캐시가 정리되었습니다!",
+  "@cacheCleared": {
+    "description": "캐시 정리 성공 메시지"
+  },
+
+  "languageDialogTitle": "언어 선택",
+  "@languageDialogTitle": {
+    "description": "언어 선택 다이얼로그 제목"
+  },
+
+  "languageUpdated": "언어가 {language}(으)로 변경되었습니다",
+  "@languageUpdated": {
+    "description": "언어 변경 성공 메시지",
+    "placeholders": {
+      "language": {
+        "type": "String",
+        "example": "한국어"
+      }
+    }
+  },
+
+  "createPet": "펫 만들기",
+  "@createPet": {
+    "description": "펫 생성 화면 제목 및 버튼"
+  },
+
+  "petName": "이름",
+  "@petName": {
+    "description": "펫 이름 레이블"
+  },
+
+  "petNameHint": "펫의 이름을 입력하세요",
+  "@petNameHint": {
+    "description": "펫 이름 입력 힌트"
+  },
+
+  "petNameError": "이름을 입력해주세요",
+  "@petNameError": {
+    "description": "펫 이름 필수 에러 메시지"
+  },
+
+  "petNameLengthError": "이름은 10자 이하로 입력해주세요",
+  "@petNameLengthError": {
+    "description": "펫 이름 길이 에러 메시지"
+  },
+
+  "petBreed": "품종",
+  "@petBreed": {
+    "description": "펫 품종 레이블"
+  },
+
+  "petColor": "색상",
+  "@petColor": {
+    "description": "펫 색상 레이블"
+  },
+
+  "petPersonality": "성격",
+  "@petPersonality": {
+    "description": "펫 성격 레이블"
+  },
+
+  "noName": "이름 없음",
+  "@noName": {
+    "description": "이름이 없을 때 표시되는 텍스트"
+  },
+
+  "petCreationError": "펫 생성 중 오류가 발생했습니다: {error}",
+  "@petCreationError": {
+    "description": "펫 생성 에러 메시지",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+
+  "breedGoldenRetriever": "골든 리트리버",
+  "@breedGoldenRetriever": {
+    "description": "품종: 골든 리트리버"
+  },
+
+  "breedLabrador": "래브라도",
+  "@breedLabrador": {
+    "description": "품종: 래브라도"
+  },
+
+  "breedShiba": "시바견",
+  "@breedShiba": {
+    "description": "품종: 시바견"
+  },
+
+  "breedPomeranian": "포메라니안",
+  "@breedPomeranian": {
+    "description": "품종: 포메라니안"
+  },
+
+  "breedHusky": "허스키",
+  "@breedHusky": {
+    "description": "품종: 허스키"
+  },
+
+  "breedBeagle": "비글",
+  "@breedBeagle": {
+    "description": "품종: 비글"
+  },
+
+  "breedBulldog": "불독",
+  "@breedBulldog": {
+    "description": "품종: 불독"
+  },
+
+  "breedPoodle": "푸들",
+  "@breedPoodle": {
+    "description": "품종: 푸들"
+  },
+
+  "colorGolden": "골든",
+  "@colorGolden": {
+    "description": "색상: 골든"
+  },
+
+  "colorBrown": "브라운",
+  "@colorBrown": {
+    "description": "색상: 브라운"
+  },
+
+  "colorBlack": "블랙",
+  "@colorBlack": {
+    "description": "색상: 블랙"
+  },
+
+  "colorWhite": "화이트",
+  "@colorWhite": {
+    "description": "색상: 화이트"
+  },
+
+  "colorGray": "그레이",
+  "@colorGray": {
+    "description": "색상: 그레이"
+  },
+
+  "colorCream": "크림",
+  "@colorCream": {
+    "description": "색상: 크림"
+  },
+
+  "personalityCheerful": "명랑한",
+  "@personalityCheerful": {
+    "description": "성격: 명랑한"
+  },
+
+  "personalityCalm": "차분한",
+  "@personalityCalm": {
+    "description": "성격: 차분한"
+  },
+
+  "personalityEnergetic": "활발한",
+  "@personalityEnergetic": {
+    "description": "성격: 활발한"
+  },
+
+  "personalityShy": "수줍은",
+  "@personalityShy": {
+    "description": "성격: 수줍은"
+  },
+
+  "personalityPlayful": "장난기 많은",
+  "@personalityPlayful": {
+    "description": "성격: 장난기 많은"
+  },
+
+  "streakTitle": "연속 산책 기록",
+  "@streakTitle": {
+    "description": "연속 산책 위젯 제목"
+  },
+
+  "daysInARow": "일 연속",
+  "@daysInARow": {
+    "description": "연속 일수 단위"
+  },
+
+  "longestStreak": "최장 기록",
+  "@longestStreak": {
+    "description": "최장 연속 기록 레이블"
+  },
+
+  "streakDays": "{days}일",
+  "@streakDays": {
+    "description": "연속 일수 표시",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+
+  "lastWalk": "마지막 산책",
+  "@lastWalk": {
+    "description": "마지막 산책 레이블"
+  },
+
+  "noRecord": "기록 없음",
+  "@noRecord": {
+    "description": "산책 기록 없음"
+  },
+
+  "dataLoadError": "데이터를 불러올 수 없습니다",
+  "@dataLoadError": {
+    "description": "데이터 로드 에러 메시지"
+  },
+
+  "today": "오늘",
+  "@today": {
+    "description": "오늘"
+  },
+
+  "yesterday": "어제",
+  "@yesterday": {
+    "description": "어제"
+  },
+
+  "daysAgo": "{days}일 전",
+  "@daysAgo": {
+    "description": "며칠 전 표시",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "streakEncouragement0": "오늘 산책을 시작하고 연속 기록을 세워보세요!",
+  "@streakEncouragement0": {
+    "description": "연속 기록 0일 격려 메시지"
+  },
+
+  "streakEncouragement1": "좋은 시작이에요! 내일도 계속해보세요! 💪",
+  "@streakEncouragement1": {
+    "description": "연속 기록 1일 격려 메시지"
+  },
+
+  "streakEncouragementUnder7": "멋져요! 일주일 연속을 향해 달려가고 있어요! 🔥",
+  "@streakEncouragementUnder7": {
+    "description": "연속 기록 7일 미만 격려 메시지"
+  },
+
+  "streakEncouragement7": "와! 일주일 연속 달성! 정말 대단해요! 🎉",
+  "@streakEncouragement7": {
+    "description": "연속 기록 7일 달성 격려 메시지"
+  },
+
+  "streakEncouragementUnder30": "놀라워요! 한 달 연속까지 {days}일 남았어요! 🌟",
+  "@streakEncouragementUnder30": {
+    "description": "연속 기록 30일 미만 격려 메시지",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+
+  "streakEncouragement30Plus": "전설이에요! 한 달 이상 연속 산책 중! 👑",
+  "@streakEncouragement30Plus": {
+    "description": "연속 기록 30일 이상 격려 메시지"
+  },
+
+  "nextGoal3Days": "3일 연속까지 {remaining}일 남았어요!",
+  "@nextGoal3Days": {
+    "description": "3일 연속 목표 메시지",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+
+  "nextGoalWeek": "일주일 연속까지 {remaining}일 남았어요!",
+  "@nextGoalWeek": {
+    "description": "일주일 연속 목표 메시지",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "nextGoalTwoWeeks": "2주 연속까지 {remaining}일 남았어요!",
+  "@nextGoalTwoWeeks": {
+    "description": "2주 연속 목표 메시지",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "nextGoalMonth": "한 달 연속까지 {remaining}일 남았어요!",
+  "@nextGoalMonth": {
+    "description": "한 달 연속 목표 메시지",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+
+  "keepGoingMessage": "계속 이 기록을 유지해보세요!",
+  "@keepGoingMessage": {
+    "description": "30일 이상 유지 메시지"
+  },
+
+  "walkEndWalk": "산책 종료하기",
+  "@walkEndWalk": {
+    "description": "산책 종료 버튼 제목"
+  },
+
+  "walkStartWalk": "산책 시작하기",
+  "@walkStartWalk": {
+    "description": "산책 시작 버튼 제목"
+  },
+
+  "walkEndWalkDescription": "산책을 종료하고 보상을 받아보세요",
+  "@walkEndWalkDescription": {
+    "description": "산책 종료 버튼 설명"
+  },
+
+  "walkStartWalkDescription": "펫과 함께 건강한 산책을 시작해보세요",
+  "@walkStartWalkDescription": {
+    "description": "산책 시작 버튼 설명"
+  },
+
+  "walkEndButton": "산책 종료",
+  "@walkEndButton": {
+    "description": "산책 종료 버튼 레이블"
+  },
+
+  "walkIndoor": "실내 산책",
+  "@walkIndoor": {
+    "description": "실내 산책 버튼"
+  },
+
+  "walkOutdoor": "실외 산책",
+  "@walkOutdoor": {
+    "description": "실외 산책 버튼"
+  },
+
+  "walkingNow": "산책 중입니다! 걸음수가 실시간으로 기록되고 있어요.",
+  "@walkingNow": {
+    "description": "산책 중 팁 메시지"
+  },
+
+  "walkOutdoorBonus": "실외 산책 시 보너스 간식을 더 많이 획득할 수 있어요!",
+  "@walkOutdoorBonus": {
+    "description": "실외 산책 보너스 팁 메시지"
+  },
+
+  "walkSensorInitializing": "걸음수 센서 초기화 중...",
+  "@walkSensorInitializing": {
+    "description": "센서 초기화 로딩 메시지"
+  },
+
+  "walkSensorUnavailable": "걸음수 센서를 사용할 수 없습니다",
+  "@walkSensorUnavailable": {
+    "description": "센서 사용 불가 에러 제목"
+  },
+
+  "walkPermissionRequired": "설정에서 활동 권한을 허용해주세요",
+  "@walkPermissionRequired": {
+    "description": "권한 허용 요청 메시지"
+  },
+
+  "walkStartedOutdoor": "실외 산책을 시작합니다! 🌳\n위치 권한을 허용해주세요.",
+  "@walkStartedOutdoor": {
+    "description": "실외 산책 시작 성공 메시지"
+  },
+
+  "walkStartedIndoor": "실내 산책을 시작합니다! 🏠",
+  "@walkStartedIndoor": {
+    "description": "실내 산책 시작 성공 메시지"
+  },
+
+  "walkStartFailed": "산책을 시작할 수 없습니다. 권한을 확인해주세요.",
+  "@walkStartFailed": {
+    "description": "산책 시작 실패 에러 메시지"
+  },
+
+  "walkEndingMessage": "산책을 종료하는 중입니다...\n걸음수가 반영될 때까지 잠시만 기다려주세요",
+  "@walkEndingMessage": {
+    "description": "산책 종료 진행 중 메시지"
+  },
+
+  "walkCompleted": "산책 완료! {steps}걸음 기록됨 🎉\n간식 {treats}개, 행복도 +{happiness}",
+  "@walkCompleted": {
+    "description": "산책 완료 성공 메시지",
+    "placeholders": {
+      "steps": {
+        "type": "int",
+        "example": "5000"
+      },
+      "treats": {
+        "type": "int",
+        "example": "10"
+      },
+      "happiness": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+
+  "walkLevelUp": "🎊 레벨 업! LV {levelBefore} → LV {levelAfter}",
+  "@walkLevelUp": {
+    "description": "레벨 업 알림 메시지",
+    "placeholders": {
+      "levelBefore": {
+        "type": "int",
+        "example": "5"
+      },
+      "levelAfter": {
+        "type": "int",
+        "example": "6"
+      }
+    }
+  },
+
+  "walkLevelUpMultiple": "(+{levels}레벨)",
+  "@walkLevelUpMultiple": {
+    "description": "다중 레벨 업 표시",
+    "placeholders": {
+      "levels": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+
+  "walkEndError": "산책 종료 중 오류가 발생했습니다.",
+  "@walkEndError": {
+    "description": "산책 종료 실패 에러 메시지"
+  },
+
+  "errorOccurred": "오류가 발생했습니다: {error}",
+  "@errorOccurred": {
+    "description": "일반 에러 메시지",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+
+  "close": "닫기",
+  "@close": {
+    "description": "닫기 버튼"
+  },
+
+  "congratulations": "축하해요! 🎉",
+  "@congratulations": {
+    "description": "축하 메시지"
+  },
+
+  "tabHome": "홈",
+  "@tabHome": {
+    "description": "홈 탭 라벨"
+  },
+
+  "tabWalk": "산책",
+  "@tabWalk": {
+    "description": "산책 탭 라벨"
+  },
+
+  "tabCustomize": "커스터마이즈",
+  "@tabCustomize": {
+    "description": "커스터마이즈 탭 라벨"
+  },
+
+  "tabSettings": "설정",
+  "@tabSettings": {
+    "description": "설정 탭 라벨"
+  },
+
+  "notificationComingSoon": "알림 기능은 곧 구현될 예정입니다!",
+  "@notificationComingSoon": {
+    "description": "알림 기능 준비중 메시지"
+  },
+
+  "petStatus": "펫 상태",
+  "@petStatus": {
+    "description": "펫 상태 섹션 제목"
+  },
+
+  "happiness": "행복도",
+  "@happiness": {
+    "description": "행복도 라벨"
+  },
+
+  "experience": "경험치",
+  "@experience": {
+    "description": "경험치 라벨"
+  },
+
+  "treats": "간식",
+  "@treats": {
+    "description": "간식 라벨"
+  },
+
+  "treatsCount": "{count}개",
+  "@treatsCount": {
+    "description": "간식 개수",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "giveTreat": "간식 주기",
+  "@giveTreat": {
+    "description": "간식 주기 버튼"
+  },
+
+  "statusVeryHappy": "아주 행복해해요! 😆",
+  "@statusVeryHappy": {
+    "description": "펫 상태 메시지 - 매우 행복 (90+)"
+  },
+
+  "statusHappy": "기분이 좋아 보여요! 😊",
+  "@statusHappy": {
+    "description": "펫 상태 메시지 - 행복 (80-89)"
+  },
+
+  "statusNeutral": "보통이에요 😐",
+  "@statusNeutral": {
+    "description": "펫 상태 메시지 - 보통 (60-79)"
+  },
+
+  "statusSad": "조금 우울해 보여요 😔",
+  "@statusSad": {
+    "description": "펫 상태 메시지 - 조금 슬픔 (40-59)"
+  },
+
+  "statusVerySad": "많이 슬퍼해요 😢",
+  "@statusVerySad": {
+    "description": "펫 상태 메시지 - 매우 슬픔 (20-39)"
+  },
+
+  "statusDepressed": "매우 우울해해요... 😭",
+  "@statusDepressed": {
+    "description": "펫 상태 메시지 - 우울 (0-19)"
+  },
+
+  "petInfoLoadError": "펫 정보를 불러올 수 없습니다",
+  "@petInfoLoadError": {
+    "description": "펫 정보 로딩 실패 메시지"
+  },
+
+  "treatFeedSuccess": "냠냠! 맛있어! 🐕 (행복도 +10)",
+  "@treatFeedSuccess": {
+    "description": "간식 급여 성공 메시지"
+  },
+
+  "treatFeedError": "간식을 줄 수 없습니다",
+  "@treatFeedError": {
+    "description": "간식 급여 실패 메시지"
+  },
+
+  "errorWithMessage": "오류: {message}",
+  "@errorWithMessage": {
+    "description": "오류 메시지 (예외 포함)",
+    "placeholders": {
+      "message": {
+        "type": "String",
+        "example": "네트워크 오류"
+      }
+    }
+  },
+
+  "personalityCheerfulDesc": "명랑한 성격",
+  "@personalityCheerfulDesc": {
+    "description": "성격 설명 - 명랑한"
+  },
+
+  "personalityCalmDesc": "차분한 성격",
+  "@personalityCalmDesc": {
+    "description": "성격 설명 - 차분한"
+  },
+
+  "personalityEnergeticDesc": "활발한 성격",
+  "@personalityEnergeticDesc": {
+    "description": "성격 설명 - 활발한"
+  },
+
+  "personalityShyDesc": "수줍은 성격",
+  "@personalityShyDesc": {
+    "description": "성격 설명 - 수줍은"
+  },
+
+  "personalityPlayfulDesc": "장난기 많은 성격",
+  "@personalityPlayfulDesc": {
+    "description": "성격 설명 - 장난기 많은"
+  },
+
+  "defaultPetName": "멍멍이",
+  "@defaultPetName": {
+    "description": "기본 펫 이름"
+  },
+
+  "defaultPetBreed": "골든 리트리버",
+  "@defaultPetBreed": {
+    "description": "기본 펫 품종"
+  },
+
+  "tapPetToChat": "펫을 터치해서 대화해보세요!",
+  "@tapPetToChat": {
+    "description": "펫 인터랙션 힌트 메시지"
+  },
+
+  "customizeTitle": "커스터마이즈",
+  "@customizeTitle": {
+    "description": "커스터마이즈 화면 제목"
+  },
+  "accessoriesTitle": "액세서리",
+  "@accessoriesTitle": {
+    "description": "액세서리 섹션 제목"
+  },
+  "aiStickerGeneration": "AI 스티커 생성",
+  "@aiStickerGeneration": {
+    "description": "AI 스티커 생성 섹션 제목"
+  },
+  "aiStickerDescription": "AI가 생성한 나만의 펫 스티커를 만들어보세요!",
+  "@aiStickerDescription": {
+    "description": "AI 스티커 생성 설명 문구"
+  },
+  "generateSticker": "스티커 생성하기",
+  "@generateSticker": {
+    "description": "스티커 생성 버튼 라벨"
+  },
+  "accessoryNone": "없음",
+  "@accessoryNone": {
+    "description": "액세서리 - 없음"
+  },
+  "accessoryBandana": "반다나",
+  "@accessoryBandana": {
+    "description": "액세서리 - 반다나"
+  },
+  "accessoryGlasses": "안경",
+  "@accessoryGlasses": {
+    "description": "액세서리 - 안경"
+  },
+  "accessoryBowtie": "나비넥타이",
+  "@accessoryBowtie": {
+    "description": "액세서리 - 나비넥타이"
+  },
+  "accessoryHat": "모자",
+  "@accessoryHat": {
+    "description": "액세서리 - 모자"
+  },
+  "accessoryCollar": "목걸이",
+  "@accessoryCollar": {
+    "description": "액세서리 - 목걸이"
+  },
+  "applyAccessoryTitle": "액세서리 적용",
+  "@applyAccessoryTitle": {
+    "description": "액세서리 적용 다이얼로그 제목"
+  },
+  "applyAccessoryConfirm": "{accessoryName}을(를) 적용하시겠습니까?",
+  "@applyAccessoryConfirm": {
+    "description": "액세서리 적용 확인 메시지",
+    "placeholders": {
+      "accessoryName": {
+        "type": "String",
+        "example": "반다나"
+      }
+    }
+  },
+  "cancel": "취소",
+  "@cancel": {
+    "description": "취소 버튼"
+  },
+  "accessoryAppliedSuccess": "{accessoryName}이(가) 적용되었습니다!",
+  "@accessoryAppliedSuccess": {
+    "description": "액세서리 적용 성공 메시지",
+    "placeholders": {
+      "accessoryName": {
+        "type": "String",
+        "example": "반다나"
+      }
+    }
+  },
+  "apply": "적용",
+  "@apply": {
+    "description": "적용 버튼"
+  },
+  "stickerComingSoon": "AI 스티커 생성 기능은 곧 구현될 예정입니다! 🎨",
+  "@stickerComingSoon": {
+    "description": "AI 스티커 생성 미구현 메시지"
+  },
+
+  "walkTitle": "산책",
+  "@walkTitle": {
+    "description": "산책 화면 제목"
+  },
+  "todaySteps": "오늘의 걸음수",
+  "@todaySteps": {
+    "description": "오늘의 걸음수 제목"
+  },
+  "stepsUnit": "steps",
+  "@stepsUnit": {
+    "description": "걸음수 단위"
+  },
+  "walkGuideTitle": "산책 가이드",
+  "@walkGuideTitle": {
+    "description": "산책 가이드 제목"
+  },
+  "guideAutoRecording": "폰을 들고 걷기만 하면 자동으로 걸음수가 기록됩니다",
+  "@guideAutoRecording": {
+    "description": "산책 가이드 - 자동 기록"
+  },
+  "guideTreatReward": "300걸음마다 간식 1개를 획득할 수 있습니다",
+  "@guideTreatReward": {
+    "description": "산책 가이드 - 간식 보상"
+  },
+  "guideHappinessIncrease": "걸을수록 펫의 행복도가 올라갑니다",
+  "@guideHappinessIncrease": {
+    "description": "산책 가이드 - 행복도 증가"
+  },
+  "guideMissionReward": "미션을 완료하면 추가 보상을 받을 수 있습니다",
+  "@guideMissionReward": {
+    "description": "산책 가이드 - 미션 보상"
+  },
+  "comingSoonTitle": "곧 추가될 기능",
+  "@comingSoonTitle": {
+    "description": "곧 추가될 기능 제목"
+  },
+  "featureGPSTracking": "실시간 GPS 트래킹",
+  "@featureGPSTracking": {
+    "description": "기능 - GPS 트래킹"
+  },
+  "featureWalkHistory": "산책 기록 저장 및 조회",
+  "@featureWalkHistory": {
+    "description": "기능 - 산책 기록"
+  },
+  "featureOutdoorBonus": "실외 보너스 시스템",
+  "@featureOutdoorBonus": {
+    "description": "기능 - 실외 보너스"
+  },
+  "featureMissionProgress": "산책 중 미션 진행도 표시",
+  "@featureMissionProgress": {
+    "description": "기능 - 미션 진행도"
+  },
+  "featureStatistics": "산책 통계 및 그래프",
+  "@featureStatistics": {
+    "description": "기능 - 통계"
+  },
+  "badgeWeek3": "Week 3",
+  "@badgeWeek3": {
+    "description": "배지 - Week 3"
+  },
+  "badgeWeek4": "Week 4",
+  "@badgeWeek4": {
+    "description": "배지 - Week 4"
+  },
+
+  "achievementsTitle": "배지",
+  "@achievementsTitle": {
+    "description": "배지 섹션 제목"
+  },
+  "viewAll": "전체보기",
+  "@viewAll": {
+    "description": "전체보기 버튼"
+  },
+  "firstBadgePrompt": "첫 번째 배지를 획득해보세요!",
+  "@firstBadgePrompt": {
+    "description": "빈 상태 - 첫 배지 획득 안내"
+  },
+  "badgesWalkHint": "산책을 시작하면 배지를 얻을 수 있어요",
+  "@badgesWalkHint": {
+    "description": "빈 상태 - 산책 시작 힌트"
+  },
+  "badgesLoadError": "배지 정보를 불러올 수 없어요",
+  "@badgesLoadError": {
+    "description": "배지 로드 에러 메시지"
+  },
+
+  "settingsLoadError": "설정을 불러올 수 없습니다: {error}",
+  "@settingsLoadError": {
+    "description": "설정 로드 에러 메시지",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTimeHint": "아침과 저녁 알림 시간을 설정하세요",
+  "@notificationTimeHint": {
+    "description": "알림 시간 설정 힌트"
+  },
+  "languageChangeError": "언어 변경 중 오류가 발생했습니다: {error}",
+  "@languageChangeError": {
+    "description": "언어 변경 에러 메시지",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "badgesCollectionTitle": "배지 모음",
+  "@badgesCollectionTitle": {
+    "description": "배지 모음 화면 제목"
+  },
+  "badgesCollectionStatus": "배지 수집 현황",
+  "@badgesCollectionStatus": {
+    "description": "배지 수집 현황 제목"
+  },
+  "badgesAchieved": "{unlockedCount} / {totalCount} 개 달성",
+  "@badgesAchieved": {
+    "description": "달성한 배지 개수",
+    "placeholders": {
+      "unlockedCount": {
+        "type": "int"
+      },
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "achievementUnlockedDate": "달성일: {date}",
+  "@achievementUnlockedDate": {
+    "description": "배지 달성 날짜",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "noBadgesYet": "아직 배지가 없어요",
+  "@noBadgesYet": {
+    "description": "배지가 없을 때 메시지"
+  },
+  "startWalkingForFirstBadge": "산책을 시작해서 첫 번째 배지를 획득해보세요!",
+  "@startWalkingForFirstBadge": {
+    "description": "첫 번째 배지 획득 안내"
+  },
+  "tryAgainLater": "잠시 후 다시 시도해주세요",
+  "@tryAgainLater": {
+    "description": "재시도 안내 메시지"
+  },
+  "tierBronze": "브론즈",
+  "@tierBronze": {
+    "description": "브론즈 티어"
+  },
+  "tierSilver": "실버",
+  "@tierSilver": {
+    "description": "실버 티어"
+  },
+  "tierGold": "골드",
+  "@tierGold": {
+    "description": "골드 티어"
+  },
+  "tierPlatinum": "플래티넘",
+  "@tierPlatinum": {
+    "description": "플래티넘 티어"
+  },
+  "welcomeHeadline": "나만의 가상 반려견과\n함께 걸어보세요!",
+  "@welcomeHeadline": {
+    "description": "환영 화면 헤드라인"
+  },
+  "featureStepTrackingTitle": "걸음수 트래킹",
+  "@featureStepTrackingTitle": {
+    "description": "걸음수 트래킹 기능 제목"
+  },
+  "featureStepTrackingDesc": "산책할 때마다 펫이 행복해해요",
+  "@featureStepTrackingDesc": {
+    "description": "걸음수 트래킹 기능 설명"
+  },
+  "featureRewardSystemTitle": "보상 시스템",
+  "@featureRewardSystemTitle": {
+    "description": "보상 시스템 기능 제목"
+  },
+  "featureRewardSystemDesc": "걸음수에 따라 간식과 배지를 획득",
+  "@featureRewardSystemDesc": {
+    "description": "보상 시스템 기능 설명"
+  },
+  "featureAiChatTitle": "AI 대화",
+  "@featureAiChatTitle": {
+    "description": "AI 대화 기능 제목"
+  },
+  "featureAiChatDesc": "펫과 실시간으로 대화하고 교감",
+  "@featureAiChatDesc": {
+    "description": "AI 대화 기능 설명"
+  },
+  "createPet": "펫 만들기",
+  "@createPet": {
+    "description": "펫 만들기 버튼"
+  },
+  "comingSoon": "곧 구현될 예정입니다!",
+  "@comingSoon": {
+    "description": "곧 구현 예정 메시지"
+  },
+  "loadExistingPet": "기존 펫 불러오기",
+  "@loadExistingPet": {
+    "description": "기존 펫 불러오기 버튼"
+  },
+  "missionCompleted": "완료",
+  "@missionCompleted": {
+    "description": "미션 완료 상태"
+  },
+  "missionProgress": "진행도",
+  "@missionProgress": {
+    "description": "미션 진행도 레이블"
+  },
+  "missionTreatsCount": "{count}개",
+  "@missionTreatsCount": {
+    "description": "간식 개수",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionTreatsLabel": "간식",
+  "@missionTreatsLabel": {
+    "description": "간식 레이블"
+  },
+  "missionHappinessLabel": "행복도",
+  "@missionHappinessLabel": {
+    "description": "행복도 레이블"
+  },
+  "missionExpired": "만료됨",
+  "@missionExpired": {
+    "description": "미션 만료됨"
+  },
+  "missionDaysRemaining": "{days}일 남음",
+  "@missionDaysRemaining": {
+    "description": "미션 남은 일수",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "missionHoursRemaining": "{hours}시간 남음",
+  "@missionHoursRemaining": {
+    "description": "미션 남은 시간",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "missionMinutesRemaining": "{minutes}분 남음",
+  "@missionMinutesRemaining": {
+    "description": "미션 남은 분",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "missionStepsUnit": "{steps}걸음",
+  "@missionStepsUnit": {
+    "description": "걸음수 단위",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+  "missionMinutesUnit": "{minutes}분",
+  "@missionMinutesUnit": {
+    "description": "분 단위",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "missionComplete": "미션 완료!",
+  "@missionComplete": {
+    "description": "Mission completion notification title"
+  },
+  "close": "닫기",
+  "@close": {
+    "description": "Close button text"
+  },
+  "todaysMissions": "오늘의 미션",
+  "@todaysMissions": {
+    "description": "Today's missions title"
+  },
+  "viewAll": "전체보기",
+  "@viewAll": {
+    "description": "View all button text"
+  },
+  "moreAvailable": "{count}개 더 있음",
+  "@moreAvailable": {
+    "description": "Indicates more items available",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cannotLoadMissions": "미션을 불러올 수 없습니다",
+  "@cannotLoadMissions": {
+    "description": "Error message when missions cannot be loaded"
+  },
+  "newMissionsComingSoon": "새로운 미션이 곧 생성됩니다!",
+  "@newMissionsComingSoon": {
+    "description": "Empty state message"
+  },
+  "missions": "미션",
+  "@missions": {
+    "description": "Missions title"
+  },
+  "stepsUnitLabel": "걸음",
+  "@stepsUnitLabel": {
+    "description": "Steps unit label"
+  },
+  "minutesUnitLabel": "분",
+  "@minutesUnitLabel": {
+    "description": "Minutes unit label"
+  },
+  "rewardsEarned": "획득한 보상",
+  "@rewardsEarned": {
+    "description": "Rewards earned title"
+  },
+  "congratulations": "축하합니다! 🎉",
+  "@congratulations": {
+    "description": "Congratulations message"
+  },
+  "todaysActivity": "오늘의 활동",
+  "@todaysActivity": {
+    "description": "Today's activity title"
+  },
+  "goalAchieved": "목표 달성! 🎉",
+  "@goalAchieved": {
+    "description": "Goal achieved message"
+  },
+  "stepsToGoal": "목표까지 {steps}걸음",
+  "@stepsToGoal": {
+    "description": "Steps remaining to goal",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+  "distance": "거리",
+  "@distance": {
+    "description": "Distance label"
+  },
+  "activeTime": "활동 시간",
+  "@activeTime": {
+    "description": "Active time label"
+  },
+  "loadingSteps": "걸음수 데이터를 불러오는 중...",
+  "@loadingSteps": {
+    "description": "Loading steps data message"
+  },
+  "cannotLoadSteps": "걸음수 데이터를 불러올 수 없습니다",
+  "@cannotLoadSteps": {
+    "description": "Cannot load steps error message"
+  },
+  "checkActivityPermissions": "설정에서 활동 권한을 확인해주세요",
+  "@checkActivityPermissions": {
+    "description": "Check activity permissions message"
+  },
+  "trackingStateMonitoring": "모니터링",
+  "@trackingStateMonitoring": {
+    "description": "Monitoring tracking state"
+  },
+  "trackingStateWalking": "산책 중",
+  "@trackingStateWalking": {
+    "description": "Walking tracking state"
+  },
+  "trackingStateStopped": "중지됨",
+  "@trackingStateStopped": {
+    "description": "Stopped tracking state"
+  },
+  "trackingStateError": "오류",
+  "@trackingStateError": {
+    "description": "Error tracking state"
+  },
+  "streakMessageZero": "오늘 산책을 시작하고 연속 기록을 세워보세요!",
+  "@streakMessageZero": {
+    "description": "Streak message for zero days"
+  },
+  "streakMessageOne": "좋은 시작! 내일도 계속해보세요!",
+  "@streakMessageOne": {
+    "description": "Streak message for one day"
+  },
+  "streakMessageActive": "{days}일 연속 달성 중! 일주일까지 {remaining}일 남았어요!",
+  "@streakMessageActive": {
+    "description": "Streak message for active streak under 7 days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "streakMessageLong": "{days}일 연속 달성 중! 계속 화이팅!",
+  "@streakMessageLong": {
+    "description": "Streak message for 7+ days",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+
+  "weeklyActivity": "주간 활동",
+  "@weeklyActivity": {
+    "description": "Weekly activity title"
+  },
+
+  "last7Days": "최근 7일",
+  "@last7Days": {
+    "description": "Last 7 days label"
+  },
+
+  "chartTooltipTotal": "전체: {steps}걸음",
+  "@chartTooltipTotal": {
+    "description": "Chart tooltip total steps",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "chartTooltipAppWalk": "앱 산책: {steps}걸음",
+  "@chartTooltipAppWalk": {
+    "description": "Chart tooltip app walk steps",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "average": "평균",
+  "@average": {
+    "description": "Average label"
+  },
+
+  "maximum": "최고",
+  "@maximum": {
+    "description": "Maximum/peak label"
+  },
+
+  "cannotLoadData": "데이터를 불러올 수 없습니다",
+  "@cannotLoadData": {
+    "description": "Cannot load data error message"
+  },
+
+  "noRecordsYet": "아직 기록이 없습니다",
+  "@noRecordsYet": {
+    "description": "No records yet message"
+  },
+
+  "mondayShort": "월",
+  "@mondayShort": {
+    "description": "Monday abbreviation"
+  },
+
+  "tuesdayShort": "화",
+  "@tuesdayShort": {
+    "description": "Tuesday abbreviation"
+  },
+
+  "wednesdayShort": "수",
+  "@wednesdayShort": {
+    "description": "Wednesday abbreviation"
+  },
+
+  "thursdayShort": "목",
+  "@thursdayShort": {
+    "description": "Thursday abbreviation"
+  },
+
+  "fridayShort": "금",
+  "@fridayShort": {
+    "description": "Friday abbreviation"
+  },
+
+  "saturdayShort": "토",
+  "@saturdayShort": {
+    "description": "Saturday abbreviation"
+  },
+
+  "sundayShort": "일",
+  "@sundayShort": {
+    "description": "Sunday abbreviation"
+  },
+
+  "monthlyTrend": "월간 추세",
+  "@monthlyTrend": {
+    "description": "Monthly trend title"
+  },
+
+  "last30Days": "최근 30일",
+  "@last30Days": {
+    "description": "Last 30 days label"
+  },
+
+  "totalSteps": "총 걸음",
+  "@totalSteps": {
+    "description": "Total steps label"
+  },
+
+  "dailyAverage": "일평균",
+  "@dailyAverage": {
+    "description": "Daily average label"
+  },
+
+  "dogBark": "멍멍! 왈왈!",
+  "@dogBark": {
+    "description": "Dog bark fallback message"
+  },
+
+  "loadingDogInfo": "강아지 정보를 불러오는 중...",
+  "@loadingDogInfo": {
+    "description": "Loading dog information message"
+  },
+
+  "gpsStatus": "GPS 상태",
+  "@gpsStatus": {
+    "description": "GPS status title"
+  },
+
+  "gpsTracking": "GPS 추적중",
+  "@gpsTracking": {
+    "description": "GPS tracking active"
+  },
+
+  "gpsWaiting": "GPS 대기",
+  "@gpsWaiting": {
+    "description": "GPS waiting"
+  },
+
+  "outdoorMode": "실외 모드",
+  "@outdoorMode": {
+    "description": "Outdoor mode"
+  },
+
+  "indoorMode": "실내 모드",
+  "@indoorMode": {
+    "description": "Indoor mode"
+  },
+
+  "detecting": "감지 중...",
+  "@detecting": {
+    "description": "Detecting status"
+  },
+
+  "errorStatus": "오류",
+  "@errorStatus": {
+    "description": "Error status"
+  },
+
+  "searchingGpsSignal": "GPS 신호를 찾는 중...",
+  "@searchingGpsSignal": {
+    "description": "Searching for GPS signal"
+  },
+
+  "locationSamples": "위치 샘플",
+  "@locationSamples": {
+    "description": "Location samples label"
+  },
+
+  "countItems": "{count}개",
+  "@countItems": {
+    "description": "Count items",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "outdoorSignals": "실외 신호",
+  "@outdoorSignals": {
+    "description": "Outdoor signals label"
+  },
+
+  "outdoorRatio": "실외 비율",
+  "@outdoorRatio": {
+    "description": "Outdoor ratio label"
+  },
+
+  "doubleBonusApplied": "2배 보너스 적용!",
+  "@doubleBonusApplied": {
+    "description": "Double bonus applied message"
+  },
+
+  "outdoorBonusRequirement": "실외 50% 이상 시 2배 보너스",
+  "@outdoorBonusRequirement": {
+    "description": "Outdoor bonus requirement message"
+  },
+
+  "locationPermissionError": "위치 권한 요청 중 오류가 발생했습니다: {error}",
+  "@locationPermissionError": {
+    "description": "Location permission request error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "gpsOutdoorMode": "GPS 실외 모드",
+  "@gpsOutdoorMode": {
+    "description": "GPS outdoor mode"
+  },
+
+  "locationPermissionGranted": "위치 권한 허용됨",
+  "@locationPermissionGranted": {
+    "description": "Location permission granted"
+  },
+
+  "locationPermissionGrantedDesc": "GPS를 사용하여 실외 산책을 자동으로 감지하고 보너스 보상을 받을 수 있습니다.",
+  "@locationPermissionGrantedDesc": {
+    "description": "Location permission granted description"
+  },
+
+  "locationPermissionRequired": "위치 권한 필요",
+  "@locationPermissionRequired": {
+    "description": "Location permission required"
+  },
+
+  "locationPermissionRequiredDesc": "실외 산책 감지와 보너스 보상을 위해 위치 권한이 필요합니다.",
+  "@locationPermissionRequiredDesc": {
+    "description": "Location permission required description"
+  },
+
+  "locationPermissionDenied": "위치 권한 거부됨",
+  "@locationPermissionDenied": {
+    "description": "Location permission denied"
+  },
+
+  "locationPermissionDeniedDesc": "설정에서 직접 위치 권한을 허용해주세요.",
+  "@locationPermissionDeniedDesc": {
+    "description": "Location permission denied description"
+  },
+
+  "checkingPermissionStatus": "권한 상태 확인 중...",
+  "@checkingPermissionStatus": {
+    "description": "Checking permission status"
+  },
+
+  "outdoorModeBenefits": "실외 모드 혜택",
+  "@outdoorModeBenefits": {
+    "description": "Outdoor mode benefits title"
+  },
+
+  "doubleReward": "2배 보상",
+  "@doubleReward": {
+    "description": "Double reward"
+  },
+
+  "doubleRewardDesc": "실외 산책 시 간식과 행복도를 2배로 획득",
+  "@doubleRewardDesc": {
+    "description": "Double reward description"
+  },
+
+  "accurateDistanceTracking": "정확한 거리 측정",
+  "@accurateDistanceTracking": {
+    "description": "Accurate distance tracking"
+  },
+
+  "accurateDistanceTrackingDesc": "GPS로 실제 이동 거리와 속도를 정확히 측정",
+  "@accurateDistanceTrackingDesc": {
+    "description": "Accurate distance tracking description"
+  },
+
+  "specialBadges": "특별 배지",
+  "@specialBadges": {
+    "description": "Special badges"
+  },
+
+  "specialBadgesDesc": "실외 산책 전용 배지와 업적 해제 가능",
+  "@specialBadgesDesc": {
+    "description": "Special badges description"
+  },
+
+  "refreshPermissionStatus": "권한 상태 새로고침",
+  "@refreshPermissionStatus": {
+    "description": "Refresh permission status button"
+  },
+
+  "allowPermissionInSettings": "설정에서 권한 허용",
+  "@allowPermissionInSettings": {
+    "description": "Allow permission in settings button"
+  },
+
+  "requestingPermission": "권한 요청 중...",
+  "@requestingPermission": {
+    "description": "Requesting permission message"
+  },
+
+  "activateGpsOutdoorMode": "GPS 실외 모드 활성화",
+  "@activateGpsOutdoorMode": {
+    "description": "Activate GPS outdoor mode button"
+  },
+
+  "daily": "일일",
+  "@daily": {
+    "description": "Daily label"
+  },
+
+  "weekly": "주간",
+  "@weekly": {
+    "description": "Weekly label"
+  },
+
+  "noDailyMissions": "오늘의 미션이 없습니다",
+  "@noDailyMissions": {
+    "description": "No daily missions message"
+  },
+
+  "errorLoadingDailyMissions": "일일 미션을 불러오는 중 오류가 발생했습니다",
+  "@errorLoadingDailyMissions": {
+    "description": "Error loading daily missions"
+  },
+
+  "noWeeklyMissions": "이번 주 미션이 없습니다",
+  "@noWeeklyMissions": {
+    "description": "No weekly missions message"
+  },
+
+  "newWeeklyMissionsComingSoon": "새로운 주간 미션이 곧 생성됩니다!",
+  "@newWeeklyMissionsComingSoon": {
+    "description": "New weekly missions coming soon message"
+  },
+
+  "errorLoadingWeeklyMissions": "주간 미션을 불러오는 중 오류가 발생했습니다",
+  "@errorLoadingWeeklyMissions": {
+    "description": "Error loading weekly missions"
+  },
+
+  "noCompletedMissions": "완료된 미션이 없습니다",
+  "@noCompletedMissions": {
+    "description": "No completed missions message"
+  },
+
+  "completeToGetRewards": "미션을 완료하여 보상을 받아보세요!",
+  "@completeToGetRewards": {
+    "description": "Complete missions to get rewards message"
+  },
+
+  "errorLoadingCompletedMissions": "완료된 미션을 불러오는 중 오류가 발생했습니다",
+  "@errorLoadingCompletedMissions": {
+    "description": "Error loading completed missions"
+  },
+
+  "loadingMissions": "미션을 불러오는 중...",
+  "@loadingMissions": {
+    "description": "Loading missions message"
+  },
+
+  "retry": "다시 시도",
+  "@retry": {
+    "description": "Retry button"
+  },
+
+  "dailyMissionType": "일일 미션",
+  "@dailyMissionType": {
+    "description": "Daily mission type label"
+  },
+
+  "weeklyMissionType": "주간 미션",
+  "@weeklyMissionType": {
+    "description": "Weekly mission type label"
+  },
+
+  "specialMissionType": "특별 미션",
+  "@specialMissionType": {
+    "description": "Special mission type label"
+  },
+
+  "rewardsLabel": "보상",
+  "@rewardsLabel": {
+    "description": "Rewards label"
+  },
+
+  "targetLabel": "목표",
+  "@targetLabel": {
+    "description": "Target/goal label"
+  },
+
+  "percentComplete": "{percent}% 완료",
+  "@percentComplete": {
+    "description": "Percentage complete",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+
+  "missionInfoTitle": "미션 정보",
+  "@missionInfoTitle": {
+    "description": "Mission information title"
+  },
+
+  "expiryTime": "만료 일시",
+  "@expiryTime": {
+    "description": "Expiry time label"
+  },
+
+  "remainingTime": "남은 시간",
+  "@remainingTime": {
+    "description": "Remaining time label"
+  },
+
+  "completionTime": "완료 일시",
+  "@completionTime": {
+    "description": "Completion time label"
+  },
+
+  "daysUnit": "일",
+  "@daysUnit": {
+    "description": "Days unit"
+  },
+
+  "hoursUnit": "시간",
+  "@hoursUnit": {
+    "description": "Hours unit"
+  },
+
+  "badgeAchieved": "배지 달성!",
+  "@badgeAchieved": {
+    "description": "Badge achievement notification title"
+  },
+
+  "petCreationComingSoon": "곧 펫 생성 화면이 준비될 예정입니다!",
+  "@petCreationComingSoon": {
+    "description": "Pet creation coming soon message"
+  },
+
+  "petLoadingComingSoon": "곧 펫 불러오기 기능이 준비될 예정입니다!",
+  "@petLoadingComingSoon": {
+    "description": "Pet loading coming soon message"
+  },
+
+  "missionDailyStepsTitle": "오늘의 걸음수 목표",
+  "@missionDailyStepsTitle": {
+    "description": "Daily steps mission title"
+  },
+
+  "missionDailyStepsDescription": "{steps}걸음 걷기",
+  "@missionDailyStepsDescription": {
+    "description": "Daily steps mission description",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "missionWeeklyStepsTitle": "이번 주 걸음수 챌린지",
+  "@missionWeeklyStepsTitle": {
+    "description": "Weekly steps mission title"
+  },
+
+  "missionWeeklyStepsDescription": "{steps}걸음 걷기",
+  "@missionWeeklyStepsDescription": {
+    "description": "Weekly steps mission description",
+    "placeholders": {
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+
+  "missionActiveWeekTitle": "활동적인 한 주",
+  "@missionActiveWeekTitle": {
+    "description": "Active week mission title"
+  },
+
+  "missionActiveWeekDescription": "총 180분 산책하기",
+  "@missionActiveWeekDescription": {
+    "description": "Active week mission description"
+  },
+
+  "missionQuickWalkTitle": "빠른 걸음으로",
+  "@missionQuickWalkTitle": {
+    "description": "Quick walk mission title"
+  },
+
+  "missionQuickWalkDescription": "30분 연속 산책하기",
+  "@missionQuickWalkDescription": {
+    "description": "Quick walk mission description"
+  },
+
+  "missionDistanceChallengeTitle": "거리 도전",
+  "@missionDistanceChallengeTitle": {
+    "description": "Distance challenge mission title"
+  },
+
+  "missionEarlyAchievementTitle": "조기 달성",
+  "@missionEarlyAchievementTitle": {
+    "description": "Early achievement mission title"
+  },
+
+  "missionConsistentExerciseTitle": "꾸준한 운동",
+  "@missionConsistentExerciseTitle": {
+    "description": "Consistent exercise mission title"
+  },
+
+  "missionDistanceChallengeDescription": "2km 이상 걷기",
+  "@missionDistanceChallengeDescription": {
+    "description": "Distance challenge mission description"
+  },
+
+  "missionEarlyAchievementDescription": "3000걸음 조기 달성",
+  "@missionEarlyAchievementDescription": {
+    "description": "Early achievement mission description"
+  },
+
+  "missionConsistentExerciseDescription": "45분 활동하기",
+  "@missionConsistentExerciseDescription": {
+    "description": "Consistent exercise mission description"
+  },
+
+  "achievementFirstWalkTitle": "첫 산책",
+  "@achievementFirstWalkTitle": {
+    "description": "First walk achievement title"
+  },
+
+  "achievementFirstWalkDescription": "첫 번째 산책을 완료했어요!",
+  "@achievementFirstWalkDescription": {
+    "description": "First walk achievement description"
+  },
+
+  "achievementSteps1kTitle": "천 걸음",
+  "@achievementSteps1kTitle": {
+    "description": "1,000 steps achievement title"
+  },
+
+  "achievementSteps1kDescription": "누적 1,000걸음 달성!",
+  "@achievementSteps1kDescription": {
+    "description": "1,000 steps achievement description"
+  },
+
+  "achievementSteps5kTitle": "오천 걸음",
+  "@achievementSteps5kTitle": {
+    "description": "5,000 steps achievement title"
+  },
+
+  "achievementSteps5kDescription": "누적 5,000걸음 달성!",
+  "@achievementSteps5kDescription": {
+    "description": "5,000 steps achievement description"
+  },
+
+  "achievementSteps10kTitle": "만 걸음",
+  "@achievementSteps10kTitle": {
+    "description": "10,000 steps achievement title"
+  },
+
+  "achievementSteps10kDescription": "누적 10,000걸음 달성!",
+  "@achievementSteps10kDescription": {
+    "description": "10,000 steps achievement description"
+  },
+
+  "achievementStreak3Title": "3일 연속",
+  "@achievementStreak3Title": {
+    "description": "3-day streak achievement title"
+  },
+
+  "achievementStreak3Description": "3일 연속 산책 완료!",
+  "@achievementStreak3Description": {
+    "description": "3-day streak achievement description"
+  },
+
+  "achievementStreak7Title": "1주일 연속",
+  "@achievementStreak7Title": {
+    "description": "7-day streak achievement title"
+  },
+
+  "achievementStreak7Description": "7일 연속 산책 완료!",
+  "@achievementStreak7Description": {
+    "description": "7-day streak achievement description"
+  },
+
+  "achievementOutdoorFirstTitle": "첫 실외 산책",
+  "@achievementOutdoorFirstTitle": {
+    "description": "First outdoor walk achievement title"
+  },
+
+  "achievementOutdoorFirstDescription": "첫 번째 실외 산책을 완료했어요!",
+  "@achievementOutdoorFirstDescription": {
+    "description": "First outdoor walk achievement description"
+  },
+
+  "achievementHappy100Title": "최고 행복도",
+  "@achievementHappy100Title": {
+    "description": "Max happiness achievement title"
+  },
+
+  "achievementHappy100Description": "행복도 100에 도달했어요!",
+  "@achievementHappy100Description": {
+    "description": "Max happiness achievement description"
+  },
+
+  "achievementTreats100Title": "간식 부자",
+  "@achievementTreats100Title": {
+    "description": "100 treats achievement title"
+  },
+
+  "achievementTreats100Description": "간식 100개를 모았어요!",
+  "@achievementTreats100Description": {
+    "description": "100 treats achievement description"
+  },
+
+  "achievementDistance1kmTitle": "1km 달성",
+  "@achievementDistance1kmTitle": {
+    "description": "1km distance achievement title"
+  },
+
+  "achievementDistance1kmDescription": "누적 1km 산책 완료!",
+  "@achievementDistance1kmDescription": {
+    "description": "1km distance achievement description"
+  }
+}

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../services/tracking/step_tracking_service.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// 산책 화면
 /// Week 2: 기본 걸음수 표시 및 산책 시작 기능
@@ -16,7 +17,7 @@ class WalkScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('산책'),
+        title: Text(AppLocalizations.of(context).walkTitle),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -73,7 +74,7 @@ class WalkScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '오늘의 걸음수',
+            AppLocalizations.of(context).todaySteps,
             style: theme.textTheme.titleMedium?.copyWith(
               color: Colors.white.withOpacity(0.9),
             ),
@@ -100,7 +101,7 @@ class WalkScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'steps',
+            AppLocalizations.of(context).stepsUnit,
             style: theme.textTheme.bodyLarge?.copyWith(
               color: Colors.white.withOpacity(0.8),
             ),
@@ -131,7 +132,7 @@ class WalkScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '산책 가이드',
+                AppLocalizations.of(context).walkGuideTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -141,22 +142,22 @@ class WalkScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           _GuideItem(
             icon: '📱',
-            text: '폰을 들고 걷기만 하면 자동으로 걸음수가 기록됩니다',
+            text: AppLocalizations.of(context).guideAutoRecording,
           ),
           const SizedBox(height: 12),
           _GuideItem(
             icon: '🎁',
-            text: '300걸음마다 간식 1개를 획득할 수 있습니다',
+            text: AppLocalizations.of(context).guideTreatReward,
           ),
           const SizedBox(height: 12),
           _GuideItem(
             icon: '😊',
-            text: '걸을수록 펫의 행복도가 올라갑니다',
+            text: AppLocalizations.of(context).guideHappinessIncrease,
           ),
           const SizedBox(height: 12),
           _GuideItem(
             icon: '🏆',
-            text: '미션을 완료하면 추가 보상을 받을 수 있습니다',
+            text: AppLocalizations.of(context).guideMissionReward,
           ),
         ],
       ),
@@ -186,7 +187,7 @@ class WalkScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '곧 추가될 기능',
+                AppLocalizations.of(context).comingSoonTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.secondary,
@@ -195,15 +196,30 @@ class WalkScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _FeatureItem(text: '실시간 GPS 트래킹', badge: 'Week 3'),
+          _FeatureItem(
+            text: AppLocalizations.of(context).featureGPSTracking,
+            badge: AppLocalizations.of(context).badgeWeek3,
+          ),
           const SizedBox(height: 8),
-          _FeatureItem(text: '산책 기록 저장 및 조회', badge: 'Week 3'),
+          _FeatureItem(
+            text: AppLocalizations.of(context).featureWalkHistory,
+            badge: AppLocalizations.of(context).badgeWeek3,
+          ),
           const SizedBox(height: 8),
-          _FeatureItem(text: '실외 보너스 시스템', badge: 'Week 3'),
+          _FeatureItem(
+            text: AppLocalizations.of(context).featureOutdoorBonus,
+            badge: AppLocalizations.of(context).badgeWeek3,
+          ),
           const SizedBox(height: 8),
-          _FeatureItem(text: '산책 중 미션 진행도 표시', badge: 'Week 3'),
+          _FeatureItem(
+            text: AppLocalizations.of(context).featureMissionProgress,
+            badge: AppLocalizations.of(context).badgeWeek3,
+          ),
           const SizedBox(height: 8),
-          _FeatureItem(text: '산책 통계 및 그래프', badge: 'Week 4'),
+          _FeatureItem(
+            text: AppLocalizations.of(context).featureStatistics,
+            badge: AppLocalizations.of(context).badgeWeek4,
+          ),
         ],
       ),
     );

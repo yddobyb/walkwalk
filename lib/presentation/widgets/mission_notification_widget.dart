@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../services/mission/mission_service.dart';
 import '../screens/home/widgets/pet_dialogue_widget.dart';
 
@@ -141,7 +142,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '미션 완료!',
+                                AppLocalizations.of(context).missionComplete,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: Colors.white70,
                                   fontWeight: FontWeight.w600,
@@ -290,7 +291,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('닫기'),
+                child: Text(AppLocalizations.of(context).close),
               ),
             ),
             const SizedBox(height: 8),

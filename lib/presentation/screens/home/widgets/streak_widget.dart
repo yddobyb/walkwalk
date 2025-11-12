@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/statistics/statistics_service.dart';
 
 /// 연속 산책 일수 위젯
@@ -36,7 +37,7 @@ class StreakWidget extends ConsumerWidget {
       child: streakDataAsync.when(
         data: (streakData) => _buildContent(context, theme, streakData),
         loading: () => _buildLoadingState(),
-        error: (error, stack) => _buildErrorState(theme),
+        error: (error, stack) => _buildErrorState(context, theme),
       ),
     );
   }
@@ -62,7 +63,7 @@ class StreakWidget extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '연속 산책 기록',
+                AppLocalizations.of(context).streakTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -89,7 +90,7 @@ class StreakWidget extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                '일 연속',
+                AppLocalizations.of(context).daysInARow,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurface.withOpacity(0.8),
@@ -103,7 +104,7 @@ class StreakWidget extends ConsumerWidget {
 
         // 격려 메시지
         Text(
-          _getEncouragementMessage(streakData.currentStreak),
+          _getEncouragementMessage(context, streakData.currentStreak),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface.withOpacity(0.7),
           ),
@@ -125,9 +126,10 @@ class StreakWidget extends ConsumerWidget {
           children: [
             Expanded(
               child: _buildStatItem(
+                context,
                 theme,
-                '최장 기록',
-                '${streakData.longestStreak}일',
+                AppLocalizations.of(context).longestStreak,
+                AppLocalizations.of(context).streakDays(streakData.longestStreak),
                 Icons.emoji_events,
                 Colors.amber,
               ),
@@ -139,11 +141,12 @@ class StreakWidget extends ConsumerWidget {
             ),
             Expanded(
               child: _buildStatItem(
+                context,
                 theme,
-                '마지막 산책',
+                AppLocalizations.of(context).lastWalk,
                 streakData.lastWalkDate != null
-                    ? _formatLastWalkDate(streakData.lastWalkDate!)
-                    : '기록 없음',
+                    ? _formatLastWalkDate(context, streakData.lastWalkDate!)
+                    : AppLocalizations.of(context).noRecord,
                 Icons.calendar_today,
                 theme.colorScheme.secondary,
               ),
@@ -171,7 +174,7 @@ class StreakWidget extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  _getNextGoalMessage(streakData.currentStreak),
+                  _getNextGoalMessage(context, streakData.currentStreak),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withOpacity(0.8),
                     fontWeight: FontWeight.w600,
@@ -185,7 +188,7 @@ class StreakWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatItem(ThemeData theme, String label, String value, IconData icon, Color color) {
+  Widget _buildStatItem(BuildContext context, ThemeData theme, String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(icon, size: 24, color: color),
@@ -217,12 +220,12 @@ class StreakWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(ThemeData theme) {
+  Widget _buildErrorState(BuildContext context, ThemeData theme) {
     return SizedBox(
       height: 150,
       child: Center(
         child: Text(
-          '데이터를 불러올 수 없습니다',
+          AppLocalizations.of(context).dataLoadError,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.error,
           ),
@@ -239,46 +242,49 @@ class StreakWidget extends ConsumerWidget {
     return Colors.blue;
   }
 
-  String _getEncouragementMessage(int streak) {
+  String _getEncouragementMessage(BuildContext context, int streak) {
+    final l10n = AppLocalizations.of(context);
     if (streak == 0) {
-      return '오늘 산책을 시작하고 연속 기록을 세워보세요!';
+      return l10n.streakEncouragement0;
     } else if (streak == 1) {
-      return '좋은 시작이에요! 내일도 계속해보세요! 💪';
+      return l10n.streakEncouragement1;
     } else if (streak < 7) {
-      return '멋져요! 일주일 연속을 향해 달려가고 있어요! 🔥';
+      return l10n.streakEncouragementUnder7;
     } else if (streak == 7) {
-      return '와! 일주일 연속 달성! 정말 대단해요! 🎉';
+      return l10n.streakEncouragement7;
     } else if (streak < 30) {
-      return '놀라워요! 한 달 연속까지 ${30 - streak}일 남았어요! 🌟';
+      return l10n.streakEncouragementUnder30(30 - streak);
     } else {
-      return '전설이에요! 한 달 이상 연속 산책 중! 👑';
+      return l10n.streakEncouragement30Plus;
     }
   }
 
-  String _getNextGoalMessage(int streak) {
+  String _getNextGoalMessage(BuildContext context, int streak) {
+    final l10n = AppLocalizations.of(context);
     if (streak < 3) {
-      return '3일 연속까지 ${3 - streak}일 남았어요!';
+      return l10n.nextGoal3Days(3 - streak);
     } else if (streak < 7) {
-      return '일주일 연속까지 ${7 - streak}일 남았어요!';
+      return l10n.nextGoalWeek(7 - streak);
     } else if (streak < 14) {
-      return '2주 연속까지 ${14 - streak}일 남았어요!';
+      return l10n.nextGoalTwoWeeks(14 - streak);
     } else if (streak < 30) {
-      return '한 달 연속까지 ${30 - streak}일 남았어요!';
+      return l10n.nextGoalMonth(30 - streak);
     } else {
-      return '계속 이 기록을 유지해보세요!';
+      return l10n.keepGoingMessage;
     }
   }
 
-  String _formatLastWalkDate(DateTime date) {
+  String _formatLastWalkDate(BuildContext context, DateTime date) {
+    final l10n = AppLocalizations.of(context);
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
 
     if (difference == 0) {
-      return '오늘';
+      return l10n.today;
     } else if (difference == 1) {
-      return '어제';
+      return l10n.yesterday;
     } else if (difference < 7) {
-      return '$difference일 전';
+      return l10n.daysAgo(difference);
     } else {
       return DateFormat('M/d').format(date);
     }

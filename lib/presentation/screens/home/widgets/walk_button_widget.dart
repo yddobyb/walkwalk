@@ -1,6 +1,7 @@
 // lib/presentation/screens/home/widgets/walk_button_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 import 'pet_dialogue_widget.dart';
 
@@ -71,7 +72,7 @@ class WalkButtonWidget extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isWalking ? '산책 종료하기' : '산책 시작하기',
+                      isWalking ? AppLocalizations.of(context).walkEndWalk : AppLocalizations.of(context).walkStartWalk,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -79,8 +80,8 @@ class WalkButtonWidget extends ConsumerWidget {
                     ),
                     Text(
                       isWalking
-                          ? '산책을 종료하고 보상을 받아보세요'
-                          : '펫과 함께 건강한 산책을 시작해보세요',
+                          ? AppLocalizations.of(context).walkEndWalkDescription
+                          : AppLocalizations.of(context).walkStartWalkDescription,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withOpacity(0.9),
                       ),
@@ -101,7 +102,7 @@ class WalkButtonWidget extends ConsumerWidget {
               child: ElevatedButton.icon(
                 onPressed: () => _stopWalk(context, ref),
                 icon: const Icon(Icons.stop),
-                label: const Text('산책 종료'),
+                label: Text(AppLocalizations.of(context).walkEndButton),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.red.shade600,
@@ -120,7 +121,7 @@ class WalkButtonWidget extends ConsumerWidget {
                   child: ElevatedButton.icon(
                     onPressed: () => _startWalk(context, ref, false),
                     icon: const Icon(Icons.home),
-                    label: const Text('실내 산책'),
+                    label: Text(AppLocalizations.of(context).walkIndoor),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: theme.colorScheme.primary,
@@ -136,7 +137,7 @@ class WalkButtonWidget extends ConsumerWidget {
                   child: ElevatedButton.icon(
                     onPressed: () => _startWalk(context, ref, true),
                     icon: const Icon(Icons.location_on),
-                    label: const Text('실외 산책'),
+                    label: Text(AppLocalizations.of(context).walkOutdoor),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.2),
                       foregroundColor: Colors.white,
@@ -175,8 +176,8 @@ class WalkButtonWidget extends ConsumerWidget {
                 Expanded(
                   child: Text(
                     isWalking
-                        ? '산책 중입니다! 걸음수가 실시간으로 기록되고 있어요.'
-                        : '실외 산책 시 보너스 간식을 더 많이 획득할 수 있어요!',
+                        ? AppLocalizations.of(context).walkingNow
+                        : AppLocalizations.of(context).walkOutdoorBonus,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.white.withOpacity(0.8),
                     ),
@@ -214,7 +215,7 @@ class WalkButtonWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              '걸음수 센서 초기화 중...',
+              AppLocalizations.of(context).walkSensorInitializing,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withOpacity(0.7),
               ),
@@ -249,7 +250,7 @@ class WalkButtonWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '걸음수 센서를 사용할 수 없습니다',
+            AppLocalizations.of(context).walkSensorUnavailable,
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.error,
               fontWeight: FontWeight.bold,
@@ -257,7 +258,7 @@ class WalkButtonWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '설정에서 활동 권한을 허용해주세요',
+            AppLocalizations.of(context).walkPermissionRequired,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onErrorContainer,
             ),
@@ -279,21 +280,21 @@ class WalkButtonWidget extends ConsumerWidget {
           SnackBar(
             content: Text(
               isOutdoor
-                  ? '실외 산책을 시작합니다! 🌳\n위치 권한을 허용해주세요.'
-                  : '실내 산책을 시작합니다! 🏠',
+                  ? AppLocalizations.of(context).walkStartedOutdoor
+                  : AppLocalizations.of(context).walkStartedIndoor,
             ),
             backgroundColor: Colors.green,
             action: SnackBarAction(
-              label: '확인',
+              label: AppLocalizations.of(context).confirm,
               onPressed: () {},
             ),
           ),
         );
       } else {
-        _showErrorSnackBar(context, '산책을 시작할 수 없습니다. 권한을 확인해주세요.');
+        _showErrorSnackBar(context, AppLocalizations.of(context).walkStartFailed);
       }
     } catch (e) {
-      _showErrorSnackBar(context, '오류가 발생했습니다: $e');
+      _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
     }
   }
 
@@ -304,9 +305,9 @@ class WalkButtonWidget extends ConsumerWidget {
       // 산책 종료 안내 메시지 (걸음수 동기화 대기 중)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(
@@ -314,9 +315,9 @@ class WalkButtonWidget extends ConsumerWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
-                child: Text('산책을 종료하는 중입니다...\n걸음수가 반영될 때까지 잠시만 기다려주세요'),
+                child: Text(AppLocalizations.of(context).walkEndingMessage),
               ),
             ],
           ),
@@ -342,13 +343,17 @@ class WalkButtonWidget extends ConsumerWidget {
         final didLevelUp = levelsGained > 0;
 
         // 메시지 구성
-        String message = '산책 완료! ${walkSession.totalSteps}걸음 기록됨 🎉\n'
-            '간식 ${walkSession.treatsEarned}개, 행복도 +${walkSession.happinessGained}';
+        final l10n = AppLocalizations.of(context);
+        String message = l10n.walkCompleted(
+          walkSession.totalSteps,
+          walkSession.treatsEarned,
+          walkSession.happinessGained,
+        );
 
         if (didLevelUp) {
-          message += '\n\n🎊 레벨 업! LV $levelBefore → LV $levelAfter';
+          message += '\n\n${l10n.walkLevelUp(levelBefore, levelAfter)}';
           if (levelsGained > 1) {
-            message += ' (+$levelsGained레벨)';
+            message += ' ${l10n.walkLevelUpMultiple(levelsGained)}';
           }
         }
 
@@ -358,7 +363,7 @@ class WalkButtonWidget extends ConsumerWidget {
             backgroundColor: didLevelUp ? Colors.amber.shade700 : Colors.green,
             duration: Duration(seconds: didLevelUp ? 6 : 4),
             action: SnackBarAction(
-              label: '확인',
+              label: l10n.confirm,
               textColor: Colors.white,
               onPressed: () {},
             ),
@@ -415,7 +420,7 @@ class WalkButtonWidget extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text('닫기'),
+                      child: Text(AppLocalizations.of(context).close),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -490,7 +495,7 @@ class WalkButtonWidget extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text('축하해요! 🎉'),
+                          child: Text(AppLocalizations.of(context).congratulations),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -502,10 +507,10 @@ class WalkButtonWidget extends ConsumerWidget {
           }
         }
       } else {
-        _showErrorSnackBar(context, '산책 종료 중 오류가 발생했습니다.');
+        _showErrorSnackBar(context, AppLocalizations.of(context).walkEndError);
       }
     } catch (e) {
-      _showErrorSnackBar(context, '오류가 발생했습니다: $e');
+      _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
     }
   }
 
@@ -515,7 +520,7 @@ class WalkButtonWidget extends ConsumerWidget {
         content: Text(message),
         backgroundColor: Colors.red,
         action: SnackBarAction(
-          label: '확인',
+          label: AppLocalizations.of(context).confirm,
           onPressed: () {},
         ),
       ),

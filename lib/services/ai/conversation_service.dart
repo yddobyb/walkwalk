@@ -30,6 +30,7 @@ class ConversationService {
   /// [context]: 대화 컨텍스트 (walk_complete, mission_complete, feed, level_up, low_happiness, greeting)
   /// [contextData]: 컨텍스트별 추가 데이터
   /// [userMessage]: 사용자 정의 메시지 (선택)
+  /// [locale]: 언어 설정 ('ko' 또는 'en')
   ///
   /// Returns: 강아지의 응답 문자열
   Future<String> getResponse({
@@ -39,6 +40,7 @@ class ConversationService {
     required String context,
     Map<String, dynamic>? contextData,
     String? userMessage,
+    required String locale,
   }) async {
     try {
       // 1. LLM 서비스가 초기화되어 있으면 API 호출 시도
@@ -53,6 +55,7 @@ class ConversationService {
           happinessLevel: happinessLevel,
           context: context,
           contextData: contextData,
+          locale: locale,
         );
 
         // 응답이 있으면 반환
@@ -69,11 +72,11 @@ class ConversationService {
         debugPrint('⚠️ ConversationService - Using fallback response');
       }
 
-      return _fallbackResponses.getResponse(context, contextData);
+      return _fallbackResponses.getResponse(context, contextData, locale);
     } catch (e) {
       // 3. 예외 발생 시에도 폴백 사용
       debugPrint('❌ ConversationService - Error: $e, using fallback');
-      return _fallbackResponses.getResponse(context, contextData);
+      return _fallbackResponses.getResponse(context, contextData, locale);
     }
   }
 
@@ -84,12 +87,14 @@ class ConversationService {
     required String dogName,
     required String dogBreed,
     required int happinessLevel,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
       dogBreed: dogBreed,
       happinessLevel: happinessLevel,
       context: 'greeting',
+      locale: locale,
     );
   }
 
@@ -100,12 +105,14 @@ class ConversationService {
     required String dogName,
     required String dogBreed,
     required int happinessLevel,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
       dogBreed: dogBreed,
       happinessLevel: happinessLevel,
       context: 'greeting_static',
+      locale: locale,
     );
   }
 
@@ -117,6 +124,7 @@ class ConversationService {
     required int steps,
     required int duration,
     required bool isOutdoor,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
@@ -128,6 +136,7 @@ class ConversationService {
         'duration': duration,
         'isOutdoor': isOutdoor,
       },
+      locale: locale,
     );
   }
 
@@ -138,6 +147,7 @@ class ConversationService {
     required int happinessLevel,
     required String missionTitle,
     required int treatReward,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
@@ -148,6 +158,7 @@ class ConversationService {
         'title': missionTitle,
         'treatReward': treatReward,
       },
+      locale: locale,
     );
   }
 
@@ -157,6 +168,7 @@ class ConversationService {
     required String dogBreed,
     required int happinessLevel,
     required int treatCount,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
@@ -166,6 +178,7 @@ class ConversationService {
       contextData: {
         'treatCount': treatCount,
       },
+      locale: locale,
     );
   }
 
@@ -176,6 +189,7 @@ class ConversationService {
     required int happinessLevel,
     required int newLevel,
     required int experience,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
@@ -186,6 +200,7 @@ class ConversationService {
         'level': newLevel,
         'experience': experience,
       },
+      locale: locale,
     );
   }
 
@@ -194,12 +209,14 @@ class ConversationService {
     required String dogName,
     required String dogBreed,
     required int happinessLevel,
+    required String locale,
   }) async {
     return await getResponse(
       dogName: dogName,
       dogBreed: dogBreed,
       happinessLevel: happinessLevel,
       context: 'low_happiness',
+      locale: locale,
     );
   }
 

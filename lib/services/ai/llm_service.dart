@@ -159,6 +159,7 @@ class LLMService {
   /// [happinessLevel]: 행복도 (0-100)
   /// [context]: 대화 컨텍스트
   /// [contextData]: 컨텍스트별 추가 데이터
+  /// [locale]: 언어 설정 ('ko' 또는 'en')
   ///
   /// Returns: 강아지의 응답
   Future<String> generateDialogue({
@@ -167,6 +168,7 @@ class LLMService {
     required int happinessLevel,
     required String context,
     Map<String, dynamic>? contextData,
+    required String locale,
   }) async {
     // Analytics: LLM 요청 시작 이벤트
     await AnalyticsService.logLlmRequestStarted(
@@ -187,12 +189,14 @@ class LLMService {
         dogName: dogName,
         dogBreed: dogBreed,
         happinessLevel: happinessLevel,
+        locale: locale,
       );
 
       // 사용자 메시지 생성
       final userMessage = _buildUserMessage(
         context: context,
         contextData: contextData,
+        locale: locale,
       );
 
       // API 호출 (실패 시 자동 폴백)
@@ -240,7 +244,7 @@ class LLMService {
       );
 
       // 폴백 응답 반환 (컨텍스트 유지)
-      return _fallbackResponses.getResponse(context, contextData);
+      return _fallbackResponses.getResponse(context, contextData, locale);
     }
   }
 
@@ -251,10 +255,12 @@ class LLMService {
     required String dogName,
     required String dogBreed,
     required int happinessLevel,
+    required String locale,
   }) {
-    final mood = _getMood(happinessLevel);
+    final mood = _getMood(happinessLevel, locale);
 
-    return '''
+    if (locale == 'ko') {
+      return '''
 당신은 $dogName이라는 이름의 $dogBreed 강아지입니다.
 당신의 성격: 활발하고 친근하며 주인을 매우 사랑합니다.
 현재 기분: $mood
@@ -266,6 +272,21 @@ class LLMService {
 4. 주인에게 감사와 애정을 표현하세요
 5. 산책과 간식을 좋아하는 강아지답게 행동하세요
 ''';
+    } else {
+      // 영어 프롬프트
+      return '''
+You are a $dogBreed dog named $dogName.
+Your personality: Active, friendly, and loves your owner very much.
+Current mood: $mood
+
+Rules:
+1. Always respond in dog-like manner (use "Woof!", "Bark!")
+2. Keep responses short and friendly (maximum 2 sentences)
+3. Don't use emojis
+4. Express gratitude and affection to your owner
+5. Act like a dog who loves walks and treats
+''';
+    }
   }
 
   /// 사용자 메시지 생성
@@ -274,65 +295,130 @@ class LLMService {
   String _buildUserMessage({
     required String context,
     Map<String, dynamic>? contextData,
+    required String locale,
   }) {
-    switch (context) {
-      case 'walk_complete':
-        final steps = contextData?['steps'] ?? 0;
-        final duration = contextData?['duration'] ?? 0;
-        return '방금 산책을 마쳤어요! $steps걸음을 ${duration ~/ 60}분 동안 걸었어요. 어땠어요?';
+    if (locale == 'ko') {
+      // 한국어 메시지
+      switch (context) {
+        case 'walk_complete':
+          final steps = contextData?['steps'] ?? 0;
+          final duration = contextData?['duration'] ?? 0;
+          return '방금 산책을 마쳤어요! $steps걸음을 ${duration ~/ 60}분 동안 걸었어요. 어땠어요?';
 
-      case 'mission_complete':
-        final title = contextData?['title'] ?? '미션';
-        return '$title을(를) 완료했어요! 기분이 어때요?';
+        case 'mission_complete':
+          final title = contextData?['title'] ?? '미션';
+          return '$title을(를) 완료했어요! 기분이 어때요?';
 
-      case 'feed':
-        final treatCount = contextData?['treatCount'] ?? 0;
-        return '간식을 줬어요! 지금 총 $treatCount개의 간식이 있어요. 어때요?';
+        case 'feed':
+          final treatCount = contextData?['treatCount'] ?? 0;
+          return '간식을 줬어요! 지금 총 $treatCount개의 간식이 있어요. 어때요?';
 
-      case 'level_up':
-        final level = contextData?['level'] ?? 1;
-        return '레벨업! 이제 레벨 $level이 됐어요! 축하해요!';
+        case 'level_up':
+          final level = contextData?['level'] ?? 1;
+          return '레벨업! 이제 레벨 $level이 됐어요! 축하해요!';
 
-      case 'low_happiness':
-        return '요즘 기분이 좀 안 좋아 보여요. 무슨 일이에요?';
+        case 'low_happiness':
+          return '요즘 기분이 좀 안 좋아 보여요. 무슨 일이에요?';
 
-      case 'greeting':
-        final hour = DateTime.now().hour;
-        if (hour < 12) {
-          return '좋은 아침이에요! 오늘 기분이 어때요?';
-        } else if (hour < 18) {
-          return '좋은 오후예요! 뭐 하고 있어요?';
-        } else {
-          return '좋은 저녁이에요! 오늘 하루 어땠어요?';
-        }
+        case 'greeting':
+          final hour = DateTime.now().hour;
+          if (hour < 12) {
+            return '좋은 아침이에요! 오늘 기분이 어때요?';
+          } else if (hour < 18) {
+            return '좋은 오후예요! 뭐 하고 있어요?';
+          } else {
+            return '좋은 저녁이에요! 오늘 하루 어땠어요?';
+          }
 
-      case 'greeting_static':
-        final hour = DateTime.now().hour;
-        if (hour < 12) {
-          return '좋은 아침이에요! 오늘도 산책 갈까요?';
-        } else if (hour < 18) {
-          return '좋은 오후예요! 신나는 하루 보내요!';
-        } else {
-          return '좋은 저녁이에요! 오늘 하루 어땠어요?';
-        }
+        case 'greeting_static':
+          final hour = DateTime.now().hour;
+          if (hour < 12) {
+            return '좋은 아침이에요! 오늘도 산책 갈까요?';
+          } else if (hour < 18) {
+            return '좋은 오후예요! 신나는 하루 보내요!';
+          } else {
+            return '좋은 저녁이에요! 오늘 하루 어땠어요?';
+          }
 
-      default:
-        return '안녕! 무슨 일이에요?';
+        default:
+          return '안녕! 무슨 일이에요?';
+      }
+    } else {
+      // 영어 메시지
+      switch (context) {
+        case 'walk_complete':
+          final steps = contextData?['steps'] ?? 0;
+          final duration = contextData?['duration'] ?? 0;
+          return 'Just finished a walk! We walked $steps steps for ${duration ~/ 60} minutes. How was it?';
+
+        case 'mission_complete':
+          final title = contextData?['title'] ?? 'Mission';
+          return 'Completed $title! How do you feel?';
+
+        case 'feed':
+          final treatCount = contextData?['treatCount'] ?? 0;
+          return 'Got a treat! I now have $treatCount treats in total. How is it?';
+
+        case 'level_up':
+          final level = contextData?['level'] ?? 1;
+          return 'Level up! I\'m now level $level! Congratulations!';
+
+        case 'low_happiness':
+          return 'You seem a bit down lately. What\'s wrong?';
+
+        case 'greeting':
+          final hour = DateTime.now().hour;
+          if (hour < 12) {
+            return 'Good morning! How are you feeling today?';
+          } else if (hour < 18) {
+            return 'Good afternoon! What are you up to?';
+          } else {
+            return 'Good evening! How was your day?';
+          }
+
+        case 'greeting_static':
+          final hour = DateTime.now().hour;
+          if (hour < 12) {
+            return 'Good morning! Shall we go for a walk today?';
+          } else if (hour < 18) {
+            return 'Good afternoon! Have a great day!';
+          } else {
+            return 'Good evening! How was your day?';
+          }
+
+        default:
+          return 'Hello! What\'s up?';
+      }
     }
   }
 
   /// 행복도 기반 기분 계산
-  String _getMood(int happinessLevel) {
-    if (happinessLevel >= 80) {
-      return '매우 행복함 (꼬리를 흔들며 뛰어다님)';
-    } else if (happinessLevel >= 60) {
-      return '행복함 (기분 좋음)';
-    } else if (happinessLevel >= 40) {
-      return '보통 (평온함)';
-    } else if (happinessLevel >= 20) {
-      return '조금 슬픔 (관심 필요)';
+  String _getMood(int happinessLevel, String locale) {
+    if (locale == 'ko') {
+      if (happinessLevel >= 80) {
+        return '매우 행복함 (꼬리를 흔들며 뛰어다님)';
+      } else if (happinessLevel >= 60) {
+        return '행복함 (기분 좋음)';
+      } else if (happinessLevel >= 40) {
+        return '보통 (평온함)';
+      } else if (happinessLevel >= 20) {
+        return '조금 슬픔 (관심 필요)';
+      } else {
+        return '매우 슬픔 (외로움)';
+      }
     } else {
-      return '매우 슬픔 (외로움)';
+      // 영어
+      if (happinessLevel >= 80) {
+        return 'Very Happy (Wagging tail and jumping around)';
+      } else if (happinessLevel >= 60) {
+        return 'Happy (Feeling good)';
+      } else if (happinessLevel >= 40) {
+        return 'Normal (Peaceful)';
+      } else if (happinessLevel >= 20) {
+        return 'A bit sad (Needs attention)';
+      } else {
+        return 'Very sad (Lonely)';
+      }
     }
   }
 

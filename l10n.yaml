@@ -1,0 +1,19 @@
+# Flutter Localization Configuration
+# Week 3: Language Support (Korean/English)
+
+# ARB 파일이 위치한 디렉토리
+arb-dir: lib/l10n
+
+# 템플릿 ARB 파일 (영어)
+template-arb-file: app_en.arb
+
+# 생성될 Dart 파일명
+output-localization-file: app_localizations.dart
+
+# 생성될 파일 위치
+output-class: AppLocalizations
+
+# Nullable getter 비활성화 (더 깔끔한 API)
+nullable-getter: false
+
+# synthetic-package: false (기본값, 변경 불필요)
