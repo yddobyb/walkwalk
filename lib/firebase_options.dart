@@ -41,16 +41,17 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAX-fH8S1VdIJ7GnrEC2KC0k7kjwUnc5CY',
-    appId: '1:701057110809:web:walkwalkddog',
+    apiKey: 'AIzaSyCZrFZSPt-4dyKnj_XdJ8otOpzT3z1s4_U',
+    appId: '1:701057110809:web:5e7fc1686b8d49ed9a2b88',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
     authDomain: 'walkwalkddog.firebaseapp.com',
     storageBucket: 'walkwalkddog.firebasestorage.app',
+    measurementId: 'G-ZNKF44B03T',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAX-fH8S1VdIJ7GnrEC2KC0k7kjwUnc5CY',
+    apiKey: 'AIzaSyDorGbyRC7ljIM_Y4DCZOOB9MmX2AreXZg',
     appId: '1:701057110809:android:61d3ecd893ab595d9a2b88',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
@@ -58,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyClctG7hqrRYUvlbvsZcluGxf9nNP2CxOY',
+    apiKey: 'AIzaSyClLFoC3Zcc7AmfNCXpGsxs6FiAottlnwM',
     appId: '1:701057110809:ios:b021e3f705864e189a2b88',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
@@ -67,8 +68,8 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyClctG7hqrRYUvlbvsZcluGxf9nNP2CxOY',
-    appId: '1:701057110809:macos:walkwalkddog',
+    apiKey: 'AIzaSyClLFoC3Zcc7AmfNCXpGsxs6FiAottlnwM',
+    appId: '1:701057110809:ios:921556afe387d6b99a2b88',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
     storageBucket: 'walkwalkddog.firebasestorage.app',
@@ -76,7 +77,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAX-fH8S1VdIJ7GnrEC2KC0k7kjwUnc5CY',
+    apiKey: 'AIzaSyCZrFZSPt-4dyKnj_XdJ8otOpzT3z1s4_U',
     appId: '1:701057110809:windows:walkwalkddog',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
