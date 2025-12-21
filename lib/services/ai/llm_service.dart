@@ -13,7 +13,7 @@ import 'rate_limiter.dart';
 /// OpenRouter API 기반 LLM 서비스
 ///
 /// Week 3: 클라우드 AI 대화 시스템
-/// - DeepSeek R1 모델 사용
+/// - Mistral Devstral 2512 모델 사용 (코딩 전문)
 /// - HTTP POST 요청으로 OpenRouter API 호출
 /// - 15초 타임아웃
 /// - 자동 폴백 (에러 시 FallbackResponses 사용)
@@ -138,8 +138,10 @@ class LLMService {
       final data = jsonDecode(response.body);
       final content = data['choices'][0]['message']['content'] as String;
 
-      // DeepSeek R1 응답 필터링 (생각 과정 제거)
-      final cleanedContent = _filterDeepSeekThinking(content);
+      // DeepSeek R1 응답 필터링 (DeepSeek 모델에만 적용)
+      final cleanedContent = ApiConfig.model.contains('deepseek')
+          ? _filterDeepSeekThinking(content)
+          : content;
 
       if (ApiConfig.enableDebugLogs) {
         debugPrint('✅ LLMService - Generated: ${cleanedContent.substring(0, cleanedContent.length > 50 ? 50 : cleanedContent.length)}...');

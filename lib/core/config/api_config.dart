@@ -7,13 +7,13 @@ import '../../services/config/remote_config_service.dart';
 /// OpenRouter API 설정
 ///
 /// Week 3: 클라우드 AI 대화 시스템
-/// - DeepSeek R1 모델 (무료, 100회/일)
+/// - Mistral Devstral 2512 모델 (무료, 코딩 전문)
 /// - HTTP 기반 API 호출
 /// - 15초 타임아웃
 class ApiConfig {
   // OpenRouter API 기본 설정
   static const String openRouterBaseUrl = 'https://openrouter.ai/api/v1';
-  static const String model = 'deepseek/deepseek-r1:free';
+  static const String model = 'mistralai/devstral-2512:free';
   static const int requestTimeout = 15; // 초
 
   // 레이트 리밋 (안전 마진 포함)
