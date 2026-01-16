@@ -59,6 +59,7 @@ dependencies:
   uuid: ^4.4.0
   shared_preferences: ^2.2.2
   intl: ^0.20.2
+  crypto: ^3.0.6
 
   # Charts
   fl_chart: ^0.69.0
@@ -70,6 +71,11 @@ dependencies:
   firebase_core: ^3.8.1
   firebase_remote_config: ^5.1.8
   firebase_analytics: ^11.3.8
+
+  # Firebase (Week 4 - Auth & Functions)
+  firebase_auth: ^5.3.3
+  cloud_functions: ^5.2.3
+  firebase_app_check: ^0.3.2+3
 
   # Network (Week 3 - Optimization)
   connectivity_plus: ^6.1.2
@@ -90,6 +96,11 @@ dev_dependencies:
 
   # App Icon Generator (Latest: 0.14.3)
   flutter_launcher_icons: ^0.14.3
+
+  # Testing (Week 4 Phase 5)
+  mockito: ^5.4.4
+  integration_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

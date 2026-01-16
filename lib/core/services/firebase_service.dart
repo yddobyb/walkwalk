@@ -1,13 +1,19 @@
 // lib/core/services/firebase_service.dart
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../firebase_options.dart';
+import '../../services/cache/image_cache_service.dart';
 
 /// Firebase 초기화 서비스
 ///
 /// Week 3: Firebase Core, Remote Config, Analytics 초기화
+/// Week 4: Firebase Auth, Cloud Functions, App Check 초기화
+/// Phase 4: Image Cache Service 초기화
 ///
 /// Usage:
 /// ```dart
@@ -15,6 +21,7 @@ import '../../firebase_options.dart';
 /// ```
 class FirebaseService {
   static bool _isInitialized = false;
+  static final ImageCacheService _imageCacheService = ImageCacheService();
 
   /// Firebase 초기화
   ///
@@ -32,6 +39,26 @@ class FirebaseService {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+
+      // Week 4: App Check 초기화 (디버그 모드에서는 Debug Provider 사용)
+      if (kDebugMode) {
+        await FirebaseAppCheck.instance.activate(
+          androidProvider: AndroidProvider.debug,
+          appleProvider: AppleProvider.debug,
+        );
+        debugPrint('✅ Firebase App Check - Debug mode activated');
+      } else {
+        await FirebaseAppCheck.instance.activate(
+          androidProvider: AndroidProvider.playIntegrity,
+          appleProvider: AppleProvider.deviceCheck,
+        );
+        debugPrint('✅ Firebase App Check - Production mode activated');
+      }
+
+      debugPrint('✅ Cloud Functions - Ready (region: us-central1)');
+
+      // Phase 4: Image Cache Service 초기화
+      await _imageCacheService.initialize();
 
       _isInitialized = true;
       debugPrint('✅ Firebase - Initialized successfully');

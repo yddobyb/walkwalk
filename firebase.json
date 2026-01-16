@@ -1,1 +1,56 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"walkwalkddog","appId":"1:701057110809:android:61d3ecd893ab595d9a2b88","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"walkwalkddog","appId":"1:701057110809:ios:b021e3f705864e189a2b88","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"walkwalkddog","appId":"1:701057110809:ios:921556afe387d6b99a2b88","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"walkwalkddog","configurations":{"android":"1:701057110809:android:61d3ecd893ab595d9a2b88","ios":"1:701057110809:ios:b021e3f705864e189a2b88","macos":"1:701057110809:ios:921556afe387d6b99a2b88","web":"1:701057110809:web:5e7fc1686b8d49ed9a2b88"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "walkwalkddog",
+          "appId": "1:701057110809:android:61d3ecd893ab595d9a2b88",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "walkwalkddog",
+          "appId": "1:701057110809:ios:b021e3f705864e189a2b88",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "walkwalkddog",
+          "appId": "1:701057110809:ios:921556afe387d6b99a2b88",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "walkwalkddog",
+          "configurations": {
+            "android": "1:701057110809:android:61d3ecd893ab595d9a2b88",
+            "ios": "1:701057110809:ios:b021e3f705864e189a2b88",
+            "macos": "1:701057110809:ios:921556afe387d6b99a2b88",
+            "web": "1:701057110809:web:5e7fc1686b8d49ed9a2b88"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}
