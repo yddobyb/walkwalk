@@ -30,9 +30,15 @@ class QuotaService {
       debugPrint('📊 Fetching quota...');
 
       final callable = _functions.httpsCallable('quota');
-      final result = await callable.call<Map<String, dynamic>>({});
+      final result = await callable.call({});
 
-      final response = QuotaResponse.fromJson(result.data);
+      // result.data는 Map<Object?, Object?>이므로 Map<String, dynamic>으로 deep copy
+      final rawData = result.data as Map;
+      final data = {
+        'success': rawData['success'],
+        'data': Map<String, dynamic>.from(rawData['data'] as Map),
+      };
+      final response = QuotaResponse.fromJson(data);
 
       debugPrint('✅ Quota fetched successfully');
       debugPrint('   - Remaining: ${response.data.remaining}/${response.data.total}');

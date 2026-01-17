@@ -93,7 +93,7 @@ class _StickerGeneratorScreenState extends ConsumerState<StickerGeneratorScreen>
                       ),
                       const SizedBox(height: 8),
                       LinearProgressIndicator(
-                        value: quota.usageRate,
+                        value: quota.total > 0 ? quota.used / quota.total : 0.0,
                         backgroundColor: Colors.grey[300],
                         valueColor: AlwaysStoppedAnimation(
                           quota.remaining > 5 ? Colors.green : Colors.orange,
@@ -105,7 +105,7 @@ class _StickerGeneratorScreenState extends ConsumerState<StickerGeneratorScreen>
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Text(
-                        '리셋까지: ${quota.formattedTimeUntilReset}',
+                        '리셋까지: ${_formatTimeUntilReset(quota.nextResetIn)}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -342,6 +342,17 @@ class _StickerGeneratorScreenState extends ConsumerState<StickerGeneratorScreen>
         ),
       ),
     );
+  }
+
+  String _formatTimeUntilReset(int seconds) {
+    final hours = seconds ~/ 3600;
+    final minutes = (seconds % 3600) ~/ 60;
+
+    if (hours > 0) {
+      return '$hours시간 $minutes분';
+    } else {
+      return '$minutes분';
+    }
   }
 }
 

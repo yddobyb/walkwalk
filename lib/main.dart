@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -15,6 +16,8 @@ import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
 import 'services/ai/ai_providers.dart';
 import 'presentation/screens/splash/splash_screen.dart';
+// Week 4 테스트: StickerGeneratorScreen 직접 접근
+import 'presentation/screens/sticker/sticker_generator_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +26,19 @@ void main() async {
   await FirebaseService.initialize();
   await RemoteConfigService.initialize();
   await AnalyticsService.initialize();
+
+  // Week 4 테스트: 익명 로그인 (Firebase Functions 호출을 위해 필요)
+  try {
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) {
+      await auth.signInAnonymously();
+      debugPrint('✅ Anonymous authentication successful');
+    } else {
+      debugPrint('✅ User already authenticated: ${auth.currentUser!.uid}');
+    }
+  } catch (e) {
+    debugPrint('❌ Anonymous authentication failed: $e');
+  }
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);
@@ -95,7 +111,9 @@ class WalkDogApp extends ConsumerWidget {
         Locale('ko'), // 한국어
         Locale('en'), // 영어
       ],
-      home: const SplashScreen(),
+      // Week 4 테스트: StickerGeneratorScreen을 직접 띄움 (임시)
+      // home: const SplashScreen(),  // 원래 코드
+      home: const StickerGeneratorScreen(),  // 테스트용
     );
   }
 }

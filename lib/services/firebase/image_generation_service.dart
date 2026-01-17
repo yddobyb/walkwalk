@@ -46,13 +46,13 @@ class ImageGenerationService {
   /// - [FormatException] 응답 파싱 실패
   Future<StickerResponse> generateSticker(StickerRequest request) async {
     try {
-      debugPrint('🎨 Generating sticker for petId: ${request.petId}');
-      debugPrint('   - Breed: ${request.breed}');
-      debugPrint('   - Color: ${request.color}');
-      debugPrint('   - Accessory: ${request.accessory.name}');
-      debugPrint('   - Style: ${request.style.name}');
-      debugPrint('   - Size: ${request.size}');
-      debugPrint('   - Force: ${request.force}');
+      print('🎨🎨🎨 [STICKER] Generating sticker for petId: ${request.petId}');
+      print('   - Breed: ${request.breed}');
+      print('   - Color: ${request.color}');
+      print('   - Accessory: ${request.accessory.name}');
+      print('   - Style: ${request.style.name}');
+      print('   - Size: ${request.size}');
+      print('   - Force: ${request.force}');
 
       // Phase 4: 로컬 캐시 확인 (force=false일 때만)
       if (!request.force && cacheService != null) {
@@ -92,9 +92,11 @@ class ImageGenerationService {
       }
 
       // 캐시 미스 → Cloud Functions 호출 (재시도 로직 포함)
+      print('📞 [STICKER] Calling Cloud Functions...');
       final callable = _functions.httpsCallable('genSticker');
 
       final result = await _callWithRetry(() async {
+        print('📡 [STICKER] Making API call to genSticker');
         return await callable.call<Map<String, dynamic>>({
           'petId': request.petId,
           'breed': request.breed,
@@ -108,7 +110,18 @@ class ImageGenerationService {
         });
       });
 
-      final response = StickerResponse.fromJson(result.data);
+      print('📦 [STICKER] Received result from Cloud Functions');
+      print('   - Result type: ${result.runtimeType}');
+      print('   - Result.data type: ${result.data.runtimeType}');
+
+      // result.data는 Map<Object?, Object?>이므로 깊은 복사로 Map<String, dynamic>으로 변환
+      final rawData = result.data as Map;
+      final data = _deepCopyMap(rawData);
+      print('✅ [STICKER] Data deep copy successful');
+      print('   - Data keys: ${data.keys.join(", ")}');
+
+      final response = StickerResponse.fromJson(data);
+      print('✅ [STICKER] Response parsing successful');
 
       debugPrint('✅ Sticker generated successfully');
       debugPrint('   - Cached: ${response.data.cached}');
@@ -128,9 +141,9 @@ class ImageGenerationService {
 
       return response;
     } on FirebaseFunctionsException catch (e) {
-      debugPrint('❌ Sticker generation failed: ${e.code}');
-      debugPrint('   Message: ${e.message}');
-      debugPrint('   Details: ${e.details}');
+      print('❌❌❌ [STICKER] FirebaseFunctionsException: ${e.code}');
+      print('   Message: ${e.message}');
+      print('   Details: ${e.details}');
 
       throw ImageGenerationException(
         code: e.code,
@@ -138,8 +151,9 @@ class ImageGenerationService {
         details: e.details,
       );
     } catch (e, stackTrace) {
-      debugPrint('❌ Unexpected error: $e');
-      debugPrint('   Stack trace: $stackTrace');
+      print('❌❌❌ [STICKER] Unexpected error: $e');
+      print('   Type: ${e.runtimeType}');
+      print('   Stack trace: $stackTrace');
 
       throw ImageGenerationException(
         code: 'unknown',
@@ -215,6 +229,33 @@ class ImageGenerationService {
       'resource-exhausted', // 할당량 초과
       'failed-precondition', // App Check 실패
     ].contains(code);
+  }
+
+  // 깊은 복사를 수행하여 Map<Object?, Object?>를 Map<String, dynamic>으로 변환
+  Map<String, dynamic> _deepCopyMap(Map rawMap) {
+    final result = <String, dynamic>{};
+    rawMap.forEach((key, value) {
+      if (value is Map) {
+        result[key.toString()] = _deepCopyMap(value);
+      } else if (value is List) {
+        result[key.toString()] = _deepCopyList(value);
+      } else {
+        result[key.toString()] = value;
+      }
+    });
+    return result;
+  }
+
+  List<dynamic> _deepCopyList(List rawList) {
+    return rawList.map((item) {
+      if (item is Map) {
+        return _deepCopyMap(item);
+      } else if (item is List) {
+        return _deepCopyList(item);
+      } else {
+        return item;
+      }
+    }).toList();
   }
 
   // Enum to String 변환
