@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-// import * as admin from "firebase-admin"; // Week 4 테스트: 캐시 비활성화로 미사용
+import * as admin from "firebase-admin";
 import axios from "axios";
 // import * as crypto from "crypto"; // Week 4 테스트: 캐시 비활성화로 미사용
 import sharp from "sharp";
@@ -14,6 +14,7 @@ interface GenStickerRequest {
   bg?: "transparent" | "white" | "gradient";
   seed?: number;
   force?: boolean;
+  userId?: string; // auth context가 전달되지 않을 때 사용
 }
 
 // Week 4 테스트: 캐시 비활성화로 미사용
@@ -40,7 +41,7 @@ interface GeminiImageData {
 
 export const genSticker = functions
   .region("us-central1")
-  .https.onCall(async (data: GenStickerRequest) => { // Week 4 테스트: context 미사용
+  .https.onCall(async (data: GenStickerRequest, context) => {
     console.log("🎨 genSticker called with data:", JSON.stringify(data));
 
     // 1. App Check 검증 (Week 4 테스트: 임시 제거)
@@ -51,10 +52,19 @@ export const genSticker = functions
     //   );
     // }
 
-    // 2. 인증 확인 (Week 4 테스트: 임시 제거)
-    // if (!context.auth) {
-    //   throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-    // }
+    // 2. 인증 확인: auth context가 있으면 사용, 없으면 전달받은 userId 사용
+    let uid: string;
+    if (context.auth) {
+      uid = context.auth.uid;
+      console.log(`👤 User (authenticated): ${uid}`);
+    } else if (data.userId) {
+      uid = data.userId;
+      console.log(`👤 User (passed userId): ${uid}`);
+    } else {
+      // 둘 다 없으면 임시 UID 생성
+      uid = `temp-${Date.now()}`;
+      console.log(`👤 User (temporary): ${uid} - no auth or userId`);
+    }
 
     // 3. 입력 검증
     const {petId, breed = "Shiba Inu", color = "orange", accessory = "none",
@@ -108,8 +118,9 @@ export const genSticker = functions
     // 8. 캐시 저장 (임시 비활성화 - Storage bucket 설정 필요)
     // await saveToCache(cacheKey, {data: base64Image, seed: imageData.seed});
 
-    // 9. 사용량 기록 (Week 4 테스트: Firestore 없이 스킵)
-    // await recordUsage(uid);
+    // 9. 사용량 기록
+    await recordUsage(uid);
+    console.log(`📊 Usage recorded for user ${uid}`);
 
     const response = {
       success: true,
@@ -272,8 +283,7 @@ async function checkRateLimit(uid: string): Promise<boolean> {
 }
 */
 
-// 사용량 기록 (Week 4 테스트: 전체 주석 처리)
-/*
+// 사용량 기록
 async function recordUsage(uid: string): Promise<void> {
   const db = admin.firestore();
   const now = Date.now();
@@ -282,7 +292,7 @@ async function recordUsage(uid: string): Promise<void> {
   const usageRef = db.collection("imageUsage").doc(uid);
   const usageDoc = await usageRef.get();
 
-  if (!usageDoc.exists || usageDoc.data()!.date !== today) {
+  if (!usageDoc.exists || usageDoc.data()?.date !== today) {
     await usageRef.set({
       date: today,
       count: 1,
@@ -295,4 +305,3 @@ async function recordUsage(uid: string): Promise<void> {
     });
   }
 }
-*/

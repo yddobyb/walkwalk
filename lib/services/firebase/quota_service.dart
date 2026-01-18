@@ -1,6 +1,7 @@
 // lib/services/firebase/quota_service.dart
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../data/models/quota_response.dart';
@@ -27,10 +28,17 @@ class QuotaService {
   /// - [FormatException] 응답 파싱 실패
   Future<QuotaResponse> getQuota() async {
     try {
+      // 인증 상태 확인
+      final user = FirebaseAuth.instance.currentUser;
       debugPrint('📊 Fetching quota...');
+      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
+      debugPrint('   - Is anonymous: ${user?.isAnonymous}');
 
       final callable = _functions.httpsCallable('quota');
-      final result = await callable.call({});
+      // userId를 직접 전달 (auth context가 전달되지 않는 문제 우회)
+      final result = await callable.call({
+        'userId': user?.uid,
+      });
 
       // result.data는 Map<Object?, Object?>이므로 Map<String, dynamic>으로 deep copy
       final rawData = result.data as Map;

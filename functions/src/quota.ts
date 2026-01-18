@@ -1,29 +1,57 @@
 import * as functions from "firebase-functions";
-// import * as admin from "firebase-admin"; // Week 4 테스트: Firestore 사용 안함
+import * as admin from "firebase-admin";
 
 export const quota = functions
   .region("us-central1")
-  .https.onCall(async () => { // Week 4 테스트: data, context 미사용
-    // Week 4 테스트: 인증 체크 임시 제거
-    // if (!context.auth) {
-    //   throw new functions.https.HttpsError("unauthenticated", "User must be authenticated");
-    // }
+  .https.onCall(async (data, context) => {
+    const db = admin.firestore();
+    const today = new Date().toISOString().split("T")[0];
 
-    // Week 4 테스트: Firestore 대신 하드코딩된 값 사용
-    // const uid = context.auth?.uid || "test-user-" + Date.now();
-    // const db = admin.firestore();
-    // const today = new Date().toISOString().split("T")[0];
-    // const config = functions.config();
+    const dailyQuota = 20; // 일일 할당량
+    let used = 0;
 
-    // const usageRef = db.collection("imageUsage").doc(uid);
-    // const usageDoc = await usageRef.get();
+    // 인증 확인: auth context가 있으면 사용, 없으면 전달받은 userId 사용
+    let uid: string;
+    if (context.auth) {
+      uid = context.auth.uid;
+      console.log(`📊 Quota requested with auth: ${uid}`);
+    } else if (data && data.userId) {
+      uid = data.userId as string;
+      console.log(`📊 Quota requested with passed userId: ${uid}`);
+    } else {
+      console.log("📊 Quota requested without auth or userId - returning default");
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
 
-    const dailyQuota = 20; // 테스트용 고정값
-    const used = 0; // 테스트용: 항상 0으로 시작
+      return {
+        success: true,
+        data: {
+          remaining: dailyQuota,
+          total: dailyQuota,
+          used: 0,
+          resetAt: tomorrow.toISOString(),
+          nextResetIn: Math.floor((tomorrow.getTime() - Date.now()) / 1000),
+        },
+      };
+    }
 
-    // if (usageDoc.exists && usageDoc.data()!.date === today) {
-    //   used = usageDoc.data()!.count;
-    // }
+    try {
+      const usageRef = db.collection("imageUsage").doc(uid);
+      const usageDoc = await usageRef.get();
+
+      if (usageDoc.exists) {
+        const usageData = usageDoc.data();
+        if (usageData && usageData.date === today) {
+          used = usageData.count || 0;
+        }
+      }
+
+      console.log(`📊 Quota for user ${uid}: used=${used}, total=${dailyQuota}`);
+    } catch (error) {
+      console.error("❌ Error fetching quota:", error);
+      // Firestore 오류 시에도 기본값 반환
+    }
 
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../data/models/sticker_request.dart';
@@ -95,6 +96,10 @@ class ImageGenerationService {
       print('📞 [STICKER] Calling Cloud Functions...');
       final callable = _functions.httpsCallable('genSticker');
 
+      // userId를 직접 전달 (auth context가 전달되지 않는 문제 우회)
+      final user = FirebaseAuth.instance.currentUser;
+      print('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
+
       final result = await _callWithRetry(() async {
         print('📡 [STICKER] Making API call to genSticker');
         return await callable.call<Map<String, dynamic>>({
@@ -107,6 +112,7 @@ class ImageGenerationService {
           'bg': _backgroundToString(request.bg),
           if (request.seed != null) 'seed': request.seed,
           'force': request.force,
+          'userId': user?.uid, // auth context 우회
         });
       });
 

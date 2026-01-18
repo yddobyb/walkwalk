@@ -16,8 +16,6 @@ import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
 import 'services/ai/ai_providers.dart';
 import 'presentation/screens/splash/splash_screen.dart';
-// Week 4 테스트: StickerGeneratorScreen 직접 접근
-import 'presentation/screens/sticker/sticker_generator_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,14 +28,20 @@ void main() async {
   // Week 4 테스트: 익명 로그인 (Firebase Functions 호출을 위해 필요)
   try {
     final auth = FirebaseAuth.instance;
+    print('🔐🔐🔐 [AUTH] Starting anonymous authentication...');
+    print('🔐🔐🔐 [AUTH] Current user before: ${auth.currentUser?.uid ?? "NULL"}');
+
     if (auth.currentUser == null) {
-      await auth.signInAnonymously();
-      debugPrint('✅ Anonymous authentication successful');
+      final userCredential = await auth.signInAnonymously();
+      print('🔐🔐🔐 [AUTH] ✅ Anonymous authentication successful');
+      print('🔐🔐🔐 [AUTH] User UID: ${userCredential.user?.uid}');
     } else {
-      debugPrint('✅ User already authenticated: ${auth.currentUser!.uid}');
+      print('🔐🔐🔐 [AUTH] ✅ User already authenticated: ${auth.currentUser!.uid}');
     }
+
+    print('🔐🔐🔐 [AUTH] Current user after: ${auth.currentUser?.uid ?? "NULL"}');
   } catch (e) {
-    debugPrint('❌ Anonymous authentication failed: $e');
+    print('🔐🔐🔐 [AUTH] ❌ Anonymous authentication failed: $e');
   }
 
   // intl 패키지 한국어 locale 초기화
@@ -111,9 +115,7 @@ class WalkDogApp extends ConsumerWidget {
         Locale('ko'), // 한국어
         Locale('en'), // 영어
       ],
-      // Week 4 테스트: StickerGeneratorScreen을 직접 띄움 (임시)
-      // home: const SplashScreen(),  // 원래 코드
-      home: const StickerGeneratorScreen(),  // 테스트용
+      home: const SplashScreen(),
     );
   }
 }
