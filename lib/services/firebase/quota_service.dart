@@ -19,6 +19,26 @@ import '../../data/models/quota_response.dart';
 class QuotaService {
   final FirebaseFunctions _functions = FirebaseFunctions.instanceFor(region: 'us-central1');
 
+  /// 인증 확인 및 필요시 재인증
+  Future<void> _ensureAuthenticated() async {
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
+
+    if (user == null) {
+      debugPrint('🔐 [AUTH] No user authenticated, attempting anonymous sign-in...');
+      try {
+        final credential = await auth.signInAnonymously();
+        debugPrint('🔐 [AUTH] ✅ Anonymous sign-in successful: ${credential.user?.uid}');
+      } catch (e) {
+        debugPrint('🔐 [AUTH] ❌ Anonymous sign-in failed: $e');
+        throw QuotaException(
+          code: 'unauthenticated',
+          message: 'Failed to authenticate. Please restart the app.',
+        );
+      }
+    }
+  }
+
   /// 할당량 조회
   ///
   /// Returns: 할당량 응답 (남은 횟수, 전체 횟수, 리셋 시간 포함)
@@ -28,6 +48,9 @@ class QuotaService {
   /// - [FormatException] 응답 파싱 실패
   Future<QuotaResponse> getQuota() async {
     try {
+      // 인증 확인 및 필요시 재인증
+      await _ensureAuthenticated();
+
       // 인증 상태 확인
       final user = FirebaseAuth.instance.currentUser;
       debugPrint('📊 Fetching quota...');

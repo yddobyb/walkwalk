@@ -55,6 +55,9 @@ class ImageGenerationService {
       print('   - Size: ${request.size}');
       print('   - Force: ${request.force}');
 
+      // 인증 확인 및 필요시 재인증
+      await _ensureAuthenticated();
+
       // Phase 4: 로컬 캐시 확인 (force=false일 때만)
       if (!request.force && cacheService != null) {
         final cachedImage = await cacheService!.getCachedImage(request);
@@ -183,6 +186,31 @@ class ImageGenerationService {
   }
 
   // ========== Private Methods ==========
+
+  /// 인증 확인 및 필요시 재인증
+  ///
+  /// Firebase Functions 호출 전에 인증 상태를 확인하고,
+  /// 인증이 없으면 익명 로그인을 시도합니다.
+  Future<void> _ensureAuthenticated() async {
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
+
+    if (user == null) {
+      debugPrint('🔐 [AUTH] No user authenticated, attempting anonymous sign-in...');
+      try {
+        final credential = await auth.signInAnonymously();
+        debugPrint('🔐 [AUTH] ✅ Anonymous sign-in successful: ${credential.user?.uid}');
+      } catch (e) {
+        debugPrint('🔐 [AUTH] ❌ Anonymous sign-in failed: $e');
+        throw ImageGenerationException(
+          code: 'unauthenticated',
+          message: 'Failed to authenticate. Please restart the app.',
+        );
+      }
+    } else {
+      debugPrint('🔐 [AUTH] ✅ User already authenticated: ${user.uid}');
+    }
+  }
 
   /// 재시도 로직을 포함한 API 호출
   ///

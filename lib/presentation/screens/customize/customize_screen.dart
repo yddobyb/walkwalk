@@ -1,4 +1,5 @@
 // lib/presentation/screens/customize/customize_screen.dart
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import '../../../domain/entities/pet.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
+import '../../../services/pet/pet_reward_service.dart';
+import '../../../services/sticker/sticker_save_service.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
   const CustomizeScreen({super.key});
@@ -33,6 +36,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     final theme = Theme.of(context);
     final stickerState = ref.watch(stickerGeneratorProvider);
     final quotaAsync = ref.watch(quotaProvider);
+    final applyState = ref.watch(stickerApplyProvider);
+    final petAsync = ref.watch(activePetProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,25 +70,17 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   Stack(
                     alignment: Alignment.center,
                     children: [
-                      // 펫 아바타
-                      const Text(
-                        '🐕',
-                        style: TextStyle(fontSize: 100),
+                      // 펫 아바타 - 저장된 스티커가 있으면 표시, 없으면 이모지
+                      _PetPreviewAvatar(
+                        stickerPath: petAsync.valueOrNull?.stickerPath,
+                        selectedAccessory: _selectedAccessory,
+                        getAccessoryEmoji: _getAccessoryEmoji,
                       ),
-                      // 액세서리 표시
-                      if (_selectedAccessory != PetAccessory.none)
-                        Positioned(
-                          top: 10,
-                          child: Text(
-                            _getAccessoryEmoji(_selectedAccessory),
-                            style: const TextStyle(fontSize: 30),
-                          ),
-                        ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    AppLocalizations.of(context).defaultPetName,
+                    petAsync.valueOrNull?.name ?? AppLocalizations.of(context).defaultPetName,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -294,6 +291,36 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                           color: theme.colorScheme.onSurface.withOpacity(0.5),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      // 스티커 적용 버튼
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: applyState.isLoading
+                              ? null
+                              : () => _applySticker(imageBytes),
+                          icon: applyState.isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                                  ),
+                                )
+                              : const Icon(Icons.check_circle),
+                          label: Text(
+                            applyState.isLoading
+                                ? '적용 중...'
+                                : '이 스티커로 변경하기',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.secondary,
+                            foregroundColor: theme.colorScheme.onSecondary,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -418,6 +445,31 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         ],
       ),
     );
+  }
+
+  /// 스티커 적용 (저장 및 Pet 업데이트)
+  Future<void> _applySticker(Uint8List imageBytes) async {
+    final success = await ref.read(stickerApplyProvider.notifier).applySticker(imageBytes);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('스티커가 적용되었습니다!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // 상태 초기화
+      ref.read(stickerApplyProvider.notifier).reset();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('스티커 적용에 실패했습니다.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _generateSticker() {
@@ -611,6 +663,75 @@ class _QuotaIndicator extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 펫 미리보기 아바타 위젯
+///
+/// 저장된 스티커가 있으면 표시, 없으면 이모지 표시
+class _PetPreviewAvatar extends StatelessWidget {
+  final String? stickerPath;
+  final PetAccessory selectedAccessory;
+  final String Function(PetAccessory) getAccessoryEmoji;
+
+  const _PetPreviewAvatar({
+    required this.stickerPath,
+    required this.selectedAccessory,
+    required this.getAccessoryEmoji,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // 스티커가 있으면 이미지 표시
+    if (stickerPath != null && stickerPath!.isNotEmpty) {
+      final file = File(stickerPath!);
+      return FutureBuilder<bool>(
+        future: file.exists(),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.file(
+                file,
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  // 이미지 로드 실패 시 이모지 폴백
+                  return _buildEmojiAvatar();
+                },
+              ),
+            );
+          }
+          // 파일이 존재하지 않으면 이모지
+          return _buildEmojiAvatar();
+        },
+      );
+    }
+
+    // 스티커가 없으면 이모지 표시
+    return _buildEmojiAvatar();
+  }
+
+  Widget _buildEmojiAvatar() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const Text(
+          '🐕',
+          style: TextStyle(fontSize: 100),
+        ),
+        // 액세서리 표시
+        if (selectedAccessory != PetAccessory.none)
+          Positioned(
+            top: 10,
+            child: Text(
+              getAccessoryEmoji(selectedAccessory),
+              style: const TextStyle(fontSize: 30),
+            ),
+          ),
+      ],
     );
   }
 }

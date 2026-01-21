@@ -1,4 +1,6 @@
 // lib/presentation/screens/home/widgets/pet_avatar_widget.dart
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../domain/entities/pet.dart';
@@ -23,6 +25,48 @@ class PetAvatarWidget extends ConsumerWidget {
       case PetPersonality.playful:
         return l10n.personalityPlayfulDesc;
     }
+  }
+
+  /// 펫 아바타 빌드 (스티커가 있으면 이미지, 없으면 이모지)
+  Widget _buildPetAvatar(String? stickerPath) {
+    // 스티커 경로가 있으면 이미지 표시
+    if (stickerPath != null && stickerPath.isNotEmpty) {
+      final file = File(stickerPath);
+      return FutureBuilder<bool>(
+        future: file.exists(),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(75),
+              child: Image.file(
+                file,
+                width: 130,
+                height: 130,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // 이미지 로드 실패 시 이모지 폴백
+                  return const Text(
+                    '🐕',
+                    style: TextStyle(fontSize: 80),
+                  );
+                },
+              ),
+            );
+          }
+          // 파일이 존재하지 않으면 이모지
+          return const Text(
+            '🐕',
+            style: TextStyle(fontSize: 80),
+          );
+        },
+      );
+    }
+
+    // 스티커가 없으면 이모지
+    return const Text(
+      '🐕',
+      style: TextStyle(fontSize: 80),
+    );
   }
 
   @override
@@ -54,7 +98,7 @@ class PetAvatarWidget extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 임시 강아지 이모지 (추후 벡터 아바타로 교체)
+              // 펫 아바타 (스티커가 있으면 표시, 없으면 이모지)
               GestureDetector(
                 onTap: () => _showGreetingDialogue(context, pet),
                 child: Container(
@@ -71,11 +115,8 @@ class PetAvatarWidget extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Text(
-                      '🐕',
-                      style: TextStyle(fontSize: 80),
-                    ),
+                  child: Center(
+                    child: _buildPetAvatar(pet?.stickerPath),
                   ),
                 ),
               ),
