@@ -988,6 +988,38 @@
   "@apply": {
     "description": "적용 버튼"
   },
+  "styleTitle": "스타일",
+  "@styleTitle": {
+    "description": "스타일 섹션 제목"
+  },
+  "styleFlat": "플랫 2D",
+  "@styleFlat": {
+    "description": "스타일 - 플랫 2D"
+  },
+  "style3d": "3D",
+  "@style3d": {
+    "description": "스타일 - 3D"
+  },
+  "styleRealistic": "리얼리스틱",
+  "@styleRealistic": {
+    "description": "스타일 - 리얼리스틱"
+  },
+  "backgroundTitle": "배경",
+  "@backgroundTitle": {
+    "description": "배경 섹션 제목"
+  },
+  "bgTransparent": "투명",
+  "@bgTransparent": {
+    "description": "배경 - 투명"
+  },
+  "bgWhite": "흰색",
+  "@bgWhite": {
+    "description": "배경 - 흰색"
+  },
+  "bgGradient": "그라데이션",
+  "@bgGradient": {
+    "description": "배경 - 그라데이션"
+  },
   "stickerComingSoon": "AI 스티커 생성 기능은 곧 구현될 예정입니다! 🎨",
   "@stickerComingSoon": {
     "description": "AI 스티커 생성 미구현 메시지"

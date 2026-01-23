@@ -1130,6 +1130,54 @@ abstract class AppLocalizations {
   /// **'Apply'**
   String get apply;
 
+  /// Style section title
+  ///
+  /// In en, this message translates to:
+  /// **'Style'**
+  String get styleTitle;
+
+  /// Style - Flat 2D
+  ///
+  /// In en, this message translates to:
+  /// **'Flat 2D'**
+  String get styleFlat;
+
+  /// Style - 3D
+  ///
+  /// In en, this message translates to:
+  /// **'3D'**
+  String get style3d;
+
+  /// Style - Realistic
+  ///
+  /// In en, this message translates to:
+  /// **'Realistic'**
+  String get styleRealistic;
+
+  /// Background section title
+  ///
+  /// In en, this message translates to:
+  /// **'Background'**
+  String get backgroundTitle;
+
+  /// Background - Transparent
+  ///
+  /// In en, this message translates to:
+  /// **'Transparent'**
+  String get bgTransparent;
+
+  /// Background - White
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get bgWhite;
+
+  /// Background - Gradient
+  ///
+  /// In en, this message translates to:
+  /// **'Gradient'**
+  String get bgGradient;
+
   /// AI sticker generation not implemented message
   ///
   /// In en, this message translates to:

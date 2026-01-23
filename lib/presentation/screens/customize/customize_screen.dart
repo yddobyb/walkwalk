@@ -25,9 +25,9 @@ class CustomizeScreen extends ConsumerStatefulWidget {
 class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
   PetAccessory _selectedAccessory = PetAccessory.none;
 
-  // 스티커 생성 옵션 (테스트용 기본값)
+  // 스티커 생성 옵션 (기본값)
   String _breed = 'Shiba Inu';
-  String _color = 'orange';
+  String _color = 'golden'; // UI 색상 목록의 첫 번째 항목과 일치
   StickerStyle _style = StickerStyle.stickerFlat;
   StickerBackground _bg = StickerBackground.transparent;
 
@@ -165,6 +165,54 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                 );
               },
             ),
+
+            const SizedBox(height: 32),
+
+            // 견종 선택 섹션
+            Text(
+              AppLocalizations.of(context).petBreed,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildBreedSelector(theme),
+
+            const SizedBox(height: 32),
+
+            // 색상 선택 섹션
+            Text(
+              AppLocalizations.of(context).petColor,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildColorSelector(theme),
+
+            const SizedBox(height: 32),
+
+            // 스타일 선택 섹션
+            Text(
+              AppLocalizations.of(context).styleTitle,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildStyleSelector(theme),
+
+            const SizedBox(height: 32),
+
+            // 배경 선택 섹션
+            Text(
+              AppLocalizations.of(context).backgroundTitle,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildBackgroundSelector(theme),
 
             const SizedBox(height: 32),
 
@@ -415,6 +463,389 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       case PetAccessory.collar:
         return l10n.accessoryCollar;
     }
+  }
+
+  // 견종 목록 및 이모지
+  static const List<Map<String, String>> _breeds = [
+    {'value': 'Golden Retriever', 'key': 'breedGoldenRetriever', 'emoji': '🦮'},
+    {'value': 'Labrador', 'key': 'breedLabrador', 'emoji': '🐕'},
+    {'value': 'Shiba Inu', 'key': 'breedShiba', 'emoji': '🐕‍🦺'},
+    {'value': 'Pomeranian', 'key': 'breedPomeranian', 'emoji': '🐶'},
+    {'value': 'Husky', 'key': 'breedHusky', 'emoji': '🐺'},
+    {'value': 'Beagle', 'key': 'breedBeagle', 'emoji': '🐕'},
+    {'value': 'Bulldog', 'key': 'breedBulldog', 'emoji': '🐶'},
+    {'value': 'Poodle', 'key': 'breedPoodle', 'emoji': '🐩'},
+  ];
+
+  String _getBreedName(String breedValue) {
+    final l10n = AppLocalizations.of(context);
+    switch (breedValue) {
+      case 'Golden Retriever':
+        return l10n.breedGoldenRetriever;
+      case 'Labrador':
+        return l10n.breedLabrador;
+      case 'Shiba Inu':
+        return l10n.breedShiba;
+      case 'Pomeranian':
+        return l10n.breedPomeranian;
+      case 'Husky':
+        return l10n.breedHusky;
+      case 'Beagle':
+        return l10n.breedBeagle;
+      case 'Bulldog':
+        return l10n.breedBulldog;
+      case 'Poodle':
+        return l10n.breedPoodle;
+      default:
+        return breedValue;
+    }
+  }
+
+  Widget _buildBreedSelector(ThemeData theme) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 0.85,
+      ),
+      itemCount: _breeds.length,
+      itemBuilder: (context, index) {
+        final breed = _breeds[index];
+        final isSelected = _breed == breed['value'];
+
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _breed = breed['value']!;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline.withOpacity(0.2),
+                width: 2,
+              ),
+              boxShadow: [
+                if (isSelected)
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  breed['emoji']!,
+                  style: const TextStyle(fontSize: 28),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _getBreedName(breed['value']!),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 색상 목록
+  static const List<Map<String, dynamic>> _colors = [
+    {'value': 'golden', 'key': 'colorGolden', 'color': Color(0xFFD4A574)},
+    {'value': 'brown', 'key': 'colorBrown', 'color': Color(0xFF8B4513)},
+    {'value': 'black', 'key': 'colorBlack', 'color': Color(0xFF2C2C2C)},
+    {'value': 'white', 'key': 'colorWhite', 'color': Color(0xFFF5F5F5)},
+    {'value': 'gray', 'key': 'colorGray', 'color': Color(0xFF808080)},
+    {'value': 'cream', 'key': 'colorCream', 'color': Color(0xFFFFF8DC)},
+  ];
+
+  String _getColorName(String colorValue) {
+    final l10n = AppLocalizations.of(context);
+    switch (colorValue) {
+      case 'golden':
+        return l10n.colorGolden;
+      case 'brown':
+        return l10n.colorBrown;
+      case 'black':
+        return l10n.colorBlack;
+      case 'white':
+        return l10n.colorWhite;
+      case 'gray':
+        return l10n.colorGray;
+      case 'cream':
+        return l10n.colorCream;
+      default:
+        return colorValue;
+    }
+  }
+
+  Widget _buildColorSelector(ThemeData theme) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 6,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 0.85,
+      ),
+      itemCount: _colors.length,
+      itemBuilder: (context, index) {
+        final colorData = _colors[index];
+        final isSelected = _color == colorData['value'];
+
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _color = colorData['value'] as String;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline.withOpacity(0.2),
+                width: 2,
+              ),
+              boxShadow: [
+                if (isSelected)
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: colorData['color'] as Color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: theme.colorScheme.outline.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _getColorName(colorData['value'] as String),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 스타일 목록
+  String _getStyleName(StickerStyle style) {
+    final l10n = AppLocalizations.of(context);
+    switch (style) {
+      case StickerStyle.stickerFlat:
+        return l10n.styleFlat;
+      case StickerStyle.sticker3d:
+        return l10n.style3d;
+      case StickerStyle.realistic:
+        return l10n.styleRealistic;
+    }
+  }
+
+  String _getStyleEmoji(StickerStyle style) {
+    switch (style) {
+      case StickerStyle.stickerFlat:
+        return '🎨';
+      case StickerStyle.sticker3d:
+        return '🎲';
+      case StickerStyle.realistic:
+        return '📷';
+    }
+  }
+
+  Widget _buildStyleSelector(ThemeData theme) {
+    return Row(
+      children: StickerStyle.values.map((style) {
+        final isSelected = _style == style;
+
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _style = style;
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline.withOpacity(0.2),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    if (isSelected)
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _getStyleEmoji(style),
+                      style: const TextStyle(fontSize: 32),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      _getStyleName(style),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  // 배경 목록
+  String _getBackgroundName(StickerBackground bg) {
+    final l10n = AppLocalizations.of(context);
+    switch (bg) {
+      case StickerBackground.transparent:
+        return l10n.bgTransparent;
+      case StickerBackground.white:
+        return l10n.bgWhite;
+      case StickerBackground.gradient:
+        return l10n.bgGradient;
+    }
+  }
+
+  String _getBackgroundEmoji(StickerBackground bg) {
+    switch (bg) {
+      case StickerBackground.transparent:
+        return '🔲';
+      case StickerBackground.white:
+        return '⬜';
+      case StickerBackground.gradient:
+        return '🌈';
+    }
+  }
+
+  Widget _buildBackgroundSelector(ThemeData theme) {
+    return Row(
+      children: StickerBackground.values.map((bg) {
+        final isSelected = _bg == bg;
+
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _bg = bg;
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outline.withOpacity(0.2),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    if (isSelected)
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _getBackgroundEmoji(bg),
+                      style: const TextStyle(fontSize: 32),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      _getBackgroundName(bg),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
   }
 
   void _showApplyDialog() {

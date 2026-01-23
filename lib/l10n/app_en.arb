@@ -988,6 +988,38 @@
   "@apply": {
     "description": "Apply button"
   },
+  "styleTitle": "Style",
+  "@styleTitle": {
+    "description": "Style section title"
+  },
+  "styleFlat": "Flat 2D",
+  "@styleFlat": {
+    "description": "Style - Flat 2D"
+  },
+  "style3d": "3D",
+  "@style3d": {
+    "description": "Style - 3D"
+  },
+  "styleRealistic": "Realistic",
+  "@styleRealistic": {
+    "description": "Style - Realistic"
+  },
+  "backgroundTitle": "Background",
+  "@backgroundTitle": {
+    "description": "Background section title"
+  },
+  "bgTransparent": "Transparent",
+  "@bgTransparent": {
+    "description": "Background - Transparent"
+  },
+  "bgWhite": "White",
+  "@bgWhite": {
+    "description": "Background - White"
+  },
+  "bgGradient": "Gradient",
+  "@bgGradient": {
+    "description": "Background - Gradient"
+  },
   "stickerComingSoon": "AI sticker generation feature coming soon! 🎨",
   "@stickerComingSoon": {
     "description": "AI sticker generation not implemented message"

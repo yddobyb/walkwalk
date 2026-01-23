@@ -567,6 +567,30 @@ class AppLocalizationsKo extends AppLocalizations {
   String get apply => '적용';
 
   @override
+  String get styleTitle => '스타일';
+
+  @override
+  String get styleFlat => '플랫 2D';
+
+  @override
+  String get style3d => '3D';
+
+  @override
+  String get styleRealistic => '리얼리스틱';
+
+  @override
+  String get backgroundTitle => '배경';
+
+  @override
+  String get bgTransparent => '투명';
+
+  @override
+  String get bgWhite => '흰색';
+
+  @override
+  String get bgGradient => '그라데이션';
+
+  @override
   String get stickerComingSoon => 'AI 스티커 생성 기능은 곧 구현될 예정입니다! 🎨';
 
   @override

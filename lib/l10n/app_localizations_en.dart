@@ -578,6 +578,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apply => 'Apply';
 
   @override
+  String get styleTitle => 'Style';
+
+  @override
+  String get styleFlat => 'Flat 2D';
+
+  @override
+  String get style3d => '3D';
+
+  @override
+  String get styleRealistic => 'Realistic';
+
+  @override
+  String get backgroundTitle => 'Background';
+
+  @override
+  String get bgTransparent => 'Transparent';
+
+  @override
+  String get bgWhite => 'White';
+
+  @override
+  String get bgGradient => 'Gradient';
+
+  @override
   String get stickerComingSoon =>
       'AI sticker generation feature coming soon! 🎨';
 
