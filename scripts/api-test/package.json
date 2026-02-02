@@ -1,0 +1,19 @@
+{
+  "name": "image-api-test",
+  "version": "1.0.0",
+  "description": "Test scripts for image generation APIs",
+  "type": "module",
+  "scripts": {
+    "test:all": "node test-all-apis.js",
+    "test:pixazo": "node test-pixazo.js",
+    "test:replicate": "node test-replicate.js",
+    "test:fal": "node test-fal.js",
+    "test:openai": "node test-openai.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "replicate": "^1.0.1",
+    "@fal-ai/client": "^1.2.1",
+    "openai": "^4.77.0"
+  }
+}

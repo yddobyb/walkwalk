@@ -1,0 +1,14 @@
+# Environment variables (API keys)
+.env
+
+# Node modules
+node_modules/
+
+# Generated test images
+output/
+*.png
+*.jpg
+*.webp
+
+# Logs
+*.log
