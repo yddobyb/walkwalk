@@ -76,9 +76,13 @@ final quotaProvider = AutoDisposeFutureProvider<QuotaData>.internal(
 );
 
 typedef QuotaRef = AutoDisposeFutureProviderRef<QuotaData>;
-String _$stickerGeneratorHash() => r'f9d6b796df517a24249b0d9cc896530b14c603cf';
+String _$stickerGeneratorHash() => r'293690a8e245fa706e4a1ef0e5ad317492060156';
 
 /// 스티커 생성 프로바이더
+///
+/// 사용자 등급에 따라 적절한 Cloud Function 호출:
+/// - Free: genStickerFree (Pixazo → OpenAI 폴백)
+/// - Premium: genSticker (Gemini)
 ///
 /// Copied from [StickerGenerator].
 @ProviderFor(StickerGenerator)

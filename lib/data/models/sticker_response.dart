@@ -43,6 +43,20 @@ class StickerData with _$StickerData {
 
     /// 메타데이터 (cached: false일 때만)
     StickerMetadata? metadata,
+
+    // === genStickerFree 추가 필드 ===
+
+    /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+    String? provider,
+
+    /// Provider 표시 이름 - genStickerFree 전용
+    String? providerName,
+
+    /// 추정 비용 (USD) - genStickerFree 전용
+    double? estimatedCost,
+
+    /// Provider 시도 이력 - genStickerFree 전용
+    List<ProviderAttempt>? attempts,
   }) = _StickerData;
 
   factory StickerData.fromJson(Map<String, dynamic> json) =>
@@ -73,4 +87,25 @@ class StickerMetadata with _$StickerMetadata {
 
   factory StickerMetadata.fromJson(Map<String, dynamic> json) =>
       _$StickerMetadataFromJson(json);
+}
+
+/// Provider 시도 이력 - genStickerFree 전용
+@freezed
+class ProviderAttempt with _$ProviderAttempt {
+  const factory ProviderAttempt({
+    /// Provider 이름 (pixazo, openai)
+    required String provider,
+
+    /// 성공 여부
+    required bool success,
+
+    /// 소요 시간 (ms)
+    required int durationMs,
+
+    /// 에러 메시지 (실패 시)
+    String? error,
+  }) = _ProviderAttempt;
+
+  factory ProviderAttempt.fromJson(Map<String, dynamic> json) =>
+      _$ProviderAttemptFromJson(json);
 }

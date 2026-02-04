@@ -8,12 +8,14 @@
     "test:pixazo": "node test-pixazo.js",
     "test:replicate": "node test-replicate.js",
     "test:fal": "node test-fal.js",
-    "test:openai": "node test-openai.js"
+    "test:openai": "node test-openai.js",
+    "test:function": "node test-genStickerFree.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "replicate": "^1.0.1",
     "@fal-ai/client": "^1.2.1",
-    "openai": "^4.77.0"
+    "openai": "^4.77.0",
+    "firebase": "^10.8.0"
   }
 }

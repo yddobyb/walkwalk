@@ -330,6 +330,11 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                           ),
                         ],
                       ),
+                      // Provider 정보 표시 (새로 생성된 경우만)
+                      if (!response.data.cached && response.data.provider != null) ...[
+                        const SizedBox(height: 4),
+                        _ProviderBadge(provider: response.data.provider!),
+                      ],
                       const SizedBox(height: 16),
                       _StickerImage(imageBytes: imageBytes),
                       const SizedBox(height: 12),
@@ -986,6 +991,10 @@ class _QuotaIndicator extends StatelessWidget {
     return quotaAsync.when(
       data: (quota) => Column(
         children: [
+          // 현재 등급 및 품질 표시 배지
+          _TierBadge(quota: quota, theme: theme),
+          const SizedBox(height: 12),
+
           // 할당량 텍스트
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1027,7 +1036,7 @@ class _QuotaIndicator extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(
                 quota.isExhausted
                     ? Colors.red
-                    : quota.remaining <= 5
+                    : quota.remaining <= 3
                         ? Colors.orange
                         : Colors.green,
               ),
@@ -1054,6 +1063,12 @@ class _QuotaIndicator extends StatelessWidget {
                 ),
               ],
             ),
+          ],
+
+          // 무료 사용자에게 프리미엄 업그레이드 유도 배너
+          if (quota.isFree) ...[
+            const SizedBox(height: 16),
+            _PremiumUpgradeBanner(theme: theme),
           ],
         ],
       ),
@@ -1095,6 +1110,198 @@ class _QuotaIndicator extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// 현재 등급 표시 배지
+class _TierBadge extends StatelessWidget {
+  final QuotaData quota;
+  final ThemeData theme;
+
+  const _TierBadge({
+    required this.quota,
+    required this.theme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isPremium = quota.isPremium;
+    final bgColor = isPremium
+        ? const Color(0xFFFFD700).withOpacity(0.15)
+        : Colors.green.withOpacity(0.1);
+    final borderColor = isPremium
+        ? const Color(0xFFFFD700)
+        : Colors.green;
+    final textColor = isPremium
+        ? const Color(0xFFB8860B)
+        : Colors.green.shade700;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderColor.withOpacity(0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            quota.tierEmoji,
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '${quota.tierDisplayName} 품질',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '(${quota.providerDisplayName})',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: textColor.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 프리미엄 업그레이드 유도 배너
+class _PremiumUpgradeBanner extends StatelessWidget {
+  final ThemeData theme;
+
+  const _PremiumUpgradeBanner({required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFFFFD700).withOpacity(0.1),
+            const Color(0xFFFFA500).withOpacity(0.1),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFFFD700).withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Text('💎', style: TextStyle(fontSize: 16)),
+              const SizedBox(width: 8),
+              Text(
+                '프리미엄으로 업그레이드',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFFB8860B),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                // TODO: 프리미엄 구독 페이지로 이동
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('프리미엄 구독 기능은 준비 중입니다'),
+                  ),
+                );
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFFB8860B),
+                side: const BorderSide(color: Color(0xFFFFD700)),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              child: const Text('업그레이드하기'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Provider 배지 위젯
+///
+/// 스티커 생성에 사용된 AI 제공자를 표시
+class _ProviderBadge extends StatelessWidget {
+  final String provider;
+
+  const _ProviderBadge({required this.provider});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    // provider에 따른 스타일 설정
+    final isGemini = provider.toLowerCase() == 'gemini';
+    final bgColor = isGemini
+        ? const Color(0xFF4285F4).withOpacity(0.1)
+        : Colors.purple.withOpacity(0.1);
+    final textColor = isGemini
+        ? const Color(0xFF4285F4)
+        : Colors.purple;
+    final emoji = isGemini ? '✨' : '🎨';
+    final displayName = _getProviderDisplayName(provider);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 12)),
+          const SizedBox(width: 4),
+          Text(
+            displayName,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getProviderDisplayName(String provider) {
+    switch (provider.toLowerCase()) {
+      case 'gemini':
+        return 'Gemini';
+      case 'pixazo':
+        return 'Pixazo';
+      case 'openai':
+        return 'OpenAI';
+      default:
+        return provider;
+    }
   }
 }
 

@@ -212,7 +212,16 @@ mixin _$QuotaData {
 
   /// 리셋까지 남은 시간 (초)
   @JsonKey(name: 'nextResetIn')
-  int get nextResetIn => throw _privateConstructorUsedError;
+  int get nextResetIn =>
+      throw _privateConstructorUsedError; // === 프리미엄 통합을 위한 추가 필드 ===
+  /// 사용자 등급 (free, premium)
+  String get tier => throw _privateConstructorUsedError;
+
+  /// 등급 표시 이름 (무료, 프리미엄)
+  String get tierDisplayName => throw _privateConstructorUsedError;
+
+  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  String get provider => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -230,7 +239,10 @@ abstract class $QuotaDataCopyWith<$Res> {
       int total,
       int used,
       @JsonKey(name: 'resetAt') String resetAt,
-      @JsonKey(name: 'nextResetIn') int nextResetIn});
+      @JsonKey(name: 'nextResetIn') int nextResetIn,
+      String tier,
+      String tierDisplayName,
+      String provider});
 }
 
 /// @nodoc
@@ -251,6 +263,9 @@ class _$QuotaDataCopyWithImpl<$Res, $Val extends QuotaData>
     Object? used = null,
     Object? resetAt = null,
     Object? nextResetIn = null,
+    Object? tier = null,
+    Object? tierDisplayName = null,
+    Object? provider = null,
   }) {
     return _then(_value.copyWith(
       remaining: null == remaining
@@ -273,6 +288,18 @@ class _$QuotaDataCopyWithImpl<$Res, $Val extends QuotaData>
           ? _value.nextResetIn
           : nextResetIn // ignore: cast_nullable_to_non_nullable
               as int,
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as String,
+      tierDisplayName: null == tierDisplayName
+          ? _value.tierDisplayName
+          : tierDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -290,7 +317,10 @@ abstract class _$$QuotaDataImplCopyWith<$Res>
       int total,
       int used,
       @JsonKey(name: 'resetAt') String resetAt,
-      @JsonKey(name: 'nextResetIn') int nextResetIn});
+      @JsonKey(name: 'nextResetIn') int nextResetIn,
+      String tier,
+      String tierDisplayName,
+      String provider});
 }
 
 /// @nodoc
@@ -309,6 +339,9 @@ class __$$QuotaDataImplCopyWithImpl<$Res>
     Object? used = null,
     Object? resetAt = null,
     Object? nextResetIn = null,
+    Object? tier = null,
+    Object? tierDisplayName = null,
+    Object? provider = null,
   }) {
     return _then(_$QuotaDataImpl(
       remaining: null == remaining
@@ -331,6 +364,18 @@ class __$$QuotaDataImplCopyWithImpl<$Res>
           ? _value.nextResetIn
           : nextResetIn // ignore: cast_nullable_to_non_nullable
               as int,
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as String,
+      tierDisplayName: null == tierDisplayName
+          ? _value.tierDisplayName
+          : tierDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -343,7 +388,10 @@ class _$QuotaDataImpl implements _QuotaData {
       required this.total,
       required this.used,
       @JsonKey(name: 'resetAt') required this.resetAt,
-      @JsonKey(name: 'nextResetIn') required this.nextResetIn});
+      @JsonKey(name: 'nextResetIn') required this.nextResetIn,
+      this.tier = 'free',
+      this.tierDisplayName = '무료',
+      this.provider = 'pixazo'});
 
   factory _$QuotaDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuotaDataImplFromJson(json);
@@ -369,10 +417,25 @@ class _$QuotaDataImpl implements _QuotaData {
   @override
   @JsonKey(name: 'nextResetIn')
   final int nextResetIn;
+// === 프리미엄 통합을 위한 추가 필드 ===
+  /// 사용자 등급 (free, premium)
+  @override
+  @JsonKey()
+  final String tier;
+
+  /// 등급 표시 이름 (무료, 프리미엄)
+  @override
+  @JsonKey()
+  final String tierDisplayName;
+
+  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  @override
+  @JsonKey()
+  final String provider;
 
   @override
   String toString() {
-    return 'QuotaData(remaining: $remaining, total: $total, used: $used, resetAt: $resetAt, nextResetIn: $nextResetIn)';
+    return 'QuotaData(remaining: $remaining, total: $total, used: $used, resetAt: $resetAt, nextResetIn: $nextResetIn, tier: $tier, tierDisplayName: $tierDisplayName, provider: $provider)';
   }
 
   @override
@@ -386,13 +449,18 @@ class _$QuotaDataImpl implements _QuotaData {
             (identical(other.used, used) || other.used == used) &&
             (identical(other.resetAt, resetAt) || other.resetAt == resetAt) &&
             (identical(other.nextResetIn, nextResetIn) ||
-                other.nextResetIn == nextResetIn));
+                other.nextResetIn == nextResetIn) &&
+            (identical(other.tier, tier) || other.tier == tier) &&
+            (identical(other.tierDisplayName, tierDisplayName) ||
+                other.tierDisplayName == tierDisplayName) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, remaining, total, used, resetAt, nextResetIn);
+  int get hashCode => Object.hash(runtimeType, remaining, total, used, resetAt,
+      nextResetIn, tier, tierDisplayName, provider);
 
   @JsonKey(ignore: true)
   @override
@@ -410,12 +478,14 @@ class _$QuotaDataImpl implements _QuotaData {
 
 abstract class _QuotaData implements QuotaData {
   const factory _QuotaData(
-          {required final int remaining,
-          required final int total,
-          required final int used,
-          @JsonKey(name: 'resetAt') required final String resetAt,
-          @JsonKey(name: 'nextResetIn') required final int nextResetIn}) =
-      _$QuotaDataImpl;
+      {required final int remaining,
+      required final int total,
+      required final int used,
+      @JsonKey(name: 'resetAt') required final String resetAt,
+      @JsonKey(name: 'nextResetIn') required final int nextResetIn,
+      final String tier,
+      final String tierDisplayName,
+      final String provider}) = _$QuotaDataImpl;
 
   factory _QuotaData.fromJson(Map<String, dynamic> json) =
       _$QuotaDataImpl.fromJson;
@@ -442,6 +512,17 @@ abstract class _QuotaData implements QuotaData {
   /// 리셋까지 남은 시간 (초)
   @JsonKey(name: 'nextResetIn')
   int get nextResetIn;
+  @override // === 프리미엄 통합을 위한 추가 필드 ===
+  /// 사용자 등급 (free, premium)
+  String get tier;
+  @override
+
+  /// 등급 표시 이름 (무료, 프리미엄)
+  String get tierDisplayName;
+  @override
+
+  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  String get provider;
   @override
   @JsonKey(ignore: true)
   _$$QuotaDataImplCopyWith<_$QuotaDataImpl> get copyWith =>

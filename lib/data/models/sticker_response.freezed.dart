@@ -215,7 +215,19 @@ mixin _$StickerData {
   StickerSize get size => throw _privateConstructorUsedError;
 
   /// 메타데이터 (cached: false일 때만)
-  StickerMetadata? get metadata => throw _privateConstructorUsedError;
+  StickerMetadata? get metadata =>
+      throw _privateConstructorUsedError; // === genStickerFree 추가 필드 ===
+  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  String? get provider => throw _privateConstructorUsedError;
+
+  /// Provider 표시 이름 - genStickerFree 전용
+  String? get providerName => throw _privateConstructorUsedError;
+
+  /// 추정 비용 (USD) - genStickerFree 전용
+  double? get estimatedCost => throw _privateConstructorUsedError;
+
+  /// Provider 시도 이력 - genStickerFree 전용
+  List<ProviderAttempt>? get attempts => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -235,7 +247,11 @@ abstract class $StickerDataCopyWith<$Res> {
       int seed,
       bool cached,
       StickerSize size,
-      StickerMetadata? metadata});
+      StickerMetadata? metadata,
+      String? provider,
+      String? providerName,
+      double? estimatedCost,
+      List<ProviderAttempt>? attempts});
 
   $StickerSizeCopyWith<$Res> get size;
   $StickerMetadataCopyWith<$Res>? get metadata;
@@ -260,6 +276,10 @@ class _$StickerDataCopyWithImpl<$Res, $Val extends StickerData>
     Object? cached = null,
     Object? size = null,
     Object? metadata = freezed,
+    Object? provider = freezed,
+    Object? providerName = freezed,
+    Object? estimatedCost = freezed,
+    Object? attempts = freezed,
   }) {
     return _then(_value.copyWith(
       imageBase64: null == imageBase64
@@ -286,6 +306,22 @@ class _$StickerDataCopyWithImpl<$Res, $Val extends StickerData>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as StickerMetadata?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
+      providerName: freezed == providerName
+          ? _value.providerName
+          : providerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      estimatedCost: freezed == estimatedCost
+          ? _value.estimatedCost
+          : estimatedCost // ignore: cast_nullable_to_non_nullable
+              as double?,
+      attempts: freezed == attempts
+          ? _value.attempts
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as List<ProviderAttempt>?,
     ) as $Val);
   }
 
@@ -324,7 +360,11 @@ abstract class _$$StickerDataImplCopyWith<$Res>
       int seed,
       bool cached,
       StickerSize size,
-      StickerMetadata? metadata});
+      StickerMetadata? metadata,
+      String? provider,
+      String? providerName,
+      double? estimatedCost,
+      List<ProviderAttempt>? attempts});
 
   @override
   $StickerSizeCopyWith<$Res> get size;
@@ -349,6 +389,10 @@ class __$$StickerDataImplCopyWithImpl<$Res>
     Object? cached = null,
     Object? size = null,
     Object? metadata = freezed,
+    Object? provider = freezed,
+    Object? providerName = freezed,
+    Object? estimatedCost = freezed,
+    Object? attempts = freezed,
   }) {
     return _then(_$StickerDataImpl(
       imageBase64: null == imageBase64
@@ -375,6 +419,22 @@ class __$$StickerDataImplCopyWithImpl<$Res>
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
               as StickerMetadata?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
+      providerName: freezed == providerName
+          ? _value.providerName
+          : providerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      estimatedCost: freezed == estimatedCost
+          ? _value.estimatedCost
+          : estimatedCost // ignore: cast_nullable_to_non_nullable
+              as double?,
+      attempts: freezed == attempts
+          ? _value._attempts
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as List<ProviderAttempt>?,
     ));
   }
 }
@@ -388,7 +448,12 @@ class _$StickerDataImpl implements _StickerData {
       required this.seed,
       this.cached = false,
       required this.size,
-      this.metadata});
+      this.metadata,
+      this.provider,
+      this.providerName,
+      this.estimatedCost,
+      final List<ProviderAttempt>? attempts})
+      : _attempts = attempts;
 
   factory _$StickerDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$StickerDataImplFromJson(json);
@@ -419,10 +484,35 @@ class _$StickerDataImpl implements _StickerData {
   /// 메타데이터 (cached: false일 때만)
   @override
   final StickerMetadata? metadata;
+// === genStickerFree 추가 필드 ===
+  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  @override
+  final String? provider;
+
+  /// Provider 표시 이름 - genStickerFree 전용
+  @override
+  final String? providerName;
+
+  /// 추정 비용 (USD) - genStickerFree 전용
+  @override
+  final double? estimatedCost;
+
+  /// Provider 시도 이력 - genStickerFree 전용
+  final List<ProviderAttempt>? _attempts;
+
+  /// Provider 시도 이력 - genStickerFree 전용
+  @override
+  List<ProviderAttempt>? get attempts {
+    final value = _attempts;
+    if (value == null) return null;
+    if (_attempts is EqualUnmodifiableListView) return _attempts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'StickerData(imageBase64: $imageBase64, mime: $mime, seed: $seed, cached: $cached, size: $size, metadata: $metadata)';
+    return 'StickerData(imageBase64: $imageBase64, mime: $mime, seed: $seed, cached: $cached, size: $size, metadata: $metadata, provider: $provider, providerName: $providerName, estimatedCost: $estimatedCost, attempts: $attempts)';
   }
 
   @override
@@ -437,13 +527,30 @@ class _$StickerDataImpl implements _StickerData {
             (identical(other.cached, cached) || other.cached == cached) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.metadata, metadata) ||
-                other.metadata == metadata));
+                other.metadata == metadata) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
+            (identical(other.providerName, providerName) ||
+                other.providerName == providerName) &&
+            (identical(other.estimatedCost, estimatedCost) ||
+                other.estimatedCost == estimatedCost) &&
+            const DeepCollectionEquality().equals(other._attempts, _attempts));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, imageBase64, mime, seed, cached, size, metadata);
+  int get hashCode => Object.hash(
+      runtimeType,
+      imageBase64,
+      mime,
+      seed,
+      cached,
+      size,
+      metadata,
+      provider,
+      providerName,
+      estimatedCost,
+      const DeepCollectionEquality().hash(_attempts));
 
   @JsonKey(ignore: true)
   @override
@@ -466,7 +573,11 @@ abstract class _StickerData implements StickerData {
       required final int seed,
       final bool cached,
       required final StickerSize size,
-      final StickerMetadata? metadata}) = _$StickerDataImpl;
+      final StickerMetadata? metadata,
+      final String? provider,
+      final String? providerName,
+      final double? estimatedCost,
+      final List<ProviderAttempt>? attempts}) = _$StickerDataImpl;
 
   factory _StickerData.fromJson(Map<String, dynamic> json) =
       _$StickerDataImpl.fromJson;
@@ -496,6 +607,21 @@ abstract class _StickerData implements StickerData {
 
   /// 메타데이터 (cached: false일 때만)
   StickerMetadata? get metadata;
+  @override // === genStickerFree 추가 필드 ===
+  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  String? get provider;
+  @override
+
+  /// Provider 표시 이름 - genStickerFree 전용
+  String? get providerName;
+  @override
+
+  /// 추정 비용 (USD) - genStickerFree 전용
+  double? get estimatedCost;
+  @override
+
+  /// Provider 시도 이력 - genStickerFree 전용
+  List<ProviderAttempt>? get attempts;
   @override
   @JsonKey(ignore: true)
   _$$StickerDataImplCopyWith<_$StickerDataImpl> get copyWith =>
@@ -847,5 +973,223 @@ abstract class _StickerMetadata implements StickerMetadata {
   @override
   @JsonKey(ignore: true)
   _$$StickerMetadataImplCopyWith<_$StickerMetadataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ProviderAttempt _$ProviderAttemptFromJson(Map<String, dynamic> json) {
+  return _ProviderAttempt.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ProviderAttempt {
+  /// Provider 이름 (pixazo, openai)
+  String get provider => throw _privateConstructorUsedError;
+
+  /// 성공 여부
+  bool get success => throw _privateConstructorUsedError;
+
+  /// 소요 시간 (ms)
+  int get durationMs => throw _privateConstructorUsedError;
+
+  /// 에러 메시지 (실패 시)
+  String? get error => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ProviderAttemptCopyWith<ProviderAttempt> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ProviderAttemptCopyWith<$Res> {
+  factory $ProviderAttemptCopyWith(
+          ProviderAttempt value, $Res Function(ProviderAttempt) then) =
+      _$ProviderAttemptCopyWithImpl<$Res, ProviderAttempt>;
+  @useResult
+  $Res call({String provider, bool success, int durationMs, String? error});
+}
+
+/// @nodoc
+class _$ProviderAttemptCopyWithImpl<$Res, $Val extends ProviderAttempt>
+    implements $ProviderAttemptCopyWith<$Res> {
+  _$ProviderAttemptCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? provider = null,
+    Object? success = null,
+    Object? durationMs = null,
+    Object? error = freezed,
+  }) {
+    return _then(_value.copyWith(
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String,
+      success: null == success
+          ? _value.success
+          : success // ignore: cast_nullable_to_non_nullable
+              as bool,
+      durationMs: null == durationMs
+          ? _value.durationMs
+          : durationMs // ignore: cast_nullable_to_non_nullable
+              as int,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ProviderAttemptImplCopyWith<$Res>
+    implements $ProviderAttemptCopyWith<$Res> {
+  factory _$$ProviderAttemptImplCopyWith(_$ProviderAttemptImpl value,
+          $Res Function(_$ProviderAttemptImpl) then) =
+      __$$ProviderAttemptImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String provider, bool success, int durationMs, String? error});
+}
+
+/// @nodoc
+class __$$ProviderAttemptImplCopyWithImpl<$Res>
+    extends _$ProviderAttemptCopyWithImpl<$Res, _$ProviderAttemptImpl>
+    implements _$$ProviderAttemptImplCopyWith<$Res> {
+  __$$ProviderAttemptImplCopyWithImpl(
+      _$ProviderAttemptImpl _value, $Res Function(_$ProviderAttemptImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? provider = null,
+    Object? success = null,
+    Object? durationMs = null,
+    Object? error = freezed,
+  }) {
+    return _then(_$ProviderAttemptImpl(
+      provider: null == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String,
+      success: null == success
+          ? _value.success
+          : success // ignore: cast_nullable_to_non_nullable
+              as bool,
+      durationMs: null == durationMs
+          ? _value.durationMs
+          : durationMs // ignore: cast_nullable_to_non_nullable
+              as int,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ProviderAttemptImpl implements _ProviderAttempt {
+  const _$ProviderAttemptImpl(
+      {required this.provider,
+      required this.success,
+      required this.durationMs,
+      this.error});
+
+  factory _$ProviderAttemptImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ProviderAttemptImplFromJson(json);
+
+  /// Provider 이름 (pixazo, openai)
+  @override
+  final String provider;
+
+  /// 성공 여부
+  @override
+  final bool success;
+
+  /// 소요 시간 (ms)
+  @override
+  final int durationMs;
+
+  /// 에러 메시지 (실패 시)
+  @override
+  final String? error;
+
+  @override
+  String toString() {
+    return 'ProviderAttempt(provider: $provider, success: $success, durationMs: $durationMs, error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProviderAttemptImpl &&
+            (identical(other.provider, provider) ||
+                other.provider == provider) &&
+            (identical(other.success, success) || other.success == success) &&
+            (identical(other.durationMs, durationMs) ||
+                other.durationMs == durationMs) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, provider, success, durationMs, error);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProviderAttemptImplCopyWith<_$ProviderAttemptImpl> get copyWith =>
+      __$$ProviderAttemptImplCopyWithImpl<_$ProviderAttemptImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ProviderAttemptImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ProviderAttempt implements ProviderAttempt {
+  const factory _ProviderAttempt(
+      {required final String provider,
+      required final bool success,
+      required final int durationMs,
+      final String? error}) = _$ProviderAttemptImpl;
+
+  factory _ProviderAttempt.fromJson(Map<String, dynamic> json) =
+      _$ProviderAttemptImpl.fromJson;
+
+  @override
+
+  /// Provider 이름 (pixazo, openai)
+  String get provider;
+  @override
+
+  /// 성공 여부
+  bool get success;
+  @override
+
+  /// 소요 시간 (ms)
+  int get durationMs;
+  @override
+
+  /// 에러 메시지 (실패 시)
+  String? get error;
+  @override
+  @JsonKey(ignore: true)
+  _$$ProviderAttemptImplCopyWith<_$ProviderAttemptImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

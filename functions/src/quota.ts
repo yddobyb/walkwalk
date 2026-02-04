@@ -1,43 +1,81 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
+// 사용자 등급별 설정
+const TIER_CONFIG = {
+  free: {
+    dailyQuota: 10,
+    collection: "freeImageUsage",
+    provider: "pixazo",
+  },
+  premium: {
+    dailyQuota: 50,
+    collection: "imageUsage",
+    provider: "gemini",
+  },
+};
+
+type UserTier = "free" | "premium";
+
+/**
+ * 사용자 등급 조회
+ *
+ * MVP: 모든 사용자가 무료
+ * 추후: Firestore users/{uid}/subscription 또는 RevenueCat 연동
+ */
+async function getUserTier(uid: string): Promise<UserTier> {
+  // 추후 구현 예시:
+  // const db = admin.firestore();
+  // const userDoc = await db.collection("users").doc(uid).get();
+  // if (userDoc.exists) {
+  //   const userData = userDoc.data();
+  //   if (userData?.subscription?.status === "active") {
+  //     return "premium";
+  //   }
+  // }
+
+  // MVP: 모든 사용자 무료
+  console.log(`👤 [getUserTier] User ${uid}: free (MVP default)`);
+  return "free";
+}
+
+/**
+ * 사용자 할당량 조회
+ *
+ * 사용자 등급에 따라 다른 컬렉션과 한도 적용:
+ * - 무료: freeImageUsage, 10회/일
+ * - 프리미엄: imageUsage, 50회/일
+ */
 export const quota = functions
   .region("us-central1")
   .https.onCall(async (data, context) => {
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];
 
-    const dailyQuota = 20; // 일일 할당량
-    let used = 0;
-
-    // 인증 확인: auth context가 있으면 사용, 없으면 전달받은 userId 사용
+    // 인증 확인
     let uid: string;
     if (context.auth) {
       uid = context.auth.uid;
-      console.log(`📊 Quota requested with auth: ${uid}`);
+      console.log(`📊 [quota] User (authenticated): ${uid}`);
     } else if (data && data.userId) {
       uid = data.userId as string;
-      console.log(`📊 Quota requested with passed userId: ${uid}`);
+      console.log(`📊 [quota] User (passed userId): ${uid}`);
     } else {
-      console.log("📊 Quota requested without auth or userId - returning default");
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(0, 0, 0, 0);
-
-      return {
-        success: true,
-        data: {
-          remaining: dailyQuota,
-          total: dailyQuota,
-          used: 0,
-          resetAt: tomorrow.toISOString(),
-          nextResetIn: Math.floor((tomorrow.getTime() - Date.now()) / 1000),
-        },
-      };
+      console.log("📊 [quota] No user - returning free tier default");
+      const config = TIER_CONFIG.free;
+      return buildQuotaResponse(config.dailyQuota, 0, "free");
     }
 
+    // 사용자 등급 조회
+    const tier = await getUserTier(uid);
+    const config = TIER_CONFIG[tier];
+
+    console.log(`📊 [quota] Tier: ${tier}, Quota: ${config.dailyQuota}, Collection: ${config.collection}`);
+
+    let used = 0;
+
     try {
-      const usageRef = db.collection("imageUsage").doc(uid);
+      const usageRef = db.collection(config.collection).doc(uid);
       const usageDoc = await usageRef.get();
 
       if (usageDoc.exists) {
@@ -47,24 +85,34 @@ export const quota = functions
         }
       }
 
-      console.log(`📊 Quota for user ${uid}: used=${used}, total=${dailyQuota}`);
+      console.log(`📊 [quota] User ${uid}: used=${used}/${config.dailyQuota}`);
     } catch (error) {
-      console.error("❌ Error fetching quota:", error);
-      // Firestore 오류 시에도 기본값 반환
+      console.error("❌ [quota] Error fetching usage:", error);
     }
 
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-
-    return {
-      success: true,
-      data: {
-        remaining: Math.max(0, dailyQuota - used),
-        total: dailyQuota,
-        used: used,
-        resetAt: tomorrow.toISOString(),
-        nextResetIn: Math.floor((tomorrow.getTime() - Date.now()) / 1000),
-      },
-    };
+    return buildQuotaResponse(config.dailyQuota, used, tier);
   });
+
+/**
+ * 할당량 응답 생성
+ */
+function buildQuotaResponse(total: number, used: number, tier: UserTier) {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+
+  return {
+    success: true,
+    data: {
+      remaining: Math.max(0, total - used),
+      total: total,
+      used: used,
+      resetAt: tomorrow.toISOString(),
+      nextResetIn: Math.floor((tomorrow.getTime() - Date.now()) / 1000),
+      // 프리미엄 통합을 위한 추가 필드
+      tier: tier,
+      tierDisplayName: tier === "premium" ? "프리미엄" : "무료",
+      provider: TIER_CONFIG[tier].provider,
+    },
+  };
+}

@@ -171,6 +171,146 @@ class ImageGenerationService {
     }
   }
 
+  /// 무료 사용자용 스티커 생성
+  ///
+  /// [request] 스티커 생성 요청
+  ///
+  /// Returns: 스티커 응답 (Base64 인코딩된 WebP 이미지 포함)
+  ///
+  /// genStickerFree Cloud Function 호출 (Pixazo → OpenAI 폴백)
+  /// 응답에 provider, estimatedCost, attempts 정보 포함
+  ///
+  /// Throws:
+  /// - [FirebaseFunctionsException] API 호출 실패
+  /// - [FormatException] 응답 파싱 실패
+  Future<StickerResponse> generateStickerFree(StickerRequest request) async {
+    try {
+      debugPrint('🎨 [STICKER-FREE] Generating sticker for petId: ${request.petId}');
+      debugPrint('   - Breed: ${request.breed}');
+      debugPrint('   - Color: ${request.color}');
+      debugPrint('   - Accessory: ${request.accessory.name}');
+      debugPrint('   - Style: ${request.style.name}');
+      debugPrint('   - Size: ${request.size}');
+      debugPrint('   - Force: ${request.force}');
+
+      // 인증 확인 및 필요시 재인증
+      await _ensureAuthenticated();
+
+      // Phase 4: 로컬 캐시 확인 (force=false일 때만)
+      if (!request.force && cacheService != null) {
+        final cachedImage = await cacheService!.getCachedImage(request);
+        if (cachedImage != null) {
+          debugPrint('✅ Using cached image (local)');
+          final base64Image = base64Encode(cachedImage);
+          return StickerResponse(
+            success: true,
+            data: StickerData(
+              imageBase64: base64Image,
+              mime: 'image/webp',
+              seed: 0, // 캐시에서는 seed 알 수 없음
+              cached: true,
+              size: StickerSize(width: request.size, height: request.size),
+              metadata: StickerMetadata(
+                breed: request.breed,
+                color: request.color,
+                accessory: _accessoryToString(request.accessory),
+                style: _styleToString(request.style),
+              ),
+              provider: 'cache',
+              providerName: 'Local Cache',
+              estimatedCost: 0,
+            ),
+          );
+        }
+      }
+
+      // Phase 4: 네트워크 연결 확인
+      final connectivityResult = await Connectivity().checkConnectivity();
+      final isOffline = connectivityResult.contains(ConnectivityResult.none);
+
+      if (isOffline) {
+        debugPrint('❌ Network offline - cannot generate new sticker');
+        throw ImageGenerationException(
+          code: 'offline',
+          message: 'No internet connection. Please check your network and try again.',
+        );
+      }
+
+      // Cloud Functions 호출 - genStickerFree (Pixazo → OpenAI 폴백)
+      debugPrint('📞 [STICKER-FREE] Calling Cloud Functions (genStickerFree)...');
+      final callable = _functions.httpsCallable('genStickerFree');
+
+      final user = FirebaseAuth.instance.currentUser;
+      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
+
+      final result = await _callWithRetry(() async {
+        debugPrint('📡 [STICKER-FREE] Making API call to genStickerFree');
+        return await callable.call<Map<String, dynamic>>({
+          'petId': request.petId,
+          'breed': request.breed,
+          'color': request.color,
+          'accessory': _accessoryToString(request.accessory),
+          'style': _styleToString(request.style),
+          'size': request.size,
+          'bg': _backgroundToString(request.bg),
+          if (request.seed != null) 'seed': request.seed,
+          'force': request.force,
+          'userId': user?.uid, // auth context 우회
+        });
+      });
+
+      debugPrint('📦 [STICKER-FREE] Received result from Cloud Functions');
+
+      // result.data는 Map<Object?, Object?>이므로 깊은 복사로 변환
+      final rawData = result.data as Map;
+      final data = _deepCopyMap(rawData);
+      debugPrint('✅ [STICKER-FREE] Data deep copy successful');
+      debugPrint('   - Data keys: ${data.keys.join(", ")}');
+
+      final response = StickerResponse.fromJson(data);
+      debugPrint('✅ [STICKER-FREE] Response parsing successful');
+
+      debugPrint('✅ Sticker generated successfully (Free tier)');
+      debugPrint('   - Provider: ${response.data.provider ?? "unknown"}');
+      debugPrint('   - Cost: \$${response.data.estimatedCost ?? 0}');
+      debugPrint('   - Cached: ${response.data.cached}');
+      debugPrint('   - Seed: ${response.data.seed}');
+      debugPrint('   - Size: ${response.data.size.width}x${response.data.size.height}');
+
+      // Phase 4: 로컬 캐시에 저장 (백엔드에서 캐시 미스인 경우만)
+      if (!response.data.cached && cacheService != null) {
+        final imageBytes = decodeBase64Image(response.data.imageBase64);
+        await cacheService!.cacheImage(
+          request,
+          imageBytes,
+          seed: response.data.seed,
+        );
+        debugPrint('💾 Image saved to local cache');
+      }
+
+      return response;
+    } on FirebaseFunctionsException catch (e) {
+      debugPrint('❌ [STICKER-FREE] FirebaseFunctionsException: ${e.code}');
+      debugPrint('   Message: ${e.message}');
+      debugPrint('   Details: ${e.details}');
+
+      throw ImageGenerationException(
+        code: e.code,
+        message: e.message ?? 'Unknown error',
+        details: e.details,
+      );
+    } catch (e, stackTrace) {
+      debugPrint('❌ [STICKER-FREE] Unexpected error: $e');
+      debugPrint('   Type: ${e.runtimeType}');
+      debugPrint('   Stack trace: $stackTrace');
+
+      throw ImageGenerationException(
+        code: 'unknown',
+        message: e.toString(),
+      );
+    }
+  }
+
   /// Base64 이미지 디코딩
   ///
   /// [base64String] Base64 인코딩된 이미지

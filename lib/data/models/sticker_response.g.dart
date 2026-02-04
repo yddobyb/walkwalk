@@ -30,6 +30,12 @@ _$StickerDataImpl _$$StickerDataImplFromJson(Map<String, dynamic> json) =>
       metadata: json['metadata'] == null
           ? null
           : StickerMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
+      provider: json['provider'] as String?,
+      providerName: json['providerName'] as String?,
+      estimatedCost: (json['estimatedCost'] as num?)?.toDouble(),
+      attempts: (json['attempts'] as List<dynamic>?)
+          ?.map((e) => ProviderAttempt.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$StickerDataImplToJson(_$StickerDataImpl instance) =>
@@ -40,6 +46,10 @@ Map<String, dynamic> _$$StickerDataImplToJson(_$StickerDataImpl instance) =>
       'cached': instance.cached,
       'size': instance.size,
       'metadata': instance.metadata,
+      'provider': instance.provider,
+      'providerName': instance.providerName,
+      'estimatedCost': instance.estimatedCost,
+      'attempts': instance.attempts,
     };
 
 _$StickerSizeImpl _$$StickerSizeImplFromJson(Map<String, dynamic> json) =>
@@ -70,4 +80,22 @@ Map<String, dynamic> _$$StickerMetadataImplToJson(
       'color': instance.color,
       'accessory': instance.accessory,
       'style': instance.style,
+    };
+
+_$ProviderAttemptImpl _$$ProviderAttemptImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ProviderAttemptImpl(
+      provider: json['provider'] as String,
+      success: json['success'] as bool,
+      durationMs: (json['durationMs'] as num).toInt(),
+      error: json['error'] as String?,
+    );
+
+Map<String, dynamic> _$$ProviderAttemptImplToJson(
+        _$ProviderAttemptImpl instance) =>
+    <String, dynamic>{
+      'provider': instance.provider,
+      'success': instance.success,
+      'durationMs': instance.durationMs,
+      'error': instance.error,
     };

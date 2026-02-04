@@ -40,6 +40,17 @@ class QuotaData with _$QuotaData {
 
     /// 리셋까지 남은 시간 (초)
     @JsonKey(name: 'nextResetIn') required int nextResetIn,
+
+    // === 프리미엄 통합을 위한 추가 필드 ===
+
+    /// 사용자 등급 (free, premium)
+    @Default('free') String tier,
+
+    /// 등급 표시 이름 (무료, 프리미엄)
+    @Default('무료') String tierDisplayName,
+
+    /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+    @Default('pixazo') String provider,
   }) = _QuotaData;
 
   factory QuotaData.fromJson(Map<String, dynamic> json) =>
@@ -71,4 +82,32 @@ extension QuotaDataX on QuotaData {
 
   /// 리셋 시간 DateTime
   DateTime get resetAtDateTime => DateTime.parse(resetAt);
+
+  // === 프리미엄 통합을 위한 헬퍼 메서드 ===
+
+  /// 프리미엄 사용자 여부
+  bool get isPremium => tier == 'premium';
+
+  /// 무료 사용자 여부
+  bool get isFree => tier == 'free';
+
+  /// Provider 표시 이름
+  String get providerDisplayName {
+    switch (provider) {
+      case 'gemini':
+        return 'Gemini (고품질)';
+      case 'pixazo':
+        return 'Pixazo';
+      case 'openai':
+        return 'OpenAI';
+      default:
+        return provider;
+    }
+  }
+
+  /// 등급 아이콘 이모지
+  String get tierEmoji => isPremium ? '💎' : '🆓';
+
+  /// 등급 색상 (Hex)
+  int get tierColorValue => isPremium ? 0xFFFFD700 : 0xFF4CAF50;
 }
