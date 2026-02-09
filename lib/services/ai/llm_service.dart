@@ -1,59 +1,70 @@
 // lib/services/ai/llm_service.dart
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../../core/config/api_config.dart';
 import '../analytics/analytics_service.dart';
 import '../network/connectivity_service.dart';
 import 'fallback_responses.dart';
+import 'providers/llm_provider.dart';
 import 'rate_limiter.dart';
 
-/// OpenRouter API 기반 LLM 서비스
+/// LLM 서비스 - 4-tier fallback chain
 ///
-/// Week 3: 클라우드 AI 대화 시스템
-/// - Mistral Devstral 2512 모델 사용 (코딩 전문)
-/// - HTTP POST 요청으로 OpenRouter API 호출
-/// - 15초 타임아웃
-/// - 자동 폴백 (에러 시 FallbackResponses 사용)
-/// - 레이트 리밋 관리 (일일 80회, 시간당 20회)
-/// - 네트워크 체크 (인터넷 연결 확인 후 API 호출)
+/// Provider 체인:
+/// 1. OpenRouter Free (자동 라우터) → 8초
+/// 2. Groq Free (Llama 3.3 70B) → 5초
+/// 3. Gemini Flash-Lite (Google) → 8초
+/// 4. 규칙 기반 폴백 (오프라인)
 class LLMService {
   final FallbackResponses _fallbackResponses;
   final RateLimiter _rateLimiter;
   final ConnectivityService? _connectivityService;
-  String? _apiKey;
+  final List<LlmProvider> _providers;
   bool _isInitialized = false;
+
+  /// 마지막으로 사용된 Provider (analytics용)
+  LlmProviderType? _lastUsedProvider;
+  int _lastAttempts = 0;
 
   LLMService({
     required FallbackResponses fallbackResponses,
     required RateLimiter rateLimiter,
     ConnectivityService? connectivityService,
+    List<LlmProvider> providers = const [],
   })  : _fallbackResponses = fallbackResponses,
         _rateLimiter = rateLimiter,
-        _connectivityService = connectivityService;
+        _connectivityService = connectivityService,
+        _providers = providers;
 
-  /// 서비스 초기화 (API 키 로드)
+  /// 서비스 초기화 (모든 Provider 초기화)
   ///
-  /// 앱 시작 시 또는 첫 사용 전 호출 필요
+  /// 1개 이상의 Provider가 성공하면 서비스 ready
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    try {
-      _apiKey = await ApiConfig.getOpenRouterApiKey();
+    int successCount = 0;
+    for (final provider in _providers) {
+      final ok = await provider.initialize();
+      if (ok) successCount++;
+    }
 
-      // API 키 유효성 검증
-      if (!ApiConfig.isValidApiKey(_apiKey)) {
-        debugPrint('⚠️ LLMService - Invalid API key format');
-        _isInitialized = false;
-        return;
-      }
-
+    if (successCount > 0) {
       _isInitialized = true;
-      debugPrint('✅ LLMService - Initialized with OpenRouter API');
-    } catch (e) {
-      debugPrint('❌ LLMService - Initialization failed: $e');
+      debugPrint(
+        '✅ LLMService - Initialized '
+        '($successCount/${_providers.length} providers)',
+      );
+    } else if (_providers.isEmpty) {
+      // Provider 없이도 레거시 호환을 위해 초기화 성공 처리
+      _isInitialized = true;
+      debugPrint(
+        '⚠️ LLMService - No providers, fallback only',
+      );
+    } else {
+      debugPrint(
+        '❌ LLMService - All providers failed',
+      );
       _isInitialized = false;
     }
   }
@@ -61,50 +72,62 @@ class LLMService {
   /// 초기화 상태 확인
   bool get isInitialized => _isInitialized;
 
-  /// AI 응답 생성
+  /// 마지막 사용된 Provider 타입
+  LlmProviderType? get lastUsedProvider =>
+      _lastUsedProvider;
+
+  /// 마지막 시도 횟수
+  int get lastAttempts => _lastAttempts;
+
+  /// AI 응답 생성 (Provider 체인 순회)
   ///
-  /// [systemPrompt]: 시스템 메시지 (강아지 성격, 역할 정의)
-  /// [userMessage]: 사용자 메시지 (컨텍스트 기반)
-  /// [maxTokens]: 최대 토큰 수 (기본: 100)
-  /// [temperature]: 창의성 (0.0~1.0, 기본: 0.7)
-  ///
-  /// Returns: AI 응답 문자열
-  ///
-  /// Throws: Exception - API 키 없음, 네트워크 연결 실패, 레이트 리밋 초과, API 에러 등
+  /// 네트워크/레이트리밋 체크 → Provider 순회 → 성공 시 즉시 return
+  /// 모두 실패 시 Exception throw
   Future<String> generateResponse({
     required String systemPrompt,
     required String userMessage,
     int? maxTokens,
     double? temperature,
   }) async {
-    // API 키가 없으면 예외 발생
-    if (!_isInitialized || _apiKey == null) {
-      debugPrint('⚠️ LLMService - Not initialized');
+    if (!_isInitialized) {
       throw Exception('LLM not initialized');
     }
 
-    // 네트워크 연결 체크
+    // 네트워크 연결 체크 (1회만)
     if (_connectivityService != null) {
-      final isConnected = await _connectivityService!.isConnected();
+      final isConnected =
+          await _connectivityService.isConnected();
       if (!isConnected) {
-        final connectionType = await _connectivityService!.getConnectionTypeString();
-        debugPrint('📡 LLMService - No internet connection ($connectionType)');
+        final connectionType = await _connectivityService
+            .getConnectionTypeString();
+        debugPrint(
+          '📡 LLMService - No internet ($connectionType)',
+        );
         throw Exception('No internet connection');
       }
-
-      // WiFi vs 모바일 데이터 로그
       if (ApiConfig.enableDebugLogs) {
-        final isWifi = await _connectivityService!.isWifi();
-        debugPrint('📡 LLMService - Connected via ${isWifi ? "WiFi" : "Mobile Data"}');
+        final isWifi =
+            await _connectivityService.isWifi();
+        debugPrint(
+          '📡 LLMService - '
+          '${isWifi ? "WiFi" : "Mobile Data"}',
+        );
       }
     }
 
-    // 레이트 리밋 체크
-    final canProceed = await _rateLimiter.canMakeRequest();
+    // 레이트 리밋 체크 (1회만)
+    final canProceed =
+        await _rateLimiter.canMakeRequest();
     if (!canProceed) {
-      final dailyRemaining = await _rateLimiter.getRemainingDailyQuota();
-      final hourlyRemaining = await _rateLimiter.getRemainingHourlyQuota();
-      debugPrint('🚫 LLMService - Rate limit exceeded (daily: $dailyRemaining, hourly: $hourlyRemaining)');
+      final dailyRemaining =
+          await _rateLimiter.getRemainingDailyQuota();
+      final hourlyRemaining =
+          await _rateLimiter.getRemainingHourlyQuota();
+      debugPrint(
+        '🚫 LLMService - Rate limit exceeded '
+        '(daily: $dailyRemaining, '
+        'hourly: $hourlyRemaining)',
+      );
       throw Exception('Rate limit exceeded');
     }
 
@@ -112,58 +135,73 @@ class LLMService {
     await _rateLimiter.incrementDailyCount();
     await _rateLimiter.incrementHourlyCount();
 
-    final response = await http
-        .post(
-          Uri.parse('${ApiConfig.openRouterBaseUrl}/chat/completions'),
-          headers: ApiConfig.getHeaders(_apiKey!),
-          body: jsonEncode({
-            'model': ApiConfig.model,
-            'messages': [
-              {'role': 'system', 'content': systemPrompt},
-              {'role': 'user', 'content': userMessage},
-            ],
-            'max_tokens': maxTokens ?? ApiConfig.maxTokens,
-            'temperature': temperature ?? ApiConfig.temperature,
-          }),
-        )
-        .timeout(
-          Duration(seconds: ApiConfig.requestTimeout),
-          onTimeout: () {
-            debugPrint('⏱️ LLMService - Request timeout');
-            throw Exception('Request timeout');
-          },
+    // Provider 체인 순회
+    final initializedProviders = _providers
+        .where((p) => p.isInitialized)
+        .toList();
+
+    if (initializedProviders.isEmpty) {
+      throw Exception('No LLM providers available');
+    }
+
+    int attempt = 0;
+    for (final provider in initializedProviders) {
+      attempt++;
+      final startMs = DateTime.now().millisecondsSinceEpoch;
+      try {
+        debugPrint(
+          '🔄 LLMService - Trying ${provider.displayName} '
+          '($attempt/${initializedProviders.length})',
+        );
+        final response = await provider.generateResponse(
+          systemPrompt: systemPrompt,
+          userMessage: userMessage,
+          maxTokens: maxTokens,
+          temperature: temperature,
         );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final content = data['choices'][0]['message']['content'] as String;
+        // 추론 모델 응답 필터링
+        final cleaned = _filterThinkingBlocks(response);
+        final elapsed =
+            DateTime.now().millisecondsSinceEpoch -
+                startMs;
 
-      // DeepSeek R1 응답 필터링 (DeepSeek 모델에만 적용)
-      final cleanedContent = ApiConfig.model.contains('deepseek')
-          ? _filterDeepSeekThinking(content)
-          : content;
+        _lastUsedProvider = provider.type;
+        _lastAttempts = attempt;
+        debugPrint(
+          '✅ LLMService - ${provider.displayName} '
+          'succeeded (${elapsed}ms)',
+        );
 
-      if (ApiConfig.enableDebugLogs) {
-        debugPrint('✅ LLMService - Generated: ${cleanedContent.substring(0, cleanedContent.length > 50 ? 50 : cleanedContent.length)}...');
+        if (ApiConfig.enableDebugLogs) {
+          final preview = cleaned.length > 80
+              ? cleaned.substring(0, 80)
+              : cleaned;
+          debugPrint('✅ LLMService - Generated: $preview');
+        }
+
+        return cleaned.trim();
+      } catch (e) {
+        final elapsed =
+            DateTime.now().millisecondsSinceEpoch -
+                startMs;
+        debugPrint(
+          '⚠️ LLMService - ${provider.displayName} '
+          'failed (${elapsed}ms): $e',
+        );
+        // 다음 Provider 시도
       }
-
-      return cleanedContent.trim();
-    } else {
-      debugPrint('❌ LLMService - API Error ${response.statusCode}: ${response.body}');
-      throw Exception('API Error: ${response.statusCode}');
     }
+
+    // 모든 Provider 실패
+    _lastUsedProvider = LlmProviderType.fallback;
+    _lastAttempts = attempt;
+    throw Exception(
+      'All ${initializedProviders.length} providers failed',
+    );
   }
 
   /// 컨텍스트 기반 대화 생성
-  ///
-  /// [dogName]: 강아지 이름
-  /// [dogBreed]: 강아지 품종
-  /// [happinessLevel]: 행복도 (0-100)
-  /// [context]: 대화 컨텍스트
-  /// [contextData]: 컨텍스트별 추가 데이터
-  /// [locale]: 언어 설정 ('ko' 또는 'en')
-  ///
-  /// Returns: 강아지의 응답
   Future<String> generateDialogue({
     required String dogName,
     required String dogBreed,
@@ -172,7 +210,6 @@ class LLMService {
     Map<String, dynamic>? contextData,
     required String locale,
   }) async {
-    // Analytics: LLM 요청 시작 이벤트
     await AnalyticsService.logLlmRequestStarted(
       context: context,
       dogName: dogName,
@@ -186,32 +223,29 @@ class LLMService {
     String? errorMessage;
 
     try {
-      // 시스템 프롬프트 생성
       final systemPrompt = _buildSystemPrompt(
         dogName: dogName,
         dogBreed: dogBreed,
         happinessLevel: happinessLevel,
         locale: locale,
       );
-
-      // 사용자 메시지 생성
       final userMessage = _buildUserMessage(
         context: context,
         contextData: contextData,
         locale: locale,
       );
 
-      // API 호출 (실패 시 자동 폴백)
       final response = await generateResponse(
         systemPrompt: systemPrompt,
         userMessage: userMessage,
       );
 
-      // 폴백 사용 여부 확인 (FallbackResponses에서 온 응답인지)
-      usedFallback = _fallbackResponses.isFromFallback(response);
+      usedFallback =
+          _fallbackResponses.isFromFallback(response);
 
-      // Analytics: LLM 요청 완료 이벤트
-      final responseTimeMs = DateTime.now().difference(startTime).inMilliseconds;
+      final responseTimeMs = DateTime.now()
+          .difference(startTime)
+          .inMilliseconds;
       await AnalyticsService.logLlmRequestCompleted(
         context: context,
         responseTimeMs: responseTimeMs,
@@ -232,7 +266,6 @@ class LLMService {
       errorType = 'exception';
       errorMessage = e.toString();
 
-      // Analytics: LLM 요청 실패 이벤트
       await AnalyticsService.logLlmRequestFailed(
         context: context,
         errorType: errorType,
@@ -245,14 +278,15 @@ class LLMService {
         reason: errorType,
       );
 
-      // 폴백 응답 반환 (컨텍스트 유지)
-      return _fallbackResponses.getResponse(context, contextData, locale);
+      return _fallbackResponses.getResponse(
+        context,
+        contextData,
+        locale,
+      );
     }
   }
 
   /// 시스템 프롬프트 생성
-  ///
-  /// 강아지의 성격, 역할, 말투를 정의
   String _buildSystemPrompt({
     required String dogName,
     required String dogBreed,
@@ -275,7 +309,6 @@ class LLMService {
 5. 산책과 간식을 좋아하는 강아지답게 행동하세요
 ''';
     } else {
-      // 영어 프롬프트
       return '''
 You are a $dogBreed dog named $dogName.
 Your personality: Active, friendly, and loves your owner very much.
@@ -292,36 +325,32 @@ Rules:
   }
 
   /// 사용자 메시지 생성
-  ///
-  /// 컨텍스트에 맞는 질문/상황 설명
   String _buildUserMessage({
     required String context,
     Map<String, dynamic>? contextData,
     required String locale,
   }) {
     if (locale == 'ko') {
-      // 한국어 메시지
       switch (context) {
         case 'walk_complete':
           final steps = contextData?['steps'] ?? 0;
           final duration = contextData?['duration'] ?? 0;
-          return '방금 산책을 마쳤어요! $steps걸음을 ${duration ~/ 60}분 동안 걸었어요. 어땠어요?';
-
+          return '방금 산책을 마쳤어요! '
+              '$steps걸음을 ${duration ~/ 60}분 동안 걸었어요. '
+              '어땠어요?';
         case 'mission_complete':
           final title = contextData?['title'] ?? '미션';
           return '$title을(를) 완료했어요! 기분이 어때요?';
-
         case 'feed':
-          final treatCount = contextData?['treatCount'] ?? 0;
-          return '간식을 줬어요! 지금 총 $treatCount개의 간식이 있어요. 어때요?';
-
+          final treatCount =
+              contextData?['treatCount'] ?? 0;
+          return '간식을 줬어요! '
+              '지금 총 $treatCount개의 간식이 있어요. 어때요?';
         case 'level_up':
           final level = contextData?['level'] ?? 1;
           return '레벨업! 이제 레벨 $level이 됐어요! 축하해요!';
-
         case 'low_happiness':
           return '요즘 기분이 좀 안 좋아 보여요. 무슨 일이에요?';
-
         case 'greeting':
           final hour = DateTime.now().hour;
           if (hour < 12) {
@@ -331,7 +360,6 @@ Rules:
           } else {
             return '좋은 저녁이에요! 오늘 하루 어땠어요?';
           }
-
         case 'greeting_static':
           final hour = DateTime.now().hour;
           if (hour < 12) {
@@ -341,53 +369,55 @@ Rules:
           } else {
             return '좋은 저녁이에요! 오늘 하루 어땠어요?';
           }
-
         default:
           return '안녕! 무슨 일이에요?';
       }
     } else {
-      // 영어 메시지
       switch (context) {
         case 'walk_complete':
           final steps = contextData?['steps'] ?? 0;
           final duration = contextData?['duration'] ?? 0;
-          return 'Just finished a walk! We walked $steps steps for ${duration ~/ 60} minutes. How was it?';
-
+          return 'Just finished a walk! '
+              'We walked $steps steps for '
+              '${duration ~/ 60} minutes. How was it?';
         case 'mission_complete':
-          final title = contextData?['title'] ?? 'Mission';
+          final title =
+              contextData?['title'] ?? 'Mission';
           return 'Completed $title! How do you feel?';
-
         case 'feed':
-          final treatCount = contextData?['treatCount'] ?? 0;
-          return 'Got a treat! I now have $treatCount treats in total. How is it?';
-
+          final treatCount =
+              contextData?['treatCount'] ?? 0;
+          return 'Got a treat! '
+              'I now have $treatCount treats in total. '
+              'How is it?';
         case 'level_up':
           final level = contextData?['level'] ?? 1;
-          return 'Level up! I\'m now level $level! Congratulations!';
-
+          return 'Level up! I\'m now level $level! '
+              'Congratulations!';
         case 'low_happiness':
-          return 'You seem a bit down lately. What\'s wrong?';
-
+          return 'You seem a bit down lately. '
+              'What\'s wrong?';
         case 'greeting':
           final hour = DateTime.now().hour;
           if (hour < 12) {
-            return 'Good morning! How are you feeling today?';
+            return 'Good morning! '
+                'How are you feeling today?';
           } else if (hour < 18) {
-            return 'Good afternoon! What are you up to?';
+            return 'Good afternoon! '
+                'What are you up to?';
           } else {
             return 'Good evening! How was your day?';
           }
-
         case 'greeting_static':
           final hour = DateTime.now().hour;
           if (hour < 12) {
-            return 'Good morning! Shall we go for a walk today?';
+            return 'Good morning! '
+                'Shall we go for a walk today?';
           } else if (hour < 18) {
             return 'Good afternoon! Have a great day!';
           } else {
             return 'Good evening! How was your day?';
           }
-
         default:
           return 'Hello! What\'s up?';
       }
@@ -409,9 +439,9 @@ Rules:
         return '매우 슬픔 (외로움)';
       }
     } else {
-      // 영어
       if (happinessLevel >= 80) {
-        return 'Very Happy (Wagging tail and jumping around)';
+        return 'Very Happy '
+            '(Wagging tail and jumping around)';
       } else if (happinessLevel >= 60) {
         return 'Happy (Feeling good)';
       } else if (happinessLevel >= 40) {
@@ -424,52 +454,58 @@ Rules:
     }
   }
 
-  /// DeepSeek R1 응답 필터링
-  ///
-  /// DeepSeek R1은 reasoning model로, 때때로 응답에 생각 과정을 포함합니다.
-  /// 이 메서드는 다음과 같은 패턴을 제거합니다:
-  /// - "**생각 과정:**" 섹션
-  /// - "1. **...**" 형태의 사고 단계
-  /// - `<think>...</think>` XML 태그
-  /// - `<answer>...</answer>` XML 태그 (내용만 추출)
-  ///
-  /// [content]: 원본 API 응답
-  /// Returns: 필터링된 응답 (강아지 대화만)
-  String _filterDeepSeekThinking(String content) {
+  /// 추론 모델 응답 필터링
+  String _filterThinkingBlocks(String content) {
     String filtered = content;
 
-    // 1. <think>...</think> 태그 제거 (XML 형식)
-    filtered = filtered.replaceAll(RegExp(r'<think>.*?</think>', dotAll: true), '');
+    filtered = filtered.replaceAll(
+      RegExp(r'<think>.*?</think>', dotAll: true),
+      '',
+    );
 
-    // 2. <answer>...</answer> 태그에서 내용만 추출
-    final answerMatch = RegExp(r'<answer>(.*?)</answer>', dotAll: true).firstMatch(filtered);
+    final answerMatch = RegExp(
+      r'<answer>(.*?)</answer>',
+      dotAll: true,
+    ).firstMatch(filtered);
     if (answerMatch != null) {
       filtered = answerMatch.group(1) ?? filtered;
     }
 
-    // 3. "**생각 과정:**" 섹션 전체 제거
-    filtered = filtered.replaceAll(RegExp(r'\*\*생각 과정:?\*\*.*?(?=\n\n|\*\*|$)', dotAll: true), '');
+    filtered = filtered.replaceAll(
+      RegExp(
+        r'\*\*생각 과정:?\*\*.*?(?=\n\n|\*\*|$)',
+        dotAll: true,
+      ),
+      '',
+    );
 
-    // 4. 번호 매겨진 사고 단계 제거 (예: "1. **강아지 말투 준수**...")
-    filtered = filtered.replaceAll(RegExp(r'^\d+\.\s*\*\*.*?\*\*.*?$', multiLine: true), '');
+    filtered = filtered.replaceAll(
+      RegExp(
+        r'^\d+\.\s*\*\*.*?\*\*.*?$',
+        multiLine: true,
+      ),
+      '',
+    );
 
-    // 5. 남은 ** 볼드 마커 제거 (사고 과정 잔여물)
-    filtered = filtered.replaceAll(RegExp(r'\*\*[^*]*\*\*:?'), '');
+    filtered = filtered.replaceAll(
+      RegExp(r'\*\*[^*]*\*\*:?'),
+      '',
+    );
 
-    // 6. 빈 줄 정리 (연속된 줄바꿈 제거)
-    filtered = filtered.replaceAll(RegExp(r'\n\s*\n+'), '\n').trim();
+    filtered = filtered
+        .replaceAll(RegExp(r'\n\s*\n+'), '\n')
+        .trim();
 
-    // 7. 필터링 후 내용이 없으면 원본 반환
     if (filtered.isEmpty || filtered.length < 5) {
-      debugPrint('⚠️ LLMService - Filtering removed all content, using original');
+      debugPrint(
+        '⚠️ LLMService - Filtering removed all content',
+      );
       return content.trim();
     }
 
-    // 8. 디버그: 필터링 전후 비교
-    if (ApiConfig.enableDebugLogs && content != filtered) {
-      debugPrint('🔧 LLMService - Filtered thinking process:');
-      debugPrint('   Before: ${content.substring(0, content.length > 100 ? 100 : content.length)}...');
-      debugPrint('   After: ${filtered.substring(0, filtered.length > 100 ? 100 : filtered.length)}...');
+    if (ApiConfig.enableDebugLogs &&
+        content != filtered) {
+      debugPrint('🔧 LLMService - Filtered thinking');
     }
 
     return filtered;
@@ -477,7 +513,9 @@ Rules:
 
   /// 서비스 정리
   void dispose() {
-    _apiKey = null;
+    for (final provider in _providers) {
+      provider.dispose();
+    }
     _isInitialized = false;
     debugPrint('🗑️ LLMService - Disposed');
   }

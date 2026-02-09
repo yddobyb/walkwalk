@@ -27,6 +27,8 @@ class RemoteConfigService {
 
   static const Map<String, dynamic> _defaults = {
     'openrouter_api_key': '',
+    'groq_api_key': '',
+    'gemini_api_key': '',
     'rate_limit_daily': 80,
     'rate_limit_hourly': 20,
     'enable_debug_logs': false,
@@ -67,10 +69,17 @@ class RemoteConfigService {
       _isInitialized = true;
 
       debugPrint('✅ RemoteConfig - Initialized successfully');
-      debugPrint('   - API Key: ${_maskApiKey(getOpenRouterApiKey())}');
+      debugPrint(
+        '   - OpenRouter: ${_maskApiKey(getOpenRouterApiKey())}',
+      );
+      debugPrint(
+        '   - Groq: ${_maskApiKey(getGroqApiKey())}',
+      );
+      debugPrint(
+        '   - Gemini: ${_maskApiKey(getGeminiApiKey())}',
+      );
       debugPrint('   - Daily Limit: ${getRateLimitDaily()}');
       debugPrint('   - Hourly Limit: ${getRateLimitHourly()}');
-      debugPrint('   - Debug Logs: ${isDebugLogsEnabled()}');
 
       return true;
     } catch (e, stackTrace) {
@@ -119,6 +128,38 @@ class RemoteConfigService {
     } catch (e) {
       debugPrint('⚠️ RemoteConfig - Failed to get API key: $e');
       return _defaults['openrouter_api_key'] as String;
+    }
+  }
+
+  /// Groq API 키 가져오기
+  static String getGroqApiKey() {
+    if (!_isInitialized || _remoteConfig == null) {
+      return _defaults['groq_api_key'] as String;
+    }
+    try {
+      final value = _remoteConfig!.getString('groq_api_key');
+      return value.isEmpty ?
+          _defaults['groq_api_key'] as String : value;
+    } catch (e) {
+      debugPrint('⚠️ RemoteConfig - Failed to get Groq API key: $e');
+      return _defaults['groq_api_key'] as String;
+    }
+  }
+
+  /// Gemini API 키 가져오기
+  static String getGeminiApiKey() {
+    if (!_isInitialized || _remoteConfig == null) {
+      return _defaults['gemini_api_key'] as String;
+    }
+    try {
+      final value = _remoteConfig!.getString('gemini_api_key');
+      return value.isEmpty ?
+          _defaults['gemini_api_key'] as String : value;
+    } catch (e) {
+      debugPrint(
+        '⚠️ RemoteConfig - Failed to get Gemini API key: $e',
+      );
+      return _defaults['gemini_api_key'] as String;
     }
   }
 

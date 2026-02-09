@@ -4,86 +4,176 @@ import 'package:flutter/foundation.dart';
 
 import '../../services/config/remote_config_service.dart';
 
-/// OpenRouter API 설정
+/// API 설정
 ///
-/// Week 3: 클라우드 AI 대화 시스템
-/// - Mistral Devstral 2512 모델 (무료, 코딩 전문)
-/// - HTTP 기반 API 호출
-/// - 15초 타임아웃
+/// LLM 4-tier fallback chain:
+/// 1. OpenRouter Free (자동 라우터)
+/// 2. Groq Free (Llama 3.3 70B, 초고속)
+/// 3. Gemini Flash-Lite (Google 직접)
+/// 4. 규칙 기반 폴백 (오프라인)
 class ApiConfig {
-  // OpenRouter API 기본 설정
-  static const String openRouterBaseUrl = 'https://openrouter.ai/api/v1';
-  static const String model = 'mistralai/devstral-2512:free';
-  static const int requestTimeout = 15; // 초
+  // ==========================================================
+  // OpenRouter
+  // ==========================================================
+  static const String openRouterBaseUrl =
+      'https://openrouter.ai/api/v1';
+  static const String openRouterModel = 'openrouter/free';
+  static const int openRouterTimeout = 8; // 초
+
+  // ==========================================================
+  // Groq
+  // ==========================================================
+  static const String groqBaseUrl =
+      'https://api.groq.com/openai/v1';
+  static const String groqModel = 'llama-3.3-70b-versatile';
+  static const int groqTimeout = 5; // Groq는 초고속
+
+  // ==========================================================
+  // Gemini
+  // ==========================================================
+  static const String geminiBaseUrl =
+      'https://generativelanguage.googleapis.com/v1beta';
+  static const String geminiModel = 'gemini-2.0-flash-lite';
+  static const int geminiTimeout = 8; // 초
+
+  // ==========================================================
+  // 공통 설정
+  // ==========================================================
+  static const int requestTimeout = 15; // 레거시 (하위호환)
 
   // 레이트 리밋 (안전 마진 포함)
-  static const int maxDailyRequests = 80; // OpenRouter 무료: 100회/일
-  static const int maxHourlyRequests = 20; // 시간당 제한
+  static const int maxDailyRequests = 40;
+  static const int maxHourlyRequests = 15;
 
   // 응답 생성 설정
-  static const int maxTokens = 100; // 짧은 대화 유지
-  static const double temperature = 0.7; // 창의성과 일관성 균형
+  static const int maxTokens = 100;
+  static const double temperature = 0.7;
 
-  /// Firebase Remote Config에서 API 키 가져오기
-  ///
-  /// Week 3: Remote Config 우선, 환경 변수 폴백
-  ///
-  /// 우선순위:
-  /// 1. Firebase Remote Config (openrouter_api_key)
-  /// 2. 환경 변수 (--dart-define=OPENROUTER_API_KEY)
-  /// 3. 에러 발생
+  // 레거시 별칭
+  static const String model = openRouterModel;
+
+  // ==========================================================
+  // OpenRouter API 키
+  // ==========================================================
   static Future<String> getOpenRouterApiKey() async {
     try {
-      // 1. Firebase Remote Config에서 가져오기 시도
       if (RemoteConfigService.isInitialized) {
-        final remoteKey = RemoteConfigService.getOpenRouterApiKey();
+        final remoteKey =
+            RemoteConfigService.getOpenRouterApiKey();
         if (remoteKey.isNotEmpty && isValidApiKey(remoteKey)) {
-          debugPrint('✅ ApiConfig - Using API key from Firebase Remote Config');
+          debugPrint(
+            '✅ ApiConfig - OpenRouter key from Remote Config',
+          );
           return remoteKey;
-        } else if (remoteKey.isNotEmpty) {
-          debugPrint('⚠️ ApiConfig - Invalid API key from Remote Config');
         }
-      } else {
-        debugPrint('⚠️ ApiConfig - RemoteConfigService not initialized');
       }
-
-      // 2. 환경 변수로 폴백
       const envKey = String.fromEnvironment(
         'OPENROUTER_API_KEY',
         defaultValue: '',
       );
-
       if (envKey.isNotEmpty && isValidApiKey(envKey)) {
-        debugPrint('✅ ApiConfig - Using API key from environment variable');
+        debugPrint(
+          '✅ ApiConfig - OpenRouter key from env variable',
+        );
         return envKey;
-      } else if (envKey.isNotEmpty) {
-        debugPrint('⚠️ ApiConfig - Invalid API key from environment variable');
       }
-
-      // 3. API 키가 설정되지 않았으면 에러
-      debugPrint('❌ ApiConfig - OPENROUTER_API_KEY not configured');
-      debugPrint('   Set it via:');
-      debugPrint('   - Firebase Remote Config (openrouter_api_key)');
-      debugPrint('   - Environment variable: flutter run --dart-define=OPENROUTER_API_KEY=your_key');
       throw Exception('OpenRouter API key not configured');
     } catch (e) {
-      debugPrint('❌ ApiConfig - Failed to get API key: $e');
+      debugPrint('❌ ApiConfig - OpenRouter key failed: $e');
       rethrow;
     }
   }
 
-  /// API 키 유효성 검증
+  // ==========================================================
+  // Groq API 키
+  // ==========================================================
+  static Future<String> getGroqApiKey() async {
+    try {
+      if (RemoteConfigService.isInitialized) {
+        final remoteKey = RemoteConfigService.getGroqApiKey();
+        if (remoteKey.isNotEmpty &&
+            isValidGroqApiKey(remoteKey)) {
+          debugPrint(
+            '✅ ApiConfig - Groq key from Remote Config',
+          );
+          return remoteKey;
+        }
+      }
+      const envKey = String.fromEnvironment(
+        'GROQ_API_KEY',
+        defaultValue: '',
+      );
+      if (envKey.isNotEmpty && isValidGroqApiKey(envKey)) {
+        debugPrint('✅ ApiConfig - Groq key from env variable');
+        return envKey;
+      }
+      throw Exception('Groq API key not configured');
+    } catch (e) {
+      debugPrint('❌ ApiConfig - Groq key failed: $e');
+      rethrow;
+    }
+  }
+
+  // ==========================================================
+  // Gemini API 키
+  // ==========================================================
+  static Future<String> getGeminiApiKey() async {
+    try {
+      if (RemoteConfigService.isInitialized) {
+        final remoteKey =
+            RemoteConfigService.getGeminiApiKey();
+        if (remoteKey.isNotEmpty &&
+            isValidGeminiApiKey(remoteKey)) {
+          debugPrint(
+            '✅ ApiConfig - Gemini key from Remote Config',
+          );
+          return remoteKey;
+        }
+      }
+      const envKey = String.fromEnvironment(
+        'GEMINI_API_KEY',
+        defaultValue: '',
+      );
+      if (envKey.isNotEmpty && isValidGeminiApiKey(envKey)) {
+        debugPrint(
+          '✅ ApiConfig - Gemini key from env variable',
+        );
+        return envKey;
+      }
+      throw Exception('Gemini API key not configured');
+    } catch (e) {
+      debugPrint('❌ ApiConfig - Gemini key failed: $e');
+      rethrow;
+    }
+  }
+
+  // ==========================================================
+  // API 키 유효성 검증
+  // ==========================================================
+
+  /// OpenRouter API 키 검증 (sk-or- prefix)
   static bool isValidApiKey(String? key) {
     if (key == null || key.isEmpty) return false;
-    // OpenRouter API 키는 보통 "sk-or-" 로 시작
     return key.startsWith('sk-or-');
   }
 
-  /// 개발/프로덕션 환경별 설정
-  static bool get isProduction => kReleaseMode;
-  static bool get enableDebugLogs => kDebugMode;
+  /// Groq API 키 검증 (gsk_ prefix)
+  static bool isValidGroqApiKey(String? key) {
+    if (key == null || key.isEmpty) return false;
+    return key.startsWith('gsk_');
+  }
 
-  /// API 요청 헤더 생성
+  /// Gemini API 키 검증 (AIza prefix)
+  static bool isValidGeminiApiKey(String? key) {
+    if (key == null || key.isEmpty) return false;
+    return key.startsWith('AIza');
+  }
+
+  // ==========================================================
+  // 헤더 생성
+  // ==========================================================
+
+  /// OpenRouter 요청 헤더
   static Map<String, String> getHeaders(String apiKey) {
     return {
       'Authorization': 'Bearer $apiKey',
@@ -92,4 +182,25 @@ class ApiConfig {
       'Content-Type': 'application/json',
     };
   }
+
+  /// Groq 요청 헤더
+  static Map<String, String> getGroqHeaders(String apiKey) {
+    return {
+      'Authorization': 'Bearer $apiKey',
+      'Content-Type': 'application/json',
+    };
+  }
+
+  /// Gemini 요청 헤더 (API 키는 URL 파라미터로)
+  static Map<String, String> getGeminiHeaders() {
+    return {
+      'Content-Type': 'application/json',
+    };
+  }
+
+  // ==========================================================
+  // 환경
+  // ==========================================================
+  static bool get isProduction => kReleaseMode;
+  static bool get enableDebugLogs => kDebugMode;
 }
