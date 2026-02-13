@@ -1266,4 +1266,111 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walkScreenAllMissionsDone => 'All missions completed!';
+
+  @override
+  String get helpScreenTitle => 'Help';
+
+  @override
+  String get helpGettingStarted => 'Getting Started';
+
+  @override
+  String get helpGettingStartedContent =>
+      'WalkDog is an app that makes walking with your dog more fun. When you start a walk, your steps are automatically tracked and you can give treats and happiness to your virtual pet.';
+
+  @override
+  String get helpHowToWalk => 'How to Walk';
+
+  @override
+  String get helpHowToWalkContent =>
+      '1. Tap \'Indoor\' or \'Outdoor\' on the home screen or walk tab to start a walk.\n2. Outdoor walks activate GPS for bonus rewards.\n3. During the walk, your steps and time are shown in real-time.\n4. When you end the walk, rewards are automatically calculated.';
+
+  @override
+  String get helpRewards => 'Reward System';
+
+  @override
+  String get helpRewardsContent =>
+      'Walking earns treats and happiness points based on your steps. Use these rewards to level up your virtual pet and unlock new achievements. Outdoor walks earn 1.5x bonus rewards.';
+
+  @override
+  String get helpMissions => 'Missions';
+
+  @override
+  String get helpMissionsContent =>
+      'New missions are generated daily. Complete various missions like reaching your daily step goal or maintaining a walking streak to earn extra rewards.';
+
+  @override
+  String get helpAchievements => 'Achievements & Badges';
+
+  @override
+  String get helpAchievementsContent =>
+      'Earn badges by reaching special milestones. There are Bronze, Silver, Gold, and Platinum tier badges. Check your badge collection in Settings.';
+
+  @override
+  String get helpAIFeatures => 'AI Features';
+
+  @override
+  String get helpAIFeaturesContent =>
+      'The app includes AI-powered conversation features. Your pet will chat based on walking situations, and AI image generation can create pet stickers. You can toggle local AI and cloud image generation in Settings.';
+
+  @override
+  String get helpContact => 'Contact Us';
+
+  @override
+  String get helpContactContent =>
+      'If you encounter any issues or have suggestions, please contact the development team through Settings > App Info.';
+
+  @override
+  String get privacyScreenTitle => 'Privacy Policy';
+
+  @override
+  String get privacyEffectiveDate => 'Effective Date: January 1, 2025';
+
+  @override
+  String get privacyOverview => 'Overview';
+
+  @override
+  String get privacyOverviewContent =>
+      'WalkDog (the \'App\') values your privacy and protects personal information in accordance with applicable laws. This policy explains what information we collect and how we use it.';
+
+  @override
+  String get privacyDataCollection => 'Information We Collect';
+
+  @override
+  String get privacyDataCollectionContent =>
+      '• Step Data: Collected through the pedometer sensor.\n• Location Data: Collected via GPS during outdoor walks only. Not collected in indoor mode.\n• Account Info: Only minimal information required for login (email, nickname).\n• Pet Data: Virtual pet game data including level, experience, and happiness.';
+
+  @override
+  String get privacyDataUsage => 'How We Use Information';
+
+  @override
+  String get privacyDataUsageContent =>
+      '• Walk tracking and reward calculation\n• Game progress saving and synchronization\n• Mission and achievement system operation\n• AI-powered pet conversations and image generation\n• App service improvement and bug fixes';
+
+  @override
+  String get privacyDataStorage => 'Data Storage & Security';
+
+  @override
+  String get privacyDataStorageContent =>
+      'User data is securely stored in Firebase Cloud. Some data is stored locally on your device for offline use. All data transfers are encrypted.';
+
+  @override
+  String get privacyThirdParty => 'Third-Party Services';
+
+  @override
+  String get privacyThirdPartyContent =>
+      '• Firebase (Google): Authentication, data storage, cloud functions\n• AI Image Generation: Pet sticker creation (optional)\n• These services are governed by their respective privacy policies.';
+
+  @override
+  String get privacyUserRights => 'Your Rights';
+
+  @override
+  String get privacyUserRightsContent =>
+      'You can request access, modification, or deletion of your data at any time. All personal data is permanently deleted upon account deletion. Location and notification permissions can be managed in your device settings.';
+
+  @override
+  String get privacyChanges => 'Policy Changes';
+
+  @override
+  String get privacyChangesContent =>
+      'This privacy policy may be updated. Significant changes will be communicated through in-app notifications.';
 }

@@ -2389,6 +2389,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All missions completed!'**
   String get walkScreenAllMissionsDone;
+
+  /// Help screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get helpScreenTitle;
+
+  /// Getting started section title
+  ///
+  /// In en, this message translates to:
+  /// **'Getting Started'**
+  String get helpGettingStarted;
+
+  /// Getting started content
+  ///
+  /// In en, this message translates to:
+  /// **'WalkDog is an app that makes walking with your dog more fun. When you start a walk, your steps are automatically tracked and you can give treats and happiness to your virtual pet.'**
+  String get helpGettingStartedContent;
+
+  /// How to walk section title
+  ///
+  /// In en, this message translates to:
+  /// **'How to Walk'**
+  String get helpHowToWalk;
+
+  /// How to walk content
+  ///
+  /// In en, this message translates to:
+  /// **'1. Tap \'Indoor\' or \'Outdoor\' on the home screen or walk tab to start a walk.\n2. Outdoor walks activate GPS for bonus rewards.\n3. During the walk, your steps and time are shown in real-time.\n4. When you end the walk, rewards are automatically calculated.'**
+  String get helpHowToWalkContent;
+
+  /// Rewards section title
+  ///
+  /// In en, this message translates to:
+  /// **'Reward System'**
+  String get helpRewards;
+
+  /// Rewards content
+  ///
+  /// In en, this message translates to:
+  /// **'Walking earns treats and happiness points based on your steps. Use these rewards to level up your virtual pet and unlock new achievements. Outdoor walks earn 1.5x bonus rewards.'**
+  String get helpRewardsContent;
+
+  /// Missions section title
+  ///
+  /// In en, this message translates to:
+  /// **'Missions'**
+  String get helpMissions;
+
+  /// Missions content
+  ///
+  /// In en, this message translates to:
+  /// **'New missions are generated daily. Complete various missions like reaching your daily step goal or maintaining a walking streak to earn extra rewards.'**
+  String get helpMissionsContent;
+
+  /// Achievements section title
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements & Badges'**
+  String get helpAchievements;
+
+  /// Achievements content
+  ///
+  /// In en, this message translates to:
+  /// **'Earn badges by reaching special milestones. There are Bronze, Silver, Gold, and Platinum tier badges. Check your badge collection in Settings.'**
+  String get helpAchievementsContent;
+
+  /// AI features section title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Features'**
+  String get helpAIFeatures;
+
+  /// AI features content
+  ///
+  /// In en, this message translates to:
+  /// **'The app includes AI-powered conversation features. Your pet will chat based on walking situations, and AI image generation can create pet stickers. You can toggle local AI and cloud image generation in Settings.'**
+  String get helpAIFeaturesContent;
+
+  /// Contact section title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get helpContact;
+
+  /// Contact content
+  ///
+  /// In en, this message translates to:
+  /// **'If you encounter any issues or have suggestions, please contact the development team through Settings > App Info.'**
+  String get helpContactContent;
+
+  /// Privacy policy screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyScreenTitle;
+
+  /// Privacy policy effective date
+  ///
+  /// In en, this message translates to:
+  /// **'Effective Date: January 1, 2025'**
+  String get privacyEffectiveDate;
+
+  /// Privacy overview section title
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get privacyOverview;
+
+  /// Privacy overview content
+  ///
+  /// In en, this message translates to:
+  /// **'WalkDog (the \'App\') values your privacy and protects personal information in accordance with applicable laws. This policy explains what information we collect and how we use it.'**
+  String get privacyOverviewContent;
+
+  /// Data collection section title
+  ///
+  /// In en, this message translates to:
+  /// **'Information We Collect'**
+  String get privacyDataCollection;
+
+  /// Data collection content
+  ///
+  /// In en, this message translates to:
+  /// **'• Step Data: Collected through the pedometer sensor.\n• Location Data: Collected via GPS during outdoor walks only. Not collected in indoor mode.\n• Account Info: Only minimal information required for login (email, nickname).\n• Pet Data: Virtual pet game data including level, experience, and happiness.'**
+  String get privacyDataCollectionContent;
+
+  /// Data usage section title
+  ///
+  /// In en, this message translates to:
+  /// **'How We Use Information'**
+  String get privacyDataUsage;
+
+  /// Data usage content
+  ///
+  /// In en, this message translates to:
+  /// **'• Walk tracking and reward calculation\n• Game progress saving and synchronization\n• Mission and achievement system operation\n• AI-powered pet conversations and image generation\n• App service improvement and bug fixes'**
+  String get privacyDataUsageContent;
+
+  /// Data storage section title
+  ///
+  /// In en, this message translates to:
+  /// **'Data Storage & Security'**
+  String get privacyDataStorage;
+
+  /// Data storage content
+  ///
+  /// In en, this message translates to:
+  /// **'User data is securely stored in Firebase Cloud. Some data is stored locally on your device for offline use. All data transfers are encrypted.'**
+  String get privacyDataStorageContent;
+
+  /// Third party services section title
+  ///
+  /// In en, this message translates to:
+  /// **'Third-Party Services'**
+  String get privacyThirdParty;
+
+  /// Third party services content
+  ///
+  /// In en, this message translates to:
+  /// **'• Firebase (Google): Authentication, data storage, cloud functions\n• AI Image Generation: Pet sticker creation (optional)\n• These services are governed by their respective privacy policies.'**
+  String get privacyThirdPartyContent;
+
+  /// User rights section title
+  ///
+  /// In en, this message translates to:
+  /// **'Your Rights'**
+  String get privacyUserRights;
+
+  /// User rights content
+  ///
+  /// In en, this message translates to:
+  /// **'You can request access, modification, or deletion of your data at any time. All personal data is permanently deleted upon account deletion. Location and notification permissions can be managed in your device settings.'**
+  String get privacyUserRightsContent;
+
+  /// Policy changes section title
+  ///
+  /// In en, this message translates to:
+  /// **'Policy Changes'**
+  String get privacyChanges;
+
+  /// Policy changes content
+  ///
+  /// In en, this message translates to:
+  /// **'This privacy policy may be updated. Significant changes will be communicated through in-app notifications.'**
+  String get privacyChangesContent;
 }
 
 class _AppLocalizationsDelegate

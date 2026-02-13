@@ -5,6 +5,9 @@ import '../../../core/constants/app_constants.dart';
 import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
 import '../../../l10n/app_localizations.dart';
+import '../achievements/achievements_screen.dart';
+import 'help_screen.dart';
+import 'privacy_policy_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -77,9 +80,9 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: AppLocalizations.of(context).badgesDescription,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context).comingSoon),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AchievementsScreen(),
                     ),
                   );
                 },
@@ -219,9 +222,9 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: AppLocalizations.of(context).helpDescription,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context).comingSoon),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const HelpScreen(),
                     ),
                   );
                 },
@@ -232,9 +235,9 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: AppLocalizations.of(context).privacyPolicyDescription,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context).comingSoon),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PrivacyPolicyScreen(),
                     ),
                   );
                 },

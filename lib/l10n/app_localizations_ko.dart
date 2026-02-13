@@ -1239,4 +1239,111 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get walkScreenAllMissionsDone => '모든 미션을 완료했습니다!';
+
+  @override
+  String get helpScreenTitle => '도움말';
+
+  @override
+  String get helpGettingStarted => '시작하기';
+
+  @override
+  String get helpGettingStartedContent =>
+      'WalkDog은 반려견과의 산책을 더 즐겁게 만들어주는 앱입니다. 산책을 시작하면 걸음수가 자동으로 추적되고, 가상 펫에게 간식과 행복을 선물할 수 있습니다.';
+
+  @override
+  String get helpHowToWalk => '산책하는 방법';
+
+  @override
+  String get helpHowToWalkContent =>
+      '1. 홈 화면이나 산책 탭에서 \'실내\' 또는 \'실외\' 버튼을 눌러 산책을 시작하세요.\n2. 실외 산책은 GPS가 활성화되어 보너스 보상을 받을 수 있습니다.\n3. 산책 중에는 실시간으로 걸음수와 시간이 표시됩니다.\n4. 산책을 종료하면 보상이 자동으로 계산됩니다.';
+
+  @override
+  String get helpRewards => '보상 시스템';
+
+  @override
+  String get helpRewardsContent =>
+      '산책을 하면 걸음수에 따라 간식과 행복 포인트를 얻습니다. 이 보상으로 가상 펫의 레벨을 올리고 새로운 업적을 달성할 수 있습니다. 실외 산책은 1.5배 보너스 보상을 받습니다.';
+
+  @override
+  String get helpMissions => '미션';
+
+  @override
+  String get helpMissionsContent =>
+      '매일 새로운 미션이 생성됩니다. 일일 걸음수 목표 달성, 연속 산책 등 다양한 미션을 완료하면 추가 보상을 받을 수 있습니다.';
+
+  @override
+  String get helpAchievements => '업적 & 배지';
+
+  @override
+  String get helpAchievementsContent =>
+      '특별한 목표를 달성하면 배지를 획득할 수 있습니다. 브론즈, 실버, 골드, 플래티넘 등급의 배지가 있으며, 설정에서 내 배지 컬렉션을 확인할 수 있습니다.';
+
+  @override
+  String get helpAIFeatures => 'AI 기능';
+
+  @override
+  String get helpAIFeaturesContent =>
+      '앱에는 AI 기반 대화 기능이 포함되어 있습니다. 펫이 산책 상황에 맞는 대화를 나누며, AI 이미지 생성으로 펫의 스티커를 만들 수 있습니다. 설정에서 로컬 AI와 클라우드 이미지 생성을 켜거나 끌 수 있습니다.';
+
+  @override
+  String get helpContact => '문의하기';
+
+  @override
+  String get helpContactContent =>
+      '앱 사용 중 문제가 발생하거나 건의사항이 있으시면 설정 > 앱 정보에서 개발팀에 연락해 주세요.';
+
+  @override
+  String get privacyScreenTitle => '개인정보 처리방침';
+
+  @override
+  String get privacyEffectiveDate => '시행일: 2025년 1월 1일';
+
+  @override
+  String get privacyOverview => '개요';
+
+  @override
+  String get privacyOverviewContent =>
+      'WalkDog(이하 \'앱\')은 사용자의 개인정보를 소중히 여기며, 관련 법률에 따라 개인정보를 보호하고 있습니다. 본 방침은 앱이 수집하는 정보와 그 사용 방법을 설명합니다.';
+
+  @override
+  String get privacyDataCollection => '수집하는 정보';
+
+  @override
+  String get privacyDataCollectionContent =>
+      '• 걸음수 데이터: 만보기 센서를 통해 수집됩니다.\n• 위치 정보: 실외 산책 시 GPS를 통해 수집되며, 실내 모드에서는 수집하지 않습니다.\n• 계정 정보: 이메일, 닉네임 등 로그인에 필요한 최소한의 정보만 수집합니다.\n• 펫 데이터: 가상 펫의 레벨, 경험치, 행복도 등 게임 데이터를 저장합니다.';
+
+  @override
+  String get privacyDataUsage => '정보 사용 목적';
+
+  @override
+  String get privacyDataUsageContent =>
+      '• 산책 추적 및 보상 계산\n• 게임 진행 상태 저장 및 동기화\n• 미션 및 업적 시스템 운영\n• AI 기반 펫 대화 및 이미지 생성\n• 앱 서비스 개선 및 버그 수정';
+
+  @override
+  String get privacyDataStorage => '데이터 저장 및 보안';
+
+  @override
+  String get privacyDataStorageContent =>
+      '사용자 데이터는 Firebase 클라우드에 안전하게 저장됩니다. 일부 데이터는 오프라인 사용을 위해 기기 내부에 저장됩니다. 모든 데이터 전송은 암호화되어 처리됩니다.';
+
+  @override
+  String get privacyThirdParty => '제3자 서비스';
+
+  @override
+  String get privacyThirdPartyContent =>
+      '• Firebase (Google): 인증, 데이터 저장, 클라우드 함수\n• AI 이미지 생성 서비스: 펫 스티커 생성 (선택적)\n• 위 서비스들의 개인정보 처리방침은 각 서비스 제공자의 정책을 따릅니다.';
+
+  @override
+  String get privacyUserRights => '사용자 권리';
+
+  @override
+  String get privacyUserRightsContent =>
+      '사용자는 언제든지 자신의 데이터에 접근, 수정, 삭제를 요청할 수 있습니다. 계정 삭제 시 모든 개인 데이터가 영구적으로 삭제됩니다. 위치 정보 및 알림 권한은 기기 설정에서 관리할 수 있습니다.';
+
+  @override
+  String get privacyChanges => '방침 변경';
+
+  @override
+  String get privacyChangesContent =>
+      '본 개인정보 처리방침은 변경될 수 있으며, 중요한 변경 사항은 앱 내 공지를 통해 안내됩니다.';
 }
