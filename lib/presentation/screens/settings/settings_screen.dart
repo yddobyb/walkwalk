@@ -55,17 +55,6 @@ class SettingsScreen extends ConsumerWidget {
             title: AppLocalizations.of(context).gameSettings,
             children: [
               _SettingsTile(
-                icon: Icons.location_on,
-                title: AppLocalizations.of(context).outdoorMode,
-                subtitle: AppLocalizations.of(context).outdoorModeDescription,
-                trailing: Switch(
-                  value: settings.isOutdoorModeEnabled,
-                  onChanged: (value) {
-                    ref.read(settingsNotifierProvider.notifier).updateOutdoorMode(value);
-                  },
-                ),
-              ),
-              _SettingsTile(
                 icon: Icons.timer,
                 title: AppLocalizations.of(context).dailyGoal,
                 subtitle: AppLocalizations.of(context).dailyGoalSteps(settings.dailyStepGoal),
@@ -83,50 +72,6 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const AchievementsScreen(),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // AI 설정
-          _SettingsSection(
-            title: AppLocalizations.of(context).aiSettings,
-            children: [
-              _SettingsTile(
-                icon: Icons.psychology,
-                title: AppLocalizations.of(context).localAIChat,
-                subtitle: AppLocalizations.of(context).localAIChatDescription,
-                trailing: Switch(
-                  value: settings.localLLMEnabled,
-                  onChanged: (value) {
-                    ref.read(settingsNotifierProvider.notifier).updateLocalLLM(value);
-                  },
-                ),
-              ),
-              _SettingsTile(
-                icon: Icons.image,
-                title: AppLocalizations.of(context).cloudImageGeneration,
-                subtitle: AppLocalizations.of(context).cloudImageGenerationDescription,
-                trailing: Switch(
-                  value: settings.cloudImageEnabled,
-                  onChanged: (value) {
-                    ref.read(settingsNotifierProvider.notifier).updateCloudImage(value);
-                  },
-                ),
-              ),
-              _SettingsTile(
-                icon: Icons.download,
-                title: AppLocalizations.of(context).aiModelManagement,
-                subtitle: AppLocalizations.of(context).aiModelManagementDescription,
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context).comingSoon),
                     ),
                   );
                 },
@@ -187,15 +132,6 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   _showLanguageDialog(context, ref, settings.locale);
-                },
-              ),
-              _SettingsTile(
-                icon: Icons.storage,
-                title: AppLocalizations.of(context).cacheManagement,
-                subtitle: AppLocalizations.of(context).cacheManagementDescription,
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  _showCacheDialog(context);
                 },
               ),
             ],
@@ -369,33 +305,6 @@ class SettingsScreen extends ConsumerWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(AppLocalizations.of(context).comingSoon),
-                ),
-              );
-            },
-            child: Text(AppLocalizations.of(context).confirm),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showCacheDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context).cacheDialogTitle),
-        content: Text(AppLocalizations.of(context).cacheDialogDescription),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context).cacheCleared),
                 ),
               );
             },
