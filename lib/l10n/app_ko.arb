@@ -2053,5 +2053,40 @@
   "achievementDistance1kmDescription": "누적 1km 산책 완료!",
   "@achievementDistance1kmDescription": {
     "description": "1km distance achievement description"
+  },
+
+  "walkScreenElapsedTime": "경과 시간",
+  "@walkScreenElapsedTime": {
+    "description": "Elapsed time label on walk screen"
+  },
+
+  "walkScreenSessionSteps": "이번 산책 걸음수",
+  "@walkScreenSessionSteps": {
+    "description": "Session steps label on walk screen"
+  },
+
+  "walkScreenOutdoorBadge": "실외",
+  "@walkScreenOutdoorBadge": {
+    "description": "Outdoor badge label on walk screen"
+  },
+
+  "walkScreenIndoorBadge": "실내",
+  "@walkScreenIndoorBadge": {
+    "description": "Indoor badge label on walk screen"
+  },
+
+  "walkScreenMotivation": "계속 걸어보세요! 모든 걸음이 보상이 됩니다!",
+  "@walkScreenMotivation": {
+    "description": "Motivational message during walk"
+  },
+
+  "walkScreenStartPrompt": "산책할 준비가 되셨나요? 모드를 선택하세요!",
+  "@walkScreenStartPrompt": {
+    "description": "Prompt to start walking"
+  },
+
+  "walkScreenAllMissionsDone": "모든 미션을 완료했습니다!",
+  "@walkScreenAllMissionsDone": {
+    "description": "All missions completed message"
   }
 }

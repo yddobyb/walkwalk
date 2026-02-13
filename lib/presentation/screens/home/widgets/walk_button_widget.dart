@@ -373,7 +373,7 @@ class WalkButtonWidget extends ConsumerWidget {
         // AI 대화 Bottom Sheet (walk_complete)
         await Future.delayed(const Duration(milliseconds: 500));
         if (context.mounted) {
-          showModalBottomSheet(
+          await showModalBottomSheet(
             context: context,
             isScrollControlled: true,
             backgroundColor: Colors.transparent,

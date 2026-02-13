@@ -1245,4 +1245,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get achievementDistance1kmDescription => 'Walked 1km in total!';
+
+  @override
+  String get walkScreenElapsedTime => 'Elapsed Time';
+
+  @override
+  String get walkScreenSessionSteps => 'Session Steps';
+
+  @override
+  String get walkScreenOutdoorBadge => 'Outdoor';
+
+  @override
+  String get walkScreenIndoorBadge => 'Indoor';
+
+  @override
+  String get walkScreenMotivation => 'Keep going! Every step earns rewards!';
+
+  @override
+  String get walkScreenStartPrompt => 'Ready to walk? Choose your mode!';
+
+  @override
+  String get walkScreenAllMissionsDone => 'All missions completed!';
 }

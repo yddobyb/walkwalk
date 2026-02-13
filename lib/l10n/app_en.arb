@@ -2070,5 +2070,40 @@
   "achievementDistance1kmDescription": "Walked 1km in total!",
   "@achievementDistance1kmDescription": {
     "description": "1km distance achievement description"
+  },
+
+  "walkScreenElapsedTime": "Elapsed Time",
+  "@walkScreenElapsedTime": {
+    "description": "Elapsed time label on walk screen"
+  },
+
+  "walkScreenSessionSteps": "Session Steps",
+  "@walkScreenSessionSteps": {
+    "description": "Session steps label on walk screen"
+  },
+
+  "walkScreenOutdoorBadge": "Outdoor",
+  "@walkScreenOutdoorBadge": {
+    "description": "Outdoor badge label on walk screen"
+  },
+
+  "walkScreenIndoorBadge": "Indoor",
+  "@walkScreenIndoorBadge": {
+    "description": "Indoor badge label on walk screen"
+  },
+
+  "walkScreenMotivation": "Keep going! Every step earns rewards!",
+  "@walkScreenMotivation": {
+    "description": "Motivational message during walk"
+  },
+
+  "walkScreenStartPrompt": "Ready to walk? Choose your mode!",
+  "@walkScreenStartPrompt": {
+    "description": "Prompt to start walking"
+  },
+
+  "walkScreenAllMissionsDone": "All missions completed!",
+  "@walkScreenAllMissionsDone": {
+    "description": "All missions completed message"
   }
 }

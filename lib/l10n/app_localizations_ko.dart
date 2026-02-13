@@ -1218,4 +1218,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get achievementDistance1kmDescription => '누적 1km 산책 완료!';
+
+  @override
+  String get walkScreenElapsedTime => '경과 시간';
+
+  @override
+  String get walkScreenSessionSteps => '이번 산책 걸음수';
+
+  @override
+  String get walkScreenOutdoorBadge => '실외';
+
+  @override
+  String get walkScreenIndoorBadge => '실내';
+
+  @override
+  String get walkScreenMotivation => '계속 걸어보세요! 모든 걸음이 보상이 됩니다!';
+
+  @override
+  String get walkScreenStartPrompt => '산책할 준비가 되셨나요? 모드를 선택하세요!';
+
+  @override
+  String get walkScreenAllMissionsDone => '모든 미션을 완료했습니다!';
 }

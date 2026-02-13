@@ -2347,6 +2347,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Walked 1km in total!'**
   String get achievementDistance1kmDescription;
+
+  /// Elapsed time label on walk screen
+  ///
+  /// In en, this message translates to:
+  /// **'Elapsed Time'**
+  String get walkScreenElapsedTime;
+
+  /// Session steps label on walk screen
+  ///
+  /// In en, this message translates to:
+  /// **'Session Steps'**
+  String get walkScreenSessionSteps;
+
+  /// Outdoor badge label on walk screen
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoor'**
+  String get walkScreenOutdoorBadge;
+
+  /// Indoor badge label on walk screen
+  ///
+  /// In en, this message translates to:
+  /// **'Indoor'**
+  String get walkScreenIndoorBadge;
+
+  /// Motivational message during walk
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going! Every step earns rewards!'**
+  String get walkScreenMotivation;
+
+  /// Prompt to start walking
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to walk? Choose your mode!'**
+  String get walkScreenStartPrompt;
+
+  /// All missions completed message
+  ///
+  /// In en, this message translates to:
+  /// **'All missions completed!'**
+  String get walkScreenAllMissionsDone;
 }
 
 class _AppLocalizationsDelegate

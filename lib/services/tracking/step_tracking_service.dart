@@ -102,6 +102,8 @@ class StepTrackingService {
   StepTrackingState get currentState => _currentState;
   int get currentDailySteps => _currentDailySteps;
   int get currentWeeklySteps => _currentWeeklySteps;
+  DateTime? get sessionStartTime => _sessionStartTime;
+  int get sessionStartSteps => _sessionStartSteps;
 
   /// 서비스 초기화
   Future<bool> initialize() async {
@@ -304,6 +306,11 @@ class StepTrackingService {
   Future<bool> startWalkSession({bool enableGPS = true}) async {
     if (!_isInitialized) {
       debugPrint('StepTrackingService - Not initialized');
+      return false;
+    }
+
+    if (_currentState == StepTrackingState.walking) {
+      debugPrint('StepTrackingService - Already walking');
       return false;
     }
 
