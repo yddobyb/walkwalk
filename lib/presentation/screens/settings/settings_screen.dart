@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
+import '../../../services/notification/notification_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
 import 'help_screen.dart';
@@ -91,18 +92,21 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: AppLocalizations.of(context).notificationsDescription,
                 trailing: Switch(
                   value: settings.notificationsEnabled,
-                  onChanged: (value) {
-                    ref.read(settingsNotifierProvider.notifier).updateNotifications(value);
+                  onChanged: (value) async {
+                    await _handleNotificationToggle(
+                      context, ref, value, settings,
+                    );
                   },
                 ),
               ),
               _SettingsTile(
                 icon: Icons.schedule,
                 title: AppLocalizations.of(context).notificationTime,
-                subtitle: AppLocalizations.of(context).notificationTimeDescription,
+                subtitle: '${AppLocalizations.of(context).notificationMorning} ${settings.morningReminderTime}, '
+                    '${AppLocalizations.of(context).notificationEvening} ${settings.eveningReminderTime}',
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  _showNotificationTimeDialog(context);
+                  _showNotificationTimeDialog(context, ref, settings);
                 },
               ),
             ],
@@ -288,31 +292,263 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showNotificationTimeDialog(BuildContext context) {
+  /// 알림 토글 변경 시 알림 스케줄/취소 처리
+  Future<void> _handleNotificationToggle(
+    BuildContext context,
+    WidgetRef ref,
+    bool enabled,
+    dynamic settings,
+  ) async {
+    final notifService = NotificationService.instance;
+    if (!notifService.isInitialized) {
+      // 서비스 미초기화 시 DB만 업데이트
+      await ref.read(settingsNotifierProvider.notifier)
+          .updateNotifications(enabled);
+      return;
+    }
+
+    if (enabled) {
+      // 권한 요청 (DB 저장 전에 먼저)
+      final granted =
+          await notifService.requestPermissions();
+      if (!granted) {
+        // 권한 거부 시 DB를 false로 유지
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)
+                    .notificationPermissionDenied,
+              ),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+        return;
+      }
+
+      // 권한 승인 후 DB 업데이트
+      await ref.read(settingsNotifierProvider.notifier)
+          .updateNotifications(true);
+
+      // 알림 스케줄
+      if (context.mounted) {
+        await _scheduleAllReminders(context, settings);
+      }
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)
+                  .notificationEnabled,
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } else {
+      // DB 업데이트
+      await ref.read(settingsNotifierProvider.notifier)
+          .updateNotifications(false);
+
+      // 모든 알림 취소
+      await notifService.cancelAll();
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)
+                  .notificationDisabled,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  /// 모든 리마인더 스케줄
+  Future<void> _scheduleAllReminders(
+    BuildContext context,
+    dynamic settings,
+  ) async {
+    final notifService = NotificationService.instance;
+    final l10n = AppLocalizations.of(context);
+
+    // 산책 리마인더 (조건부: 오늘 산책 여부 확인)
+    await notifService.scheduleConditionalReminders();
+
+    // 미션 만료 리마인더 (21:00 고정, 매일 반복)
+    await notifService.scheduleMissionExpiryReminder(
+      title: l10n.notificationMissionTitle,
+      body: l10n.notificationMissionBody,
+    );
+  }
+
+  void _showNotificationTimeDialog(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic settings,
+  ) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context).notificationTime),
-        content: Text(AppLocalizations.of(context).notificationTimeHint),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          AppLocalizations.of(context).notificationTime,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              AppLocalizations.of(context)
+                  .notificationTimeHint,
+            ),
+            const SizedBox(height: 16),
+            // 오전 알림 시간
+            ListTile(
+              leading: const Icon(Icons.wb_sunny),
+              title: Text(
+                AppLocalizations.of(context)
+                    .notificationMorning,
+              ),
+              trailing: Text(
+                settings.morningReminderTime,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              onTap: () async {
+                Navigator.of(dialogContext).pop();
+                await _pickTime(
+                  context,
+                  ref,
+                  settings,
+                  isMorning: true,
+                );
+              },
+            ),
+            const Divider(),
+            // 오후 알림 시간
+            ListTile(
+              leading: const Icon(Icons.nights_stay),
+              title: Text(
+                AppLocalizations.of(context)
+                    .notificationEvening,
+              ),
+              trailing: Text(
+                settings.eveningReminderTime,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              onTap: () async {
+                Navigator.of(dialogContext).pop();
+                await _pickTime(
+                  context,
+                  ref,
+                  settings,
+                  isMorning: false,
+                );
+              },
+            ),
+          ],
+        ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context).comingSoon),
-                ),
-              );
-            },
-            child: Text(AppLocalizations.of(context).confirm),
+            onPressed: () =>
+                Navigator.of(dialogContext).pop(),
+            child: Text(
+              AppLocalizations.of(context).close,
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _pickTime(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic settings, {
+    required bool isMorning,
+  }) async {
+    final currentTime = isMorning
+        ? settings.morningReminderTime
+        : settings.eveningReminderTime;
+    final parts = currentTime.split(':');
+    final initialHour = int.tryParse(parts[0]) ??
+        (isMorning ? 9 : 18);
+    final initialMinute = int.tryParse(parts[1]) ?? 0;
+
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: initialHour,
+        minute: initialMinute,
+      ),
+    );
+
+    if (picked == null) return;
+
+    final timeString =
+        '${picked.hour.toString().padLeft(2, '0')}:'
+        '${picked.minute.toString().padLeft(2, '0')}';
+
+    try {
+      final notifier = ref.read(
+        settingsNotifierProvider.notifier,
+      );
+      if (isMorning) {
+        await notifier.updateMorningReminderTime(
+          timeString,
+        );
+      } else {
+        await notifier.updateEveningReminderTime(
+          timeString,
+        );
+      }
+
+      // 알림이 켜져있으면 조건부 리마인더 재스케줄
+      if (settings.notificationsEnabled) {
+        final notifService =
+            NotificationService.instance;
+        if (notifService.isInitialized) {
+          await notifService
+              .scheduleConditionalReminders();
+        }
+      }
+
+      if (context.mounted) {
+        final label = isMorning
+            ? AppLocalizations.of(context)
+                .notificationMorning
+            : AppLocalizations.of(context)
+                .notificationEvening;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '$label $timeString',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)
+                  .notificationTimeUpdateError,
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   void _showAboutDialog(BuildContext context) {

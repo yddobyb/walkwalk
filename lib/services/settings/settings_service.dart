@@ -108,6 +108,40 @@ class SettingsService {
     }
   }
 
+  /// 오전 알림 시간 설정 변경
+  Future<void> updateMorningReminderTime(
+    String time,
+  ) async {
+    try {
+      final settings = await loadSettings();
+      settings.morningReminderTime = time;
+      settings.morningReminderEnabled = true;
+      await _databaseService.saveSettings(settings);
+    } catch (e) {
+      debugPrint(
+        'SettingsService - Error updating morning time: $e',
+      );
+      rethrow;
+    }
+  }
+
+  /// 오후 알림 시간 설정 변경
+  Future<void> updateEveningReminderTime(
+    String time,
+  ) async {
+    try {
+      final settings = await loadSettings();
+      settings.eveningReminderTime = time;
+      settings.eveningReminderEnabled = true;
+      await _databaseService.saveSettings(settings);
+    } catch (e) {
+      debugPrint(
+        'SettingsService - Error updating evening time: $e',
+      );
+      rethrow;
+    }
+  }
+
   /// 언어 설정 변경 (Week 3 - Localization)
   Future<void> updateLocale(String localeCode) async {
     try {
@@ -191,6 +225,20 @@ class SettingsNotifier extends StateNotifier<AsyncValue<SettingsModel>> {
 
   Future<void> updateLocale(String localeCode) async {
     await _service.updateLocale(localeCode);
+    await _loadSettings();
+  }
+
+  Future<void> updateMorningReminderTime(
+    String time,
+  ) async {
+    await _service.updateMorningReminderTime(time);
+    await _loadSettings();
+  }
+
+  Future<void> updateEveningReminderTime(
+    String time,
+  ) async {
+    await _service.updateEveningReminderTime(time);
     await _loadSettings();
   }
 }

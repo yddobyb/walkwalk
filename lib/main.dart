@@ -15,6 +15,7 @@ import 'services/pet/happiness_scheduler_service.dart';
 import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
 import 'services/ai/ai_providers.dart';
+import 'services/notification/notification_service.dart';
 import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
@@ -49,6 +50,17 @@ void main() async {
 
   // 데이터베이스 초기화
   await DatabaseService.instance;
+
+  // 알림 서비스 초기화 (행복도 스케줄러가 알림을 사용하므로 먼저)
+  final notifService = NotificationService.instance;
+  await notifService.initialize().catchError((error) {
+    debugPrint('❌ Notification service initialization failed: $error');
+    return null;
+  });
+
+  // 조건부 산책 리마인더 스케줄 + 자정 타이머
+  await notifService.scheduleConditionalReminders();
+  notifService.startMidnightRescheduleTimer();
 
   // 행복도 스케줄러 초기화 (StepTrackingService보다 먼저)
   await HappinessSchedulerService.instance.initialize().catchError((error) {

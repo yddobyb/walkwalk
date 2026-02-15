@@ -1319,8 +1319,92 @@ abstract class AppLocalizations {
   /// Notification time setting hint
   ///
   /// In en, this message translates to:
-  /// **'Set morning and evening notification times'**
+  /// **'Tap to change morning and evening notification times'**
   String get notificationTimeHint;
+
+  /// Morning notification label
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get notificationMorning;
+
+  /// Evening notification label
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get notificationEvening;
+
+  /// Notification enabled confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get notificationEnabled;
+
+  /// Notification disabled confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications disabled'**
+  String get notificationDisabled;
+
+  /// Notification permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission denied. Please allow in device settings.'**
+  String get notificationPermissionDenied;
+
+  /// Notification time update error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating notification time'**
+  String get notificationTimeUpdateError;
+
+  /// Morning walk notification title
+  ///
+  /// In en, this message translates to:
+  /// **'Time for a walk!'**
+  String get notificationMorningTitle;
+
+  /// Morning walk notification body
+  ///
+  /// In en, this message translates to:
+  /// **'Start a healthy walk today!'**
+  String get notificationMorningBody;
+
+  /// Evening walk notification title
+  ///
+  /// In en, this message translates to:
+  /// **'Have you walked today?'**
+  String get notificationEveningTitle;
+
+  /// Evening walk notification body
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s still time. Start your walk!'**
+  String get notificationEveningBody;
+
+  /// Mission expiry notification title
+  ///
+  /// In en, this message translates to:
+  /// **'You have incomplete missions!'**
+  String get notificationMissionTitle;
+
+  /// Mission expiry notification body
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s missions expire in 3 hours. Check them now!'**
+  String get notificationMissionBody;
+
+  /// Low happiness notification title
+  ///
+  /// In en, this message translates to:
+  /// **'{petName} is feeling sad 😢'**
+  String notificationLowHappinessTitle(String petName);
+
+  /// Low happiness notification body
+  ///
+  /// In en, this message translates to:
+  /// **'Happiness dropped to {happiness}%. Go for a walk or give treats!'**
+  String notificationLowHappinessBody(int happiness);
 
   /// Language change error message
   ///

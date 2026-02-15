@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/constants/app_constants.dart';
+import '../../data/datasources/database_service.dart';
+import '../notification/notification_service.dart';
 import 'pet_reward_service.dart';
 
 /// 펫의 행복도 일일 감소 스케줄러
@@ -81,12 +82,61 @@ class HappinessSchedulerService {
       final activePet = await _rewardService.getActivePet();
       if (activePet == null) return;
 
-      final updatedPet = await _rewardService.applyDailyHappinessDecay(activePet.petId);
-      if (updatedPet != null && updatedPet.happiness <= AppConstants.minHappiness + 10) {
-        debugPrint('⚠️ Pet happiness is getting low: ${updatedPet.happiness}');
+      final updatedPet = await _rewardService
+          .applyDailyHappinessDecay(activePet.petId);
+      if (updatedPet != null &&
+          updatedPet.happiness <= 30) {
+        debugPrint(
+          '⚠️ Pet happiness is low: '
+          '${updatedPet.happiness}',
+        );
+        // 알림 설정이 켜져있으면 푸시 알림 발송
+        await _sendLowHappinessNotification(
+          updatedPet.name,
+          updatedPet.happiness,
+        );
       }
     } catch (e) {
       debugPrint('❌ Error applying daily decay: $e');
+    }
+  }
+
+  /// 행복도 낮음 푸시 알림 발송
+  Future<void> _sendLowHappinessNotification(
+    String petName,
+    int happiness,
+  ) async {
+    try {
+      // 알림 설정 확인
+      final dbService = DatabaseService();
+      final settings = await dbService.getSettings();
+      if (settings == null ||
+          !settings.notificationsEnabled) {
+        return;
+      }
+
+      final notifService = NotificationService.instance;
+      if (!notifService.isInitialized) return;
+
+      // locale에 따라 메시지 결정
+      final isKorean = settings.locale == 'ko';
+      final title = isKorean
+          ? '$petName이(가) 슬퍼하고 있어요 😢'
+          : '$petName is feeling sad 😢';
+      final body = isKorean
+          ? '행복도가 $happiness%로 낮아졌어요. '
+              '산책이나 간식으로 기운을 내주세요!'
+          : 'Happiness dropped to $happiness%. '
+              'Go for a walk or give treats!';
+
+      await notifService.showLowHappinessAlert(
+        title: title,
+        body: body,
+      );
+    } catch (e) {
+      debugPrint(
+        '❌ Error sending low happiness notification: $e',
+      );
     }
   }
 

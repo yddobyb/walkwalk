@@ -13,6 +13,7 @@ import '../pet/pet_reward_service.dart';
 import '../achievement/achievement_service.dart';
 import '../location/location_service.dart';
 import '../mission/mission_service.dart';
+import '../notification/notification_service.dart';
 import '../../domain/entities/mission.dart';
 
 /// 걸음수 트래킹 및 펫 상태 업데이트 서비스
@@ -440,6 +441,10 @@ class StepTrackingService {
 
       // 데이터베이스에 저장
       await _databaseService.saveWalkSession(updatedWalkSession);
+
+      // 산책 완료 → 오늘 남은 산책 리마인더 취소
+      await NotificationService.instance
+          .cancelTodayWalkReminders();
 
       // 펫 상태 업데이트 (보상 적용)
       if (_currentPet != null) {

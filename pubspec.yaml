@@ -80,6 +80,11 @@ dependencies:
   # Network (Week 3 - Optimization)
   connectivity_plus: ^6.1.2
 
+  # Local Notifications (Week 5.5 - Push Notifications)
+  flutter_local_notifications: ^19.0.0
+  timezone: ^0.10.0
+  flutter_timezone: ^3.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

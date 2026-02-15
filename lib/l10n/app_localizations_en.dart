@@ -678,7 +678,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationTimeHint =>
-      'Set morning and evening notification times';
+      'Tap to change morning and evening notification times';
+
+  @override
+  String get notificationMorning => 'Morning';
+
+  @override
+  String get notificationEvening => 'Evening';
+
+  @override
+  String get notificationEnabled => 'Notifications enabled';
+
+  @override
+  String get notificationDisabled => 'Notifications disabled';
+
+  @override
+  String get notificationPermissionDenied =>
+      'Notification permission denied. Please allow in device settings.';
+
+  @override
+  String get notificationTimeUpdateError => 'Error updating notification time';
+
+  @override
+  String get notificationMorningTitle => 'Time for a walk!';
+
+  @override
+  String get notificationMorningBody => 'Start a healthy walk today!';
+
+  @override
+  String get notificationEveningTitle => 'Have you walked today?';
+
+  @override
+  String get notificationEveningBody => 'There\'s still time. Start your walk!';
+
+  @override
+  String get notificationMissionTitle => 'You have incomplete missions!';
+
+  @override
+  String get notificationMissionBody =>
+      'Today\'s missions expire in 3 hours. Check them now!';
+
+  @override
+  String notificationLowHappinessTitle(String petName) {
+    return '$petName is feeling sad 😢';
+  }
+
+  @override
+  String notificationLowHappinessBody(int happiness) {
+    return 'Happiness dropped to $happiness%. Go for a walk or give treats!';
+  }
 
   @override
   String languageChangeError(String error) {

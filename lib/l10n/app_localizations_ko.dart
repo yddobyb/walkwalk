@@ -662,7 +662,53 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get notificationTimeHint => '아침과 저녁 알림 시간을 설정하세요';
+  String get notificationTimeHint => '아침과 저녁 알림 시간을 탭하여 변경하세요';
+
+  @override
+  String get notificationMorning => '오전';
+
+  @override
+  String get notificationEvening => '오후';
+
+  @override
+  String get notificationEnabled => '알림이 설정되었습니다';
+
+  @override
+  String get notificationDisabled => '알림이 해제되었습니다';
+
+  @override
+  String get notificationPermissionDenied => '알림 권한이 거부되었습니다. 기기 설정에서 허용해주세요.';
+
+  @override
+  String get notificationTimeUpdateError => '알림 시간 변경 중 오류가 발생했습니다';
+
+  @override
+  String get notificationMorningTitle => '산책 갈 시간이에요!';
+
+  @override
+  String get notificationMorningBody => '오늘도 건강한 산책을 시작해보세요!';
+
+  @override
+  String get notificationEveningTitle => '오늘 산책은 하셨나요?';
+
+  @override
+  String get notificationEveningBody => '아직 시간이 있어요. 산책을 시작해보세요!';
+
+  @override
+  String get notificationMissionTitle => '미완료 미션이 있어요!';
+
+  @override
+  String get notificationMissionBody => '오늘의 미션이 3시간 후 만료됩니다. 지금 확인해보세요!';
+
+  @override
+  String notificationLowHappinessTitle(String petName) {
+    return '$petName이(가) 슬퍼하고 있어요 😢';
+  }
+
+  @override
+  String notificationLowHappinessBody(int happiness) {
+    return '행복도가 $happiness%로 낮아졌어요. 산책이나 간식으로 기운을 내주세요!';
+  }
 
   @override
   String languageChangeError(String error) {
