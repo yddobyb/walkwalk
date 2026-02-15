@@ -33,26 +33,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentIndex = 0;
+  late final List<Widget> _screens;
 
   @override
-  Widget build(BuildContext context) {
-    // 🐛 DEBUG: HomeScreen build - initialPet 전달 상태
-    if (widget.initialPet != null) {
-      debugPrint('🐛 HomeScreen - Received initialPet: ${widget.initialPet!.name}, happiness: ${widget.initialPet!.happiness}, treats: ${widget.initialPet!.treats}');
-    } else {
-      debugPrint('🐛 HomeScreen - No initialPet received');
-    }
-
-    // initialPet을 사용하기 위해 _screens를 build 메서드 안으로 이동
-    final List<Widget> screens = [
+  void initState() {
+    super.initState();
+    _screens = [
       _HomeTabContent(initialPet: widget.initialPet),
       const WalkScreen(),
       const CustomizeScreen(),
       const SettingsScreen(),
     ];
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: screens),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
