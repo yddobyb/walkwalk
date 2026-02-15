@@ -1406,6 +1406,12 @@ abstract class AppLocalizations {
   /// **'Happiness dropped to {happiness}%. Go for a walk or give treats!'**
   String notificationLowHappinessBody(int happiness);
 
+  /// Notification types info text
+  ///
+  /// In en, this message translates to:
+  /// **'Walk reminders (AM/PM)  |  Mission expiry  |  Low happiness alert'**
+  String get notificationTypesInfo;
+
   /// Language change error message
   ///
   /// In en, this message translates to:

@@ -729,6 +729,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get notificationTypesInfo =>
+      'Walk reminders (AM/PM)  |  Mission expiry  |  Low happiness alert';
+
+  @override
   String languageChangeError(String error) {
     return 'Error occurred while changing language: $error';
   }

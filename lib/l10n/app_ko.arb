@@ -1190,6 +1190,10 @@
       }
     }
   },
+  "notificationTypesInfo": "산책 리마인더 (오전/오후)  |  미션 만료 알림  |  행복도 낮음 알림",
+  "@notificationTypesInfo": {
+    "description": "알림 종류 안내 텍스트"
+  },
   "languageChangeError": "언어 변경 중 오류가 발생했습니다: {error}",
   "@languageChangeError": {
     "description": "언어 변경 에러 메시지",

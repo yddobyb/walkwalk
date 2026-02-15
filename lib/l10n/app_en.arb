@@ -1190,6 +1190,10 @@
       }
     }
   },
+  "notificationTypesInfo": "Walk reminders (AM/PM)  |  Mission expiry  |  Low happiness alert",
+  "@notificationTypesInfo": {
+    "description": "Notification types info text"
+  },
   "languageChangeError": "Error occurred while changing language: {error}",
   "@languageChangeError": {
     "description": "Language change error message",

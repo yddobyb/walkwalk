@@ -711,6 +711,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get notificationTypesInfo =>
+      '산책 리마인더 (오전/오후)  |  미션 만료 알림  |  행복도 낮음 알림';
+
+  @override
   String languageChangeError(String error) {
     return '언어 변경 중 오류가 발생했습니다: $error';
   }

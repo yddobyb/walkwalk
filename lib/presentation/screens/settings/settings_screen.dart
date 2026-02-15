@@ -111,6 +111,24 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16, right: 16, top: 8,
+            ),
+            child: Text(
+              AppLocalizations.of(context)
+                  .notificationTypesInfo,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.45),
+                  ),
+            ),
+          ),
 
           const SizedBox(height: 24),
 
