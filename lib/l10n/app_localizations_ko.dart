@@ -1396,4 +1396,65 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get privacyChangesContent =>
       '본 개인정보 처리방침은 변경될 수 있으며, 중요한 변경 사항은 앱 내 공지를 통해 안내됩니다.';
+
+  @override
+  String get paywallTitle => '프리미엄 구독';
+
+  @override
+  String get paywallHeaderTitle => 'WalkDog Premium';
+
+  @override
+  String get paywallHeaderSubtitle => '고품질 AI 이미지와 더 많은 혜택을 누리세요';
+
+  @override
+  String get paywallBenefitQuality => '고품질 AI 이미지 (Gemini)';
+
+  @override
+  String get paywallBenefitQuota => '일일 50회 이미지 생성';
+
+  @override
+  String get paywallBenefitAds => '광고 없는 경험';
+
+  @override
+  String get paywallBenefitSpeed => '더 빠른 생성 속도';
+
+  @override
+  String get paywallPricePerMonth => '월';
+
+  @override
+  String get paywallSubscribeButton => '구독 시작하기';
+
+  @override
+  String get paywallRestoreButton => '구매 복원하기';
+
+  @override
+  String get paywallTermsNote =>
+      '구독은 언제든지 취소할 수 있습니다. 결제는 Apple/Google 계정을 통해 처리됩니다.';
+
+  @override
+  String get paywallSuccess => '프리미엄 구독이 활성화되었습니다!';
+
+  @override
+  String get paywallNotConfigured => '스토어 계정 설정 후 이용 가능합니다';
+
+  @override
+  String get paywallProductNotFound => '상품 정보를 불러올 수 없습니다';
+
+  @override
+  String get paywallRestoreNotFound => '복원 가능한 구독이 없습니다';
+
+  @override
+  String get subscriptionSection => '구독';
+
+  @override
+  String get premiumTitle => '프리미엄';
+
+  @override
+  String get premiumActiveSubtitle => '구독 중';
+
+  @override
+  String get premiumInactiveSubtitle => '업그레이드하여 고품질 AI 이미지 이용';
+
+  @override
+  String get premiumActiveBadge => '활성';
 }

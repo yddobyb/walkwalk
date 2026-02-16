@@ -397,27 +397,8 @@ class _StopWalkButton extends StatelessWidget {
         top: false,
         child: SizedBox(
           width: double.infinity,
-          child: ElevatedButton.icon(
+          child: ElevatedButton(
             onPressed: isStopping ? null : onStopWalk,
-            icon: isStopping
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.stop, size: 24),
-            label: Text(
-              isStopping
-                  ? l10n.walkEndingMessage
-                  : l10n.walkEndButton,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: isStopping
                   ? Colors.grey
@@ -432,6 +413,32 @@ class _StopWalkButton extends StatelessWidget {
               disabledBackgroundColor: Colors.grey,
               disabledForegroundColor:
                   Colors.white.withOpacity(0.7),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isStopping)
+                  const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                else
+                  const Icon(Icons.stop, size: 24),
+                const SizedBox(width: 8),
+                Text(
+                  isStopping
+                      ? l10n.walkEndingMessage
+                      : l10n.walkEndButton,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

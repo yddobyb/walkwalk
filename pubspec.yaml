@@ -77,6 +77,12 @@ dependencies:
   cloud_functions: ^5.2.3
   firebase_app_check: ^0.3.2+3
 
+  # Subscription (Phase 7 - RevenueCat)
+  purchases_flutter: ^8.0.0
+
+  # Firestore (Phase 7 - 구독 상태 동기화)
+  cloud_firestore: ^5.5.0
+
   # Network (Week 3 - Optimization)
   connectivity_plus: ^6.1.2
 

@@ -372,10 +372,16 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
         _currentPermission == LocationPermission.always) {
       return SizedBox(
         width: double.infinity,
-        child: ElevatedButton.icon(
+        child: ElevatedButton(
           onPressed: _checkPermission,
-          icon: const Icon(Icons.refresh),
-          label: Text(l10n.refreshPermissionStatus),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.refresh),
+              const SizedBox(width: 8),
+              Text(l10n.refreshPermissionStatus),
+            ],
+          ),
         ),
       );
     }
@@ -383,13 +389,19 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
     if (_currentPermission == LocationPermission.deniedForever) {
       return SizedBox(
         width: double.infinity,
-        child: ElevatedButton.icon(
+        child: ElevatedButton(
           onPressed: _openAppSettings,
-          icon: const Icon(Icons.settings),
-          label: Text(l10n.allowPermissionInSettings),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.orange,
             foregroundColor: Colors.white,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.settings),
+              const SizedBox(width: 8),
+              Text(l10n.allowPermissionInSettings),
+            ],
           ),
         ),
       );
@@ -397,16 +409,23 @@ class _LocationPermissionWidgetState extends ConsumerState<LocationPermissionWid
 
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton.icon(
+      child: ElevatedButton(
         onPressed: _isLoading ? null : _requestPermission,
-        icon: _isLoading
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : const Icon(Icons.location_on),
-        label: Text(_isLoading ? l10n.requestingPermission : l10n.activateGpsOutdoorMode),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_isLoading)
+              const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            else
+              const Icon(Icons.location_on),
+            const SizedBox(width: 8),
+            Text(_isLoading ? l10n.requestingPermission : l10n.activateGpsOutdoorMode),
+          ],
+        ),
       ),
     );
   }

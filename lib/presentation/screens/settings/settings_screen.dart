@@ -5,8 +5,11 @@ import '../../../core/constants/app_constants.dart';
 import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
 import '../../../services/notification/notification_service.dart';
+import '../../../services/user/user_tier_providers.dart';
+import '../../../services/user/user_tier_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
+import '../subscription/paywall_screen.dart';
 import 'help_screen.dart';
 import 'privacy_policy_screen.dart';
 
@@ -51,6 +54,11 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // 구독
+          _SubscriptionSection(ref: ref),
+
+          const SizedBox(height: 24),
+
           // 게임 설정
           _SettingsSection(
             title: AppLocalizations.of(context).gameSettings,
@@ -772,6 +780,68 @@ class _SettingsTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// 구독 섹션 위젯
+class _SubscriptionSection extends ConsumerWidget {
+  final WidgetRef ref;
+
+  const _SubscriptionSection({required this.ref});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tierAsync = ref.watch(currentUserTierProvider);
+
+    final isPremium = tierAsync.maybeWhen(
+      data: (tier) => tier == UserTier.premium,
+      orElse: () => false,
+    );
+
+    return _SettingsSection(
+      title: l10n.subscriptionSection,
+      children: [
+        _SettingsTile(
+          icon: isPremium
+              ? Icons.workspace_premium
+              : Icons.star_border,
+          title: l10n.premiumTitle,
+          subtitle: isPremium
+              ? l10n.premiumActiveSubtitle
+              : l10n.premiumInactiveSubtitle,
+          trailing: isPremium
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFD700).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    l10n.premiumActiveBadge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelSmall
+                        ?.copyWith(
+                          color: const Color(0xFFB8860B),
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                )
+              : const Icon(Icons.chevron_right),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const PaywallScreen(),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

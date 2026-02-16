@@ -178,12 +178,18 @@ class PetStatusWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: treats > 0 ? () => _feedTreat(context, ref, pet) : null,
-                icon: const Icon(Icons.favorite, size: 16),
-                label: Text(AppLocalizations.of(context).giveTreat),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.favorite, size: 16),
+                    const SizedBox(width: 8),
+                    Text(AppLocalizations.of(context).giveTreat),
+                  ],
                 ),
               ),
             ],

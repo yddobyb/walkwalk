@@ -11,23 +11,26 @@ void main() {
       service = UserTierService();
     });
 
-    test('getCurrentTier returns free for MVP', () async {
+    test('getCurrentTier returns free when RevenueCat unconfigured',
+        () async {
+      // RevenueCat API 키가 플레이스홀더이므로
+      // hasPremiumEntitlement()는 항상 false 반환
       final tier = await service.getCurrentTier();
       expect(tier, equals(UserTier.free));
     });
 
-    test('isPremium returns false for MVP', () async {
+    test('isPremium returns false when unconfigured', () async {
       final isPremium = await service.isPremium();
       expect(isPremium, isFalse);
     });
 
-    test('isFree returns true for MVP', () async {
+    test('isFree returns true when unconfigured', () async {
       final isFree = await service.isFree();
       expect(isFree, isTrue);
     });
   });
 
-  group('UserTier', () {
+  group('UserTier enum', () {
     test('free tier has correct display name', () {
       expect(UserTier.free.displayName, equals('무료'));
     });
@@ -45,11 +48,59 @@ void main() {
     });
 
     test('free tier uses genStickerFree function', () {
-      expect(UserTier.free.cloudFunctionName, equals('genStickerFree'));
+      expect(
+        UserTier.free.cloudFunctionName,
+        equals('genStickerFree'),
+      );
     });
 
     test('premium tier uses genSticker function', () {
-      expect(UserTier.premium.cloudFunctionName, equals('genSticker'));
+      expect(
+        UserTier.premium.cloudFunctionName,
+        equals('genSticker'),
+      );
+    });
+
+    test('UserTier has exactly 2 values', () {
+      expect(UserTier.values.length, equals(2));
+      expect(
+        UserTier.values,
+        containsAll([UserTier.free, UserTier.premium]),
+      );
+    });
+  });
+
+  group('UserTierExtension', () {
+    test('all tiers have non-empty displayName', () {
+      for (final tier in UserTier.values) {
+        expect(tier.displayName, isNotEmpty);
+      }
+    });
+
+    test('all tiers have positive dailyImageLimit', () {
+      for (final tier in UserTier.values) {
+        expect(tier.dailyImageLimit, greaterThan(0));
+      }
+    });
+
+    test('premium limit is greater than free limit', () {
+      expect(
+        UserTier.premium.dailyImageLimit,
+        greaterThan(UserTier.free.dailyImageLimit),
+      );
+    });
+
+    test('all tiers have non-empty cloudFunctionName', () {
+      for (final tier in UserTier.values) {
+        expect(tier.cloudFunctionName, isNotEmpty);
+      }
+    });
+
+    test('free and premium use different cloud functions', () {
+      expect(
+        UserTier.free.cloudFunctionName,
+        isNot(equals(UserTier.premium.cloudFunctionName)),
+      );
     });
   });
 }

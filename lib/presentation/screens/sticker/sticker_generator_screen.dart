@@ -202,10 +202,16 @@ class _StickerGeneratorScreenState extends ConsumerState<StickerGeneratorScreen>
             const SizedBox(height: 24),
 
             // 생성 버튼
-            ElevatedButton.icon(
+            ElevatedButton(
               onPressed: stickerState.isLoading ? null : _generateSticker,
-              icon: stickerState.isLoading
-                  ? const SizedBox(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(16.0),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (stickerState.isLoading)
+                    const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
@@ -213,10 +219,11 @@ class _StickerGeneratorScreenState extends ConsumerState<StickerGeneratorScreen>
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
                     )
-                  : const Icon(Icons.auto_awesome),
-              label: Text(stickerState.isLoading ? '생성 중...' : '스티커 생성'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16.0),
+                  else
+                    const Icon(Icons.auto_awesome),
+                  const SizedBox(width: 8),
+                  Text(stickerState.isLoading ? '생성 중...' : '스티커 생성'),
+                ],
               ),
             ),
 

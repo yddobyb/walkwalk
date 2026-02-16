@@ -99,10 +99,8 @@ class WalkButtonWidget extends ConsumerWidget {
             // 산책 종료 버튼
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
+              child: ElevatedButton(
                 onPressed: () => _stopWalk(context, ref),
-                icon: const Icon(Icons.stop),
-                label: Text(AppLocalizations.of(context).walkEndButton),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.red.shade600,
@@ -111,6 +109,14 @@ class WalkButtonWidget extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.stop),
+                    const SizedBox(width: 8),
+                    Text(AppLocalizations.of(context).walkEndButton),
+                  ],
+                ),
               ),
             )
           else
@@ -118,10 +124,8 @@ class WalkButtonWidget extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: () => _startWalk(context, ref, false),
-                    icon: const Icon(Icons.home),
-                    label: Text(AppLocalizations.of(context).walkIndoor),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: theme.colorScheme.primary,
@@ -130,14 +134,20 @@ class WalkButtonWidget extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.home),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context).walkIndoor),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: () => _startWalk(context, ref, true),
-                    icon: const Icon(Icons.location_on),
-                    label: Text(AppLocalizations.of(context).walkOutdoor),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.2),
                       foregroundColor: Colors.white,
@@ -149,6 +159,14 @@ class WalkButtonWidget extends ConsumerWidget {
                           width: 1,
                         ),
                       ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.location_on),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context).walkOutdoor),
+                      ],
                     ),
                   ),
                 ),

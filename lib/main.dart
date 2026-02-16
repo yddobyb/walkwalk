@@ -16,6 +16,7 @@ import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
 import 'services/ai/ai_providers.dart';
 import 'services/notification/notification_service.dart';
+import 'services/subscription/revenue_cat_service.dart';
 import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
@@ -26,24 +27,19 @@ void main() async {
   await RemoteConfigService.initialize();
   await AnalyticsService.initialize();
 
-  // Week 4 테스트: 익명 로그인 (Firebase Functions 호출을 위해 필요)
+  // 익명 로그인 (Firebase Functions + Firestore 동기화를 위해 먼저)
   try {
     final auth = FirebaseAuth.instance;
-    print('🔐🔐🔐 [AUTH] Starting anonymous authentication...');
-    print('🔐🔐🔐 [AUTH] Current user before: ${auth.currentUser?.uid ?? "NULL"}');
-
     if (auth.currentUser == null) {
-      final userCredential = await auth.signInAnonymously();
-      print('🔐🔐🔐 [AUTH] ✅ Anonymous authentication successful');
-      print('🔐🔐🔐 [AUTH] User UID: ${userCredential.user?.uid}');
-    } else {
-      print('🔐🔐🔐 [AUTH] ✅ User already authenticated: ${auth.currentUser!.uid}');
+      await auth.signInAnonymously();
     }
-
-    print('🔐🔐🔐 [AUTH] Current user after: ${auth.currentUser?.uid ?? "NULL"}');
+    debugPrint('[AUTH] uid=${auth.currentUser?.uid}');
   } catch (e) {
-    print('🔐🔐🔐 [AUTH] ❌ Anonymous authentication failed: $e');
+    debugPrint('[AUTH] Anonymous authentication failed: $e');
   }
+
+  // Phase 7: RevenueCat 초기화 (로그인 후 → Firestore 동기화 가능)
+  await RevenueCatService.initialize();
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);

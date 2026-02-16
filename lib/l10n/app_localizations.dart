@@ -2665,6 +2665,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This privacy policy may be updated. Significant changes will be communicated through in-app notifications.'**
   String get privacyChangesContent;
+
+  /// Paywall screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Subscription'**
+  String get paywallTitle;
+
+  /// Paywall header title
+  ///
+  /// In en, this message translates to:
+  /// **'WalkDog Premium'**
+  String get paywallHeaderTitle;
+
+  /// Paywall header subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoy high-quality AI images and more benefits'**
+  String get paywallHeaderSubtitle;
+
+  /// Premium benefit - image quality
+  ///
+  /// In en, this message translates to:
+  /// **'High-quality AI images (Gemini)'**
+  String get paywallBenefitQuality;
+
+  /// Premium benefit - quota
+  ///
+  /// In en, this message translates to:
+  /// **'50 images per day'**
+  String get paywallBenefitQuota;
+
+  /// Premium benefit - no ads
+  ///
+  /// In en, this message translates to:
+  /// **'Ad-free experience'**
+  String get paywallBenefitAds;
+
+  /// Premium benefit - speed
+  ///
+  /// In en, this message translates to:
+  /// **'Faster generation speed'**
+  String get paywallBenefitSpeed;
+
+  /// Per month label
+  ///
+  /// In en, this message translates to:
+  /// **'month'**
+  String get paywallPricePerMonth;
+
+  /// Subscribe button
+  ///
+  /// In en, this message translates to:
+  /// **'Start Subscription'**
+  String get paywallSubscribeButton;
+
+  /// Restore purchases button
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchases'**
+  String get paywallRestoreButton;
+
+  /// Terms and conditions note
+  ///
+  /// In en, this message translates to:
+  /// **'You can cancel your subscription anytime. Payment is processed through your Apple/Google account.'**
+  String get paywallTermsNote;
+
+  /// Subscription success message
+  ///
+  /// In en, this message translates to:
+  /// **'Premium subscription activated!'**
+  String get paywallSuccess;
+
+  /// Store not configured message
+  ///
+  /// In en, this message translates to:
+  /// **'Available after store account setup'**
+  String get paywallNotConfigured;
+
+  /// Product not found message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load product information'**
+  String get paywallProductNotFound;
+
+  /// No subscription to restore message
+  ///
+  /// In en, this message translates to:
+  /// **'No subscription to restore'**
+  String get paywallRestoreNotFound;
+
+  /// Subscription settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get subscriptionSection;
+
+  /// Premium settings title
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premiumTitle;
+
+  /// Premium active subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribed'**
+  String get premiumActiveSubtitle;
+
+  /// Premium inactive subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade for high-quality AI images'**
+  String get premiumInactiveSubtitle;
+
+  /// Premium active badge text
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get premiumActiveBadge;
 }
 
 class _AppLocalizationsDelegate

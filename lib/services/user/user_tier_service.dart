@@ -2,12 +2,11 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../subscription/revenue_cat_service.dart';
+
 /// 사용자 등급
-///
-/// MVP: 모든 사용자는 무료(free)로 시작
-/// 추후: 프리미엄 구독 시스템 연동 예정
 enum UserTier {
-  /// 무료 사용자 - genStickerFree 사용 (Pixazo → OpenAI 폴백)
+  /// 무료 사용자 - genStickerFree 사용 (Pixazo -> OpenAI 폴백)
   free,
 
   /// 프리미엄 사용자 - genSticker 사용 (Gemini)
@@ -16,25 +15,19 @@ enum UserTier {
 
 /// 사용자 등급 서비스
 ///
-/// MVP: 모든 사용자를 무료로 처리
-/// 추후: Firestore에서 구독 상태 확인 또는 RevenueCat 등 연동
+/// RevenueCat 엔타이틀먼트로 구독 상태를 확인한다.
+/// SDK가 미설정(플레이스홀더 키)이면 모든 사용자를 무료로 처리.
 class UserTierService {
   /// 현재 사용자 등급 조회
-  ///
-  /// MVP: 항상 free 반환
-  /// 추후: 실제 구독 상태 확인 로직 추가
   Future<UserTier> getCurrentTier() async {
-    // TODO: 실제 구독 상태 확인 로직 구현
-    // - Firestore에서 users/{uid}/subscription 확인
-    // - 또는 RevenueCat SDK 사용
-    // - 또는 StoreKit/Google Play Billing 연동
+    debugPrint('[UserTier] Checking user tier...');
 
-    debugPrint('👤 [UserTier] Checking user tier...');
+    final isPremium =
+        await RevenueCatService.hasPremiumEntitlement();
+    final tier =
+        isPremium ? UserTier.premium : UserTier.free;
 
-    // MVP: 모든 사용자는 무료
-    const tier = UserTier.free;
-    debugPrint('👤 [UserTier] Current tier: ${tier.name}');
-
+    debugPrint('[UserTier] Current tier: ${tier.name}');
     return tier;
   }
 

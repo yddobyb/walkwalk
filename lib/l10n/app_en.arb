@@ -2330,5 +2330,86 @@
   "privacyChangesContent": "This privacy policy may be updated. Significant changes will be communicated through in-app notifications.",
   "@privacyChangesContent": {
     "description": "Policy changes content"
+  },
+
+  "paywallTitle": "Premium Subscription",
+  "@paywallTitle": {
+    "description": "Paywall screen title"
+  },
+  "paywallHeaderTitle": "WalkDog Premium",
+  "@paywallHeaderTitle": {
+    "description": "Paywall header title"
+  },
+  "paywallHeaderSubtitle": "Enjoy high-quality AI images and more benefits",
+  "@paywallHeaderSubtitle": {
+    "description": "Paywall header subtitle"
+  },
+  "paywallBenefitQuality": "High-quality AI images (Gemini)",
+  "@paywallBenefitQuality": {
+    "description": "Premium benefit - image quality"
+  },
+  "paywallBenefitQuota": "50 images per day",
+  "@paywallBenefitQuota": {
+    "description": "Premium benefit - quota"
+  },
+  "paywallBenefitAds": "Ad-free experience",
+  "@paywallBenefitAds": {
+    "description": "Premium benefit - no ads"
+  },
+  "paywallBenefitSpeed": "Faster generation speed",
+  "@paywallBenefitSpeed": {
+    "description": "Premium benefit - speed"
+  },
+  "paywallPricePerMonth": "month",
+  "@paywallPricePerMonth": {
+    "description": "Per month label"
+  },
+  "paywallSubscribeButton": "Start Subscription",
+  "@paywallSubscribeButton": {
+    "description": "Subscribe button"
+  },
+  "paywallRestoreButton": "Restore Purchases",
+  "@paywallRestoreButton": {
+    "description": "Restore purchases button"
+  },
+  "paywallTermsNote": "You can cancel your subscription anytime. Payment is processed through your Apple/Google account.",
+  "@paywallTermsNote": {
+    "description": "Terms and conditions note"
+  },
+  "paywallSuccess": "Premium subscription activated!",
+  "@paywallSuccess": {
+    "description": "Subscription success message"
+  },
+  "paywallNotConfigured": "Available after store account setup",
+  "@paywallNotConfigured": {
+    "description": "Store not configured message"
+  },
+  "paywallProductNotFound": "Unable to load product information",
+  "@paywallProductNotFound": {
+    "description": "Product not found message"
+  },
+  "paywallRestoreNotFound": "No subscription to restore",
+  "@paywallRestoreNotFound": {
+    "description": "No subscription to restore message"
+  },
+  "subscriptionSection": "Subscription",
+  "@subscriptionSection": {
+    "description": "Subscription settings section title"
+  },
+  "premiumTitle": "Premium",
+  "@premiumTitle": {
+    "description": "Premium settings title"
+  },
+  "premiumActiveSubtitle": "Subscribed",
+  "@premiumActiveSubtitle": {
+    "description": "Premium active subtitle"
+  },
+  "premiumInactiveSubtitle": "Upgrade for high-quality AI images",
+  "@premiumInactiveSubtitle": {
+    "description": "Premium inactive subtitle"
+  },
+  "premiumActiveBadge": "Active",
+  "@premiumActiveBadge": {
+    "description": "Premium active badge text"
   }
 }

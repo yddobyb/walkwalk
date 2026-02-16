@@ -14,6 +14,7 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
+import '../subscription/paywall_screen.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
   const CustomizeScreen({super.key});
@@ -259,12 +260,18 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
                       onPressed: _canGenerate(stickerState, quotaAsync)
                           ? _generateSticker
                           : null,
-                      icon: stickerState.isLoading
-                          ? const SizedBox(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (stickerState.isLoading)
+                            const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -272,20 +279,35 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                                 valueColor: AlwaysStoppedAnimation(Colors.white),
                               ),
                             )
-                          : const Icon(Icons.image),
-                      label: Text(
-                        stickerState.isLoading
-                            ? '생성 중...'
-                            : AppLocalizations.of(context).generateSticker,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                          else
+                            const Icon(Icons.image),
+                          const SizedBox(width: 8),
+                          Text(
+                            stickerState.isLoading
+                                ? '생성 중...'
+                                : AppLocalizations.of(context).generateSticker,
+                          ),
+                        ],
                       ),
                     ),
                   ),
                   // 할당량 표시 UI
                   const SizedBox(height: 16),
-                  _QuotaIndicator(quotaAsync: quotaAsync, theme: theme),
+                  _QuotaIndicator(
+                    quotaAsync: quotaAsync,
+                    theme: theme,
+                    onUpgradeTap: () async {
+                      final subscribed =
+                          await Navigator.of(context).push<bool>(
+                        MaterialPageRoute(
+                          builder: (_) => const PaywallScreen(),
+                        ),
+                      );
+                      if (subscribed == true) {
+                        ref.invalidate(quotaProvider);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -348,12 +370,20 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       // 스티커 적용 버튼
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton.icon(
+                        child: ElevatedButton(
                           onPressed: applyState.isLoading
                               ? null
                               : () => _applySticker(imageBytes),
-                          icon: applyState.isLoading
-                              ? const SizedBox(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.secondary,
+                            foregroundColor: theme.colorScheme.onSecondary,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (applyState.isLoading)
+                                const SizedBox(
                                   width: 20,
                                   height: 20,
                                   child: CircularProgressIndicator(
@@ -361,16 +391,15 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                                     valueColor: AlwaysStoppedAnimation(Colors.white),
                                   ),
                                 )
-                              : const Icon(Icons.check_circle),
-                          label: Text(
-                            applyState.isLoading
-                                ? '적용 중...'
-                                : '이 스티커로 변경하기',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.secondary,
-                            foregroundColor: theme.colorScheme.onSecondary,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                              else
+                                const Icon(Icons.check_circle),
+                              const SizedBox(width: 8),
+                              Text(
+                                applyState.isLoading
+                                    ? '적용 중...'
+                                    : '이 스티커로 변경하기',
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -980,10 +1009,12 @@ class _StickerImage extends StatelessWidget {
 class _QuotaIndicator extends StatelessWidget {
   final AsyncValue<QuotaData> quotaAsync;
   final ThemeData theme;
+  final VoidCallback? onUpgradeTap;
 
   const _QuotaIndicator({
     required this.quotaAsync,
     required this.theme,
+    this.onUpgradeTap,
   });
 
   @override
@@ -1068,7 +1099,10 @@ class _QuotaIndicator extends StatelessWidget {
           // 무료 사용자에게 프리미엄 업그레이드 유도 배너
           if (quota.isFree) ...[
             const SizedBox(height: 16),
-            _PremiumUpgradeBanner(theme: theme),
+            _PremiumUpgradeBanner(
+              theme: theme,
+              onUpgradeTap: onUpgradeTap,
+            ),
           ],
         ],
       ),
@@ -1174,8 +1208,12 @@ class _TierBadge extends StatelessWidget {
 /// 프리미엄 업그레이드 유도 배너
 class _PremiumUpgradeBanner extends StatelessWidget {
   final ThemeData theme;
+  final VoidCallback? onUpgradeTap;
 
-  const _PremiumUpgradeBanner({required this.theme});
+  const _PremiumUpgradeBanner({
+    required this.theme,
+    this.onUpgradeTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1223,14 +1261,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {
-                // TODO: 프리미엄 구독 페이지로 이동
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('프리미엄 구독 기능은 준비 중입니다'),
-                  ),
-                );
-              },
+              onPressed: onUpgradeTap,
               style: OutlinedButton.styleFrom(
                 foregroundColor: const Color(0xFFB8860B),
                 side: const BorderSide(color: Color(0xFFFFD700)),

@@ -535,10 +535,8 @@ class _WalkStartSection extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton.icon(
+                child: ElevatedButton(
                   onPressed: () => onStartWalk(false),
-                  icon: const Icon(Icons.home),
-                  label: Text(l10n.walkIndoor),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor:
@@ -550,14 +548,20 @@ class _WalkStartSection extends StatelessWidget {
                           BorderRadius.circular(12),
                     ),
                   ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.home),
+                      const SizedBox(width: 8),
+                      Text(l10n.walkIndoor),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: ElevatedButton.icon(
+                child: ElevatedButton(
                   onPressed: () => onStartWalk(true),
-                  icon: const Icon(Icons.location_on),
-                  label: Text(l10n.walkOutdoor),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         Colors.white.withOpacity(0.2),
@@ -572,6 +576,14 @@ class _WalkStartSection extends StatelessWidget {
                         width: 1,
                       ),
                     ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.location_on),
+                      const SizedBox(width: 8),
+                      Text(l10n.walkOutdoor),
+                    ],
                   ),
                 ),
               ),
