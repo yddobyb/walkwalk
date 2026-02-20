@@ -1487,4 +1487,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumActiveBadge => 'Active';
+
+  // ── Customize screen: sticker generation ──────────────────────────────────
+
+  @override
+  String get stickerGenerating => 'Generating...';
+
+  @override
+  String get stickerCached => 'Cached Sticker';
+
+  @override
+  String get stickerNew => 'New Sticker';
+
+  @override
+  String get stickerApplying => 'Applying...';
+
+  @override
+  String get stickerApplyButton => 'Apply This Sticker';
+
+  @override
+  String get stickerLoadingMessage => 'Generating sticker...';
+
+  @override
+  String get stickerLoadingTime => 'Takes approximately 5-8 seconds';
+
+  @override
+  String get stickerErrorDefault => 'An error occurred';
+
+  @override
+  String get stickerAppliedSuccess => 'Sticker applied!';
+
+  @override
+  String get stickerApplyFailed => 'Failed to apply sticker.';
+
+  // ── Customize screen: quota indicator ────────────────────────────────────
+
+  @override
+  String get quotaRemainingToday => 'Remaining Today';
+
+  @override
+  String quotaResetsIn(String time) => 'Resets in $time';
+
+  @override
+  String get quotaChecking => 'Checking quota...';
+
+  @override
+  String get quotaLoadError => 'Cannot load quota information';
+
+  // ── Customize screen: tier badge ──────────────────────────────────────────
+
+  @override
+  String tierQualityLabel(String tierName) => '$tierName Quality';
+
+  // ── Customize screen: premium upgrade banner ──────────────────────────────
+
+  @override
+  String get premiumUpgradeTitle => 'Upgrade to Premium';
+
+  @override
+  String get premiumUpgradeBenefits =>
+      '• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed';
+
+  @override
+  String get premiumUpgradeButton => 'Upgrade Now';
 }

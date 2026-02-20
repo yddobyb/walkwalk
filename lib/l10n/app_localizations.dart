@@ -2785,6 +2785,122 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active'**
   String get premiumActiveBadge;
+
+  // ── Customize screen: sticker generation ──────────────────────────────────
+
+  /// Sticker generate button loading state
+  ///
+  /// In en, this message translates to:
+  /// **'Generating...'**
+  String get stickerGenerating;
+
+  /// Cached sticker header label
+  ///
+  /// In en, this message translates to:
+  /// **'Cached Sticker'**
+  String get stickerCached;
+
+  /// New sticker header label
+  ///
+  /// In en, this message translates to:
+  /// **'New Sticker'**
+  String get stickerNew;
+
+  /// Apply button loading state
+  ///
+  /// In en, this message translates to:
+  /// **'Applying...'**
+  String get stickerApplying;
+
+  /// Apply sticker button text
+  ///
+  /// In en, this message translates to:
+  /// **'Apply This Sticker'**
+  String get stickerApplyButton;
+
+  /// Sticker loading overlay message
+  ///
+  /// In en, this message translates to:
+  /// **'Generating sticker...'**
+  String get stickerLoadingMessage;
+
+  /// Sticker loading time hint
+  ///
+  /// In en, this message translates to:
+  /// **'Takes approximately 5-8 seconds'**
+  String get stickerLoadingTime;
+
+  /// Default error message in sticker area
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get stickerErrorDefault;
+
+  /// Snackbar when sticker applied successfully
+  ///
+  /// In en, this message translates to:
+  /// **'Sticker applied!'**
+  String get stickerAppliedSuccess;
+
+  /// Snackbar when sticker apply fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to apply sticker.'**
+  String get stickerApplyFailed;
+
+  // ── Customize screen: quota indicator ────────────────────────────────────
+
+  /// Quota remaining today label
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining Today'**
+  String get quotaRemainingToday;
+
+  /// Quota reset timer label
+  ///
+  /// In en, this message translates to:
+  /// **'Resets in {time}'**
+  String quotaResetsIn(String time);
+
+  /// Quota loading state
+  ///
+  /// In en, this message translates to:
+  /// **'Checking quota...'**
+  String get quotaChecking;
+
+  /// Quota load error message
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load quota information'**
+  String get quotaLoadError;
+
+  // ── Customize screen: tier badge ──────────────────────────────────────────
+
+  /// Tier quality badge label
+  ///
+  /// In en, this message translates to:
+  /// **'{tierName} Quality'**
+  String tierQualityLabel(String tierName);
+
+  // ── Customize screen: premium upgrade banner ──────────────────────────────
+
+  /// Premium upgrade banner title
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get premiumUpgradeTitle;
+
+  /// Premium upgrade banner benefits list
+  ///
+  /// In en, this message translates to:
+  /// **'• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed'**
+  String get premiumUpgradeBenefits;
+
+  /// Premium upgrade banner button text
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade Now'**
+  String get premiumUpgradeButton;
 }
 
 class _AppLocalizationsDelegate

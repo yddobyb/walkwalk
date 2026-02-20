@@ -84,6 +84,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(
+            inherit: false,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -99,6 +100,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           textStyle: const TextStyle(
+            inherit: false,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -110,6 +112,7 @@ class AppTheme {
           foregroundColor: AppColors.primary,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           textStyle: const TextStyle(
+            inherit: false,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),

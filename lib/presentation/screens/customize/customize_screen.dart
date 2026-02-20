@@ -284,7 +284,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                           const SizedBox(width: 8),
                           Text(
                             stickerState.isLoading
-                                ? '생성 중...'
+                                ? AppLocalizations.of(context).stickerGenerating
                                 : AppLocalizations.of(context).generateSticker,
                           ),
                         ],
@@ -345,7 +345,9 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            response.data.cached ? '캐시된 스티커' : '새로 생성된 스티커',
+                            response.data.cached
+                                ? AppLocalizations.of(context).stickerCached
+                                : AppLocalizations.of(context).stickerNew,
                             style: theme.textTheme.titleSmall?.copyWith(
                               color: response.data.cached ? Colors.grey : theme.colorScheme.primary,
                             ),
@@ -396,8 +398,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                               const SizedBox(width: 8),
                               Text(
                                 applyState.isLoading
-                                    ? '적용 중...'
-                                    : '이 스티커로 변경하기',
+                                    ? AppLocalizations.of(context).stickerApplying
+                                    : AppLocalizations.of(context).stickerApplyButton,
                               ),
                             ],
                           ),
@@ -419,12 +421,12 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     const CircularProgressIndicator(),
                     const SizedBox(height: 16),
                     Text(
-                      '스티커 생성 중...',
+                      AppLocalizations.of(context).stickerLoadingMessage,
                       style: theme.textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '약 5-8초 소요됩니다',
+                      AppLocalizations.of(context).stickerLoadingTime,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
@@ -433,7 +435,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                 ),
               ),
               error: (error, _) {
-                String message = '오류가 발생했습니다';
+                String message = AppLocalizations.of(context).stickerErrorDefault;
                 if (error is ImageGenerationException) {
                   message = error.userMessage;
                 }
@@ -919,18 +921,20 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     if (!mounted) return;
 
     if (success) {
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('스티커가 적용되었습니다!'),
+        SnackBar(
+          content: Text(l10n.stickerAppliedSuccess),
           backgroundColor: Colors.green,
         ),
       );
       // 상태 초기화
       ref.read(stickerApplyProvider.notifier).reset();
     } else {
+      final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('스티커 적용에 실패했습니다.'),
+        SnackBar(
+          content: Text(l10n.stickerApplyFailed),
           backgroundColor: Colors.red,
         ),
       );
@@ -1031,7 +1035,7 @@ class _QuotaIndicator extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '오늘 남은 횟수',
+                AppLocalizations.of(context).quotaRemainingToday,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
@@ -1087,7 +1091,9 @@ class _QuotaIndicator extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${quota.formattedTimeUntilReset} 후 리셋',
+                  AppLocalizations.of(context).quotaResetsIn(
+                    quota.formattedTimeUntilReset,
+                  ),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.red.withOpacity(0.7),
                   ),
@@ -1119,7 +1125,7 @@ class _QuotaIndicator extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            '할당량 확인 중...',
+            AppLocalizations.of(context).quotaChecking,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withOpacity(0.5),
             ),
@@ -1136,7 +1142,7 @@ class _QuotaIndicator extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            '할당량 정보를 불러올 수 없습니다',
+            AppLocalizations.of(context).quotaLoadError,
             style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.orange.withOpacity(0.7),
             ),
@@ -1186,7 +1192,7 @@ class _TierBadge extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            '${quota.tierDisplayName} 품질',
+            AppLocalizations.of(context).tierQualityLabel(quota.tierDisplayName),
             style: theme.textTheme.labelMedium?.copyWith(
               color: textColor,
               fontWeight: FontWeight.w600,
@@ -1241,7 +1247,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
               const Text('💎', style: TextStyle(fontSize: 16)),
               const SizedBox(width: 8),
               Text(
-                '프리미엄으로 업그레이드',
+                AppLocalizations.of(context).premiumUpgradeTitle,
                 style: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFFB8860B),
@@ -1251,7 +1257,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도',
+            AppLocalizations.of(context).premiumUpgradeBenefits,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withOpacity(0.7),
               height: 1.4,
@@ -1267,7 +1273,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                 side: const BorderSide(color: Color(0xFFFFD700)),
                 padding: const EdgeInsets.symmetric(vertical: 8),
               ),
-              child: const Text('업그레이드하기'),
+              child: Text(AppLocalizations.of(context).premiumUpgradeButton),
             ),
           ),
         ],

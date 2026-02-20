@@ -55,7 +55,7 @@ class SettingsScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           // 구독
-          _SubscriptionSection(ref: ref),
+          const _SubscriptionSection(),
 
           const SizedBox(height: 24),
 
@@ -218,104 +218,35 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showGoalDialog(BuildContext context, WidgetRef ref, int currentGoal) {
-    final controller = TextEditingController(text: currentGoal.toString());
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
+    showDialog<int>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(AppLocalizations.of(context).dailyGoalDialogTitle),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(AppLocalizations.of(context).dailyGoalDialogDescription),
-              const SizedBox(height: 8),
-              Text(
-                AppLocalizations.of(context).dailyGoalDialogRange,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: controller,
-                keyboardType: TextInputType.number,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).dailyGoalDialogLabel,
-                  suffixText: AppLocalizations.of(context).dailyGoalDialogSuffix,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context).dailyGoalErrorEmpty;
-                  }
-                  final goal = int.tryParse(value);
-                  if (goal == null) {
-                    return AppLocalizations.of(context).dailyGoalErrorInvalid;
-                  }
-                  if (goal < 1000 || goal > 30000) {
-                    return AppLocalizations.of(context).dailyGoalErrorRange;
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              controller.dispose();
-              Navigator.of(dialogContext).pop();
-            },
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                final newGoal = int.parse(controller.text);
-                controller.dispose();
-                Navigator.of(dialogContext).pop();
-
-                try {
-                  await ref.read(settingsNotifierProvider.notifier).updateDailyStepGoal(newGoal);
-
-                  // 미션 provider들을 새로고침하여 UI 업데이트
-                  ref.invalidate(activeMissionsProvider);
-                  ref.invalidate(dailyMissionsProvider);
-                  ref.invalidate(weeklyMissionsProvider);
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(AppLocalizations.of(context).dailyGoalUpdated(newGoal)),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(AppLocalizations.of(context).dailyGoalUpdateError(e.toString())),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              }
-            },
-            child: Text(AppLocalizations.of(context).confirm),
-          ),
-        ],
-      ),
-    );
+      builder: (_) => _GoalDialog(currentGoal: currentGoal),
+    ).then((newGoal) async {
+      if (newGoal == null) return;
+      try {
+        await ref.read(settingsNotifierProvider.notifier).updateDailyStepGoal(newGoal);
+        ref.invalidate(activeMissionsProvider);
+        ref.invalidate(dailyMissionsProvider);
+        ref.invalidate(weeklyMissionsProvider);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).dailyGoalUpdated(newGoal)),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).dailyGoalUpdateError(e.toString())),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    });
   }
 
   /// 알림 토글 변경 시 알림 스케줄/취소 처리
@@ -419,79 +350,55 @@ class SettingsScreen extends ConsumerWidget {
   ) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(
-          AppLocalizations.of(context).notificationTime,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppLocalizations.of(context)
-                  .notificationTimeHint,
-            ),
-            const SizedBox(height: 16),
-            // 오전 알림 시간
-            ListTile(
-              leading: const Icon(Icons.wb_sunny),
-              title: Text(
-                AppLocalizations.of(context)
-                    .notificationMorning,
+      builder: (dialogContext) {
+        final l10n = AppLocalizations.of(dialogContext);
+        final theme = Theme.of(dialogContext);
+        return AlertDialog(
+          title: Text(l10n.notificationTime),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.notificationTimeHint),
+              const SizedBox(height: 16),
+              // 오전 알림 시간
+              ListTile(
+                leading: const Icon(Icons.wb_sunny),
+                title: Text(l10n.notificationMorning),
+                trailing: Text(
+                  settings.morningReminderTime,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                onTap: () async {
+                  Navigator.of(dialogContext).pop();
+                  await _pickTime(context, ref, settings, isMorning: true);
+                },
               ),
-              trailing: Text(
-                settings.morningReminderTime,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+              const Divider(),
+              // 오후 알림 시간
+              ListTile(
+                leading: const Icon(Icons.nights_stay),
+                title: Text(l10n.notificationEvening),
+                trailing: Text(
+                  settings.eveningReminderTime,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                onTap: () async {
+                  Navigator.of(dialogContext).pop();
+                  await _pickTime(context, ref, settings, isMorning: false);
+                },
               ),
-              onTap: () async {
-                Navigator.of(dialogContext).pop();
-                await _pickTime(
-                  context,
-                  ref,
-                  settings,
-                  isMorning: true,
-                );
-              },
-            ),
-            const Divider(),
-            // 오후 알림 시간
-            ListTile(
-              leading: const Icon(Icons.nights_stay),
-              title: Text(
-                AppLocalizations.of(context)
-                    .notificationEvening,
-              ),
-              trailing: Text(
-                settings.eveningReminderTime,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              onTap: () async {
-                Navigator.of(dialogContext).pop();
-                await _pickTime(
-                  context,
-                  ref,
-                  settings,
-                  isMorning: false,
-                );
-              },
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.close),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () =>
-                Navigator.of(dialogContext).pop(),
-            child: Text(
-              AppLocalizations.of(context).close,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -594,80 +501,93 @@ class SettingsScreen extends ConsumerWidget {
   void _showLanguageDialog(BuildContext context, WidgetRef ref, String currentLocale) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(AppLocalizations.of(context).languageDialogTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: Text(AppLocalizations.of(context).languageKorean),
-              value: 'ko',
-              groupValue: currentLocale,
-              onChanged: (value) async {
-                if (value != null && value != currentLocale) {
-                  Navigator.of(dialogContext).pop();
-                  try {
-                    await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(AppLocalizations.of(context).languageUpdated(AppLocalizations.of(context).languageKorean)),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(AppLocalizations.of(context).languageChangeError(e.toString())),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: Text(AppLocalizations.of(context).languageEnglish),
-              value: 'en',
-              groupValue: currentLocale,
-              onChanged: (value) async {
-                if (value != null && value != currentLocale) {
-                  Navigator.of(dialogContext).pop();
-                  try {
-                    await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(AppLocalizations.of(context).languageUpdated(AppLocalizations.of(context).languageEnglish)),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(AppLocalizations.of(context).languageChangeError(e.toString())),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
+      builder: (dialogContext) {
+        final l10n = AppLocalizations.of(dialogContext);
+        return AlertDialog(
+          title: Text(l10n.languageDialogTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: Text(l10n.languageKorean),
+                value: 'ko',
+                groupValue: currentLocale,
+                onChanged: (value) async {
+                  if (value != null && value != currentLocale) {
+                    // Pre-capture strings BEFORE locale changes to avoid
+                    // AppLocalizations.of(context) in async continuations,
+                    // which triggers the 'ancestor == this' assertion.
+                    final successMsg = l10n.languageUpdated(l10n.languageKorean);
+                    Navigator.of(dialogContext).pop();
+                    try {
+                      await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(successMsg),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      final errorMsg = l10n.languageChangeError(e.toString());
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(errorMsg),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     }
                   }
-                }
-              },
+                },
+              ),
+              RadioListTile<String>(
+                title: Text(l10n.languageEnglish),
+                value: 'en',
+                groupValue: currentLocale,
+                onChanged: (value) async {
+                  if (value != null && value != currentLocale) {
+                    // Pre-capture strings BEFORE locale changes to avoid
+                    // AppLocalizations.of(context) in async continuations,
+                    // which triggers the 'ancestor == this' assertion.
+                    final successMsg = l10n.languageUpdated(l10n.languageEnglish);
+                    Navigator.of(dialogContext).pop();
+                    try {
+                      await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(successMsg),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      final errorMsg = l10n.languageChangeError(e.toString());
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(errorMsg),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.cancel),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -786,9 +706,7 @@ class _SettingsTile extends StatelessWidget {
 
 /// 구독 섹션 위젯
 class _SubscriptionSection extends ConsumerWidget {
-  final WidgetRef ref;
-
-  const _SubscriptionSection({required this.ref});
+  const _SubscriptionSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -840,6 +758,95 @@ class _SubscriptionSection extends ConsumerWidget {
               ),
             );
           },
+        ),
+      ],
+    );
+  }
+}
+
+/// 일일 목표 설정 다이얼로그
+/// StatefulWidget으로 TextEditingController 수명을 위젯 수명에 맞게 관리
+class _GoalDialog extends StatefulWidget {
+  final int currentGoal;
+
+  const _GoalDialog({required this.currentGoal});
+
+  @override
+  State<_GoalDialog> createState() => _GoalDialogState();
+}
+
+class _GoalDialogState extends State<_GoalDialog> {
+  late final TextEditingController _controller;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.currentGoal.toString());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return AlertDialog(
+      title: Text(l10n.dailyGoalDialogTitle),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.dailyGoalDialogDescription),
+            const SizedBox(height: 8),
+            Text(
+              l10n.dailyGoalDialogRange,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              decoration: InputDecoration(
+                labelText: l10n.dailyGoalDialogLabel,
+                suffixText: l10n.dailyGoalDialogSuffix,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) return l10n.dailyGoalErrorEmpty;
+                final goal = int.tryParse(value);
+                if (goal == null) return l10n.dailyGoalErrorInvalid;
+                if (goal < 1000 || goal > 30000) return l10n.dailyGoalErrorRange;
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              Navigator.of(context).pop(int.parse(_controller.text));
+            }
+          },
+          child: Text(l10n.confirm),
         ),
       ],
     );

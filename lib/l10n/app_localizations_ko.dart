@@ -1457,4 +1457,67 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get premiumActiveBadge => '활성';
+
+  // ── Customize screen: sticker generation ──────────────────────────────────
+
+  @override
+  String get stickerGenerating => '생성 중...';
+
+  @override
+  String get stickerCached => '캐시된 스티커';
+
+  @override
+  String get stickerNew => '새로 생성된 스티커';
+
+  @override
+  String get stickerApplying => '적용 중...';
+
+  @override
+  String get stickerApplyButton => '이 스티커로 변경하기';
+
+  @override
+  String get stickerLoadingMessage => '스티커 생성 중...';
+
+  @override
+  String get stickerLoadingTime => '약 5-8초 소요됩니다';
+
+  @override
+  String get stickerErrorDefault => '오류가 발생했습니다';
+
+  @override
+  String get stickerAppliedSuccess => '스티커가 적용되었습니다!';
+
+  @override
+  String get stickerApplyFailed => '스티커 적용에 실패했습니다.';
+
+  // ── Customize screen: quota indicator ────────────────────────────────────
+
+  @override
+  String get quotaRemainingToday => '오늘 남은 횟수';
+
+  @override
+  String quotaResetsIn(String time) => '$time 후 리셋';
+
+  @override
+  String get quotaChecking => '할당량 확인 중...';
+
+  @override
+  String get quotaLoadError => '할당량 정보를 불러올 수 없습니다';
+
+  // ── Customize screen: tier badge ──────────────────────────────────────────
+
+  @override
+  String tierQualityLabel(String tierName) => '$tierName 품질';
+
+  // ── Customize screen: premium upgrade banner ──────────────────────────────
+
+  @override
+  String get premiumUpgradeTitle => '프리미엄으로 업그레이드';
+
+  @override
+  String get premiumUpgradeBenefits =>
+      '• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도';
+
+  @override
+  String get premiumUpgradeButton => '업그레이드하기';
 }
