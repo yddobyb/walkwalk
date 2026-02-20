@@ -1488,8 +1488,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get premiumActiveBadge => 'Active';
 
-  // ── Customize screen: sticker generation ──────────────────────────────────
-
   @override
   String get stickerGenerating => 'Generating...';
 
@@ -1520,13 +1518,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get stickerApplyFailed => 'Failed to apply sticker.';
 
-  // ── Customize screen: quota indicator ────────────────────────────────────
-
   @override
   String get quotaRemainingToday => 'Remaining Today';
 
   @override
-  String quotaResetsIn(String time) => 'Resets in $time';
+  String quotaResetsIn(String time) {
+    return 'Resets in $time';
+  }
 
   @override
   String get quotaChecking => 'Checking quota...';
@@ -1534,12 +1532,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get quotaLoadError => 'Cannot load quota information';
 
-  // ── Customize screen: tier badge ──────────────────────────────────────────
-
   @override
-  String tierQualityLabel(String tierName) => '$tierName Quality';
-
-  // ── Customize screen: premium upgrade banner ──────────────────────────────
+  String tierQualityLabel(String tierName) {
+    return '$tierName Quality';
+  }
 
   @override
   String get premiumUpgradeTitle => 'Upgrade to Premium';

@@ -2786,8 +2786,6 @@ abstract class AppLocalizations {
   /// **'Active'**
   String get premiumActiveBadge;
 
-  // ── Customize screen: sticker generation ──────────────────────────────────
-
   /// Sticker generate button loading state
   ///
   /// In en, this message translates to:
@@ -2848,8 +2846,6 @@ abstract class AppLocalizations {
   /// **'Failed to apply sticker.'**
   String get stickerApplyFailed;
 
-  // ── Customize screen: quota indicator ────────────────────────────────────
-
   /// Quota remaining today label
   ///
   /// In en, this message translates to:
@@ -2874,15 +2870,11 @@ abstract class AppLocalizations {
   /// **'Cannot load quota information'**
   String get quotaLoadError;
 
-  // ── Customize screen: tier badge ──────────────────────────────────────────
-
   /// Tier quality badge label
   ///
   /// In en, this message translates to:
   /// **'{tierName} Quality'**
   String tierQualityLabel(String tierName);
-
-  // ── Customize screen: premium upgrade banner ──────────────────────────────
 
   /// Premium upgrade banner title
   ///

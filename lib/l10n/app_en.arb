@@ -2411,5 +2411,88 @@
   "premiumActiveBadge": "Active",
   "@premiumActiveBadge": {
     "description": "Premium active badge text"
+  },
+
+  "stickerGenerating": "Generating...",
+  "@stickerGenerating": {
+    "description": "Sticker generate button loading state"
+  },
+  "stickerCached": "Cached Sticker",
+  "@stickerCached": {
+    "description": "Cached sticker header label"
+  },
+  "stickerNew": "New Sticker",
+  "@stickerNew": {
+    "description": "New sticker header label"
+  },
+  "stickerApplying": "Applying...",
+  "@stickerApplying": {
+    "description": "Apply button loading state"
+  },
+  "stickerApplyButton": "Apply This Sticker",
+  "@stickerApplyButton": {
+    "description": "Apply sticker button text"
+  },
+  "stickerLoadingMessage": "Generating sticker...",
+  "@stickerLoadingMessage": {
+    "description": "Sticker loading overlay message"
+  },
+  "stickerLoadingTime": "Takes approximately 5-8 seconds",
+  "@stickerLoadingTime": {
+    "description": "Sticker loading time hint"
+  },
+  "stickerErrorDefault": "An error occurred",
+  "@stickerErrorDefault": {
+    "description": "Default error message in sticker area"
+  },
+  "stickerAppliedSuccess": "Sticker applied!",
+  "@stickerAppliedSuccess": {
+    "description": "Snackbar when sticker applied successfully"
+  },
+  "stickerApplyFailed": "Failed to apply sticker.",
+  "@stickerApplyFailed": {
+    "description": "Snackbar when sticker apply fails"
+  },
+  "quotaRemainingToday": "Remaining Today",
+  "@quotaRemainingToday": {
+    "description": "Quota remaining today label"
+  },
+  "quotaResetsIn": "Resets in {time}",
+  "@quotaResetsIn": {
+    "description": "Quota reset timer label",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "quotaChecking": "Checking quota...",
+  "@quotaChecking": {
+    "description": "Quota loading state"
+  },
+  "quotaLoadError": "Cannot load quota information",
+  "@quotaLoadError": {
+    "description": "Quota load error message"
+  },
+  "tierQualityLabel": "{tierName} Quality",
+  "@tierQualityLabel": {
+    "description": "Tier quality badge label",
+    "placeholders": {
+      "tierName": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumUpgradeTitle": "Upgrade to Premium",
+  "@premiumUpgradeTitle": {
+    "description": "Premium upgrade banner title"
+  },
+  "premiumUpgradeBenefits": "• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed",
+  "@premiumUpgradeBenefits": {
+    "description": "Premium upgrade banner benefits list"
+  },
+  "premiumUpgradeButton": "Upgrade Now",
+  "@premiumUpgradeButton": {
+    "description": "Premium upgrade banner button text"
   }
 }

@@ -2394,5 +2394,88 @@
   "premiumActiveBadge": "활성",
   "@premiumActiveBadge": {
     "description": "Premium active badge text"
+  },
+
+  "stickerGenerating": "생성 중...",
+  "@stickerGenerating": {
+    "description": "Sticker generate button loading state"
+  },
+  "stickerCached": "캐시된 스티커",
+  "@stickerCached": {
+    "description": "Cached sticker header label"
+  },
+  "stickerNew": "새로 생성된 스티커",
+  "@stickerNew": {
+    "description": "New sticker header label"
+  },
+  "stickerApplying": "적용 중...",
+  "@stickerApplying": {
+    "description": "Apply button loading state"
+  },
+  "stickerApplyButton": "이 스티커로 변경하기",
+  "@stickerApplyButton": {
+    "description": "Apply sticker button text"
+  },
+  "stickerLoadingMessage": "스티커 생성 중...",
+  "@stickerLoadingMessage": {
+    "description": "Sticker loading overlay message"
+  },
+  "stickerLoadingTime": "약 5-8초 소요됩니다",
+  "@stickerLoadingTime": {
+    "description": "Sticker loading time hint"
+  },
+  "stickerErrorDefault": "오류가 발생했습니다",
+  "@stickerErrorDefault": {
+    "description": "Default error message in sticker area"
+  },
+  "stickerAppliedSuccess": "스티커가 적용되었습니다!",
+  "@stickerAppliedSuccess": {
+    "description": "Snackbar when sticker applied successfully"
+  },
+  "stickerApplyFailed": "스티커 적용에 실패했습니다.",
+  "@stickerApplyFailed": {
+    "description": "Snackbar when sticker apply fails"
+  },
+  "quotaRemainingToday": "오늘 남은 횟수",
+  "@quotaRemainingToday": {
+    "description": "Quota remaining today label"
+  },
+  "quotaResetsIn": "{time} 후 리셋",
+  "@quotaResetsIn": {
+    "description": "Quota reset timer label",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "quotaChecking": "할당량 확인 중...",
+  "@quotaChecking": {
+    "description": "Quota loading state"
+  },
+  "quotaLoadError": "할당량 정보를 불러올 수 없습니다",
+  "@quotaLoadError": {
+    "description": "Quota load error message"
+  },
+  "tierQualityLabel": "{tierName} 품질",
+  "@tierQualityLabel": {
+    "description": "Tier quality badge label",
+    "placeholders": {
+      "tierName": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumUpgradeTitle": "프리미엄으로 업그레이드",
+  "@premiumUpgradeTitle": {
+    "description": "Premium upgrade banner title"
+  },
+  "premiumUpgradeBenefits": "• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도",
+  "@premiumUpgradeBenefits": {
+    "description": "Premium upgrade banner benefits list"
+  },
+  "premiumUpgradeButton": "업그레이드하기",
+  "@premiumUpgradeButton": {
+    "description": "Premium upgrade banner button text"
   }
 }

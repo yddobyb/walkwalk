@@ -1458,8 +1458,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get premiumActiveBadge => '활성';
 
-  // ── Customize screen: sticker generation ──────────────────────────────────
-
   @override
   String get stickerGenerating => '생성 중...';
 
@@ -1490,13 +1488,13 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get stickerApplyFailed => '스티커 적용에 실패했습니다.';
 
-  // ── Customize screen: quota indicator ────────────────────────────────────
-
   @override
   String get quotaRemainingToday => '오늘 남은 횟수';
 
   @override
-  String quotaResetsIn(String time) => '$time 후 리셋';
+  String quotaResetsIn(String time) {
+    return '$time 후 리셋';
+  }
 
   @override
   String get quotaChecking => '할당량 확인 중...';
@@ -1504,12 +1502,10 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get quotaLoadError => '할당량 정보를 불러올 수 없습니다';
 
-  // ── Customize screen: tier badge ──────────────────────────────────────────
-
   @override
-  String tierQualityLabel(String tierName) => '$tierName 품질';
-
-  // ── Customize screen: premium upgrade banner ──────────────────────────────
+  String tierQualityLabel(String tierName) {
+    return '$tierName 품질';
+  }
 
   @override
   String get premiumUpgradeTitle => '프리미엄으로 업그레이드';
