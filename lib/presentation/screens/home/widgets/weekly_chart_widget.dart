@@ -22,7 +22,7 @@ class WeeklyChartWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -91,7 +91,7 @@ class WeeklyChartWidget extends ConsumerWidget {
                 horizontalInterval: maxSteps > 0 ? maxSteps / 5 : 2000,
                 getDrawingHorizontalLine: (value) {
                   return FlLine(
-                    color: theme.colorScheme.outline.withOpacity(0.1),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.1),
                     strokeWidth: 1,
                   );
                 },
@@ -111,7 +111,7 @@ class WeeklyChartWidget extends ConsumerWidget {
                         child: Text(
                           _formatNumber(value.toInt()),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 10,
                           ),
                         ),
@@ -141,7 +141,7 @@ class WeeklyChartWidget extends ConsumerWidget {
                         child: Text(
                           dayName,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 10,
                           ),
                         ),
@@ -195,7 +195,7 @@ class WeeklyChartWidget extends ConsumerWidget {
             Container(
               width: 1,
               height: 30,
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
             _buildStatItem(
               theme,
@@ -223,7 +223,7 @@ class WeeklyChartWidget extends ConsumerWidget {
       } else if (hasAppSession) {
         barColor = Colors.green; // 앱 세션이 있는 날은 초록색
       } else {
-        barColor = theme.colorScheme.primary.withOpacity(0.3);
+        barColor = theme.colorScheme.primary.withValues(alpha: 0.3);
       }
 
       return BarChartGroupData(
@@ -251,7 +251,7 @@ class WeeklyChartWidget extends ConsumerWidget {
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -301,13 +301,13 @@ class WeeklyChartWidget extends ConsumerWidget {
             Icon(
               Icons.bar_chart,
               size: 48,
-              color: theme.colorScheme.onSurface.withOpacity(0.3),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 8),
             Text(
               AppLocalizations.of(context).noRecordsYet,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],

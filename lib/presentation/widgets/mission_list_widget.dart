@@ -43,7 +43,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+            color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
           child: TabBar(
@@ -219,14 +219,14 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
           Icon(
             Icons.error_outline,
             size: 64,
-            color: Colors.red.withOpacity(0.5),
+            color: Colors.red.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.red.withOpacity(0.7),
+              color: Colors.red.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 16),
@@ -257,7 +257,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
           Icon(
             icon,
             size: 64,
-            color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -270,7 +270,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
           Text(
             subtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -321,7 +321,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.3),
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -347,7 +347,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                     Text(
                       mission.description,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -357,9 +357,9 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -445,7 +445,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -495,7 +495,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
             Text(
               '${AppLocalizations.of(context).targetLabel}: ${_formatTargetProgress(context)}',
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -538,9 +538,9 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                  border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
                 ),
                 child: Column(
                   children: [
@@ -560,7 +560,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                     Text(
                       AppLocalizations.of(context).missionTreatsLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.orange.withOpacity(0.7),
+                        color: Colors.orange.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -572,9 +572,9 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
+                  color: Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red.withOpacity(0.3)),
+                  border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
                 ),
                 child: Column(
                   children: [
@@ -594,7 +594,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
                     Text(
                       AppLocalizations.of(context).missionHappinessLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.red.withOpacity(0.7),
+                        color: Colors.red.withValues(alpha: 0.7),
                       ),
                     ),
                   ],

@@ -128,8 +128,8 @@ class _MissionCompletionNotificationState
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.green.withOpacity(0.9),
-                  Colors.greenAccent.withOpacity(0.9),
+                  Colors.green.withValues(alpha: 0.9),
+                  Colors.greenAccent.withValues(alpha: 0.9),
                 ],
               ),
             ),
@@ -152,7 +152,7 @@ class _MissionCompletionNotificationState
                             child: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -178,7 +178,7 @@ class _MissionCompletionNotificationState
                                 Text(
                                   widget.mission.title,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                   ),
                                 ),
                               ],
@@ -188,7 +188,7 @@ class _MissionCompletionNotificationState
                             onPressed: _dismissNotification,
                             icon: Icon(
                               Icons.close,
-                              color: Colors.white.withOpacity(0.7),
+                              color: Colors.white.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -200,7 +200,7 @@ class _MissionCompletionNotificationState
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
+                          color: Colors.white.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
@@ -226,7 +226,7 @@ class _MissionCompletionNotificationState
                                 Container(
                                   width: 1,
                                   height: 40,
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                 ),
                                 Expanded(
                                   child: _buildRewardItem(
@@ -248,7 +248,7 @@ class _MissionCompletionNotificationState
                       Text(
                         AppLocalizations.of(context).congratulations,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.center,
@@ -291,7 +291,7 @@ class _MissionCompletionNotificationState
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontSize: 12,
             ),
           ),

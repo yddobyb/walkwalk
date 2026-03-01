@@ -163,8 +163,8 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.1),
-                    theme.colorScheme.secondary.withOpacity(0.1),
+                    theme.colorScheme.primary.withValues(alpha: 0.1),
+                    theme.colorScheme.secondary.withValues(alpha: 0.1),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(20),
@@ -193,7 +193,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                       return Text(
                         '$colorName $breedName',
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       );
                     },

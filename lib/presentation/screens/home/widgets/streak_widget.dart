@@ -21,14 +21,14 @@ class StreakWidget extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            theme.colorScheme.primaryContainer.withOpacity(0.5),
-            theme.colorScheme.secondaryContainer.withOpacity(0.5),
+            theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+            theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -51,7 +51,7 @@ class StreakWidget extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: _getStreakColor(streakData.currentStreak).withOpacity(0.2),
+                color: _getStreakColor(streakData.currentStreak).withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -93,7 +93,7 @@ class StreakWidget extends ConsumerWidget {
                 AppLocalizations.of(context).daysInARow,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface.withOpacity(0.8),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                 ),
               ),
             ),
@@ -106,7 +106,7 @@ class StreakWidget extends ConsumerWidget {
         Text(
           _getEncouragementMessage(context, streakData.currentStreak),
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -115,7 +115,7 @@ class StreakWidget extends ConsumerWidget {
 
         // 구분선
         Divider(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
           thickness: 1,
         ),
 
@@ -137,7 +137,7 @@ class StreakWidget extends ConsumerWidget {
             Container(
               width: 1,
               height: 40,
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
             Expanded(
               child: _buildStatItem(
@@ -161,7 +161,7 @@ class StreakWidget extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+              color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -176,7 +176,7 @@ class StreakWidget extends ConsumerWidget {
                 Text(
                   _getNextGoalMessage(context, streakData.currentStreak),
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -204,7 +204,7 @@ class StreakWidget extends ConsumerWidget {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],

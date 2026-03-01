@@ -30,8 +30,8 @@ class WelcomeScreen extends ConsumerWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      theme.colorScheme.primary.withOpacity(0.1),
-                      theme.colorScheme.secondary.withOpacity(0.1),
+                      theme.colorScheme.primary.withValues(alpha: 0.1),
+                      theme.colorScheme.secondary.withValues(alpha: 0.1),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -72,7 +72,7 @@ class WelcomeScreen extends ConsumerWidget {
               Text(
                 AppLocalizations.of(context).appDescription,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -141,7 +141,7 @@ class WelcomeScreen extends ConsumerWidget {
                 child: Text(
                   AppLocalizations.of(context).loadExistingPet,
                   style: TextStyle(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ),
@@ -152,7 +152,7 @@ class WelcomeScreen extends ConsumerWidget {
               Text(
                 'Version ${AppConstants.appVersion}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                 ),
               ),
               const SizedBox(height: 20),
@@ -209,7 +209,7 @@ class _FeatureItem extends StatelessWidget {
               Text(
                 description,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],

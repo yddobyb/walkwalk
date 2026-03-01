@@ -110,7 +110,7 @@ class _HeroProgressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.3),
+            color: theme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -133,7 +133,7 @@ class _HeroProgressCard extends StatelessWidget {
                       value: progress,
                       strokeWidth: 10,
                       backgroundColor:
-                          Colors.white.withOpacity(0.2),
+                          Colors.white.withValues(alpha: 0.2),
                       valueColor: AlwaysStoppedAnimation<Color>(
                         achieved
                             ? Colors.greenAccent
@@ -156,7 +156,7 @@ class _HeroProgressCard extends StatelessWidget {
                         '/ $goalSteps ${l10n.stepsUnitLabel}',
                         style:
                             theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -169,7 +169,7 @@ class _HeroProgressCard extends StatelessWidget {
                     ? l10n.goalAchieved
                     : l10n.stepsToGoal(goalSteps - steps),
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -226,7 +226,7 @@ class _QuickStatsRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -245,7 +245,7 @@ class _QuickStatsRow extends StatelessWidget {
           Container(
             width: 1,
             height: 40,
-            color: theme.colorScheme.outline.withOpacity(0.2),
+            color: theme.colorScheme.outline.withValues(alpha: 0.2),
           ),
           Expanded(
             child: _QuickStatItem(
@@ -259,7 +259,7 @@ class _QuickStatsRow extends StatelessWidget {
           Container(
             width: 1,
             height: 40,
-            color: theme.colorScheme.outline.withOpacity(0.2),
+            color: theme.colorScheme.outline.withValues(alpha: 0.2),
           ),
           Expanded(
             child: _QuickStatItem(
@@ -306,7 +306,7 @@ class _QuickStatItem extends StatelessWidget {
           label,
           style: theme.textTheme.bodySmall?.copyWith(
             color:
-                theme.colorScheme.onSurface.withOpacity(0.6),
+                theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -347,7 +347,7 @@ class _ActiveMissionsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -378,7 +378,7 @@ class _ActiveMissionsCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -475,7 +475,7 @@ class _MissionProgressItem extends StatelessWidget {
             value: progress,
             backgroundColor:
                 theme.colorScheme.surfaceContainerHighest
-                    .withOpacity(0.5),
+                    .withValues(alpha: 0.5),
             valueColor: AlwaysStoppedAnimation<Color>(
                 theme.colorScheme.primary),
             minHeight: 4,
@@ -516,7 +516,7 @@ class _WalkStartSection extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color:
-                theme.colorScheme.primary.withOpacity(0.3),
+                theme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -564,7 +564,7 @@ class _WalkStartSection extends StatelessWidget {
                   onPressed: () => onStartWalk(true),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        Colors.white.withOpacity(0.2),
+                        Colors.white.withValues(alpha: 0.2),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         vertical: 14),
@@ -612,7 +612,7 @@ class _WalkTipsCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest
-            .withOpacity(0.3),
+            .withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -628,7 +628,7 @@ class _WalkTipsCard extends StatelessWidget {
               l10n.walkOutdoorBonus,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface
-                    .withOpacity(0.7),
+                    .withValues(alpha: 0.7),
               ),
             ),
           ),

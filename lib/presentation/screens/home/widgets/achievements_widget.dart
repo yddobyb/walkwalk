@@ -22,7 +22,7 @@ class AchievementsWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -111,7 +111,7 @@ class AchievementsWidget extends ConsumerWidget {
       width: 80,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: _getTierColor(achievement.tier).withOpacity(0.1),
+        color: _getTierColor(achievement.tier).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: _getTierColor(achievement.tier),
@@ -152,7 +152,7 @@ class AchievementsWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -191,10 +191,10 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.3),
+          color: theme.colorScheme.outline.withValues(alpha: 0.3),
           style: BorderStyle.solid,
         ),
       ),
@@ -230,7 +230,7 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: const Center(
@@ -244,7 +244,7 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(

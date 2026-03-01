@@ -334,7 +334,7 @@ class _WalkScreenState extends ConsumerState<WalkScreen> {
             l10n.walkPermissionRequired,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface
-                  .withOpacity(0.7),
+                  .withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),

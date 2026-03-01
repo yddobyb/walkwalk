@@ -133,7 +133,7 @@ class SettingsScreen extends ConsumerWidget {
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.45),
+                        .withValues(alpha: 0.45),
                   ),
             ),
           ),
@@ -624,7 +624,7 @@ class _SettingsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -690,7 +690,7 @@ class _SettingsTile extends StatelessWidget {
                   Text(
                     subtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -736,7 +736,7 @@ class _SubscriptionSection extends ConsumerWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFD700).withOpacity(0.2),
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -809,7 +809,7 @@ class _GoalDialogState extends State<_GoalDialog> {
             Text(
               l10n.dailyGoalDialogRange,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 16),

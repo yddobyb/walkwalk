@@ -89,8 +89,8 @@ class PetAvatarWidget extends ConsumerWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                theme.colorScheme.primary.withOpacity(0.1),
-                theme.colorScheme.secondary.withOpacity(0.1),
+                theme.colorScheme.primary.withValues(alpha: 0.1),
+                theme.colorScheme.secondary.withValues(alpha: 0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(20),
@@ -105,11 +105,11 @@ class PetAvatarWidget extends ConsumerWidget {
                   width: 150,
                   height: 150,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surface.withOpacity(0.8),
+                    color: theme.colorScheme.surface.withValues(alpha: 0.8),
                     borderRadius: BorderRadius.circular(75),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                       ),
@@ -137,7 +137,7 @@ class PetAvatarWidget extends ConsumerWidget {
               Text(
                 '$petBreed • $petPersonality',
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
 
@@ -147,7 +147,7 @@ class PetAvatarWidget extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withOpacity(0.1),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -170,8 +170,8 @@ class PetAvatarWidget extends ConsumerWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              theme.colorScheme.primary.withOpacity(0.1),
-              theme.colorScheme.secondary.withOpacity(0.1),
+              theme.colorScheme.primary.withValues(alpha: 0.1),
+              theme.colorScheme.secondary.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(20),
@@ -188,8 +188,8 @@ class PetAvatarWidget extends ConsumerWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              theme.colorScheme.primary.withOpacity(0.1),
-              theme.colorScheme.secondary.withOpacity(0.1),
+              theme.colorScheme.primary.withValues(alpha: 0.1),
+              theme.colorScheme.secondary.withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(20),

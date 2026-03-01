@@ -93,7 +93,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                   gradient: LinearGradient(
                     colors: [
                       _getTierColor(achievement.tier),
-                      _getTierColor(achievement.tier).withOpacity(0.8),
+                      _getTierColor(achievement.tier).withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -101,7 +101,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: _getTierColor(achievement.tier).withOpacity(0.3),
+                      color: _getTierColor(achievement.tier).withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -115,7 +115,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Center(
@@ -171,7 +171,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                     Text(
                       _getAchievementDescription(achievement.code, AppLocalizations.of(context)),
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                     if (achievement.treatReward > 0 || achievement.happinessReward > 0) ...[
@@ -179,7 +179,7 @@ class _AchievementNotificationWidgetState extends ConsumerState<AchievementNotif
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(

@@ -65,15 +65,15 @@ extension QuotaDataX on QuotaData {
   /// 남은 비율 (0.0 ~ 1.0)
   double get remainingRate => total > 0 ? remaining / total : 1.0;
 
-  /// 리셋까지 남은 시간 (포맷된 문자열)
+  /// 리셋까지 남은 시간 (포맷된 문자열 - 언어 독립적 h/m 약어 사용)
   String get formattedTimeUntilReset {
     final hours = nextResetIn ~/ 3600;
     final minutes = (nextResetIn % 3600) ~/ 60;
 
     if (hours > 0) {
-      return '$hours시간 $minutes분';
+      return '${hours}h ${minutes}m';
     } else {
-      return '$minutes분';
+      return '${minutes}m';
     }
   }
 
@@ -95,7 +95,7 @@ extension QuotaDataX on QuotaData {
   String get providerDisplayName {
     switch (provider) {
       case 'gemini':
-        return 'Gemini (고품질)';
+        return 'Gemini';
       case 'pixazo':
         return 'Pixazo';
       case 'openai':

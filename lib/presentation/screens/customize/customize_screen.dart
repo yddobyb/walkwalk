@@ -59,8 +59,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.1),
-                    theme.colorScheme.secondary.withOpacity(0.1),
+                    theme.colorScheme.primary.withValues(alpha: 0.1),
+                    theme.colorScheme.secondary.withValues(alpha: 0.1),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(20),
@@ -131,13 +131,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       border: Border.all(
                         color: isSelected
                             ? theme.colorScheme.primary
-                            : theme.colorScheme.outline.withOpacity(0.2),
+                            : theme.colorScheme.outline.withValues(alpha: 0.2),
                         width: 2,
                       ),
                       boxShadow: [
                         if (isSelected)
                           BoxShadow(
-                            color: theme.colorScheme.primary.withOpacity(0.3),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -226,7 +226,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -254,7 +254,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   Text(
                     AppLocalizations.of(context).aiStickerDescription,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -329,7 +329,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: theme.colorScheme.primary.withOpacity(0.3),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -365,7 +365,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       Text(
                         '${response.data.size.width}x${response.data.size.height}',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -428,7 +428,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     Text(
                       AppLocalizations.of(context).stickerLoadingTime,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -443,7 +443,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -567,13 +567,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               border: Border.all(
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.outline.withOpacity(0.2),
+                    : theme.colorScheme.outline.withValues(alpha: 0.2),
                 width: 2,
               ),
               boxShadow: [
                 if (isSelected)
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -665,13 +665,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               border: Border.all(
                 color: isSelected
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.outline.withOpacity(0.2),
+                    : theme.colorScheme.outline.withValues(alpha: 0.2),
                 width: 2,
               ),
               boxShadow: [
                 if (isSelected)
                   BoxShadow(
-                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -687,7 +687,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     color: colorData['color'] as Color,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: theme.colorScheme.outline.withOpacity(0.3),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.3),
                       width: 1,
                     ),
                   ),
@@ -760,13 +760,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   border: Border.all(
                     color: isSelected
                         ? theme.colorScheme.primary
-                        : theme.colorScheme.outline.withOpacity(0.2),
+                        : theme.colorScheme.outline.withValues(alpha: 0.2),
                     width: 2,
                   ),
                   boxShadow: [
                     if (isSelected)
                       BoxShadow(
-                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -846,13 +846,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                   border: Border.all(
                     color: isSelected
                         ? theme.colorScheme.primary
-                        : theme.colorScheme.outline.withOpacity(0.2),
+                        : theme.colorScheme.outline.withValues(alpha: 0.2),
                     width: 2,
                   ),
                   boxShadow: [
                     if (isSelected)
                       BoxShadow(
-                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -1037,7 +1037,7 @@ class _QuotaIndicator extends StatelessWidget {
               Text(
                 AppLocalizations.of(context).quotaRemainingToday,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
               Row(
@@ -1054,7 +1054,7 @@ class _QuotaIndicator extends StatelessWidget {
                   Text(
                     ' / ${quota.total}',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ],
@@ -1067,7 +1067,7 @@ class _QuotaIndicator extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: quota.remainingRate,
-              backgroundColor: theme.colorScheme.outline.withOpacity(0.2),
+              backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(
                 quota.isExhausted
                     ? Colors.red
@@ -1087,7 +1087,7 @@ class _QuotaIndicator extends StatelessWidget {
                 Icon(
                   Icons.timer_outlined,
                   size: 14,
-                  color: Colors.red.withOpacity(0.7),
+                  color: Colors.red.withValues(alpha: 0.7),
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -1095,7 +1095,7 @@ class _QuotaIndicator extends StatelessWidget {
                     quota.formattedTimeUntilReset,
                   ),
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.red.withOpacity(0.7),
+                    color: Colors.red.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -1127,7 +1127,7 @@ class _QuotaIndicator extends StatelessWidget {
           Text(
             AppLocalizations.of(context).quotaChecking,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.5),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ],
@@ -1138,13 +1138,13 @@ class _QuotaIndicator extends StatelessWidget {
           Icon(
             Icons.warning_amber_rounded,
             size: 14,
-            color: Colors.orange.withOpacity(0.7),
+            color: Colors.orange.withValues(alpha: 0.7),
           ),
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context).quotaLoadError,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: Colors.orange.withOpacity(0.7),
+              color: Colors.orange.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -1167,8 +1167,8 @@ class _TierBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPremium = quota.isPremium;
     final bgColor = isPremium
-        ? const Color(0xFFFFD700).withOpacity(0.15)
-        : Colors.green.withOpacity(0.1);
+        ? const Color(0xFFFFD700).withValues(alpha: 0.15)
+        : Colors.green.withValues(alpha: 0.1);
     final borderColor = isPremium
         ? const Color(0xFFFFD700)
         : Colors.green;
@@ -1181,7 +1181,7 @@ class _TierBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor.withOpacity(0.5)),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1206,7 +1206,7 @@ class _TierBadge extends StatelessWidget {
           Text(
             '(${quota.providerDisplayName})',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: textColor.withOpacity(0.7),
+              color: textColor.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -1227,60 +1227,161 @@ class _PremiumUpgradeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFFFFD700).withOpacity(0.1),
-            const Color(0xFFFFA500).withOpacity(0.1),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    final l10n = AppLocalizations.of(context);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFCC4A00),
+              Color(0xFFFF8A50),
+              Color(0xFFFFB584),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFFFD700).withOpacity(0.3),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Text('💎', style: TextStyle(fontSize: 16)),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(context).premiumUpgradeTitle,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFB8860B),
+        child: Stack(
+          children: [
+            // 배경 장식 원 (paywall 헤더와 동일한 스타일)
+            Positioned(
+              top: -24,
+              right: -24,
+              child: Container(
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.08),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context).premiumUpgradeBenefits,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
-              height: 1.4,
             ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: onUpgradeTap,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFFB8860B),
-                side: const BorderSide(color: Color(0xFFFFD700)),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+            Positioned(
+              bottom: -16,
+              left: 80,
+              child: Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.06),
+                ),
               ),
-              child: Text(AppLocalizations.of(context).premiumUpgradeButton),
             ),
-          ),
-        ],
+
+            // 콘텐츠
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 헤더 행: 💎 아이콘 + 타이틀/서브타이틀
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.2),
+                        ),
+                        child: const Center(
+                          child: Text('💎', style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.premiumUpgradeTitle,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.2,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              l10n.premiumInactiveSubtitle,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                fontSize: 12,
+                                height: 1.3,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 특징 칩
+                  Row(
+                    children: [
+                      _featureChip('✨ HD Quality'),
+                      const SizedBox(width: 6),
+                      _featureChip('∞ 50/day'),
+                      const SizedBox(width: 6),
+                      _featureChip('⚡ Fast'),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // CTA 버튼 (흰색 배경 + 오렌지 텍스트)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: onUpgradeTap,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFFCC4A00),
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        l10n.premiumUpgradeButton,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _featureChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -1301,8 +1402,8 @@ class _ProviderBadge extends StatelessWidget {
     // provider에 따른 스타일 설정
     final isGemini = provider.toLowerCase() == 'gemini';
     final bgColor = isGemini
-        ? const Color(0xFF4285F4).withOpacity(0.1)
-        : Colors.purple.withOpacity(0.1);
+        ? const Color(0xFF4285F4).withValues(alpha: 0.1)
+        : Colors.purple.withValues(alpha: 0.1);
     final textColor = isGemini
         ? const Color(0xFF4285F4)
         : Colors.purple;

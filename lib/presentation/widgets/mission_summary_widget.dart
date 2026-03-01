@@ -34,7 +34,7 @@ class MissionSummaryWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -51,7 +51,7 @@ class MissionSummaryWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -114,7 +114,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+              color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -151,11 +151,11 @@ class MissionSummaryWidget extends ConsumerWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isCompleted
-            ? Colors.green.withOpacity(0.05)
-            : theme.colorScheme.surfaceVariant.withOpacity(0.3),
+            ? Colors.green.withValues(alpha: 0.05)
+            : theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: isCompleted
-            ? Border.all(color: Colors.green.withOpacity(0.2))
+            ? Border.all(color: Colors.green.withValues(alpha: 0.2))
             : null,
       ),
       child: Column(
@@ -183,7 +183,7 @@ class MissionSummaryWidget extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -203,7 +203,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           // 진행도 바
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+            backgroundColor: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
             valueColor: AlwaysStoppedAnimation<Color>(
               isCompleted ? Colors.green : theme.colorScheme.primary,
             ),
@@ -270,7 +270,7 @@ class MissionSummaryWidget extends ConsumerWidget {
             margin: const EdgeInsets.only(bottom: 12),
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(
@@ -289,7 +289,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.05),
+        color: Colors.red.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -317,7 +317,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

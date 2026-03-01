@@ -81,7 +81,7 @@ class PetStatusWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -172,7 +172,7 @@ class PetStatusWidget extends ConsumerWidget {
                     Text(
                       AppLocalizations.of(context).treatsCount(treats),
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -202,7 +202,7 @@ class PetStatusWidget extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: _getStatusMessageColor(happiness, theme).withOpacity(0.1),
+              color: _getStatusMessageColor(happiness, theme).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -244,7 +244,7 @@ class PetStatusWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -264,7 +264,7 @@ class PetStatusWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -408,7 +408,7 @@ class _StatusBar extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Center(
@@ -432,7 +432,7 @@ class _StatusBar extends StatelessWidget {
                   Text(
                     '$value/$maxValue',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -440,7 +440,7 @@ class _StatusBar extends StatelessWidget {
               const SizedBox(height: 6),
               LinearProgressIndicator(
                 value: percentage,
-                backgroundColor: color.withOpacity(0.2),
+                backgroundColor: color.withValues(alpha: 0.2),
                 valueColor: AlwaysStoppedAnimation<Color>(color),
                 borderRadius: BorderRadius.circular(2),
               ),

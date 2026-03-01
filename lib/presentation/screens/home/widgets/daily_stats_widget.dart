@@ -71,7 +71,7 @@ class DailyStatsWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -96,7 +96,7 @@ class DailyStatsWidget extends ConsumerWidget {
                     data: (state) => Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: _getStateColor(state).withOpacity(0.2),
+                        color: _getStateColor(state).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -156,7 +156,7 @@ class DailyStatsWidget extends ConsumerWidget {
                       child: CircularProgressIndicator(
                         value: stepProgress > 1.0 ? 1.0 : stepProgress,
                         strokeWidth: 8,
-                        backgroundColor: theme.colorScheme.outline.withOpacity(0.2),
+                        backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.2),
                         valueColor: AlwaysStoppedAnimation<Color>(
                           stepProgress >= 1.0
                               ? Colors.green
@@ -177,7 +177,7 @@ class DailyStatsWidget extends ConsumerWidget {
                         Text(
                           AppLocalizations.of(context).stepsUnitLabel,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -192,7 +192,7 @@ class DailyStatsWidget extends ConsumerWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: stepProgress >= 1.0
                         ? Colors.green
-                        : theme.colorScheme.onSurface.withOpacity(0.7),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -216,7 +216,7 @@ class DailyStatsWidget extends ConsumerWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: theme.colorScheme.outline.withOpacity(0.2),
+                color: theme.colorScheme.outline.withValues(alpha: 0.2),
               ),
               Expanded(
                 child: _StatItem(
@@ -237,7 +237,7 @@ class DailyStatsWidget extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+                color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -252,7 +252,7 @@ class DailyStatsWidget extends ConsumerWidget {
                     child: Text(
                       _getStreakMessage(context, streakData),
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ),
@@ -275,7 +275,7 @@ class DailyStatsWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -292,7 +292,7 @@ class DailyStatsWidget extends ConsumerWidget {
             Text(
               AppLocalizations.of(context).loadingSteps,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -309,7 +309,7 @@ class DailyStatsWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -335,7 +335,7 @@ class DailyStatsWidget extends ConsumerWidget {
             Text(
               AppLocalizations.of(context).checkActivityPermissions,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
             ),
@@ -441,7 +441,7 @@ class _StatItem extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],

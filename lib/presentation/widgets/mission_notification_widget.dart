@@ -97,7 +97,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
                   gradient: LinearGradient(
                     colors: [
                       _getMissionTypeColor(mission.type),
-                      _getMissionTypeColor(mission.type).withOpacity(0.8),
+                      _getMissionTypeColor(mission.type).withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -105,7 +105,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: _getMissionTypeColor(mission.type).withOpacity(0.3),
+                      color: _getMissionTypeColor(mission.type).withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -117,7 +117,7 @@ class _MissionNotificationWidgetState extends ConsumerState<MissionNotificationW
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(

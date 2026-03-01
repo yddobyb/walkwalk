@@ -46,7 +46,7 @@ class MissionCardWidget extends ConsumerWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: isCompleted
-                ? Border.all(color: Colors.green.withOpacity(0.3), width: 2)
+                ? Border.all(color: Colors.green.withValues(alpha: 0.3), width: 2)
                 : null,
           ),
           child: Column(
@@ -72,7 +72,7 @@ class MissionCardWidget extends ConsumerWidget {
                         Text(
                           mission.description,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -82,9 +82,9 @@ class MissionCardWidget extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                        color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: Colors.green.withOpacity(0.3)),
+                        border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -200,7 +200,7 @@ class MissionCardWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(
@@ -242,7 +242,7 @@ class MissionCardWidget extends ConsumerWidget {
               label,
               style: TextStyle(
                 fontSize: 10,
-                color: color.withOpacity(0.7),
+                color: color.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -260,7 +260,7 @@ class MissionCardWidget extends ConsumerWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.1),
+          color: Colors.red.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
@@ -285,7 +285,7 @@ class MissionCardWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(

@@ -124,7 +124,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         borderRadius: BorderRadius.circular(60),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -153,7 +153,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     Text(
                       AppLocalizations.of(context).appDescription,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onPrimary.withOpacity(0.8),
+                        color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -167,7 +167,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          theme.colorScheme.onPrimary.withOpacity(0.7),
+                          theme.colorScheme.onPrimary.withValues(alpha: 0.7),
                         ),
                       ),
                     ),

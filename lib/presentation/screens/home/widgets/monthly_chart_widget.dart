@@ -22,7 +22,7 @@ class MonthlyChartWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -106,8 +106,8 @@ class MonthlyChartWidget extends ConsumerWidget {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        theme.colorScheme.secondary.withOpacity(0.3),
-                        theme.colorScheme.secondary.withOpacity(0.0),
+                        theme.colorScheme.secondary.withValues(alpha: 0.3),
+                        theme.colorScheme.secondary.withValues(alpha: 0.0),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -121,7 +121,7 @@ class MonthlyChartWidget extends ConsumerWidget {
                 horizontalInterval: maxSteps > 0 ? maxSteps / 4 : 2500,
                 getDrawingHorizontalLine: (value) {
                   return FlLine(
-                    color: theme.colorScheme.outline.withOpacity(0.1),
+                    color: theme.colorScheme.outline.withValues(alpha: 0.1),
                     strokeWidth: 1,
                   );
                 },
@@ -141,7 +141,7 @@ class MonthlyChartWidget extends ConsumerWidget {
                         child: Text(
                           _formatNumber(value.toInt()),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 10,
                           ),
                         ),
@@ -174,7 +174,7 @@ class MonthlyChartWidget extends ConsumerWidget {
                         child: Text(
                           DateFormat('M/d').format(date),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             fontSize: 10,
                           ),
                         ),
@@ -233,7 +233,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             Container(
               width: 1,
               height: 30,
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
             _buildStatItem(
               theme,
@@ -245,7 +245,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             Container(
               width: 1,
               height: 30,
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
             _buildStatItem(
               theme,
@@ -278,7 +278,7 @@ class MonthlyChartWidget extends ConsumerWidget {
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 fontSize: 11,
               ),
             ),
@@ -329,13 +329,13 @@ class MonthlyChartWidget extends ConsumerWidget {
             Icon(
               Icons.show_chart,
               size: 48,
-              color: theme.colorScheme.onSurface.withOpacity(0.3),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 8),
             Text(
               AppLocalizations.of(context).noRecordsYet,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],

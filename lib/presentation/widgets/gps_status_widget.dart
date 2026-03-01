@@ -25,7 +25,7 @@ class GPSStatusWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -83,13 +83,13 @@ class GPSStatusWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: isTracking
-          ? Colors.green.withOpacity(0.1)
-          : Colors.grey.withOpacity(0.1),
+          ? Colors.green.withValues(alpha: 0.1)
+          : Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isTracking
-            ? Colors.green.withOpacity(0.3)
-            : Colors.grey.withOpacity(0.3),
+            ? Colors.green.withValues(alpha: 0.3)
+            : Colors.grey.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -118,13 +118,13 @@ class GPSStatusWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: isOutdoor
-          ? Colors.blue.withOpacity(0.1)
-          : Colors.orange.withOpacity(0.1),
+          ? Colors.blue.withValues(alpha: 0.1)
+          : Colors.orange.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isOutdoor
-            ? Colors.blue.withOpacity(0.3)
-            : Colors.orange.withOpacity(0.3),
+            ? Colors.blue.withValues(alpha: 0.3)
+            : Colors.orange.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -152,9 +152,9 @@ class GPSStatusWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -184,9 +184,9 @@ class GPSStatusWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -218,7 +218,7 @@ class GPSStatusWidget extends ConsumerWidget {
       return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+          color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -244,7 +244,7 @@ class GPSStatusWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -325,13 +325,13 @@ class GPSStatusWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: isEligibleForBonus
-          ? Colors.green.withOpacity(0.1)
-          : Colors.orange.withOpacity(0.1),
+          ? Colors.green.withValues(alpha: 0.1)
+          : Colors.orange.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: isEligibleForBonus
-            ? Colors.green.withOpacity(0.3)
-            : Colors.orange.withOpacity(0.3),
+            ? Colors.green.withValues(alpha: 0.3)
+            : Colors.orange.withValues(alpha: 0.3),
         ),
       ),
       child: Row(

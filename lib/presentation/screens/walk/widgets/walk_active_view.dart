@@ -123,7 +123,7 @@ class _TimerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -134,7 +134,7 @@ class _TimerCard extends StatelessWidget {
           Text(
             l10n.walkScreenElapsedTime,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 8),
@@ -177,7 +177,7 @@ class _SessionStepsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -189,7 +189,7 @@ class _SessionStepsCard extends StatelessWidget {
             l10n.walkScreenSessionSteps,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurface
-                  .withOpacity(0.7),
+                  .withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
@@ -207,7 +207,7 @@ class _SessionStepsCard extends StatelessWidget {
             l10n.stepsUnitLabel,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface
-                  .withOpacity(0.5),
+                  .withValues(alpha: 0.5),
             ),
           ),
         ],
@@ -240,7 +240,7 @@ class _LiveStatsRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -266,7 +266,7 @@ class _LiveStatsRow extends StatelessWidget {
                 l10n.distance,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurface
-                      .withOpacity(0.6),
+                      .withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -275,7 +275,7 @@ class _LiveStatsRow extends StatelessWidget {
             width: 1,
             height: 40,
             color:
-                theme.colorScheme.outline.withOpacity(0.2),
+                theme.colorScheme.outline.withValues(alpha: 0.2),
           ),
           Column(
             children: [
@@ -296,7 +296,7 @@ class _LiveStatsRow extends StatelessWidget {
                   color: (isOutdoor
                           ? Colors.orange
                           : Colors.blueGrey)
-                      .withOpacity(0.15),
+                      .withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -336,10 +336,10 @@ class _MotivationalTip extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.08),
+        color: Colors.green.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.green.withOpacity(0.2),
+          color: Colors.green.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
@@ -387,7 +387,7 @@ class _StopWalkButton extends StatelessWidget {
         color: theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -412,7 +412,7 @@ class _StopWalkButton extends StatelessWidget {
               elevation: 2,
               disabledBackgroundColor: Colors.grey,
               disabledForegroundColor:
-                  Colors.white.withOpacity(0.7),
+                  Colors.white.withValues(alpha: 0.7),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

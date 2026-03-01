@@ -57,7 +57,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primaryContainer
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -96,7 +96,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             content,
             style: theme.textTheme.bodyMedium?.copyWith(
               color:
-                  theme.colorScheme.onSurface.withOpacity(0.8),
+                  theme.colorScheme.onSurface.withValues(alpha: 0.8),
               height: 1.6,
             ),
           ),

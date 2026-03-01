@@ -61,7 +61,7 @@ class AchievementsScreen extends ConsumerWidget {
         gradient: LinearGradient(
           colors: [
             theme.colorScheme.primary,
-            theme.colorScheme.primary.withOpacity(0.8),
+            theme.colorScheme.primary.withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -173,15 +173,15 @@ class AchievementsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isUnlocked ? theme.colorScheme.surface : theme.colorScheme.surface.withOpacity(0.5),
+        color: isUnlocked ? theme.colorScheme.surface : theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isUnlocked ? _getTierColor(achievement.tier) : theme.colorScheme.outline.withOpacity(0.3),
+          color: isUnlocked ? _getTierColor(achievement.tier) : theme.colorScheme.outline.withValues(alpha: 0.3),
           width: isUnlocked ? 2 : 1,
         ),
         boxShadow: isUnlocked ? [
           BoxShadow(
-            color: _getTierColor(achievement.tier).withOpacity(0.2),
+            color: _getTierColor(achievement.tier).withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -196,7 +196,7 @@ class AchievementsScreen extends ConsumerWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: isUnlocked ? _getTierColor(achievement.tier).withOpacity(0.1) : theme.colorScheme.outline.withOpacity(0.1),
+                  color: isUnlocked ? _getTierColor(achievement.tier).withValues(alpha: 0.1) : theme.colorScheme.outline.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
@@ -233,7 +233,7 @@ class AchievementsScreen extends ConsumerWidget {
             child: Text(
               _getAchievementDescription(achievement.code, AppLocalizations.of(context)),
               style: theme.textTheme.bodySmall?.copyWith(
-                color: isUnlocked ? theme.colorScheme.onSurface.withOpacity(0.7) : theme.colorScheme.outline.withOpacity(0.7),
+                color: isUnlocked ? theme.colorScheme.onSurface.withValues(alpha: 0.7) : theme.colorScheme.outline.withValues(alpha: 0.7),
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -244,9 +244,9 @@ class AchievementsScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
                 value: progress.clamp(0.0, 1.0),
-                backgroundColor: theme.colorScheme.outline.withOpacity(0.2),
+                backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.2),
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  _getTierColor(achievement.tier).withOpacity(0.7),
+                  _getTierColor(achievement.tier).withValues(alpha: 0.7),
                 ),
                 minHeight: 4,
               ),

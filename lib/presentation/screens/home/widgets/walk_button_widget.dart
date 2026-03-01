@@ -43,7 +43,7 @@ class WalkButtonWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.3),
+            color: theme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -57,7 +57,7 @@ class WalkButtonWidget extends ConsumerWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Icon(
@@ -83,7 +83,7 @@ class WalkButtonWidget extends ConsumerWidget {
                           ? AppLocalizations.of(context).walkEndWalkDescription
                           : AppLocalizations.of(context).walkStartWalkDescription,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -149,7 +149,7 @@ class WalkButtonWidget extends ConsumerWidget {
                   child: ElevatedButton(
                     onPressed: () => _startWalk(context, ref, true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.2),
+                      backgroundColor: Colors.white.withValues(alpha: 0.2),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -180,7 +180,7 @@ class WalkButtonWidget extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -188,7 +188,7 @@ class WalkButtonWidget extends ConsumerWidget {
                 Icon(
                   isWalking ? Icons.timer : Icons.lightbulb_outline,
                   size: 16,
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -197,7 +197,7 @@ class WalkButtonWidget extends ConsumerWidget {
                         ? AppLocalizations.of(context).walkingNow
                         : AppLocalizations.of(context).walkOutdoorBonus,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                     ),
                   ),
                 ),
@@ -218,7 +218,7 @@ class WalkButtonWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -235,7 +235,7 @@ class WalkButtonWidget extends ConsumerWidget {
             Text(
               AppLocalizations.of(context).walkSensorInitializing,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -253,7 +253,7 @@ class WalkButtonWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),

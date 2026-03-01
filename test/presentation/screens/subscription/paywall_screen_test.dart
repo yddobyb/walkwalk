@@ -40,12 +40,12 @@ void main() {
   }
 
   group('PaywallScreen Widget Tests', () {
-    testWidgets('renders AppBar with title', (tester) async {
+    testWidgets('renders hero header with close button', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      // AppBar가 렌더링되어야 함
-      expect(find.byType(AppBar), findsOneWidget);
+      // 새 디자인: AppBar 대신 커스텀 _HeroHeader + X 닫기 버튼
+      expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     });
 
     testWidgets('renders header gradient container', (tester) async {
@@ -60,19 +60,19 @@ void main() {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      // 4개의 체크 아이콘 (혜택 체크마크)
-      expect(find.byIcon(Icons.check_circle), findsNWidgets(4));
+      // 새 디자인: check_circle_rounded 아이콘 사용
+      expect(find.byIcon(Icons.check_circle_rounded), findsNWidgets(4));
     });
 
     testWidgets('renders benefit icons', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      // 혜택 아이콘들
-      expect(find.byIcon(Icons.auto_awesome), findsOneWidget);
-      expect(find.byIcon(Icons.all_inclusive), findsOneWidget);
-      expect(find.byIcon(Icons.block), findsOneWidget);
-      expect(find.byIcon(Icons.speed), findsOneWidget);
+      // 새 디자인: rounded 아이콘 버전 사용
+      expect(find.byIcon(Icons.auto_awesome_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.all_inclusive_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.block_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.bolt_rounded), findsOneWidget);
     });
 
     testWidgets('renders subscribe button', (tester) async {
@@ -147,9 +147,9 @@ void main() {
       );
     });
 
-    testWidgets('has back button in AppBar', (tester) async {
+    testWidgets('has close button when pushed via Navigator', (tester) async {
       // Navigator 스택에 PaywallScreen을 push해서
-      // 뒤로가기 버튼이 있는지 확인
+      // 새 디자인의 커스텀 X 닫기 버튼이 있는지 확인
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -184,8 +184,8 @@ void main() {
       await tester.tap(find.text('Go'));
       await tester.pumpAndSettle();
 
-      // 뒤로가기 버튼 확인
-      expect(find.byType(BackButton), findsOneWidget);
+      // 새 디자인: BackButton 대신 커스텀 X 닫기 버튼 (Icons.close_rounded)
+      expect(find.byIcon(Icons.close_rounded), findsOneWidget);
     });
   });
 }
