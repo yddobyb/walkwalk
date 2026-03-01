@@ -1546,4 +1546,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumUpgradeButton => 'Upgrade Now';
+
+  @override
+  String get tierNameFree => 'Free';
 }

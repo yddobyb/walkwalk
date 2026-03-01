@@ -1516,4 +1516,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get premiumUpgradeButton => '업그레이드하기';
+
+  @override
+  String get tierNameFree => '무료';
 }

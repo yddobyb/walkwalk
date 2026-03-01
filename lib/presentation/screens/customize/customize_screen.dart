@@ -1192,7 +1192,11 @@ class _TierBadge extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            AppLocalizations.of(context).tierQualityLabel(quota.tierDisplayName),
+            AppLocalizations.of(context).tierQualityLabel(
+              quota.isPremium
+                  ? AppLocalizations.of(context).premiumTitle
+                  : AppLocalizations.of(context).tierNameFree,
+            ),
             style: theme.textTheme.labelMedium?.copyWith(
               color: textColor,
               fontWeight: FontWeight.w600,

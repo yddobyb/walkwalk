@@ -2494,5 +2494,9 @@
   "premiumUpgradeButton": "Upgrade Now",
   "@premiumUpgradeButton": {
     "description": "Premium upgrade banner button text"
+  },
+  "tierNameFree": "Free",
+  "@tierNameFree": {
+    "description": "Free tier display name"
   }
 }

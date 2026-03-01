@@ -2477,5 +2477,9 @@
   "premiumUpgradeButton": "업그레이드하기",
   "@premiumUpgradeButton": {
     "description": "Premium upgrade banner button text"
+  },
+  "tierNameFree": "무료",
+  "@tierNameFree": {
+    "description": "Free tier display name"
   }
 }

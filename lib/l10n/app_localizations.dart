@@ -2893,6 +2893,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upgrade Now'**
   String get premiumUpgradeButton;
+
+  /// Free tier display name
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get tierNameFree;
 }
 
 class _AppLocalizationsDelegate
