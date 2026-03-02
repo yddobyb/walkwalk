@@ -293,6 +293,7 @@ class WalkButtonWidget extends ConsumerWidget {
     try {
       // 실외 산책일 때만 GPS 활성화
       final success = await service.startWalkSession(enableGPS: isOutdoor);
+      if (!context.mounted) return;
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -312,7 +313,9 @@ class WalkButtonWidget extends ConsumerWidget {
         _showErrorSnackBar(context, AppLocalizations.of(context).walkStartFailed);
       }
     } catch (e) {
-      _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
+      if (context.mounted) {
+        _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
+      }
     }
   }
 
@@ -361,6 +364,7 @@ class WalkButtonWidget extends ConsumerWidget {
         final didLevelUp = levelsGained > 0;
 
         // 메시지 구성
+        if (!context.mounted) return;
         final l10n = AppLocalizations.of(context);
         String message = l10n.walkCompleted(
           walkSession.totalSteps,
@@ -525,10 +529,14 @@ class WalkButtonWidget extends ConsumerWidget {
           }
         }
       } else {
-        _showErrorSnackBar(context, AppLocalizations.of(context).walkEndError);
+        if (context.mounted) {
+          _showErrorSnackBar(context, AppLocalizations.of(context).walkEndError);
+        }
       }
     } catch (e) {
-      _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
+      if (context.mounted) {
+        _showErrorSnackBar(context, AppLocalizations.of(context).errorOccurred(e.toString()));
+      }
     }
   }
 

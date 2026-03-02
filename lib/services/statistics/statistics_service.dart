@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
 import '../../data/datasources/database_service.dart';
-import '../../domain/entities/walk_session.dart';
 import '../sensors/pedometer_service.dart';
 
 /// 통계 데이터 모델
@@ -142,9 +141,7 @@ class StatisticsService {
         final sessions = await _databaseService.getWalkSessionsByDate(date);
 
         if (sessions.isNotEmpty) {
-          if (lastWalkDate == null) {
-            lastWalkDate = date;
-          }
+          lastWalkDate ??= date;
 
           // 현재 연속 기록 계산 (오늘 또는 어제까지만)
           if (i <= 1) {

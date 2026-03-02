@@ -43,7 +43,7 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
           child: TabBar(
@@ -503,7 +503,7 @@ class _MissionDetailsBottomSheet extends ConsumerWidget {
         const SizedBox(height: 8),
         LinearProgressIndicator(
           value: progress,
-          backgroundColor: theme.colorScheme.surfaceVariant,
+          backgroundColor: theme.colorScheme.surfaceContainerHighest,
           valueColor: AlwaysStoppedAnimation<Color>(
             isCompleted ? Colors.green : theme.colorScheme.primary,
           ),

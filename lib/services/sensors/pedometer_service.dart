@@ -1,9 +1,7 @@
 // lib/services/sensors/pedometer_service.dart
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// 걸음수 데이터를 위한 간단한 클래스 (StepCount 대체)
@@ -65,9 +63,9 @@ class PedometerService {
       final types = [HealthDataType.STEPS];
       final permissions = [HealthDataAccess.READ];
 
-      bool? granted = await _health.requestAuthorization(types, permissions: permissions);
+      final granted = await _health.requestAuthorization(types, permissions: permissions);
 
-      if (granted == null || !granted) {
+      if (!granted) {
         _errorController.add('건강 데이터 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.');
         return false;
       }

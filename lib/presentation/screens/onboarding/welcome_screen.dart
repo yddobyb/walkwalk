@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../l10n/app_localizations.dart';
-import '../home/home_screen.dart';
 import 'pet_creation_screen.dart';
 
 class WelcomeScreen extends ConsumerWidget {

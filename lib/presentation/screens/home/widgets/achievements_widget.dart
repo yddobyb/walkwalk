@@ -152,7 +152,7 @@ class AchievementsWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -191,7 +191,7 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: theme.colorScheme.outline.withValues(alpha: 0.3),
@@ -230,7 +230,7 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: const Center(
@@ -244,7 +244,7 @@ class AchievementsWidget extends ConsumerWidget {
       height: 120,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -337,33 +337,6 @@ class AchievementsWidget extends ConsumerWidget {
         return l10n.achievementTreats100Title;
       case 'DISTANCE_1KM':
         return l10n.achievementDistance1kmTitle;
-      default:
-        return '';
-    }
-  }
-
-  String _getAchievementDescription(String code, AppLocalizations l10n) {
-    switch (code) {
-      case 'FIRST_WALK':
-        return l10n.achievementFirstWalkDescription;
-      case 'STEPS_1K':
-        return l10n.achievementSteps1kDescription;
-      case 'STEPS_5K':
-        return l10n.achievementSteps5kDescription;
-      case 'STEPS_10K':
-        return l10n.achievementSteps10kDescription;
-      case 'STREAK_3':
-        return l10n.achievementStreak3Description;
-      case 'STREAK_7':
-        return l10n.achievementStreak7Description;
-      case 'OUTDOOR_FIRST':
-        return l10n.achievementOutdoorFirstDescription;
-      case 'HAPPY_100':
-        return l10n.achievementHappy100Description;
-      case 'TREATS_100':
-        return l10n.achievementTreats100Description;
-      case 'DISTANCE_1KM':
-        return l10n.achievementDistance1kmDescription;
       default:
         return '';
     }

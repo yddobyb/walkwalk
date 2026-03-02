@@ -338,7 +338,7 @@ class StepTrackingService {
 
       _updateState(StepTrackingState.walking);
 
-      debugPrint('StepTrackingService - Walk session started with ${_sessionStartSteps} steps');
+      debugPrint('StepTrackingService - Walk session started with $_sessionStartSteps steps');
       return true;
     } catch (e) {
       debugPrint('StepTrackingService - Error starting walk session: $e');
@@ -462,7 +462,7 @@ class StepTrackingService {
       _sessionStartSteps = 0;
       _sessionStartTime = null;
 
-      debugPrint('StepTrackingService - Walk session completed: ${sessionSteps} steps, ${duration}s');
+      debugPrint('StepTrackingService - Walk session completed: $sessionSteps steps, ${duration}s');
       return updatedWalkSession;
     } catch (e) {
       debugPrint('StepTrackingService - Error stopping walk session: $e');

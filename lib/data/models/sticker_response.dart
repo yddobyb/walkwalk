@@ -1,4 +1,5 @@
 // lib/data/models/sticker_response.dart
+// ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 

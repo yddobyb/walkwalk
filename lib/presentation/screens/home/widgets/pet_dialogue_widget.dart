@@ -55,7 +55,7 @@ class PetDialogueWidget extends ConsumerWidget {
           dogBreed: pet.breed,
           happinessLevel: pet.happiness,
           context: this.context,
-          contextData: this.contextData,
+          contextData: contextData,
           locale: locale,
         );
 

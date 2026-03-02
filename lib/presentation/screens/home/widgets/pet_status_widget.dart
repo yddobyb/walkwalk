@@ -297,12 +297,14 @@ class PetStatusWidget extends ConsumerWidget {
       final updatedPet = await rewardService.feedTreat(pet.petId, 1);
 
       if (updatedPet != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).treatFeedSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).treatFeedSuccess),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
         // 펫 데이터 새로고침 - StepTrackingService에서 펫 데이터 리로드
         await ref.read(stepTrackingServiceProvider).reloadCurrentPet();
 
@@ -364,20 +366,24 @@ class PetStatusWidget extends ConsumerWidget {
           );
         }
       } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context).treatFeedError),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context).treatFeedError),
+            content: Text(AppLocalizations.of(context).errorWithMessage(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).errorWithMessage(e.toString())),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 }

@@ -54,7 +54,6 @@ class FallbackResponses {
   // ==========================================================================
   String _getWalkCompleteResponse(Map<String, dynamic>? data, String locale) {
     final steps = data?['steps'] ?? 0;
-    final duration = data?['duration'] ?? 0; // 초 단위
     final isOutdoor = data?['isOutdoor'] ?? false;
 
     if (locale == 'ko') {
@@ -223,7 +222,6 @@ class FallbackResponses {
   // ==========================================================================
   String _getLevelUpResponse(Map<String, dynamic>? data, String locale) {
     final newLevel = data?['level'] ?? 1;
-    final experience = data?['experience'] ?? 0;
 
     if (locale == 'ko') {
       final responses = [
@@ -378,8 +376,4 @@ class FallbackResponses {
     return _fallbackResponsesSet.contains(response);
   }
 
-  /// 응답을 폴백 set에 추가 (생성 시 호출)
-  void _addToFallbackSet(String response) {
-    _fallbackResponsesSet.add(response);
-  }
 }

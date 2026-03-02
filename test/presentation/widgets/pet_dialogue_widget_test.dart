@@ -1,9 +1,11 @@
 // test/presentation/widgets/pet_dialogue_widget_test.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:walk_dog/domain/entities/pet.dart';
+import 'package:walk_dog/l10n/app_localizations.dart';
 import 'package:walk_dog/presentation/screens/home/widgets/pet_dialogue_widget.dart';
 import 'package:walk_dog/services/ai/ai_providers.dart';
 import 'package:walk_dog/services/ai/dialogue_request.dart';
@@ -64,6 +66,14 @@ void main() {
     return ProviderScope(
       overrides: overrides ?? [],
       child: MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('ko'),
         home: Scaffold(
           body: child,
         ),

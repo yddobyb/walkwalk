@@ -1,7 +1,6 @@
 // lib/services/firebase/image_generation_service.dart
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -47,13 +46,13 @@ class ImageGenerationService {
   /// - [FormatException] 응답 파싱 실패
   Future<StickerResponse> generateSticker(StickerRequest request) async {
     try {
-      print('🎨🎨🎨 [STICKER] Generating sticker for petId: ${request.petId}');
-      print('   - Breed: ${request.breed}');
-      print('   - Color: ${request.color}');
-      print('   - Accessory: ${request.accessory.name}');
-      print('   - Style: ${request.style.name}');
-      print('   - Size: ${request.size}');
-      print('   - Force: ${request.force}');
+      debugPrint('🎨🎨🎨 [STICKER] Generating sticker for petId: ${request.petId}');
+      debugPrint('   - Breed: ${request.breed}');
+      debugPrint('   - Color: ${request.color}');
+      debugPrint('   - Accessory: ${request.accessory.name}');
+      debugPrint('   - Style: ${request.style.name}');
+      debugPrint('   - Size: ${request.size}');
+      debugPrint('   - Force: ${request.force}');
 
       // 인증 확인 및 필요시 재인증
       await _ensureAuthenticated();
@@ -96,15 +95,15 @@ class ImageGenerationService {
       }
 
       // 캐시 미스 → Cloud Functions 호출 (재시도 로직 포함)
-      print('📞 [STICKER] Calling Cloud Functions...');
+      debugPrint('📞 [STICKER] Calling Cloud Functions...');
       final callable = _functions.httpsCallable('genSticker');
 
       // userId를 직접 전달 (auth context가 전달되지 않는 문제 우회)
       final user = FirebaseAuth.instance.currentUser;
-      print('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
+      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
 
       final result = await _callWithRetry(() async {
-        print('📡 [STICKER] Making API call to genSticker');
+        debugPrint('📡 [STICKER] Making API call to genSticker');
         return await callable.call<Map<String, dynamic>>({
           'petId': request.petId,
           'breed': request.breed,
@@ -119,18 +118,18 @@ class ImageGenerationService {
         });
       });
 
-      print('📦 [STICKER] Received result from Cloud Functions');
-      print('   - Result type: ${result.runtimeType}');
-      print('   - Result.data type: ${result.data.runtimeType}');
+      debugPrint('📦 [STICKER] Received result from Cloud Functions');
+      debugPrint('   - Result type: ${result.runtimeType}');
+      debugPrint('   - Result.data type: ${result.data.runtimeType}');
 
       // result.data는 Map<Object?, Object?>이므로 깊은 복사로 Map<String, dynamic>으로 변환
       final rawData = result.data as Map;
       final data = _deepCopyMap(rawData);
-      print('✅ [STICKER] Data deep copy successful');
-      print('   - Data keys: ${data.keys.join(", ")}');
+      debugPrint('✅ [STICKER] Data deep copy successful');
+      debugPrint('   - Data keys: ${data.keys.join(", ")}');
 
       final response = StickerResponse.fromJson(data);
-      print('✅ [STICKER] Response parsing successful');
+      debugPrint('✅ [STICKER] Response parsing successful');
 
       debugPrint('✅ Sticker generated successfully');
       debugPrint('   - Cached: ${response.data.cached}');
@@ -150,9 +149,9 @@ class ImageGenerationService {
 
       return response;
     } on FirebaseFunctionsException catch (e) {
-      print('❌❌❌ [STICKER] FirebaseFunctionsException: ${e.code}');
-      print('   Message: ${e.message}');
-      print('   Details: ${e.details}');
+      debugPrint('❌❌❌ [STICKER] FirebaseFunctionsException: ${e.code}');
+      debugPrint('   Message: ${e.message}');
+      debugPrint('   Details: ${e.details}');
 
       throw ImageGenerationException(
         code: e.code,
@@ -160,9 +159,9 @@ class ImageGenerationService {
         details: e.details,
       );
     } catch (e, stackTrace) {
-      print('❌❌❌ [STICKER] Unexpected error: $e');
-      print('   Type: ${e.runtimeType}');
-      print('   Stack trace: $stackTrace');
+      debugPrint('❌❌❌ [STICKER] Unexpected error: $e');
+      debugPrint('   Type: ${e.runtimeType}');
+      debugPrint('   Stack trace: $stackTrace');
 
       throw ImageGenerationException(
         code: 'unknown',

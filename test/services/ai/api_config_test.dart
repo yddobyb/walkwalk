@@ -21,12 +21,12 @@ void main() {
       final dailyLimit = ApiConfig.maxDailyRequests;
       final hourlyLimit = ApiConfig.maxHourlyRequests;
 
-      // Then: 예상값과 일치
+      // Then: 예상값과 일치 (4-tier fallback 아키텍처로 업데이트됨)
       expect(baseUrl, 'https://openrouter.ai/api/v1');
-      expect(model, 'deepseek/deepseek-r1:free');
+      expect(model, 'openrouter/free');
       expect(timeout, 15);
-      expect(dailyLimit, 80);
-      expect(hourlyLimit, 20);
+      expect(dailyLimit, 40);
+      expect(hourlyLimit, 15);
 
       print('✅ OpenRouter 설정 상수 확인 완료');
       print('   - Base URL: $baseUrl');

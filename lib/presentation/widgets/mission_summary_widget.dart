@@ -114,7 +114,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
+              color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -152,7 +152,7 @@ class MissionSummaryWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isCompleted
             ? Colors.green.withValues(alpha: 0.05)
-            : theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: isCompleted
             ? Border.all(color: Colors.green.withValues(alpha: 0.2))
@@ -203,7 +203,7 @@ class MissionSummaryWidget extends ConsumerWidget {
           // 진행도 바
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
+            backgroundColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             valueColor: AlwaysStoppedAnimation<Color>(
               isCompleted ? Colors.green : theme.colorScheme.primary,
             ),
@@ -317,7 +317,7 @@ class MissionSummaryWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withValues(alpha: 0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

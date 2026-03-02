@@ -59,20 +59,20 @@ void main() {
     // ==========================================================================
     // 2. 폴백 응답 테스트 (API 키 없음)
     // ==========================================================================
-    test('API 키 없이 응답 생성 - 폴백 사용', () async {
+    test('API 키 없이 응답 생성 - 초기화 안됨 예외 발생', () async {
       // Given: 초기화되지 않은 LLMService
 
-      // When: 응답 생성 요청
-      final response = await llmService.generateResponse(
-        systemPrompt: 'You are a helpful assistant',
-        userMessage: 'Hello',
+      // When/Then: generateResponse()는 미초기화 시 예외 발생
+      // (generateDialogue()는 내부에서 예외를 catch해 폴백 응답 반환)
+      expect(
+        () => llmService.generateResponse(
+          systemPrompt: 'You are a helpful assistant',
+          userMessage: 'Hello',
+        ),
+        throwsA(isA<Exception>()),
       );
 
-      // Then: 폴백 응답 반환
-      expect(response.isNotEmpty, true);
-
-      print('✅ 폴백 응답 생성 확인 완료');
-      print('   - 응답: $response');
+      print('✅ 미초기화 상태 예외 발생 확인 완료');
     });
 
     test('API 키 없이 컨텍스트 기반 대화 생성 - 폴백 사용', () async {
