@@ -1229,23 +1229,41 @@ class _PremiumUpgradeBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
+    final isDark = theme.brightness == Brightness.dark;
+    final textColor = isDark ? const Color(0xFFFF8A50) : Colors.white;
+    final subTextColor = isDark
+        ? const Color(0xFFFF8A50).withValues(alpha: 0.75)
+        : Colors.white.withValues(alpha: 0.85);
+    final iconBgColor = isDark
+        ? const Color(0xFFFF8A50).withValues(alpha: 0.15)
+        : Colors.white.withValues(alpha: 0.2);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFFCC4A00),
-              Color(0xFFFF8A50),
-              Color(0xFFFFB584),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? null
+              : const LinearGradient(
+                  colors: [
+                    Color(0xFFCC4A00),
+                    Color(0xFFFF8A50),
+                    Color(0xFFFFB584),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+          color: isDark ? theme.colorScheme.surfaceContainerHighest : null,
+          border: isDark
+              ? Border.all(
+                  color: const Color(0xFFFF8A50).withValues(alpha: 0.4),
+                  width: 1.5,
+                )
+              : null,
         ),
         child: Stack(
           children: [
-            // 배경 장식 원 (paywall 헤더와 동일한 스타일)
+            // 배경 장식 원
             Positioned(
               top: -24,
               right: -24,
@@ -1254,7 +1272,9 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                 height: 90,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.08),
+                  color: isDark
+                      ? const Color(0xFFFF8A50).withValues(alpha: 0.06)
+                      : Colors.white.withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -1266,7 +1286,9 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                 height: 64,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.06),
+                  color: isDark
+                      ? const Color(0xFFFF8A50).withValues(alpha: 0.04)
+                      : Colors.white.withValues(alpha: 0.06),
                 ),
               ),
             ),
@@ -1286,7 +1308,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                         height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: iconBgColor,
                         ),
                         child: const Center(
                           child: Text('💎', style: TextStyle(fontSize: 20)),
@@ -1299,8 +1321,8 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                           children: [
                             Text(
                               l10n.premiumUpgradeTitle,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: textColor,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: -0.2,
@@ -1310,7 +1332,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                             Text(
                               l10n.premiumInactiveSubtitle,
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.85),
+                                color: subTextColor,
                                 fontSize: 12,
                                 height: 1.3,
                               ),
@@ -1327,23 +1349,27 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                   // 특징 칩
                   Row(
                     children: [
-                      _featureChip('✨ HD Quality'),
+                      _featureChip('✨ HD Quality', isDark),
                       const SizedBox(width: 6),
-                      _featureChip('∞ 50/day'),
+                      _featureChip('∞ 50/day', isDark),
                       const SizedBox(width: 6),
-                      _featureChip('⚡ Fast'),
+                      _featureChip('⚡ Fast', isDark),
                     ],
                   ),
                   const SizedBox(height: 14),
 
-                  // CTA 버튼 (흰색 배경 + 오렌지 텍스트)
+                  // CTA 버튼
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: onUpgradeTap,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFFCC4A00),
+                        backgroundColor: isDark
+                            ? theme.colorScheme.primary
+                            : Colors.white,
+                        foregroundColor: isDark
+                            ? theme.colorScheme.onPrimary
+                            : const Color(0xFFCC4A00),
                         padding: const EdgeInsets.symmetric(vertical: 11),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -1368,17 +1394,24 @@ class _PremiumUpgradeBanner extends StatelessWidget {
     );
   }
 
-  Widget _featureChip(String label) {
+  Widget _featureChip(String label, bool isDark) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
+        color: isDark
+            ? const Color(0xFFFF8A50).withValues(alpha: 0.15)
+            : Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
+        border: isDark
+            ? Border.all(
+                color: const Color(0xFFFF8A50).withValues(alpha: 0.3),
+              )
+            : null,
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: isDark ? const Color(0xFFFF8A50) : Colors.white,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),

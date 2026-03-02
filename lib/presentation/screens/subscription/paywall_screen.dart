@@ -217,18 +217,42 @@ class _HeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
 
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = isDark ? const Color(0xFFFF8A50) : Colors.white;
+    final subtitleColor = isDark
+        ? const Color(0xFFFF8A50).withValues(alpha: 0.8)
+        : Colors.white.withValues(alpha: 0.88);
+    final closeBtnBg = isDark
+        ? theme.colorScheme.onSurface.withValues(alpha: 0.12)
+        : Colors.white.withValues(alpha: 0.22);
+    final closeIconColor =
+        isDark ? theme.colorScheme.onSurface : Colors.white;
+    final gemBgColor = isDark
+        ? const Color(0xFFFF8A50).withValues(alpha: 0.15)
+        : Colors.white.withValues(alpha: 0.18);
+
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFFCC4A00),
-            Color(0xFFFF8A50),
-            Color(0xFFFFB584),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+      decoration: BoxDecoration(
+        gradient: isDark
+            ? null
+            : const LinearGradient(
+                colors: [
+                  Color(0xFFCC4A00),
+                  Color(0xFFFF8A50),
+                  Color(0xFFFFB584),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+        color: isDark ? theme.colorScheme.surface : null,
+        border: isDark
+            ? Border(
+                bottom: BorderSide(
+                  color: const Color(0xFFFF8A50).withValues(alpha: 0.3),
+                ),
+              )
+            : null,
       ),
       child: Stack(
         children: [
@@ -241,7 +265,9 @@ class _HeroHeader extends StatelessWidget {
               height: 140,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.07),
+                color: isDark
+                    ? const Color(0xFFFF8A50).withValues(alpha: 0.06)
+                    : Colors.white.withValues(alpha: 0.07),
               ),
             ),
           ),
@@ -253,7 +279,9 @@ class _HeroHeader extends StatelessWidget {
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.05),
+                color: isDark
+                    ? const Color(0xFFFF8A50).withValues(alpha: 0.04)
+                    : Colors.white.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -273,11 +301,11 @@ class _HeroHeader extends StatelessWidget {
                       height: 34,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.22),
+                        color: closeBtnBg,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close_rounded,
-                        color: Colors.white,
+                        color: closeIconColor,
                         size: 18,
                       ),
                     ),
@@ -292,7 +320,7 @@ class _HeroHeader extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.18),
+                    color: gemBgColor,
                   ),
                   child: const Center(
                     child: Text(
@@ -308,7 +336,7 @@ class _HeroHeader extends StatelessWidget {
                 Text(
                   l10n.paywallHeaderTitle,
                   style: theme.textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
+                    color: titleColor,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
                   ),
@@ -321,7 +349,7 @@ class _HeroHeader extends StatelessWidget {
                 Text(
                   l10n.paywallHeaderSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.88),
+                    color: subtitleColor,
                     height: 1.4,
                   ),
                   textAlign: TextAlign.center,
@@ -356,7 +384,7 @@ class _BenefitTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8E8E8)),
+        border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -424,7 +452,9 @@ class _PriceCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 24),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF5EE),
+        color: theme.brightness == Brightness.dark
+            ? theme.colorScheme.surfaceContainerHighest
+            : const Color(0xFFFFF5EE),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: const Color(0xFFFF8A50).withValues(alpha: 0.30),
@@ -526,7 +556,7 @@ class _BottomCta extends StatelessWidget {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
-                color: loading ? const Color(0xFFE0E0E0) : null,
+                color: loading ? theme.colorScheme.surfaceContainerHighest : null,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: loading
                     ? null

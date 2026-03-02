@@ -73,7 +73,7 @@ class WalkResultBottomSheet {
               height: 4,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Theme.of(ctx).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -123,10 +123,15 @@ class WalkResultBottomSheet {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Colors.amber.shade100,
-                Colors.amber.shade50,
-              ],
+              colors: Theme.of(ctx).brightness == Brightness.dark
+                  ? [
+                      Theme.of(ctx).colorScheme.surface,
+                      Theme.of(ctx).colorScheme.surfaceContainerHighest,
+                    ]
+                  : [
+                      Colors.amber.shade100,
+                      Colors.amber.shade50,
+                    ],
             ),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(24),
@@ -141,7 +146,7 @@ class WalkResultBottomSheet {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade300,
+                  color: Theme.of(ctx).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
