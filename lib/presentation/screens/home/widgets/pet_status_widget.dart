@@ -22,53 +22,33 @@ class PetStatusWidget extends ConsumerWidget {
     final petTrackingAsync = ref.watch(petTrackingProvider);
     final petMood = ref.watch(petMoodProvider);
 
-    // 🐛 DEBUG: initialPet 상태 로그
-    if (initialPet != null) {
-      debugPrint('🐛 PetStatusWidget - initialPet: ${initialPet!.name}, happiness: ${initialPet!.happiness}, treats: ${initialPet!.treats}');
-    } else {
-      debugPrint('🐛 PetStatusWidget - initialPet is null');
-    }
-
     return petTrackingAsync.when(
       data: (pet) {
-        debugPrint('🐛 PetStatusWidget - petTrackingAsync.data: ${pet?.name}, happiness: ${pet?.happiness}, treats: ${pet?.treats}');
-        // 🔧 BUG FIX: pet이 null이고 initialPet이 있으면 initialPet 사용
+        // BUG FIX: pet이 null이고 initialPet이 있으면 initialPet 사용
         final displayPet = pet ?? initialPet;
         if (displayPet == null) {
-          debugPrint('🐛 PetStatusWidget - Both pet and initialPet are null');
           return _buildLoadingStatus(context, theme);
         }
-        debugPrint('🐛 PetStatusWidget - Using ${pet != null ? "pet from provider" : "initialPet"}');
         return _buildPetStatus(context, theme, displayPet, petMood, ref);
       },
       loading: () {
-        debugPrint('🐛 PetStatusWidget - petTrackingAsync.loading');
-        // 🔧 BUG FIX: initialPet이 있으면 로딩 중에도 즉시 표시
+        // BUG FIX: initialPet이 있으면 로딩 중에도 즉시 표시
         if (initialPet != null) {
-          debugPrint('🐛 PetStatusWidget - Using initialPet during loading');
           return _buildPetStatus(context, theme, initialPet, petMood, ref);
         }
-        debugPrint('🐛 PetStatusWidget - Showing loading indicator');
         return _buildLoadingStatus(context, theme);
       },
       error: (error, stack) {
-        debugPrint('🐛 PetStatusWidget - petTrackingAsync.error: $error');
         return _buildErrorStatus(context, theme);
       },
     );
   }
 
   Widget _buildPetStatus(BuildContext context, ThemeData theme, pet, PetMood? mood, WidgetRef ref) {
-    // 🐛 DEBUG: _buildPetStatus 호출 시 pet 정보
-    debugPrint('🐛 _buildPetStatus - pet type: ${pet.runtimeType}, pet: $pet');
-    debugPrint('🐛 _buildPetStatus - pet?.happiness: ${pet?.happiness}, pet?.treats: ${pet?.treats}');
-
     final int happiness = pet?.happiness ?? 50;
     final int treats = pet?.treats ?? 0;
     final int level = pet?.level ?? 1;
     final int experience = pet?.experience ?? 0;
-
-    debugPrint('🐛 _buildPetStatus - Final values: happiness: $happiness, treats: $treats');
 
     // 다음 레벨에 필요한 경험치 계산
     final rewardService = ref.read(petRewardServiceProvider);
