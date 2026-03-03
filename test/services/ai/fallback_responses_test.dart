@@ -1,6 +1,7 @@
 // test/services/ai/fallback_responses_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:walk_dog/services/ai/fallback_responses.dart';
 
 /// Week 3 Test 4: FallbackResponses 테스트
@@ -47,9 +48,9 @@ void main() {
         expect(response, expectedResponse);
       }
 
-      print('✅ greeting_static 시간대별 인사 확인 완료');
-      print('   - 현재 시간대: ${hour < 12 ? "아침" : hour < 18 ? "오후" : "저녁"}');
-      print('   - 응답: $expectedResponse');
+      debugPrint('✅ greeting_static 시간대별 인사 확인 완료');
+      debugPrint('   - 현재 시간대: ${hour < 12 ? "아침" : hour < 18 ? "오후" : "저녁"}');
+      debugPrint('   - 응답: $expectedResponse');
     });
 
     // ==========================================================================
@@ -72,12 +73,12 @@ void main() {
       final uniqueResponses = responses.toSet();
       expect(uniqueResponses.length, greaterThanOrEqualTo(2));
 
-      print('✅ greeting 랜덤 인사 확인 완료');
-      print('   - 총 호출 수: ${responses.length}');
-      print('   - 유니크 응답 수: ${uniqueResponses.length}');
-      print('   - 응답 예시:');
+      debugPrint('✅ greeting 랜덤 인사 확인 완료');
+      debugPrint('   - 총 호출 수: ${responses.length}');
+      debugPrint('   - 유니크 응답 수: ${uniqueResponses.length}');
+      debugPrint('   - 응답 예시:');
       for (final response in uniqueResponses.take(3)) {
-        print('     * $response');
+        debugPrint('     * $response');
       }
     });
 
@@ -109,10 +110,10 @@ void main() {
       expect(midSteps.isNotEmpty, true);
       expect(highSteps.isNotEmpty, true);
 
-      print('✅ walk_complete 걸음수별 응답 확인 완료');
-      print('   - 저걸음 (3,000): $lowSteps');
-      print('   - 중걸음 (7,000): $midSteps');
-      print('   - 고걸음 (12,000): $highSteps');
+      debugPrint('✅ walk_complete 걸음수별 응답 확인 완료');
+      debugPrint('   - 저걸음 (3,000): $lowSteps');
+      debugPrint('   - 중걸음 (7,000): $midSteps');
+      debugPrint('   - 고걸음 (12,000): $highSteps');
     });
 
     test('walk_complete - 실외 산책 보너스 응답', () {
@@ -136,9 +137,9 @@ void main() {
       expect(outdoorResponse.isNotEmpty, true);
       expect(indoorResponse.isNotEmpty, true);
 
-      print('✅ walk_complete 실외/실내 응답 확인 완료');
-      print('   - 실외 (isOutdoor: true): $outdoorResponse');
-      print('   - 실내 (isOutdoor: false): $indoorResponse');
+      debugPrint('✅ walk_complete 실외/실내 응답 확인 완료');
+      debugPrint('   - 실외 (isOutdoor: true): $outdoorResponse');
+      debugPrint('   - 실내 (isOutdoor: false): $indoorResponse');
     });
 
     // ==========================================================================
@@ -169,10 +170,10 @@ void main() {
       expect(mission2.isNotEmpty, true);
       expect(mission3.isNotEmpty, true);
 
-      print('✅ mission_complete 미션 제목 동적 삽입 확인 완료');
-      print('   - 미션 1: $mission1');
-      print('   - 미션 2: $mission2');
-      print('   - 미션 3: $mission3');
+      debugPrint('✅ mission_complete 미션 제목 동적 삽입 확인 완료');
+      debugPrint('   - 미션 1: $mission1');
+      debugPrint('   - 미션 2: $mission2');
+      debugPrint('   - 미션 3: $mission3');
     });
 
     // ==========================================================================
@@ -203,10 +204,10 @@ void main() {
       expect(midTreats.isNotEmpty, true);
       expect(highTreats.isNotEmpty, true);
 
-      print('✅ feed 간식 수량별 응답 확인 완료');
-      print('   - 저간식 (3개): $lowTreats');
-      print('   - 중간식 (15개): $midTreats');
-      print('   - 고간식 (35개): $highTreats');
+      debugPrint('✅ feed 간식 수량별 응답 확인 완료');
+      debugPrint('   - 저간식 (3개): $lowTreats');
+      debugPrint('   - 중간식 (15개): $midTreats');
+      debugPrint('   - 고간식 (35개): $highTreats');
     });
 
     // ==========================================================================
@@ -237,10 +238,10 @@ void main() {
       expect(level5.isNotEmpty, true);
       expect(level10.isNotEmpty, true);
 
-      print('✅ level_up 레벨 동적 삽입 확인 완료');
-      print('   - 레벨 2: $level2');
-      print('   - 레벨 5: $level5');
-      print('   - 레벨 10: $level10');
+      debugPrint('✅ level_up 레벨 동적 삽입 확인 완료');
+      debugPrint('   - 레벨 2: $level2');
+      debugPrint('   - 레벨 5: $level5');
+      debugPrint('   - 레벨 10: $level10');
     });
 
     // ==========================================================================
@@ -262,12 +263,12 @@ void main() {
       final uniqueResponses = responses.toSet();
       expect(uniqueResponses.length, greaterThanOrEqualTo(2));
 
-      print('✅ low_happiness 슬픈 톤 응답 확인 완료');
-      print('   - 총 호출 수: ${responses.length}');
-      print('   - 유니크 응답 수: ${uniqueResponses.length}');
-      print('   - 응답 예시:');
+      debugPrint('✅ low_happiness 슬픈 톤 응답 확인 완료');
+      debugPrint('   - 총 호출 수: ${responses.length}');
+      debugPrint('   - 유니크 응답 수: ${uniqueResponses.length}');
+      debugPrint('   - 응답 예시:');
       for (final response in uniqueResponses.take(3)) {
-        print('     * $response');
+        debugPrint('     * $response');
       }
     });
 
@@ -284,8 +285,8 @@ void main() {
       // Then: 기본 응답 반환
       expect(response.isNotEmpty, true);
 
-      print('✅ invalid_context 기본 응답 확인 완료');
-      print('   - 기본 응답: $response');
+      debugPrint('✅ invalid_context 기본 응답 확인 완료');
+      debugPrint('   - 기본 응답: $response');
     });
 
     // ==========================================================================
@@ -305,12 +306,12 @@ void main() {
       final uniqueResponses = responses.toSet();
       expect(uniqueResponses.length, greaterThanOrEqualTo(2));
 
-      print('✅ getRandomResponse 랜덤 응답 확인 완료');
-      print('   - 총 호출 수: ${responses.length}');
-      print('   - 유니크 응답 수: ${uniqueResponses.length}');
-      print('   - 응답 예시:');
+      debugPrint('✅ getRandomResponse 랜덤 응답 확인 완료');
+      debugPrint('   - 총 호출 수: ${responses.length}');
+      debugPrint('   - 유니크 응답 수: ${uniqueResponses.length}');
+      debugPrint('   - 응답 예시:');
       for (final response in uniqueResponses.take(3)) {
-        print('     * $response');
+        debugPrint('     * $response');
       }
     });
 
@@ -347,12 +348,12 @@ void main() {
       final uniqueResponses = responses.values.toSet();
       expect(uniqueResponses.length, greaterThanOrEqualTo(5));
 
-      print('✅ 7개 컨텍스트 차별화 확인 완료');
-      print('   - 총 컨텍스트 수: ${contexts.length}');
-      print('   - 유니크 응답 수: ${uniqueResponses.length}');
-      print('   - 컨텍스트별 응답:');
+      debugPrint('✅ 7개 컨텍스트 차별화 확인 완료');
+      debugPrint('   - 총 컨텍스트 수: ${contexts.length}');
+      debugPrint('   - 유니크 응답 수: ${uniqueResponses.length}');
+      debugPrint('   - 컨텍스트별 응답:');
       for (final entry in responses.entries) {
-        print('     * ${entry.key}: ${entry.value.substring(0, entry.value.length > 40 ? 40 : entry.value.length)}...');
+        debugPrint('     * ${entry.key}: ${entry.value.substring(0, entry.value.length > 40 ? 40 : entry.value.length)}...');
       }
     });
   });

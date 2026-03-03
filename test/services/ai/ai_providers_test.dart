@@ -1,6 +1,7 @@
 // test/services/ai/ai_providers_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walk_dog/services/ai/ai_providers.dart';
 import 'package:walk_dog/services/ai/fallback_responses.dart';
@@ -33,7 +34,7 @@ void main() {
       // Then: FallbackResponses 인스턴스 반환
       expect(fallbackResponses, isA<FallbackResponses>());
 
-      print('✅ fallbackResponsesProvider 인스턴스 반환 확인 완료');
+      debugPrint('✅ fallbackResponsesProvider 인스턴스 반환 확인 완료');
 
       container.dispose();
     });
@@ -48,7 +49,7 @@ void main() {
       // Then: RateLimiter 인스턴스 반환
       expect(rateLimiter, isA<RateLimiter>());
 
-      print('✅ rateLimiterProvider 인스턴스 반환 확인 완료');
+      debugPrint('✅ rateLimiterProvider 인스턴스 반환 확인 완료');
 
       container.dispose();
     });
@@ -66,8 +67,8 @@ void main() {
       // Then: LLMService 인스턴스 반환
       expect(llmService, isA<LLMService>());
 
-      print('✅ llmServiceProvider 의존성 주입 확인 완료');
-      print('   - LLMService 생성됨 (FallbackResponses + RateLimiter 주입)');
+      debugPrint('✅ llmServiceProvider 의존성 주입 확인 완료');
+      debugPrint('   - LLMService 생성됨 (FallbackResponses + RateLimiter 주입)');
 
       container.dispose();
     });
@@ -82,8 +83,8 @@ void main() {
       // Then: ConversationService 인스턴스 반환
       expect(conversationService, isA<ConversationService>());
 
-      print('✅ conversationServiceProvider 의존성 주입 확인 완료');
-      print('   - ConversationService 생성됨 (LLMService + FallbackResponses 주입)');
+      debugPrint('✅ conversationServiceProvider 의존성 주입 확인 완료');
+      debugPrint('   - ConversationService 생성됨 (LLMService + FallbackResponses 주입)');
 
       container.dispose();
     });
@@ -104,11 +105,11 @@ void main() {
       expect(llmService, isA<LLMService>());
       expect(conversationService, isA<ConversationService>());
 
-      print('✅ Provider 의존성 체인 확인 완료');
-      print('   - fallbackResponses ✅');
-      print('   - rateLimiter ✅');
-      print('   - llmService ✅ (의존성: fallbackResponses, rateLimiter)');
-      print('   - conversationService ✅ (의존성: llmService, fallbackResponses)');
+      debugPrint('✅ Provider 의존성 체인 확인 완료');
+      debugPrint('   - fallbackResponses ✅');
+      debugPrint('   - rateLimiter ✅');
+      debugPrint('   - llmService ✅ (의존성: fallbackResponses, rateLimiter)');
+      debugPrint('   - conversationService ✅ (의존성: llmService, fallbackResponses)');
 
       container.dispose();
     });
@@ -132,9 +133,9 @@ void main() {
       // Then: 초기화 완료 (API 키 없으면 false, 있으면 true)
       final isInitialized = await container.read(llmInitializationProvider.future);
 
-      print('✅ llmInitializationProvider AsyncValue 확인 완료');
-      print('   - AsyncValue 타입: ${initAsync.runtimeType}');
-      print('   - 초기화 결과: $isInitialized');
+      debugPrint('✅ llmInitializationProvider AsyncValue 확인 완료');
+      debugPrint('   - AsyncValue 타입: ${initAsync.runtimeType}');
+      debugPrint('   - 초기화 결과: $isInitialized');
 
       container.dispose();
     });
@@ -167,10 +168,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ dialogueProvider 대화 생성 확인 완료');
-      print('   - DialogueRequest: Max (Golden Retriever)');
-      print('   - 컨텍스트: greeting');
-      print('   - 응답: $response');
+      debugPrint('✅ dialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - DialogueRequest: Max (Golden Retriever)');
+      debugPrint('   - 컨텍스트: greeting');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -205,9 +206,9 @@ void main() {
       expect(response1.isNotEmpty, true);
       expect(response2.isNotEmpty, true);
 
-      print('✅ dialogueProvider 캐시 미스 확인 완료');
-      print('   - Request1 (Max): $response1');
-      print('   - Request2 (Buddy): $response2');
+      debugPrint('✅ dialogueProvider 캐시 미스 확인 완료');
+      debugPrint('   - Request1 (Max): $response1');
+      debugPrint('   - Request2 (Buddy): $response2');
 
       container.dispose();
     });
@@ -234,9 +235,9 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ greetingDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Charlie (Beagle)');
-      print('   - 응답: $response');
+      debugPrint('✅ greetingDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Charlie (Beagle)');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -265,10 +266,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ walkCompleteDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Luna (Shiba Inu)');
-      print('   - 걸음수: 7000 (40분)');
-      print('   - 응답: $response');
+      debugPrint('✅ walkCompleteDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Luna (Shiba Inu)');
+      debugPrint('   - 걸음수: 7000 (40분)');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -296,10 +297,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ missionCompleteDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Rocky (Husky)');
-      print('   - 미션: 주간 목표 달성 (보상: 20개)');
-      print('   - 응답: $response');
+      debugPrint('✅ missionCompleteDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Rocky (Husky)');
+      debugPrint('   - 미션: 주간 목표 달성 (보상: 20개)');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -326,10 +327,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ feedDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Bella (Chihuahua)');
-      print('   - 간식: 15개');
-      print('   - 응답: $response');
+      debugPrint('✅ feedDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Bella (Chihuahua)');
+      debugPrint('   - 간식: 15개');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -357,10 +358,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ levelUpDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Coco (Maltese)');
-      print('   - 레벨: 10 (경험치: 1500)');
-      print('   - 응답: $response');
+      debugPrint('✅ levelUpDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Coco (Maltese)');
+      debugPrint('   - 레벨: 10 (경험치: 1500)');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -384,10 +385,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ lowHappinessDialogueProvider 대화 생성 확인 완료');
-      print('   - 강아지: Daisy (Bulldog)');
-      print('   - 행복도: 20 (매우 슬픔)');
-      print('   - 응답: $response');
+      debugPrint('✅ lowHappinessDialogueProvider 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Daisy (Bulldog)');
+      debugPrint('   - 행복도: 20 (매우 슬픔)');
+      debugPrint('   - 응답: $response');
 
       container.dispose();
     });
@@ -454,13 +455,13 @@ void main() {
       expect(levelUp.isNotEmpty, true);
       expect(lowHappiness.isNotEmpty, true);
 
-      print('✅ 6개 편의 Provider 모두 응답 생성 확인 완료');
-      print('   1. greeting: $greeting');
-      print('   2. walkComplete: $walkComplete');
-      print('   3. missionComplete: $missionComplete');
-      print('   4. feed: $feed');
-      print('   5. levelUp: $levelUp');
-      print('   6. lowHappiness: $lowHappiness');
+      debugPrint('✅ 6개 편의 Provider 모두 응답 생성 확인 완료');
+      debugPrint('   1. greeting: $greeting');
+      debugPrint('   2. walkComplete: $walkComplete');
+      debugPrint('   3. missionComplete: $missionComplete');
+      debugPrint('   4. feed: $feed');
+      debugPrint('   5. levelUp: $levelUp');
+      debugPrint('   6. lowHappiness: $lowHappiness');
 
       container.dispose();
     });
@@ -488,9 +489,9 @@ void main() {
       // Then: 같은 응답 반환 (캐시됨)
       expect(response1, response2);
 
-      print('✅ dialogueProvider 캐싱 동작 확인 완료');
-      print('   - 같은 DialogueRequest → 같은 응답');
-      print('   - 응답: $response1');
+      debugPrint('✅ dialogueProvider 캐싱 동작 확인 완료');
+      debugPrint('   - 같은 DialogueRequest → 같은 응답');
+      debugPrint('   - 응답: $response1');
 
       container.dispose();
     });
@@ -517,9 +518,9 @@ void main() {
       expect(request1, request2);
       expect(request1.hashCode, request2.hashCode);
 
-      print('✅ DialogueRequest equals/hashCode 동작 확인 완료');
-      print('   - request1 == request2: true');
-      print('   - hashCode 일치: ${request1.hashCode == request2.hashCode}');
+      debugPrint('✅ DialogueRequest equals/hashCode 동작 확인 완료');
+      debugPrint('   - request1 == request2: true');
+      debugPrint('   - hashCode 일치: ${request1.hashCode == request2.hashCode}');
     });
   });
 }

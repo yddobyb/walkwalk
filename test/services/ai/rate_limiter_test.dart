@@ -1,6 +1,7 @@
 // test/services/ai/rate_limiter_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:walk_dog/services/ai/rate_limiter.dart';
 
@@ -44,7 +45,7 @@ void main() {
       // Then: 성공 (제한 내)
       expect(success, true);
 
-      print('✅ incrementDailyCount 첫 호출 성공 확인 완료');
+      debugPrint('✅ incrementDailyCount 첫 호출 성공 확인 완료');
     });
 
     test('incrementDailyCount - 80회 제한 도달', () async {
@@ -65,9 +66,9 @@ void main() {
       // Then: 81번째 실패 (제한 초과)
       expect(success81, false);
 
-      print('✅ incrementDailyCount 80회 제한 확인 완료');
-      print('   - 80번째: 성공');
-      print('   - 81번째: 실패 (제한 초과)');
+      debugPrint('✅ incrementDailyCount 80회 제한 확인 완료');
+      debugPrint('   - 80번째: 성공');
+      debugPrint('   - 81번째: 실패 (제한 초과)');
     });
 
     test('incrementDailyCount - 연속 호출 카운트 증가', () async {
@@ -82,8 +83,8 @@ void main() {
       final remaining = await rateLimiter.getRemainingDailyQuota();
       expect(remaining, 75);
 
-      print('✅ incrementDailyCount 연속 호출 카운트 증가 확인 완료');
-      print('   - 5회 호출 후 남은 할당량: $remaining');
+      debugPrint('✅ incrementDailyCount 연속 호출 카운트 증가 확인 완료');
+      debugPrint('   - 5회 호출 후 남은 할당량: $remaining');
     });
 
     // ==========================================================================
@@ -98,7 +99,7 @@ void main() {
       // Then: 성공 (제한 내)
       expect(success, true);
 
-      print('✅ incrementHourlyCount 첫 호출 성공 확인 완료');
+      debugPrint('✅ incrementHourlyCount 첫 호출 성공 확인 완료');
     });
 
     test('incrementHourlyCount - 20회 제한 도달', () async {
@@ -119,9 +120,9 @@ void main() {
       // Then: 21번째 실패 (제한 초과)
       expect(success21, false);
 
-      print('✅ incrementHourlyCount 20회 제한 확인 완료');
-      print('   - 20번째: 성공');
-      print('   - 21번째: 실패 (제한 초과)');
+      debugPrint('✅ incrementHourlyCount 20회 제한 확인 완료');
+      debugPrint('   - 20번째: 성공');
+      debugPrint('   - 21번째: 실패 (제한 초과)');
     });
 
     test('incrementHourlyCount - 연속 호출 카운트 증가', () async {
@@ -136,8 +137,8 @@ void main() {
       final remaining = await rateLimiter.getRemainingHourlyQuota();
       expect(remaining, 17);
 
-      print('✅ incrementHourlyCount 연속 호출 카운트 증가 확인 완료');
-      print('   - 3회 호출 후 남은 할당량: $remaining');
+      debugPrint('✅ incrementHourlyCount 연속 호출 카운트 증가 확인 완료');
+      debugPrint('   - 3회 호출 후 남은 할당량: $remaining');
     });
 
     // ==========================================================================
@@ -169,8 +170,8 @@ void main() {
       remaining = await rateLimiter.getRemainingDailyQuota();
       expect(remaining, 79);
 
-      print('✅ 일일 카운트 자동 리셋 확인 완료');
-      print('   - 어제 10회 호출 → 오늘 자동 리셋 → 79/80 남음');
+      debugPrint('✅ 일일 카운트 자동 리셋 확인 완료');
+      debugPrint('   - 어제 10회 호출 → 오늘 자동 리셋 → 79/80 남음');
     });
 
     // ==========================================================================
@@ -202,8 +203,8 @@ void main() {
       remaining = await rateLimiter.getRemainingHourlyQuota();
       expect(remaining, 19);
 
-      print('✅ 시간당 카운트 자동 리셋 확인 완료');
-      print('   - 이전 시간 5회 호출 → 현재 시간 자동 리셋 → 19/20 남음');
+      debugPrint('✅ 시간당 카운트 자동 리셋 확인 완료');
+      debugPrint('   - 이전 시간 5회 호출 → 현재 시간 자동 리셋 → 19/20 남음');
     });
 
     // ==========================================================================
@@ -227,8 +228,8 @@ void main() {
       canMake = await rateLimiter.canMakeRequest();
       expect(canMake, false);
 
-      print('✅ canMakeRequest 일일 제한 확인 완료');
-      print('   - 80회 도달 후: 호출 불가능');
+      debugPrint('✅ canMakeRequest 일일 제한 확인 완료');
+      debugPrint('   - 80회 도달 후: 호출 불가능');
     });
 
     test('canMakeRequest - 시간당 제한 우선 확인', () async {
@@ -243,8 +244,8 @@ void main() {
       // Then: 시간당 제한 초과 → 불가능
       expect(canMake, false);
 
-      print('✅ canMakeRequest 시간당 제한 확인 완료');
-      print('   - 20회 도달 후: 호출 불가능');
+      debugPrint('✅ canMakeRequest 시간당 제한 확인 완료');
+      debugPrint('   - 20회 도달 후: 호출 불가능');
     });
 
     // ==========================================================================
@@ -262,8 +263,8 @@ void main() {
       // Then: 55 (80 - 25)
       expect(remaining, 55);
 
-      print('✅ getRemainingDailyQuota 정확성 확인 완료');
-      print('   - 25회 호출 후 남은 할당량: $remaining');
+      debugPrint('✅ getRemainingDailyQuota 정확성 확인 완료');
+      debugPrint('   - 25회 호출 후 남은 할당량: $remaining');
     });
 
     test('getRemainingHourlyQuota - 정확한 남은 할당량', () async {
@@ -278,8 +279,8 @@ void main() {
       // Then: 13 (20 - 7)
       expect(remaining, 13);
 
-      print('✅ getRemainingHourlyQuota 정확성 확인 완료');
-      print('   - 7회 호출 후 남은 할당량: $remaining');
+      debugPrint('✅ getRemainingHourlyQuota 정확성 확인 완료');
+      debugPrint('   - 7회 호출 후 남은 할당량: $remaining');
     });
 
     // ==========================================================================
@@ -296,8 +297,8 @@ void main() {
       final hours = (seconds / 3600).floor();
       final minutes = ((seconds % 3600) / 60).floor();
 
-      print('✅ getSecondsUntilDailyReset 계산 확인 완료');
-      print('   - 다음 리셋까지: ${hours}시간 ${minutes}분');
+      debugPrint('✅ getSecondsUntilDailyReset 계산 확인 완료');
+      debugPrint('   - 다음 리셋까지: $hours시간 $minutes분');
     });
 
     test('getSecondsUntilHourlyReset - 남은 시간 계산', () {
@@ -310,8 +311,8 @@ void main() {
 
       final minutes = (seconds / 60).floor();
 
-      print('✅ getSecondsUntilHourlyReset 계산 확인 완료');
-      print('   - 다음 리셋까지: ${minutes}분');
+      debugPrint('✅ getSecondsUntilHourlyReset 계산 확인 완료');
+      debugPrint('   - 다음 리셋까지: $minutes분');
     });
 
     // ==========================================================================
@@ -337,11 +338,11 @@ void main() {
       expect(status['secondsUntilDailyReset'], greaterThan(0));
       expect(status['secondsUntilHourlyReset'], greaterThan(0));
 
-      print('✅ getStatus 전체 상태 조회 확인 완료');
-      print('   - dailyRemaining: ${status['dailyRemaining']}');
-      print('   - hourlyRemaining: ${status['hourlyRemaining']}');
-      print('   - secondsUntilDailyReset: ${status['secondsUntilDailyReset']}');
-      print('   - secondsUntilHourlyReset: ${status['secondsUntilHourlyReset']}');
+      debugPrint('✅ getStatus 전체 상태 조회 확인 완료');
+      debugPrint('   - dailyRemaining: ${status['dailyRemaining']}');
+      debugPrint('   - hourlyRemaining: ${status['hourlyRemaining']}');
+      debugPrint('   - secondsUntilDailyReset: ${status['secondsUntilDailyReset']}');
+      debugPrint('   - secondsUntilHourlyReset: ${status['secondsUntilHourlyReset']}');
     });
 
     // ==========================================================================
@@ -366,9 +367,9 @@ void main() {
       expect(dailyRemaining, 80);
       expect(hourlyRemaining, 20);
 
-      print('✅ reset 수동 리셋 확인 완료');
-      print('   - 리셋 후 dailyRemaining: $dailyRemaining');
-      print('   - 리셋 후 hourlyRemaining: $hourlyRemaining');
+      debugPrint('✅ reset 수동 리셋 확인 완료');
+      debugPrint('   - 리셋 후 dailyRemaining: $dailyRemaining');
+      debugPrint('   - 리셋 후 hourlyRemaining: $hourlyRemaining');
     });
 
     // ==========================================================================
@@ -391,10 +392,10 @@ void main() {
       expect(dailyRemaining, 80);
       expect(hourlyRemaining, 20);
 
-      print('✅ 첫 실행 시 정상 동작 확인 완료');
-      print('   - canMakeRequest: $canMake');
-      print('   - dailyRemaining: $dailyRemaining');
-      print('   - hourlyRemaining: $hourlyRemaining');
+      debugPrint('✅ 첫 실행 시 정상 동작 확인 완료');
+      debugPrint('   - canMakeRequest: $canMake');
+      debugPrint('   - dailyRemaining: $dailyRemaining');
+      debugPrint('   - hourlyRemaining: $hourlyRemaining');
     });
 
     // ==========================================================================
@@ -431,10 +432,10 @@ void main() {
       // Then: 실패
       expect(success, false);
 
-      print('✅ 제한 경계값 테스트 확인 완료');
-      print('   - 79회: canMake=true, remaining=1');
-      print('   - 80회: canMake=false, remaining=0');
-      print('   - 81회: 증가 실패');
+      debugPrint('✅ 제한 경계값 테스트 확인 완료');
+      debugPrint('   - 79회: canMake=true, remaining=1');
+      debugPrint('   - 80회: canMake=false, remaining=0');
+      debugPrint('   - 81회: 증가 실패');
     });
   });
 }

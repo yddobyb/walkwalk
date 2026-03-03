@@ -243,7 +243,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
               builder: (context) {
                 final breedMap = _getBreedMap(context);
                 return DropdownButtonFormField<String>(
-                  value: _selectedBreed,
+                  initialValue: _selectedBreed,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),

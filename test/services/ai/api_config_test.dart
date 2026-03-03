@@ -1,6 +1,7 @@
 // test/services/ai/api_config_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:walk_dog/core/config/api_config.dart';
 
 /// Week 3 Test 1: API 설정 테스트
@@ -28,12 +29,12 @@ void main() {
       expect(dailyLimit, 40);
       expect(hourlyLimit, 15);
 
-      print('✅ OpenRouter 설정 상수 확인 완료');
-      print('   - Base URL: $baseUrl');
-      print('   - Model: $model');
-      print('   - Timeout: ${timeout}s');
-      print('   - Daily Limit: $dailyLimit');
-      print('   - Hourly Limit: $hourlyLimit');
+      debugPrint('✅ OpenRouter 설정 상수 확인 완료');
+      debugPrint('   - Base URL: $baseUrl');
+      debugPrint('   - Model: $model');
+      debugPrint('   - Timeout: ${timeout}s');
+      debugPrint('   - Daily Limit: $dailyLimit');
+      debugPrint('   - Hourly Limit: $hourlyLimit');
     });
 
     test('API 키 유효성 검증 - 유효한 키', () {
@@ -45,7 +46,7 @@ void main() {
 
       // Then: true 반환
       expect(isValid, true);
-      print('✅ 유효한 API 키 검증 성공: ${validKey.substring(0, 20)}...');
+      debugPrint('✅ 유효한 API 키 검증 성공: ${validKey.substring(0, 20)}...');
     });
 
     test('API 키 유효성 검증 - 빈 문자열', () {
@@ -57,7 +58,7 @@ void main() {
 
       // Then: false 반환
       expect(isValid, false);
-      print('✅ 빈 API 키 검증 실패 확인');
+      debugPrint('✅ 빈 API 키 검증 실패 확인');
     });
 
     test('API 키 유효성 검증 - null', () {
@@ -69,7 +70,7 @@ void main() {
 
       // Then: false 반환
       expect(isValid, false);
-      print('✅ null API 키 검증 실패 확인');
+      debugPrint('✅ null API 키 검증 실패 확인');
     });
 
     test('HTTP 헤더 생성 확인', () {
@@ -85,11 +86,11 @@ void main() {
       expect(headers['X-Title'], 'WalkDog');
       expect(headers['Content-Type'], 'application/json');
 
-      print('✅ HTTP 헤더 생성 확인 완료');
-      print('   - Authorization: ${headers['Authorization']?.substring(0, 20)}...');
-      print('   - HTTP-Referer: ${headers['HTTP-Referer']}');
-      print('   - X-Title: ${headers['X-Title']}');
-      print('   - Content-Type: ${headers['Content-Type']}');
+      debugPrint('✅ HTTP 헤더 생성 확인 완료');
+      debugPrint('   - Authorization: ${headers['Authorization']?.substring(0, 20)}...');
+      debugPrint('   - HTTP-Referer: ${headers['HTTP-Referer']}');
+      debugPrint('   - X-Title: ${headers['X-Title']}');
+      debugPrint('   - Content-Type: ${headers['Content-Type']}');
     });
 
     test('maxTokens 및 temperature 설정 확인', () {
@@ -103,9 +104,9 @@ void main() {
       expect(maxTokens, 100);
       expect(temperature, 0.7);
 
-      print('✅ LLM 파라미터 설정 확인 완료');
-      print('   - Max Tokens: $maxTokens');
-      print('   - Temperature: $temperature');
+      debugPrint('✅ LLM 파라미터 설정 확인 완료');
+      debugPrint('   - Max Tokens: $maxTokens');
+      debugPrint('   - Temperature: $temperature');
     });
   });
 }

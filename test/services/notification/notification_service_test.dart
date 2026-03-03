@@ -7,9 +7,8 @@
 // - 자정 타이머 설정/해제
 // - dispose 정리
 
-import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzData;
@@ -170,7 +169,7 @@ void main() {
       final id1 = NotificationIds.morningId(date);
       final id2 = NotificationIds.morningId(date);
       expect(id1, id2);
-      print('✅ 같은 날짜 → 같은 ID: $id1');
+      debugPrint('✅ 같은 날짜 → 같은 ID: $id1');
     });
 
     test('다른 날짜 → 다른 ID', () {
@@ -180,7 +179,7 @@ void main() {
         NotificationIds.morningId(day1),
         isNot(equals(NotificationIds.morningId(day2))),
       );
-      print(
+      debugPrint(
         '✅ 다른 날짜 → 다른 ID: '
         '${NotificationIds.morningId(day1)} vs '
         '${NotificationIds.morningId(day2)}',
@@ -198,7 +197,7 @@ void main() {
       expect(eId, greaterThanOrEqualTo(2000));
       expect(eId, lessThan(2400));
       expect(mId, isNot(equals(eId)));
-      print('✅ morning=$mId, evening=$eId (충돌 없음)');
+      debugPrint('✅ morning=$mId, evening=$eId (충돌 없음)');
     });
 
     test('missionExpiry/lowHappiness와 충돌 없음', () {
@@ -213,12 +212,12 @@ void main() {
         expect(eId, isNot(equals(3)));
         expect(eId, isNot(equals(100)));
       }
-      print('✅ mission/happiness ID와 충돌 없음');
+      debugPrint('✅ mission/happiness ID와 충돌 없음');
     });
 
     test('scheduleDays = 7', () {
       expect(NotificationIds.scheduleDays, 7);
-      print('✅ scheduleDays = 7');
+      debugPrint('✅ scheduleDays = 7');
     });
 
     test('레거시 ID 목록 포함', () {
@@ -226,7 +225,7 @@ void main() {
         NotificationIds.legacyIds,
         containsAll([1, 2, 10, 11, 20, 21]),
       );
-      print(
+      debugPrint(
         '✅ legacyIds: ${NotificationIds.legacyIds}',
       );
     });
@@ -256,7 +255,7 @@ void main() {
 
       expect(mockPlugin.scheduledCalls, isEmpty);
       expect(mockPlugin.cancelledIds, isEmpty);
-      print('✅ 미초기화 → 스킵');
+      debugPrint('✅ 미초기화 → 스킵');
     });
 
     test('알림 비활성화 시 스케줄하지 않음', () async {
@@ -267,7 +266,7 @@ void main() {
       await service.scheduleConditionalReminders();
 
       expect(mockPlugin.scheduledCalls, isEmpty);
-      print('✅ 알림 OFF → 스킵');
+      debugPrint('✅ 알림 OFF → 스킵');
     });
 
     test('설정 없음(null) 시 스케줄하지 않음', () async {
@@ -276,7 +275,7 @@ void main() {
       await service.scheduleConditionalReminders();
 
       expect(mockPlugin.scheduledCalls, isEmpty);
-      print('✅ 설정 null → 스킵');
+      debugPrint('✅ 설정 null → 스킵');
     });
 
     test('산책 안 한 날 → 7일치 스케줄', () async {
@@ -308,7 +307,7 @@ void main() {
         );
       }
 
-      print(
+      debugPrint(
         '✅ 산책 안 한 날 → '
         '${mockPlugin.scheduledCalls.length}건 스케줄',
       );
@@ -344,7 +343,7 @@ void main() {
         12,
       );
 
-      print(
+      debugPrint(
         '✅ 산책 한 날 → 오늘 스킵, '
         '${mockPlugin.scheduledCalls.length}건 스케줄',
       );
@@ -364,7 +363,7 @@ void main() {
             c.title!.contains('아침'),
       );
       expect(hasKorean, true);
-      print('✅ 한국어 메시지 확인');
+      debugPrint('✅ 한국어 메시지 확인');
     });
 
     test('영어 locale → 영어 메시지', () async {
@@ -381,7 +380,7 @@ void main() {
             c.title!.contains('Good morning'),
       );
       expect(hasEnglish, true);
-      print('✅ 영어 메시지 확인');
+      debugPrint('✅ 영어 메시지 확인');
     });
 
     test('모든 알림은 one-time', () async {
@@ -393,7 +392,7 @@ void main() {
       for (final call in mockPlugin.scheduledCalls) {
         expect(call.isOneTime, true);
       }
-      print('✅ 모든 알림 one-time');
+      debugPrint('✅ 모든 알림 one-time');
     });
 
     test('커스텀 시간 파싱', () async {
@@ -428,7 +427,7 @@ void main() {
       expect(eveningCall.scheduledDate.hour, 20);
       expect(eveningCall.scheduledDate.minute, 15);
 
-      print('✅ 커스텀 시간 파싱: 07:30, 20:15');
+      debugPrint('✅ 커스텀 시간 파싱: 07:30, 20:15');
     });
 
     test('7일 후 날짜까지 스케줄됨', () async {
@@ -448,7 +447,7 @@ void main() {
       );
       expect(hasDay6, true);
 
-      print('✅ Day 6까지 스케줄됨');
+      debugPrint('✅ Day 6까지 스케줄됨');
     });
   });
 
@@ -483,7 +482,7 @@ void main() {
         );
       }
 
-      print(
+      debugPrint(
         '✅ ${mockPlugin.cancelledIds.length}개 '
         'ID 취소 (7일치 + 레거시)',
       );
@@ -495,7 +494,7 @@ void main() {
       await service.cancelWalkReminders();
 
       expect(mockPlugin.cancelledIds, isEmpty);
-      print('✅ 미초기화 → 취소 스킵');
+      debugPrint('✅ 미초기화 → 취소 스킵');
     });
   });
 
@@ -542,7 +541,7 @@ void main() {
         )),
       );
 
-      print(
+      debugPrint(
         '✅ 오늘만 취소 (ID: $todayMorningId, '
         '$todayEveningId), 내일 유지',
       );
@@ -554,7 +553,7 @@ void main() {
       await service.cancelTodayWalkReminders();
 
       expect(mockPlugin.cancelledIds, isEmpty);
-      print('✅ 미초기화 → 취소 스킵');
+      debugPrint('✅ 미초기화 → 취소 스킵');
     });
   });
 
@@ -576,7 +575,7 @@ void main() {
         () => service.startMidnightRescheduleTimer(),
         returnsNormally,
       );
-      print('✅ 자정 타이머 설정 성공');
+      debugPrint('✅ 자정 타이머 설정 성공');
       service.dispose();
     });
 
@@ -584,7 +583,7 @@ void main() {
       service.startMidnightRescheduleTimer();
       service.dispose();
       expect(service.isInitialized, false);
-      print('✅ dispose → 타이머 정리');
+      debugPrint('✅ dispose → 타이머 정리');
     });
 
     test('중복 호출 시 이전 타이머 취소', () {
@@ -594,7 +593,7 @@ void main() {
         () => service.dispose(),
         returnsNormally,
       );
-      print('✅ 중복 호출 안전');
+      debugPrint('✅ 중복 호출 안전');
     });
   });
 
@@ -625,7 +624,7 @@ void main() {
       );
       expect(call.isOneTime, false);
       expect(call.id, NotificationIds.missionExpiry);
-      print('✅ 미션 알림: 매일 반복');
+      debugPrint('✅ 미션 알림: 매일 반복');
     });
   });
 
@@ -640,7 +639,7 @@ void main() {
 
       await service.cancelAll();
       expect(mockPlugin.cancelAllCalled, true);
-      print('✅ cancelAll 호출됨');
+      debugPrint('✅ cancelAll 호출됨');
     });
   });
 
@@ -675,7 +674,7 @@ void main() {
           initialCount,
           greaterThanOrEqualTo(12),
         );
-        print(
+        debugPrint(
           '1️⃣ 앱 시작: $initialCount건 스케줄됨',
         );
 
@@ -684,12 +683,12 @@ void main() {
         await service.cancelTodayWalkReminders();
 
         expect(mockPlugin.cancelledIds.length, 2);
-        print('2️⃣ 산책 완료: 오늘 2건 취소');
+        debugPrint('2️⃣ 산책 완료: 오늘 2건 취소');
 
         // 3. 앱 안 열어도 내일~6일 알림 유지
         // (실제로는 iOS가 관리)
-        print('3️⃣ 나머지 알림 iOS가 자동 발송');
-        print('✅ E2E 7일 시나리오 통과');
+        debugPrint('3️⃣ 나머지 알림 iOS가 자동 발송');
+        debugPrint('✅ E2E 7일 시나리오 통과');
       },
     );
 
@@ -703,7 +702,7 @@ void main() {
 
         await service.scheduleConditionalReminders();
         expect(mockPlugin.scheduledCalls, isEmpty);
-        print('1️⃣ 알림 OFF: 0건');
+        debugPrint('1️⃣ 알림 OFF: 0건');
 
         mockPlugin.reset();
         mockDb.mockSettings = _createSettings(
@@ -715,11 +714,11 @@ void main() {
           mockPlugin.scheduledCalls.length,
           greaterThanOrEqualTo(12),
         );
-        print(
+        debugPrint(
           '2️⃣ 알림 ON: '
           '${mockPlugin.scheduledCalls.length}건',
         );
-        print('✅ 알림 토글 시나리오 통과');
+        debugPrint('✅ 알림 토글 시나리오 통과');
       },
     );
 
@@ -762,7 +761,7 @@ void main() {
         );
         expect(eveningCall.scheduledDate.hour, 20);
 
-        print('✅ 시간 변경 후 재스케줄 통과');
+        debugPrint('✅ 시간 변경 후 재스케줄 통과');
       },
     );
   });

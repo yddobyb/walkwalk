@@ -1,6 +1,7 @@
 // test/services/ai/llm_service_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:walk_dog/services/ai/llm_service.dart';
 import 'package:walk_dog/services/ai/fallback_responses.dart';
 import 'package:walk_dog/services/ai/rate_limiter.dart';
@@ -40,7 +41,7 @@ void main() {
       // Then: false 반환
       expect(isInitialized, false);
 
-      print('✅ 초기화 전 상태 확인 완료: $isInitialized');
+      debugPrint('✅ 초기화 전 상태 확인 완료: $isInitialized');
     });
 
     test('초기화 후 상태 확인', () async {
@@ -52,8 +53,8 @@ void main() {
       // Then: isInitialized 확인 (API 키 유효성에 따라 달라짐)
       final isInitialized = llmService.isInitialized;
 
-      print('✅ 초기화 후 상태 확인 완료: $isInitialized');
-      print('   - API 키가 유효하면 true, 없으면 false');
+      debugPrint('✅ 초기화 후 상태 확인 완료: $isInitialized');
+      debugPrint('   - API 키가 유효하면 true, 없으면 false');
     });
 
     // ==========================================================================
@@ -72,7 +73,7 @@ void main() {
         throwsA(isA<Exception>()),
       );
 
-      print('✅ 미초기화 상태 예외 발생 확인 완료');
+      debugPrint('✅ 미초기화 상태 예외 발생 확인 완료');
     });
 
     test('API 키 없이 컨텍스트 기반 대화 생성 - 폴백 사용', () async {
@@ -90,9 +91,9 @@ void main() {
       // Then: 폴백 응답 반환
       expect(response.isNotEmpty, true);
 
-      print('✅ 컨텍스트 기반 폴백 대화 생성 확인 완료');
-      print('   - 컨텍스트: greeting');
-      print('   - 응답: $response');
+      debugPrint('✅ 컨텍스트 기반 폴백 대화 생성 확인 완료');
+      debugPrint('   - 컨텍스트: greeting');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -118,11 +119,11 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ walk_complete 대화 생성 확인 완료');
-      print('   - 강아지: Buddy (Poodle)');
-      print('   - 행복도: 70');
-      print('   - 걸음수: 5000 (30분)');
-      print('   - 응답: $response');
+      debugPrint('✅ walk_complete 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Buddy (Poodle)');
+      debugPrint('   - 행복도: 70');
+      debugPrint('   - 걸음수: 5000 (30분)');
+      debugPrint('   - 응답: $response');
     });
 
     test('mission_complete 컨텍스트 대화 생성', () async {
@@ -144,10 +145,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ mission_complete 대화 생성 확인 완료');
-      print('   - 강아지: Charlie (Beagle)');
-      print('   - 미션: 첫 산책 완료');
-      print('   - 응답: $response');
+      debugPrint('✅ mission_complete 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Charlie (Beagle)');
+      debugPrint('   - 미션: 첫 산책 완료');
+      debugPrint('   - 응답: $response');
     });
 
     test('feed 컨텍스트 대화 생성', () async {
@@ -168,10 +169,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ feed 대화 생성 확인 완료');
-      print('   - 강아지: Luna (Shiba Inu)');
-      print('   - 간식: 15개');
-      print('   - 응답: $response');
+      debugPrint('✅ feed 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Luna (Shiba Inu)');
+      debugPrint('   - 간식: 15개');
+      debugPrint('   - 응답: $response');
     });
 
     test('level_up 컨텍스트 대화 생성', () async {
@@ -193,10 +194,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ level_up 대화 생성 확인 완료');
-      print('   - 강아지: Rocky (Husky)');
-      print('   - 레벨: 5');
-      print('   - 응답: $response');
+      debugPrint('✅ level_up 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Rocky (Husky)');
+      debugPrint('   - 레벨: 5');
+      debugPrint('   - 응답: $response');
     });
 
     test('low_happiness 컨텍스트 대화 생성', () async {
@@ -214,10 +215,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ low_happiness 대화 생성 확인 완료');
-      print('   - 강아지: Bella (Chihuahua)');
-      print('   - 행복도: 25 (매우 슬픔)');
-      print('   - 응답: $response');
+      debugPrint('✅ low_happiness 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Bella (Chihuahua)');
+      debugPrint('   - 행복도: 25 (매우 슬픔)');
+      debugPrint('   - 응답: $response');
     });
 
     test('greeting 컨텍스트 대화 생성 (시간대별)', () async {
@@ -238,10 +239,10 @@ void main() {
       final hour = DateTime.now().hour;
       final timeOfDay = hour < 12 ? '아침' : hour < 18 ? '오후' : '저녁';
 
-      print('✅ greeting 대화 생성 확인 완료');
-      print('   - 강아지: Coco (Maltese)');
-      print('   - 현재 시간대: $timeOfDay');
-      print('   - 응답: $response');
+      debugPrint('✅ greeting 대화 생성 확인 완료');
+      debugPrint('   - 강아지: Coco (Maltese)');
+      debugPrint('   - 현재 시간대: $timeOfDay');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -271,12 +272,12 @@ void main() {
         expect(response.isNotEmpty, true);
       }
 
-      print('✅ 행복도별 기분 변화 확인 완료');
-      print('   - 95: 매우 행복함 (꼬리를 흔들며 뛰어다님)');
-      print('   - 70: 행복함 (기분 좋음)');
-      print('   - 50: 보통 (평온함)');
-      print('   - 30: 조금 슬픔 (관심 필요)');
-      print('   - 10: 매우 슬픔 (외로움)');
+      debugPrint('✅ 행복도별 기분 변화 확인 완료');
+      debugPrint('   - 95: 매우 행복함 (꼬리를 흔들며 뛰어다님)');
+      debugPrint('   - 70: 행복함 (기분 좋음)');
+      debugPrint('   - 50: 보통 (평온함)');
+      debugPrint('   - 30: 조금 슬픔 (관심 필요)');
+      debugPrint('   - 10: 매우 슬픔 (외로움)');
     });
 
     // ==========================================================================
@@ -292,7 +293,7 @@ void main() {
       // Then: isInitialized = false
       expect(llmService.isInitialized, false);
 
-      print('✅ dispose 후 상태 리셋 확인 완료');
+      debugPrint('✅ dispose 후 상태 리셋 확인 완료');
     });
   });
 }

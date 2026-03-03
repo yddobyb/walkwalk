@@ -1,6 +1,7 @@
 // test/services/ai/conversation_service_test.dart
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:walk_dog/services/ai/conversation_service.dart';
 import 'package:walk_dog/services/ai/llm_service.dart';
 import 'package:walk_dog/services/ai/fallback_responses.dart';
@@ -50,10 +51,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getGreeting 응답 생성 확인 완료');
-      print('   - 강아지: Max (Golden Retriever)');
-      print('   - 행복도: 80');
-      print('   - 응답: $response');
+      debugPrint('✅ getGreeting 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Max (Golden Retriever)');
+      debugPrint('   - 행복도: 80');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -76,11 +77,11 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getWalkCompleteResponse 응답 생성 확인 완료');
-      print('   - 강아지: Buddy (Poodle)');
-      print('   - 걸음수: 5000 (30분)');
-      print('   - 실외: true');
-      print('   - 응답: $response');
+      debugPrint('✅ getWalkCompleteResponse 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Buddy (Poodle)');
+      debugPrint('   - 걸음수: 5000 (30분)');
+      debugPrint('   - 실외: true');
+      debugPrint('   - 응답: $response');
     });
 
     test('getWalkCompleteResponse - 실내 산책', () async {
@@ -100,11 +101,11 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getWalkCompleteResponse (실내) 응답 생성 확인 완료');
-      print('   - 강아지: Charlie (Beagle)');
-      print('   - 걸음수: 3000 (20분)');
-      print('   - 실외: false');
-      print('   - 응답: $response');
+      debugPrint('✅ getWalkCompleteResponse (실내) 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Charlie (Beagle)');
+      debugPrint('   - 걸음수: 3000 (20분)');
+      debugPrint('   - 실외: false');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -126,10 +127,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getMissionCompleteResponse 응답 생성 확인 완료');
-      print('   - 강아지: Luna (Shiba Inu)');
-      print('   - 미션: 첫 산책 완료 (보상: 10개)');
-      print('   - 응답: $response');
+      debugPrint('✅ getMissionCompleteResponse 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Luna (Shiba Inu)');
+      debugPrint('   - 미션: 첫 산책 완료 (보상: 10개)');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -150,10 +151,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getFeedResponse 응답 생성 확인 완료');
-      print('   - 강아지: Rocky (Husky)');
-      print('   - 간식: 15개');
-      print('   - 응답: $response');
+      debugPrint('✅ getFeedResponse 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Rocky (Husky)');
+      debugPrint('   - 간식: 15개');
+      debugPrint('   - 응답: $response');
     });
 
     test('getFeedResponse - 간식 적을 때', () async {
@@ -171,10 +172,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getFeedResponse (간식 적음) 응답 생성 확인 완료');
-      print('   - 강아지: Bella (Chihuahua)');
-      print('   - 간식: 3개');
-      print('   - 응답: $response');
+      debugPrint('✅ getFeedResponse (간식 적음) 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Bella (Chihuahua)');
+      debugPrint('   - 간식: 3개');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -196,10 +197,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getLevelUpResponse 응답 생성 확인 완료');
-      print('   - 강아지: Coco (Maltese)');
-      print('   - 레벨: 5 (경험치: 500)');
-      print('   - 응답: $response');
+      debugPrint('✅ getLevelUpResponse 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Coco (Maltese)');
+      debugPrint('   - 레벨: 5 (경험치: 500)');
+      debugPrint('   - 응답: $response');
     });
 
     test('getLevelUpResponse - 첫 레벨업', () async {
@@ -218,10 +219,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getLevelUpResponse (첫 레벨업) 응답 생성 확인 완료');
-      print('   - 강아지: Milo (Corgi)');
-      print('   - 레벨: 2 (경험치: 100)');
-      print('   - 응답: $response');
+      debugPrint('✅ getLevelUpResponse (첫 레벨업) 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Milo (Corgi)');
+      debugPrint('   - 레벨: 2 (경험치: 100)');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -241,10 +242,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getLowHappinessResponse 응답 생성 확인 완료');
-      print('   - 강아지: Daisy (Bulldog)');
-      print('   - 행복도: 25 (매우 슬픔)');
-      print('   - 응답: $response');
+      debugPrint('✅ getLowHappinessResponse 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Daisy (Bulldog)');
+      debugPrint('   - 행복도: 25 (매우 슬픔)');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -265,10 +266,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getResponse (범용) 응답 생성 확인 완료');
-      print('   - 강아지: Oscar (Labrador)');
-      print('   - 컨텍스트: greeting');
-      print('   - 응답: $response');
+      debugPrint('✅ getResponse (범용) 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Oscar (Labrador)');
+      debugPrint('   - 컨텍스트: greeting');
+      debugPrint('   - 응답: $response');
     });
 
     test('getResponse - 범용 응답 생성 (walk_complete with contextData)', () async {
@@ -291,10 +292,10 @@ void main() {
       // Then: 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ getResponse (contextData 포함) 응답 생성 확인 완료');
-      print('   - 강아지: Zoe (Pomeranian)');
-      print('   - 컨텍스트: walk_complete (7000걸음, 40분)');
-      print('   - 응답: $response');
+      debugPrint('✅ getResponse (contextData 포함) 응답 생성 확인 완료');
+      debugPrint('   - 강아지: Zoe (Pomeranian)');
+      debugPrint('   - 컨텍스트: walk_complete (7000걸음, 40분)');
+      debugPrint('   - 응답: $response');
     });
 
     // ==========================================================================
@@ -308,8 +309,8 @@ void main() {
 
       // Then: LLM 초기화 상태 확인 (API 키 있으면 true)
       // (테스트 환경에서는 API 키 없을 수 있음)
-      print('✅ initialize 호출 확인 완료');
-      print('   - LLM 초기화 시도됨');
+      debugPrint('✅ initialize 호출 확인 완료');
+      debugPrint('   - LLM 초기화 시도됨');
     });
 
     test('dispose - 서비스 정리', () {
@@ -321,8 +322,8 @@ void main() {
       // Then: 정리 완료
       expect(llmService.isInitialized, false);
 
-      print('✅ dispose 호출 확인 완료');
-      print('   - LLM 서비스 정리됨');
+      debugPrint('✅ dispose 호출 확인 완료');
+      debugPrint('   - LLM 서비스 정리됨');
     });
 
     // ==========================================================================
@@ -390,13 +391,13 @@ void main() {
       expect(levelUp.isNotEmpty, true);
       expect(lowHappiness.isNotEmpty, true);
 
-      print('✅ 6가지 편의 메서드 모두 응답 생성 확인 완료');
-      print('   1. greeting: $greeting');
-      print('   2. walkComplete: $walkComplete');
-      print('   3. missionComplete: $missionComplete');
-      print('   4. feed: $feed');
-      print('   5. levelUp: $levelUp');
-      print('   6. lowHappiness: $lowHappiness');
+      debugPrint('✅ 6가지 편의 메서드 모두 응답 생성 확인 완료');
+      debugPrint('   1. greeting: $greeting');
+      debugPrint('   2. walkComplete: $walkComplete');
+      debugPrint('   3. missionComplete: $missionComplete');
+      debugPrint('   4. feed: $feed');
+      debugPrint('   5. levelUp: $levelUp');
+      debugPrint('   6. lowHappiness: $lowHappiness');
     });
 
     // ==========================================================================
@@ -416,9 +417,9 @@ void main() {
       // Then: 폴백 응답 생성됨
       expect(response.isNotEmpty, true);
 
-      print('✅ 폴백 동작 확인 완료');
-      print('   - LLM 미초기화 시 FallbackResponses 사용');
-      print('   - 응답: $response');
+      debugPrint('✅ 폴백 동작 확인 완료');
+      debugPrint('   - LLM 미초기화 시 FallbackResponses 사용');
+      debugPrint('   - 응답: $response');
     });
   });
 }

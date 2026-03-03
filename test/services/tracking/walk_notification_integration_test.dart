@@ -7,6 +7,7 @@
 
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 
 void main() {
   group('산책 완료 → 알림 취소 통합 검증', () {
@@ -55,7 +56,7 @@ void main() {
               'saveWalkSession 이후에 호출되어야 함',
         );
 
-        print(
+        debugPrint(
           '✅ cancelTodayWalkReminders 호출 위치 정확',
         );
       },
@@ -104,7 +105,7 @@ void main() {
               'initialize 이후에 호출되어야 함',
         );
 
-        print(
+        debugPrint(
           '✅ main.dart 초기화 순서 정확',
         );
       },
@@ -185,7 +186,7 @@ void main() {
           reason: 'scheduleEveningReminder 제거 필요',
         );
 
-        print(
+        debugPrint(
           '✅ notification_service.dart: '
           '7일 미리 스케줄 구조 확인',
         );
@@ -224,7 +225,7 @@ void main() {
           reason: '레거시 메서드 사용하지 않아야 함',
         );
 
-        print(
+        debugPrint(
           '✅ settings_screen.dart: '
           'scheduleConditionalReminders 사용',
         );

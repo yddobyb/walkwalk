@@ -7,11 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:walk_dog/domain/entities/pet.dart';
 import 'package:walk_dog/l10n/app_localizations.dart';
 import 'package:walk_dog/presentation/screens/home/widgets/pet_dialogue_widget.dart';
-import 'package:walk_dog/services/ai/ai_providers.dart';
-import 'package:walk_dog/services/ai/dialogue_request.dart';
-import 'package:walk_dog/services/ai/fallback_responses.dart';
-import 'package:walk_dog/services/ai/llm_service.dart';
-import 'package:walk_dog/services/ai/rate_limiter.dart';
 import 'package:walk_dog/services/tracking/step_tracking_service.dart';
 
 /// Week 3 Test 7: PetDialogueWidget UI 테스트
@@ -23,18 +18,6 @@ import 'package:walk_dog/services/tracking/step_tracking_service.dart';
 /// 4. ShimmerLoading 표시
 /// 5. 폴백 응답 표시
 void main() {
-  late FallbackResponses fallbackResponses;
-  late RateLimiter rateLimiter;
-  late LLMService llmService;
-
-  setUp(() {
-    fallbackResponses = FallbackResponses();
-    rateLimiter = RateLimiter();
-    llmService = LLMService(
-      fallbackResponses: fallbackResponses,
-      rateLimiter: rateLimiter,
-    );
-  });
 
   // 테스트용 Mock Pet 데이터
   final mockPet = Pet(
@@ -104,7 +87,7 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ greeting 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('✅ greeting 컨텍스트 위젯 렌더링 확인 완료');
     });
 
     // ==========================================================================
@@ -134,8 +117,8 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ walk_complete 컨텍스트 위젯 렌더링 확인 완료');
-      print('   - contextData: steps=5000, duration=1800, isOutdoor=true');
+      debugPrint('✅ walk_complete 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('   - contextData: steps=5000, duration=1800, isOutdoor=true');
     });
 
     // ==========================================================================
@@ -164,8 +147,8 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ mission_complete 컨텍스트 위젯 렌더링 확인 완료');
-      print('   - contextData: missionTitle=첫 산책 완료, treatReward=10');
+      debugPrint('✅ mission_complete 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('   - contextData: missionTitle=첫 산책 완료, treatReward=10');
     });
 
     // ==========================================================================
@@ -193,8 +176,8 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ feed 컨텍스트 위젯 렌더링 확인 완료');
-      print('   - contextData: treatCount=15');
+      debugPrint('✅ feed 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('   - contextData: treatCount=15');
     });
 
     // ==========================================================================
@@ -223,8 +206,8 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ level_up 컨텍스트 위젯 렌더링 확인 완료');
-      print('   - contextData: newLevel=6, experience=600');
+      debugPrint('✅ level_up 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('   - contextData: newLevel=6, experience=600');
     });
 
     // ==========================================================================
@@ -270,8 +253,8 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ low_happiness 컨텍스트 위젯 렌더링 확인 완료');
-      print('   - happiness: 20 (매우 슬픔)');
+      debugPrint('✅ low_happiness 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('   - happiness: 20 (매우 슬픔)');
     });
 
     // ==========================================================================
@@ -296,7 +279,7 @@ void main() {
       // Then: 위젯 렌더링 확인
       expect(find.byType(PetDialogueWidget), findsOneWidget);
 
-      print('✅ greeting_static 컨텍스트 위젯 렌더링 확인 완료');
+      debugPrint('✅ greeting_static 컨텍스트 위젯 렌더링 확인 완료');
     });
 
     // ==========================================================================
@@ -321,7 +304,7 @@ void main() {
       // Then: 빈 상태 메시지 표시
       expect(find.text('강아지 정보를 불러오는 중...'), findsOneWidget);
 
-      print('✅ Pet null 시 빈 상태 표시 확인 완료');
+      debugPrint('✅ Pet null 시 빈 상태 표시 확인 완료');
     });
 
     // ==========================================================================
@@ -349,7 +332,7 @@ void main() {
       // Then: CircularProgressIndicator 표시 (로딩 상태는 별도 처리 필요)
       // 참고: AsyncLoading은 throw로 처리할 수 없으므로 실제 Provider 상태 확인 필요
 
-      print('✅ AsyncValue.loading 테스트 스킵 (Provider 상태 확인 필요)');
+      debugPrint('✅ AsyncValue.loading 테스트 스킵 (Provider 상태 확인 필요)');
     });
 
     // ==========================================================================
@@ -375,7 +358,7 @@ void main() {
       // Then: Icons.pets 아이콘 표시
       expect(find.byIcon(Icons.pets), findsWidgets);
 
-      print('✅ Icons.pets 아이콘 표시 확인 완료');
+      debugPrint('✅ Icons.pets 아이콘 표시 확인 완료');
     });
 
     // ==========================================================================
@@ -400,7 +383,7 @@ void main() {
       // Then: ShimmerLoading 위젯 표시 가능
       // 참고: AsyncValue 상태에 따라 ShimmerLoading이 표시될 수 있음
 
-      print('✅ ShimmerLoading 테스트 완료 (초기 로딩 상태)');
+      debugPrint('✅ ShimmerLoading 테스트 완료 (초기 로딩 상태)');
     });
 
     // ==========================================================================
@@ -437,9 +420,9 @@ void main() {
         expect(find.byType(PetDialogueWidget), findsOneWidget);
       }
 
-      print('✅ 7개 컨텍스트 모두 위젯 렌더링 확인 완료');
-      print('   - greeting, greeting_static, walk_complete, mission_complete,');
-      print('     feed, level_up, low_happiness');
+      debugPrint('✅ 7개 컨텍스트 모두 위젯 렌더링 확인 완료');
+      debugPrint('   - greeting, greeting_static, walk_complete, mission_complete,');
+      debugPrint('     feed, level_up, low_happiness');
     });
   });
 }

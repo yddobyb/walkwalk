@@ -7,9 +7,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:walk_dog/l10n/app_localizations.dart';
 import 'package:walk_dog/presentation/screens/subscription/paywall_screen.dart';
-import 'package:walk_dog/services/subscription/revenue_cat_service.dart';
-import 'package:walk_dog/services/user/user_tier_providers.dart';
-import 'package:walk_dog/services/user/user_tier_service.dart';
 
 /// PaywallScreen 위젯 테스트
 ///

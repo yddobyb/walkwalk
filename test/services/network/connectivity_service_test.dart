@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:walk_dog/services/network/connectivity_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -44,8 +45,8 @@ void main() {
       expect(result, isA<List<ConnectivityResult>>());
       expect(result.isNotEmpty, true);
 
-      print('✅ checkConnectivity 테스트 완료');
-      print('   - 현재 연결 상태: $result');
+      debugPrint('✅ checkConnectivity 테스트 완료');
+      debugPrint('   - 현재 연결 상태: $result');
     });
 
     // ==========================================================================
@@ -60,8 +61,8 @@ void main() {
       // Then: boolean 반환
       expect(isConnected, isA<bool>());
 
-      print('✅ isConnected 테스트 완료');
-      print('   - 인터넷 연결: $isConnected');
+      debugPrint('✅ isConnected 테스트 완료');
+      debugPrint('   - 인터넷 연결: $isConnected');
     });
 
     // ==========================================================================
@@ -76,8 +77,8 @@ void main() {
       // Then: boolean 반환
       expect(isWifi, isA<bool>());
 
-      print('✅ isWifi 테스트 완료');
-      print('   - WiFi 연결: $isWifi');
+      debugPrint('✅ isWifi 테스트 완료');
+      debugPrint('   - WiFi 연결: $isWifi');
     });
 
     // ==========================================================================
@@ -92,8 +93,8 @@ void main() {
       // Then: boolean 반환
       expect(isMobile, isA<bool>());
 
-      print('✅ isMobile 테스트 완료');
-      print('   - 모바일 데이터 연결: $isMobile');
+      debugPrint('✅ isMobile 테스트 완료');
+      debugPrint('   - 모바일 데이터 연결: $isMobile');
     });
 
     // ==========================================================================
@@ -121,8 +122,8 @@ void main() {
       ];
       expect(validTypes.contains(connectionType), true);
 
-      print('✅ getConnectionTypeString 테스트 완료');
-      print('   - 연결 타입: $connectionType');
+      debugPrint('✅ getConnectionTypeString 테스트 완료');
+      debugPrint('   - 연결 타입: $connectionType');
     });
 
     // ==========================================================================
@@ -137,8 +138,8 @@ void main() {
       // Then: Stream 반환
       expect(stream, isA<Stream<List<ConnectivityResult>>>());
 
-      print('✅ onConnectivityChanged 스트림 확인 완료');
-      print('   - Stream<List<ConnectivityResult>> 타입 확인');
+      debugPrint('✅ onConnectivityChanged 스트림 확인 완료');
+      debugPrint('   - Stream<List<ConnectivityResult>> 타입 확인');
     });
 
     // ==========================================================================
@@ -147,13 +148,10 @@ void main() {
     test('listenToConnectivity - 연결 상태 변경 리스닝', () async {
       // Given: ConnectivityService
 
-      var changeDetected = false;
-
       // When: 연결 상태 변경 리스닝
       final subscription = connectivityService.listenToConnectivity(
         onChanged: (result) {
-          changeDetected = true;
-          print('📡 연결 상태 변경: $result');
+          debugPrint('📡 연결 상태 변경: $result');
         },
       );
 
@@ -166,8 +164,8 @@ void main() {
       // Then: 구독 객체 반환
       expect(subscription, isA<StreamSubscription<List<ConnectivityResult>>>());
 
-      print('✅ listenToConnectivity 테스트 완료');
-      print('   - 스트림 구독 및 취소 성공');
+      debugPrint('✅ listenToConnectivity 테스트 완료');
+      debugPrint('   - 스트림 구독 및 취소 성공');
     });
 
     // ==========================================================================
@@ -175,9 +173,9 @@ void main() {
     // ==========================================================================
     test('dispose - 서비스 정리', () async {
       // Given: ConnectivityService with active subscription
-      final subscription = connectivityService.listenToConnectivity(
+      connectivityService.listenToConnectivity(
         onChanged: (result) {
-          print('📡 연결 상태: $result');
+          debugPrint('📡 연결 상태: $result');
         },
       );
 
@@ -187,8 +185,8 @@ void main() {
       // Then: 정리 완료 (subscription이 취소됨)
       // 참고: dispose는 내부적으로 subscription을 취소함
 
-      print('✅ dispose 테스트 완료');
-      print('   - 서비스 정리 성공');
+      debugPrint('✅ dispose 테스트 완료');
+      debugPrint('   - 서비스 정리 성공');
     });
 
     // ==========================================================================
@@ -208,9 +206,9 @@ void main() {
         expect(isConnected, true);
       }
 
-      print('✅ 연결 상태별 isConnected 동작 확인 완료');
-      print('   - 연결 상태: $connectivityResult');
-      print('   - isConnected: $isConnected');
+      debugPrint('✅ 연결 상태별 isConnected 동작 확인 완료');
+      debugPrint('   - 연결 상태: $connectivityResult');
+      debugPrint('   - isConnected: $isConnected');
     });
 
     // ==========================================================================
@@ -226,14 +224,14 @@ void main() {
       // Then: 둘 다 false이거나, 하나만 true
       // (WiFi와 모바일 동시 연결은 일반적으로 불가능)
       if (isWifi) {
-        print('✅ WiFi 연결 확인 완료');
+        debugPrint('✅ WiFi 연결 확인 완료');
       } else if (isMobile) {
-        print('✅ 모바일 데이터 연결 확인 완료');
+        debugPrint('✅ 모바일 데이터 연결 확인 완료');
       } else {
-        print('✅ WiFi/모바일 아닌 연결 또는 오프라인');
+        debugPrint('✅ WiFi/모바일 아닌 연결 또는 오프라인');
       }
 
-      print('   - WiFi: $isWifi, Mobile: $isMobile');
+      debugPrint('   - WiFi: $isWifi, Mobile: $isMobile');
     });
   });
 }
