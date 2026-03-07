@@ -429,13 +429,17 @@ class _StopWalkButton extends StatelessWidget {
                 else
                   const Icon(Icons.stop, size: 24),
                 const SizedBox(width: 8),
-                Text(
-                  isStopping
-                      ? l10n.walkEndingMessage
-                      : l10n.walkEndButton,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    isStopping
+                        ? l10n.walkEndingMessage
+                        : l10n.walkEndButton,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

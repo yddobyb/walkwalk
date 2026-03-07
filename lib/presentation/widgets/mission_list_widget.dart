@@ -61,8 +61,13 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.today, size: 16),
-                    const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).daily),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        AppLocalizations.of(context).daily,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -71,8 +76,13 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.date_range, size: 16),
-                    const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).weekly),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        AppLocalizations.of(context).weekly,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -81,8 +91,13 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.check_circle, size: 16),
-                    const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context).missionCompleted),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        AppLocalizations.of(context).missionCompleted,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               ),

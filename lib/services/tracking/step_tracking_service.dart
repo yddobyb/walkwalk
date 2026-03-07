@@ -691,6 +691,7 @@ class StepTrackingService {
     await stop();
     await _stateController.close();
     await _dailyStepsController.close();
+    await _weeklyStepsController.close();
     await _petUpdateController.close();
   }
 }
