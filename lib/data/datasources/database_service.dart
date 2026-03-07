@@ -533,29 +533,38 @@ class DatabaseService {
   }
 
   /// 일일 미션 목표값 업데이트
-  Future<void> updateDailyMissionGoal(int newGoal) async {
+  Future<void> updateDailyMissionGoal(
+    int newGoal, {
+    required List<String> matchTitles,
+    required String newDescription,
+  }) async {
     try {
       final isar = await instance;
 
-      // "오늘의 걸음수 목표" 미션 찾기
-      final missions = await isar.missionModels
+      // 활성 일일 미션 중 걸음수 기반 미션 찾기
+      final allDailyActive = await isar.missionModels
           .filter()
           .typeEqualTo('daily')
           .and()
-          .titleEqualTo('오늘의 걸음수 목표')
-          .and()
           .isActiveEqualTo(true)
           .findAll();
+
+      // 메인 걸음수 목표 미션만 필터 (한국어/영어 제목 모두 매칭)
+      final missions = allDailyActive
+          .where((m) => matchTitles.contains(m.title))
+          .toList();
 
       if (missions.isNotEmpty) {
         await isar.writeTxn(() async {
           for (final mission in missions) {
             mission.targetSteps = newGoal;
-            mission.description = '$newGoal걸음 걷기';
+            mission.description = newDescription;
             await isar.missionModels.put(mission);
           }
         });
         debugPrint('DatabaseService - Updated ${missions.length} daily mission(s) to $newGoal steps');
+      } else {
+        debugPrint('DatabaseService - No matching daily step goal missions found (tried titles: $matchTitles)');
       }
     } catch (e) {
       debugPrint('Failed to update daily mission goal: $e');
@@ -564,32 +573,71 @@ class DatabaseService {
   }
 
   /// 주간 미션 목표값 업데이트
-  Future<void> updateWeeklyMissionGoal(int newGoal) async {
+  Future<void> updateWeeklyMissionGoal(
+    int newGoal, {
+    required List<String> matchTitles,
+    required String newDescription,
+  }) async {
     try {
       final isar = await instance;
 
-      // "이번 주 걸음수 챌린지" 미션 찾기
-      final missions = await isar.missionModels
+      // 활성 주간 미션 중 걸음수 기반 미션 찾기
+      final allWeeklyActive = await isar.missionModels
           .filter()
           .typeEqualTo('weekly')
           .and()
-          .titleEqualTo('이번 주 걸음수 챌린지')
-          .and()
           .isActiveEqualTo(true)
           .findAll();
+
+      // 메인 걸음수 챌린지 미션만 필터 (한국어/영어 제목 모두 매칭)
+      final missions = allWeeklyActive
+          .where((m) => matchTitles.contains(m.title))
+          .toList();
 
       if (missions.isNotEmpty) {
         await isar.writeTxn(() async {
           for (final mission in missions) {
             mission.targetSteps = newGoal;
-            mission.description = '$newGoal걸음 걷기';
+            mission.description = newDescription;
             await isar.missionModels.put(mission);
           }
         });
         debugPrint('DatabaseService - Updated ${missions.length} weekly mission(s) to $newGoal steps');
+      } else {
+        debugPrint('DatabaseService - No matching weekly step goal missions found (tried titles: $matchTitles)');
       }
     } catch (e) {
       debugPrint('Failed to update weekly mission goal: $e');
+      rethrow;
+    }
+  }
+
+  /// 활성 미션의 제목과 설명을 새 locale로 업데이트
+  Future<void> updateMissionLocale(Map<String, ({String title, String description})> titleMap) async {
+    try {
+      final isar = await instance;
+
+      final activeMissions = await isar.missionModels
+          .filter()
+          .isActiveEqualTo(true)
+          .findAll();
+
+      int updatedCount = 0;
+      await isar.writeTxn(() async {
+        for (final mission in activeMissions) {
+          final mapping = titleMap[mission.title];
+          if (mapping != null) {
+            mission.title = mapping.title;
+            mission.description = mapping.description;
+            await isar.missionModels.put(mission);
+            updatedCount++;
+          }
+        }
+      });
+
+      debugPrint('DatabaseService - Updated $updatedCount mission(s) locale');
+    } catch (e) {
+      debugPrint('DatabaseService - Failed to update mission locale: $e');
       rethrow;
     }
   }

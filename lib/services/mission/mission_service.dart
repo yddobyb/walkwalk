@@ -420,13 +420,123 @@ class MissionService {
   /// 새로운 목표값으로 기존 미션 업데이트
   Future<void> updateMissionsForNewGoal(int newDailyStepGoal) async {
     try {
-      // 데이터베이스에서 직접 업데이트
-      await _databaseService.updateDailyMissionGoal(newDailyStepGoal);
-      await _databaseService.updateWeeklyMissionGoal(newDailyStepGoal * 7);
+      final l10n = await _getLocalizations();
+
+      // 한국어/영어 제목 모두 매칭 (미션이 어느 언어로 생성됐을지 모르므로)
+      final koL10n = await AppLocalizations.delegate.load(const Locale('ko'));
+      final enL10n = await AppLocalizations.delegate.load(const Locale('en'));
+
+      final dailyTitles = [
+        koL10n.missionDailyStepsTitle,
+        enL10n.missionDailyStepsTitle,
+      ];
+      final weeklyTitles = [
+        koL10n.missionWeeklyStepsTitle,
+        enL10n.missionWeeklyStepsTitle,
+      ];
+
+      await _databaseService.updateDailyMissionGoal(
+        newDailyStepGoal,
+        matchTitles: dailyTitles,
+        newDescription: l10n.missionDailyStepsDescription(newDailyStepGoal),
+      );
+      await _databaseService.updateWeeklyMissionGoal(
+        newDailyStepGoal * 7,
+        matchTitles: weeklyTitles,
+        newDescription: l10n.missionWeeklyStepsDescription(newDailyStepGoal * 7),
+      );
 
       debugPrint('MissionService - Updated missions for new goal: $newDailyStepGoal steps');
     } catch (e) {
       debugPrint('MissionService - Error updating missions for new goal: $e');
+      rethrow;
+    }
+  }
+
+  /// 언어 변경 시 활성 미션의 제목/설명을 새 locale로 업데이트
+  Future<void> updateMissionsLocale(String newLocaleCode) async {
+    try {
+      final settings = await _databaseService.getSettings();
+      final dailyStepGoal = settings?.dailyStepGoal ?? AppConstants.dailyStepGoal;
+
+      // 이전 locale의 l10n (한국어/영어 모두 로드)
+      final koL10n = await AppLocalizations.delegate.load(const Locale('ko'));
+      final enL10n = await AppLocalizations.delegate.load(const Locale('en'));
+
+      // 새 locale의 l10n
+      final newL10n = await AppLocalizations.delegate.load(Locale(newLocaleCode));
+
+      // old title → new (title, description) 매핑 테이블
+      final Map<String, ({String title, String description})> titleMap = {
+        // 일일 걸음수 목표
+        koL10n.missionDailyStepsTitle: (
+          title: newL10n.missionDailyStepsTitle,
+          description: newL10n.missionDailyStepsDescription(dailyStepGoal),
+        ),
+        enL10n.missionDailyStepsTitle: (
+          title: newL10n.missionDailyStepsTitle,
+          description: newL10n.missionDailyStepsDescription(dailyStepGoal),
+        ),
+        // 주간 걸음수 챌린지
+        koL10n.missionWeeklyStepsTitle: (
+          title: newL10n.missionWeeklyStepsTitle,
+          description: newL10n.missionWeeklyStepsDescription(dailyStepGoal * 7),
+        ),
+        enL10n.missionWeeklyStepsTitle: (
+          title: newL10n.missionWeeklyStepsTitle,
+          description: newL10n.missionWeeklyStepsDescription(dailyStepGoal * 7),
+        ),
+        // 활동적인 한 주
+        koL10n.missionActiveWeekTitle: (
+          title: newL10n.missionActiveWeekTitle,
+          description: newL10n.missionActiveWeekDescription,
+        ),
+        enL10n.missionActiveWeekTitle: (
+          title: newL10n.missionActiveWeekTitle,
+          description: newL10n.missionActiveWeekDescription,
+        ),
+        // 빠른 산책
+        koL10n.missionQuickWalkTitle: (
+          title: newL10n.missionQuickWalkTitle,
+          description: newL10n.missionQuickWalkDescription,
+        ),
+        enL10n.missionQuickWalkTitle: (
+          title: newL10n.missionQuickWalkTitle,
+          description: newL10n.missionQuickWalkDescription,
+        ),
+        // 거리 도전
+        koL10n.missionDistanceChallengeTitle: (
+          title: newL10n.missionDistanceChallengeTitle,
+          description: newL10n.missionDistanceChallengeDescription,
+        ),
+        enL10n.missionDistanceChallengeTitle: (
+          title: newL10n.missionDistanceChallengeTitle,
+          description: newL10n.missionDistanceChallengeDescription,
+        ),
+        // 조기 달성
+        koL10n.missionEarlyAchievementTitle: (
+          title: newL10n.missionEarlyAchievementTitle,
+          description: newL10n.missionEarlyAchievementDescription,
+        ),
+        enL10n.missionEarlyAchievementTitle: (
+          title: newL10n.missionEarlyAchievementTitle,
+          description: newL10n.missionEarlyAchievementDescription,
+        ),
+        // 꾸준한 운동
+        koL10n.missionConsistentExerciseTitle: (
+          title: newL10n.missionConsistentExerciseTitle,
+          description: newL10n.missionConsistentExerciseDescription,
+        ),
+        enL10n.missionConsistentExerciseTitle: (
+          title: newL10n.missionConsistentExerciseTitle,
+          description: newL10n.missionConsistentExerciseDescription,
+        ),
+      };
+
+      await _databaseService.updateMissionLocale(titleMap);
+      debugPrint('MissionService - Updated mission titles for locale: $newLocaleCode');
+    } catch (e) {
+      debugPrint('MissionService - Error updating missions locale: $e');
       rethrow;
     }
   }

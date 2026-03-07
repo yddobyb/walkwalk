@@ -148,7 +148,12 @@ class SettingsService {
       final settings = await loadSettings();
       settings.locale = localeCode;
       await _databaseService.saveSettings(settings);
-      debugPrint('SettingsService - Updated locale to $localeCode');
+
+      // 기존 미션의 제목/설명을 새 언어로 업데이트
+      final missionService = MissionService.instance;
+      await missionService.updateMissionsLocale(localeCode);
+
+      debugPrint('SettingsService - Updated locale to $localeCode (missions updated)');
     } catch (e) {
       debugPrint('SettingsService - Error updating locale: $e');
       rethrow;
