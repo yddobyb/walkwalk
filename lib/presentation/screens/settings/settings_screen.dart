@@ -493,7 +493,7 @@ class SettingsScreen extends ConsumerWidget {
       children: [
         Text(AppLocalizations.of(context).appDescription),
         const SizedBox(height: 16),
-        const Text('© 2025 WalkDog Team'),
+        const Text('© 2026 WalkDog Team'),
       ],
     );
   }
@@ -505,80 +505,52 @@ class SettingsScreen extends ConsumerWidget {
         final l10n = AppLocalizations.of(dialogContext);
         return AlertDialog(
           title: Text(l10n.languageDialogTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<String>(
-                title: Text(l10n.languageKorean),
-                value: 'ko',
-                groupValue: currentLocale,
-                onChanged: (value) async {
-                  if (value != null && value != currentLocale) {
-                    // Pre-capture strings BEFORE locale changes to avoid
-                    // AppLocalizations.of(context) in async continuations,
-                    // which triggers the 'ancestor == this' assertion.
-                    final successMsg = l10n.languageUpdated(l10n.languageKorean);
-                    Navigator.of(dialogContext).pop();
-                    try {
-                      await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(successMsg),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      final errorMsg = l10n.languageChangeError(e.toString());
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(errorMsg),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
+          content: RadioGroup<String>(
+            groupValue: currentLocale,
+            onChanged: (value) async {
+              if (value != null && value != currentLocale) {
+                // Pre-capture strings BEFORE locale changes to avoid
+                // AppLocalizations.of(context) in async continuations,
+                // which triggers the 'ancestor == this' assertion.
+                final langName = value == 'ko' ? l10n.languageKorean : l10n.languageEnglish;
+                final successMsg = l10n.languageUpdated(langName);
+                Navigator.of(dialogContext).pop();
+                try {
+                  await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(successMsg),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   }
-                },
-              ),
-              RadioListTile<String>(
-                title: Text(l10n.languageEnglish),
-                value: 'en',
-                groupValue: currentLocale,
-                onChanged: (value) async {
-                  if (value != null && value != currentLocale) {
-                    // Pre-capture strings BEFORE locale changes to avoid
-                    // AppLocalizations.of(context) in async continuations,
-                    // which triggers the 'ancestor == this' assertion.
-                    final successMsg = l10n.languageUpdated(l10n.languageEnglish);
-                    Navigator.of(dialogContext).pop();
-                    try {
-                      await ref.read(settingsNotifierProvider.notifier).updateLocale(value);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(successMsg),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      final errorMsg = l10n.languageChangeError(e.toString());
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(errorMsg),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
+                } catch (e) {
+                  final errorMsg = l10n.languageChangeError(e.toString());
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(errorMsg),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
-                },
-              ),
-            ],
+                }
+              }
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<String>(
+                  title: Text(l10n.languageKorean),
+                  value: 'ko',
+                ),
+                RadioListTile<String>(
+                  title: Text(l10n.languageEnglish),
+                  value: 'en',
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(

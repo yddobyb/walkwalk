@@ -1,4 +1,5 @@
 // lib/data/datasources/database_service.dart
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,7 +35,7 @@ class DatabaseService {
       ],
       directory: dir.path,
       name: 'walkdog_db',
-      inspector: true, // 개발 시에만 true
+      inspector: kDebugMode,
     );
 
     await _initializeDefaultData();

@@ -110,15 +110,15 @@ void main() {
       expect(connectionType, isA<String>());
       expect(connectionType.isNotEmpty, true);
 
-      // 가능한 값: WiFi, 모바일 데이터, 이더넷, VPN, 블루투스, 기타 네트워크, 연결 없음
+      // 가능한 값: WiFi, Mobile Data, Ethernet, VPN, Bluetooth, Other Network, No Connection
       final validTypes = [
         'WiFi',
-        '모바일 데이터',
-        '이더넷',
+        'Mobile Data',
+        'Ethernet',
         'VPN',
-        '블루투스',
-        '기타 네트워크',
-        '연결 없음',
+        'Bluetooth',
+        'Other Network',
+        'No Connection',
       ];
       expect(validTypes.contains(connectionType), true);
 

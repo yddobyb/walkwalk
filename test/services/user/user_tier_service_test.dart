@@ -32,11 +32,11 @@ void main() {
 
   group('UserTier enum', () {
     test('free tier has correct display name', () {
-      expect(UserTier.free.displayName, equals('무료'));
+      expect(UserTier.free.displayName, equals('Free'));
     });
 
     test('premium tier has correct display name', () {
-      expect(UserTier.premium.displayName, equals('프리미엄'));
+      expect(UserTier.premium.displayName, equals('Premium'));
     });
 
     test('free tier has daily limit of 10', () {

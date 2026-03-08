@@ -46,13 +46,13 @@ class UserTierService {
 
 /// UserTier 확장 메서드
 extension UserTierExtension on UserTier {
-  /// 표시 이름
+  /// 표시 이름 (로그/디버그용, UI에는 l10n 사용)
   String get displayName {
     switch (this) {
       case UserTier.free:
-        return '무료';
+        return 'Free';
       case UserTier.premium:
-        return '프리미엄';
+        return 'Premium';
     }
   }
 

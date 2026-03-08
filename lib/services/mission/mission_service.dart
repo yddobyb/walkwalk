@@ -143,10 +143,11 @@ class MissionService {
       }
     }
 
-    // 미션 완료 알림 전송
+    // 미션 완료 알림 전송 (현재 locale에 맞는 메시지)
+    final l10n = await _getLocalizations();
     final notification = MissionCompletionNotification(
       mission: mission,
-      message: '${mission.title} 완료!',
+      message: '${mission.title} - ${l10n.missionComplete}',
     );
     _missionCompletionController.add(notification);
   }
@@ -178,9 +179,9 @@ class MissionService {
 
     // 이번 주의 주간 미션 확인
     final weeklyMissions = await getMissionsByType('weekly');
+    final weekStart = _getWeekStart(now);
+    final weekEnd = weekStart.add(const Duration(days: 7));
     final thisWeekMissions = weeklyMissions.where((mission) {
-      final weekStart = _getWeekStart(now);
-      final weekEnd = weekStart.add(const Duration(days: 7));
       return mission.expiresAt.isAfter(weekStart) && mission.expiresAt.isBefore(weekEnd);
     }).toList();
 
@@ -402,11 +403,12 @@ class MissionService {
     await _databaseService.removeExpiredMissions();
   }
 
-  /// 주의 시작일 (월요일) 구하기
+  /// 주의 시작일 (월요일 00:00:00) 구하기
   DateTime _getWeekStart(DateTime date) {
     final weekday = date.weekday;
     final daysToSubtract = weekday - 1; // 월요일이 1
-    return date.subtract(Duration(days: daysToSubtract));
+    final monday = date.subtract(Duration(days: daysToSubtract));
+    return DateTime(monday.year, monday.month, monday.day);
   }
 
   /// 다음 월요일 구하기

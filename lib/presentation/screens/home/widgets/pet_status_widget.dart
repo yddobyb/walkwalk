@@ -386,7 +386,7 @@ class _StatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final percentage = value / maxValue;
+    final percentage = maxValue > 0 ? value / maxValue : 0.0;
 
     return Row(
       children: [

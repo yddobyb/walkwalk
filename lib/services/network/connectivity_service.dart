@@ -55,26 +55,26 @@ class ConnectivityService {
     return result.contains(ConnectivityResult.mobile);
   }
 
-  /// 연결 타입 문자열 반환 (UI 표시용)
+  /// 연결 타입 문자열 반환 (로그/디버그용, UI에는 l10n 사용)
   ///
-  /// Returns: "WiFi", "모바일 데이터", "이더넷", "연결 없음" 등
+  /// Returns: "WiFi", "Mobile Data", "Ethernet", "No Connection" 등
   Future<String> getConnectionTypeString() async {
     final result = await checkConnectivity();
 
     if (result.contains(ConnectivityResult.wifi)) {
       return 'WiFi';
     } else if (result.contains(ConnectivityResult.mobile)) {
-      return '모바일 데이터';
+      return 'Mobile Data';
     } else if (result.contains(ConnectivityResult.ethernet)) {
-      return '이더넷';
+      return 'Ethernet';
     } else if (result.contains(ConnectivityResult.vpn)) {
       return 'VPN';
     } else if (result.contains(ConnectivityResult.bluetooth)) {
-      return '블루투스';
+      return 'Bluetooth';
     } else if (result.contains(ConnectivityResult.other)) {
-      return '기타 네트워크';
+      return 'Other Network';
     } else {
-      return '연결 없음';
+      return 'No Connection';
     }
   }
 
