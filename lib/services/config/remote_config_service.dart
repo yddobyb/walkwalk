@@ -70,13 +70,13 @@ class RemoteConfigService {
 
       debugPrint('✅ RemoteConfig - Initialized successfully');
       debugPrint(
-        '   - OpenRouter: ${_maskApiKey(getOpenRouterApiKey())}',
+        '   - OpenRouter: ${getOpenRouterApiKey().isNotEmpty ? "configured" : "missing"}',
       );
       debugPrint(
-        '   - Groq: ${_maskApiKey(getGroqApiKey())}',
+        '   - Groq: ${getGroqApiKey().isNotEmpty ? "configured" : "missing"}',
       );
       debugPrint(
-        '   - Gemini: ${_maskApiKey(getGeminiApiKey())}',
+        '   - Gemini: ${getGeminiApiKey().isNotEmpty ? "configured" : "missing"}',
       );
       debugPrint('   - Daily Limit: ${getRateLimitDaily()}');
       debugPrint('   - Hourly Limit: ${getRateLimitHourly()}');
@@ -214,19 +214,6 @@ class RemoteConfigService {
   // ==========================================================================
   // 유틸리티
   // ==========================================================================
-
-  /// API 키 마스킹 (보안)
-  ///
-  /// 예: sk-or-v1-abc...xyz → sk-or-***xyz
-  static String _maskApiKey(String apiKey) {
-    if (apiKey.isEmpty || apiKey.length < 10) {
-      return '***';
-    }
-
-    final prefix = apiKey.substring(0, 6);
-    final suffix = apiKey.substring(apiKey.length - 3);
-    return '$prefix***$suffix';
-  }
 
   /// 초기화 상태 확인
   static bool get isInitialized => _isInitialized;

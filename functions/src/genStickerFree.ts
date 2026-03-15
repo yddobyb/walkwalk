@@ -30,7 +30,6 @@ interface GenStickerFreeRequest {
   bg?: "transparent" | "white" | "gradient";
   seed?: number;
   force?: boolean;
-  userId?: string; // auth context가 전달되지 않을 때 사용
 }
 
 // 무료 사용자 일일 할당량
@@ -39,25 +38,32 @@ const FREE_USER_DAILY_QUOTA = 10;
 export const genStickerFree = functions
   .region("us-central1")
   .https.onCall(async (data: GenStickerFreeRequest, context) => {
-    console.log("🎨 [genStickerFree] Called with data:", JSON.stringify(data));
+    console.log("🎨 [genStickerFree] Called");
 
     // =====================
-    // 1. 인증 확인
+    // 1. App Check 검증
     // =====================
-    let uid: string;
-    if (context.auth) {
-      uid = context.auth.uid;
-      console.log(`👤 [genStickerFree] User (authenticated): ${uid}`);
-    } else if (data.userId) {
-      uid = data.userId;
-      console.log(`👤 [genStickerFree] User (passed userId): ${uid}`);
-    } else {
-      uid = `temp-${Date.now()}`;
-      console.log(`👤 [genStickerFree] User (temporary): ${uid}`);
+    if (!context.app) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
+      );
     }
 
     // =====================
-    // 2. 입력 검증
+    // 2. 인증 확인 (필수)
+    // =====================
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Authentication required"
+      );
+    }
+    const uid = context.auth.uid;
+    console.log(`👤 [genStickerFree] User: ${uid}`);
+
+    // =====================
+    // 3. 입력 검증
     // =====================
     const {
       petId,
@@ -70,7 +76,7 @@ export const genStickerFree = functions
       seed,
     } = data;
 
-    console.log(`📝 [genStickerFree] Parameters: petId=${petId}, breed=${breed}, color=${color}`);
+    console.log(`📝 [genStickerFree] petId=${petId}`);
 
     if (!petId || size < 256 || size > 1024) {
       console.error("❌ [genStickerFree] Invalid parameters");
@@ -78,7 +84,7 @@ export const genStickerFree = functions
     }
 
     // =====================
-    // 3. 레이트 리밋 체크
+    // 4. 레이트 리밋 체크
     // =====================
     const rateLimitOk = await checkRateLimit(uid, FREE_USER_DAILY_QUOTA);
     if (!rateLimitOk) {
@@ -106,7 +112,7 @@ export const genStickerFree = functions
       throw new functions.https.HttpsError("internal", "OpenAI API key not configured");
     }
 
-    console.log("🔑 [genStickerFree] API keys loaded successfully");
+    console.log("🔑 [genStickerFree] API keys configured");
 
     // =====================
     // 5. 프롬프트 생성 (genSticker와 동일한 로직)

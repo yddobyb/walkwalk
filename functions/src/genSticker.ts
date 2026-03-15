@@ -14,7 +14,6 @@ interface GenStickerRequest {
   bg?: "transparent" | "white" | "gradient";
   seed?: number;
   force?: boolean;
-  userId?: string; // auth context가 전달되지 않을 때 사용
 }
 
 // Week 4 테스트: 캐시 비활성화로 미사용
@@ -42,47 +41,45 @@ interface GeminiImageData {
 export const genSticker = functions
   .region("us-central1")
   .https.onCall(async (data: GenStickerRequest, context) => {
-    console.log("🎨 genSticker called with data:", JSON.stringify(data));
+    console.log("🎨 genSticker called");
 
-    // 1. App Check 검증 (Week 4 테스트: 임시 제거)
-    // if (!context.app) {
-    //   throw new functions.https.HttpsError(
-    //     "failed-precondition",
-    //     "App Check required"
-    //   );
-    // }
-
-    // 2. 인증 확인: auth context가 있으면 사용, 없으면 전달받은 userId 사용
-    let uid: string;
-    if (context.auth) {
-      uid = context.auth.uid;
-      console.log(`👤 User (authenticated): ${uid}`);
-    } else if (data.userId) {
-      uid = data.userId;
-      console.log(`👤 User (passed userId): ${uid}`);
-    } else {
-      // 둘 다 없으면 임시 UID 생성
-      uid = `temp-${Date.now()}`;
-      console.log(`👤 User (temporary): ${uid} - no auth or userId`);
+    // 1. App Check 검증
+    if (!context.app) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
+      );
     }
+
+    // 2. 인증 확인 (필수)
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Authentication required"
+      );
+    }
+    const uid = context.auth.uid;
+    console.log(`👤 User: ${uid}`);
 
     // 3. 입력 검증
     const {petId, breed = "Shiba Inu", color = "orange", accessory = "none",
       style = "sticker-flat", size = 512, bg = "transparent", seed} = data; // force 제거 (캐시 비활성화)
 
-    console.log(`📝 Parameters: petId=${petId}, breed=${breed}, color=${color}`);
+    console.log(`📝 petId=${petId}`);
 
     if (!petId || size < 256 || size > 1024) {
       console.error("❌ Invalid parameters");
       throw new functions.https.HttpsError("invalid-argument", "Invalid parameters");
     }
 
-    // 4. 레이트 리밋 체크 (Week 4 테스트: Firestore 없이 항상 통과)
-    // const uid = context.auth?.uid || "test-user-" + Date.now();
-    // const rateLimitOk = await checkRateLimit(uid);
-    // if (!rateLimitOk) {
-    //   throw new functions.https.HttpsError("resource-exhausted", "Rate limit exceeded");
-    // }
+    // 4. 레이트 리밋 체크
+    const rateLimitOk = await checkRateLimit(uid);
+    if (!rateLimitOk) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        "Rate limit exceeded"
+      );
+    }
 
     // 5. 캐시 확인 (임시 비활성화)
     /* const cacheKey = generateCacheKey({petId, breed, color, accessory, style, size, seed});
@@ -251,8 +248,10 @@ async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer>
   return JSON.parse(data.toString()) as CachedImage;
 } */
 
-// 레이트 리밋 체크 (Week 4 테스트: 전체 주석 처리)
-/*
+// 프리미엄 사용자 할당량
+const PREMIUM_DAILY_QUOTA = 50;
+const PREMIUM_RATE_LIMIT_PER_5MIN = 5;
+
 async function checkRateLimit(uid: string): Promise<boolean> {
   const db = admin.firestore();
   const now = Date.now();
@@ -266,22 +265,22 @@ async function checkRateLimit(uid: string): Promise<boolean> {
   }
 
   const usage = usageDoc.data()!;
-  const config = functions.config();
 
   // 일일 제한 체크
-  if (usage.date === today && usage.count >= parseInt(config.limits.daily_quota)) {
+  if (usage.date === today &&
+    usage.count >= PREMIUM_DAILY_QUOTA) {
     return false;
   }
 
   // 5분 제한 체크
-  const recent = (usage.timestamps || []).filter((ts: number) => now - ts < 5 * 60 * 1000);
-  if (recent.length >= parseInt(config.limits.rate_limit_per_5min)) {
+  const recent = (usage.timestamps || [])
+    .filter((ts: number) => now - ts < 5 * 60 * 1000);
+  if (recent.length >= PREMIUM_RATE_LIMIT_PER_5MIN) {
     return false;
   }
 
   return true;
 }
-*/
 
 // 사용량 기록
 async function recordUsage(uid: string): Promise<void> {

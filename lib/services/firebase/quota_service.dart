@@ -51,17 +51,10 @@ class QuotaService {
       // 인증 확인 및 필요시 재인증
       await _ensureAuthenticated();
 
-      // 인증 상태 확인
-      final user = FirebaseAuth.instance.currentUser;
       debugPrint('📊 Fetching quota...');
-      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
-      debugPrint('   - Is anonymous: ${user?.isAnonymous}');
 
       final callable = _functions.httpsCallable('quota');
-      // userId를 직접 전달 (auth context가 전달되지 않는 문제 우회)
-      final result = await callable.call({
-        'userId': user?.uid,
-      });
+      final result = await callable.call({});
 
       // result.data는 Map<Object?, Object?>이므로 Map<String, dynamic>으로 deep copy
       final rawData = result.data as Map;

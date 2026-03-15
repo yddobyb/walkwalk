@@ -26,10 +26,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_dartobservatory._tcp</string>
-	</array>
 	<key>NSHealthShareUsageDescription</key>
 	<string>WalkDog needs to read your step count data from Apple Health to accurately track your daily walking activity and provide personalized pet interactions.</string>
 	<key>NSHealthUpdateUsageDescription</key>

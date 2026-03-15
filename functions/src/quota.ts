@@ -63,19 +63,15 @@ export const quota = functions
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];
 
-    // 인증 확인
-    let uid: string;
-    if (context.auth) {
-      uid = context.auth.uid;
-      console.log(`📊 [quota] User (authenticated): ${uid}`);
-    } else if (data && data.userId) {
-      uid = data.userId as string;
-      console.log(`📊 [quota] User (passed userId): ${uid}`);
-    } else {
-      console.log("📊 [quota] No user - returning free tier default");
-      const config = TIER_CONFIG.free;
-      return buildQuotaResponse(config.dailyQuota, 0, "free");
+    // 인증 확인 (필수)
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        "unauthenticated",
+        "Authentication required"
+      );
     }
+    const uid = context.auth.uid;
+    console.log(`📊 [quota] User: ${uid}`);
 
     // 사용자 등급 조회
     const tier = await getUserTier(uid);

@@ -98,10 +98,6 @@ class ImageGenerationService {
       debugPrint('📞 [STICKER] Calling Cloud Functions...');
       final callable = _functions.httpsCallable('genSticker');
 
-      // userId를 직접 전달 (auth context가 전달되지 않는 문제 우회)
-      final user = FirebaseAuth.instance.currentUser;
-      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
-
       final result = await _callWithRetry(() async {
         debugPrint('📡 [STICKER] Making API call to genSticker');
         return await callable.call<Map<String, dynamic>>({
@@ -114,7 +110,6 @@ class ImageGenerationService {
           'bg': _backgroundToString(request.bg),
           if (request.seed != null) 'seed': request.seed,
           'force': request.force,
-          'userId': user?.uid, // auth context 우회
         });
       });
 
@@ -239,9 +234,6 @@ class ImageGenerationService {
       debugPrint('📞 [STICKER-FREE] Calling Cloud Functions (genStickerFree)...');
       final callable = _functions.httpsCallable('genStickerFree');
 
-      final user = FirebaseAuth.instance.currentUser;
-      debugPrint('   - Auth user: ${user?.uid ?? "NOT AUTHENTICATED"}');
-
       final result = await _callWithRetry(() async {
         debugPrint('📡 [STICKER-FREE] Making API call to genStickerFree');
         return await callable.call<Map<String, dynamic>>({
@@ -254,7 +246,6 @@ class ImageGenerationService {
           'bg': _backgroundToString(request.bg),
           if (request.seed != null) 'seed': request.seed,
           'force': request.force,
-          'userId': user?.uid, // auth context 우회
         });
       });
 
