@@ -6,6 +6,7 @@ import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
 import '../../../services/notification/notification_service.dart';
 import '../../../services/user/user_tier_providers.dart';
+import '../../../services/auth/auth_service.dart';
 import '../../../services/user/user_tier_service.dart';
 import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
@@ -54,6 +55,11 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // 계정
+          const _AccountSection(),
+
+          const SizedBox(height: 24),
+
           // 구독
           const _SubscriptionSection(),
 
@@ -676,7 +682,145 @@ class _SettingsTile extends StatelessWidget {
   }
 }
 
-/// 구독 섹션 위젯
+/// 계정 섹션 위젯
+class _AccountSection extends StatelessWidget {
+  const _AccountSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    // Firebase가 초기화되지 않은 환경(테스트 등)에서 안전하게 처리
+    bool isAnonymous;
+    String providerName;
+    String? email;
+    try {
+      isAnonymous = AuthService.isAnonymous;
+      providerName = AuthService.providerName;
+      email = AuthService.currentUser?.email;
+    } catch (_) {
+      isAnonymous = true;
+      providerName = 'anonymous';
+      email = null;
+    }
+
+    return _SettingsSection(
+      title: l10n.accountSection,
+      children: [
+        if (isAnonymous) ...[
+          _SettingsTile(
+            icon: Icons.account_circle_outlined,
+            title: l10n.signInTitle,
+            subtitle: l10n.signInSubtitle,
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _showSignInOptions(context),
+          ),
+        ] else ...[
+          _SettingsTile(
+            icon: Icons.account_circle,
+            title: '$providerName ${l10n.accountConnected}',
+            subtitle: email ?? '',
+            trailing: TextButton(
+              onPressed: () => _confirmSignOut(context),
+              child: Text(l10n.signOut),
+            ),
+            onTap: null,
+          ),
+        ],
+      ],
+    );
+  }
+
+  void _showSignInOptions(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                l10n.signInTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.g_mobiledata, size: 32),
+              title: Text(l10n.signInWithGoogle),
+              onTap: () async {
+                Navigator.pop(ctx);
+                try {
+                  await AuthService.signInWithGoogle();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.signInSuccess)),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.signInFailed)),
+                    );
+                  }
+                }
+              },
+            ),
+            if (AuthService.isAppleSignInAvailable)
+              ListTile(
+                leading: const Icon(Icons.apple, size: 32),
+                title: Text(l10n.signInWithApple),
+                onTap: () async {
+                  Navigator.pop(ctx);
+                  try {
+                    await AuthService.signInWithApple();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.signInSuccess)),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.signInFailed)),
+                      );
+                    }
+                  }
+                },
+              ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _confirmSignOut(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.signOut),
+        content: Text(l10n.signOutConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await AuthService.signOut();
+            },
+            child: Text(l10n.signOut),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SubscriptionSection extends ConsumerWidget {
   const _SubscriptionSection();
 

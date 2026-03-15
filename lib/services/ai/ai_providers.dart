@@ -8,6 +8,7 @@ import 'llm_service.dart';
 import 'conversation_service.dart';
 import 'dialogue_request.dart';
 import 'providers/llm_provider.dart';
+import 'providers/cloud_function_provider.dart';
 import 'providers/openrouter_provider.dart';
 import 'providers/groq_provider.dart';
 import 'providers/gemini_provider.dart';
@@ -49,11 +50,13 @@ final rateLimiterProvider = Provider<RateLimiter>((ref) {
 // 3. LLM Provider Chain
 // ==========================================================================
 
-/// LLM Provider 체인 (4-tier fallback)
+/// LLM Provider 체인 (5-tier fallback)
 ///
-/// 순서: OpenRouter → Groq → Gemini → 규칙 기반 폴백
+/// 순서: CloudFunction(서버) → OpenRouter → Groq → Gemini → 규칙 기반 폴백
+/// CloudFunction이 최우선: API 키가 서버에만 존재하여 보안 강화
 final llmProviderChainProvider = Provider<List<LlmProvider>>((ref) {
   return [
+    CloudFunctionProvider(),
     OpenRouterProvider(),
     GroqProvider(),
     GeminiProvider(),

@@ -1549,4 +1549,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tierNameFree => 'Free';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get signInTitle => 'Sign In';
+
+  @override
+  String get signInSubtitle => 'Back up data and sync across devices';
+
+  @override
+  String get signInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get signInWithApple => 'Sign in with Apple';
+
+  @override
+  String get signInSuccess => 'Sign in successful';
+
+  @override
+  String get signInFailed => 'Sign in failed';
+
+  @override
+  String get accountConnected => 'Account connected';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get signOutConfirm =>
+      'Signing out will switch to anonymous mode. Continue?';
 }

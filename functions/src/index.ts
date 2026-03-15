@@ -12,3 +12,6 @@ export {genStickerFree} from "./genStickerFree";
 
 // 할당량 조회
 export {quota} from "./quota";
+
+// LLM 대화 프록시 (API 키 서버 사이드 관리)
+export {chatWithPet} from "./chatWithPet";

@@ -2899,6 +2899,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Free'**
   String get tierNameFree;
+
+  /// Account settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSection;
+
+  /// Sign in title
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signInTitle;
+
+  /// Sign in subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Back up data and sync across devices'**
+  String get signInSubtitle;
+
+  /// Google sign in button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get signInWithGoogle;
+
+  /// Apple sign in button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Apple'**
+  String get signInWithApple;
+
+  /// Sign in success message
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in successful'**
+  String get signInSuccess;
+
+  /// Sign in failed message
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in failed'**
+  String get signInFailed;
+
+  /// Account connected status
+  ///
+  /// In en, this message translates to:
+  /// **'Account connected'**
+  String get accountConnected;
+
+  /// Sign out button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// Sign out confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out will switch to anonymous mode. Continue?'**
+  String get signOutConfirm;
 }
 
 class _AppLocalizationsDelegate

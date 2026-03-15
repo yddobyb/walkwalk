@@ -16,11 +16,15 @@ import 'services/mission/mission_service.dart';
 import 'services/settings/settings_service.dart';
 import 'services/ai/ai_providers.dart';
 import 'services/notification/notification_service.dart';
+import 'services/storage/secure_storage_service.dart';
 import 'services/subscription/revenue_cat_service.dart';
 import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Secure Storage 초기화 (가장 먼저 — 다른 서비스가 의존)
+  await SecureStorageService.initialize();
 
   // Week 3: Firebase 초기화
   await FirebaseService.initialize();

@@ -2498,5 +2498,45 @@
   "tierNameFree": "Free",
   "@tierNameFree": {
     "description": "Free tier display name"
+  },
+  "accountSection": "Account",
+  "@accountSection": {
+    "description": "Account settings section title"
+  },
+  "signInTitle": "Sign In",
+  "@signInTitle": {
+    "description": "Sign in title"
+  },
+  "signInSubtitle": "Back up data and sync across devices",
+  "@signInSubtitle": {
+    "description": "Sign in subtitle"
+  },
+  "signInWithGoogle": "Sign in with Google",
+  "@signInWithGoogle": {
+    "description": "Google sign in button"
+  },
+  "signInWithApple": "Sign in with Apple",
+  "@signInWithApple": {
+    "description": "Apple sign in button"
+  },
+  "signInSuccess": "Sign in successful",
+  "@signInSuccess": {
+    "description": "Sign in success message"
+  },
+  "signInFailed": "Sign in failed",
+  "@signInFailed": {
+    "description": "Sign in failed message"
+  },
+  "accountConnected": "Account connected",
+  "@accountConnected": {
+    "description": "Account connected status"
+  },
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out button"
+  },
+  "signOutConfirm": "Signing out will switch to anonymous mode. Continue?",
+  "@signOutConfirm": {
+    "description": "Sign out confirmation message"
   }
 }

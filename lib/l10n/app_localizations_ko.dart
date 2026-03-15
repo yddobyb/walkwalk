@@ -1519,4 +1519,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tierNameFree => '무료';
+
+  @override
+  String get accountSection => '계정';
+
+  @override
+  String get signInTitle => '로그인';
+
+  @override
+  String get signInSubtitle => '데이터 백업 및 기기 간 동기화';
+
+  @override
+  String get signInWithGoogle => 'Google로 로그인';
+
+  @override
+  String get signInWithApple => 'Apple로 로그인';
+
+  @override
+  String get signInSuccess => '로그인 성공';
+
+  @override
+  String get signInFailed => '로그인 실패';
+
+  @override
+  String get accountConnected => '계정 연결됨';
+
+  @override
+  String get signOut => '로그아웃';
+
+  @override
+  String get signOutConfirm => '로그아웃하면 익명 계정으로 전환됩니다. 계속하시겠습니까?';
 }

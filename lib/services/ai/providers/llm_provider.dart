@@ -2,6 +2,7 @@
 
 /// LLM Provider 타입
 enum LlmProviderType {
+  cloudFunction,
   openRouter,
   groq,
   gemini,

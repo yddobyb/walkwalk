@@ -2481,5 +2481,45 @@
   "tierNameFree": "무료",
   "@tierNameFree": {
     "description": "Free tier display name"
+  },
+  "accountSection": "계정",
+  "@accountSection": {
+    "description": "Account settings section title"
+  },
+  "signInTitle": "로그인",
+  "@signInTitle": {
+    "description": "Sign in title"
+  },
+  "signInSubtitle": "데이터 백업 및 기기 간 동기화",
+  "@signInSubtitle": {
+    "description": "Sign in subtitle"
+  },
+  "signInWithGoogle": "Google로 로그인",
+  "@signInWithGoogle": {
+    "description": "Google sign in button"
+  },
+  "signInWithApple": "Apple로 로그인",
+  "@signInWithApple": {
+    "description": "Apple sign in button"
+  },
+  "signInSuccess": "로그인 성공",
+  "@signInSuccess": {
+    "description": "Sign in success message"
+  },
+  "signInFailed": "로그인 실패",
+  "@signInFailed": {
+    "description": "Sign in failed message"
+  },
+  "accountConnected": "계정 연결됨",
+  "@accountConnected": {
+    "description": "Account connected status"
+  },
+  "signOut": "로그아웃",
+  "@signOut": {
+    "description": "Sign out button"
+  },
+  "signOutConfirm": "로그아웃하면 익명 계정으로 전환됩니다. 계속하시겠습니까?",
+  "@signOutConfirm": {
+    "description": "Sign out confirmation message"
   }
 }
