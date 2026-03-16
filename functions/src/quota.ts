@@ -63,6 +63,14 @@ export const quota = functions
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];
 
+    // App Check 검증
+    if (!context.app) {
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
+      );
+    }
+
     // 인증 확인 (필수)
     if (!context.auth) {
       throw new functions.https.HttpsError(

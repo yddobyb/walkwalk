@@ -44,12 +44,10 @@ export const chatWithPet = functions
       );
     }
 
-    // 3. 입력 검증
+    // 3. 입력 검증 + 범위 제한
     const {
       systemPrompt,
       userMessage,
-      maxTokens = 100,
-      temperature = 0.7,
     } = data;
 
     if (!systemPrompt || !userMessage) {
@@ -58,6 +56,22 @@ export const chatWithPet = functions
         "systemPrompt and userMessage are required"
       );
     }
+
+    // 입력 길이 제한 (비용 방지)
+    if (systemPrompt.length > 2000 || userMessage.length > 1000) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Input too long"
+      );
+    }
+
+    // maxTokens/temperature 범위 제한
+    const maxTokens = Math.min(
+      Math.max(data.maxTokens ?? 100, 1), 500
+    );
+    const temperature = Math.min(
+      Math.max(data.temperature ?? 0.7, 0), 1.5
+    );
 
     // 4. API 키 로드 (서버 사이드 전용)
     const config = functions.config();

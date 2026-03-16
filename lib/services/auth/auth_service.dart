@@ -135,7 +135,14 @@ class AuthService {
   /// 로그아웃 후 익명 로그인으로 복귀
   static Future<void> signOut() async {
     try {
-      await GoogleSignIn.instance.signOut();
+      // Google SDK는 초기화된 경우에만 signOut (Apple 로그인 시 불필요)
+      if (_googleInitialized) {
+        try {
+          await GoogleSignIn.instance.signOut();
+        } catch (e) {
+          debugPrint('[Auth] Google signOut skipped: $e');
+        }
+      }
       await _auth.signOut();
       // 익명 로그인으로 복귀 (앱 기능 유지)
       await _auth.signInAnonymously();
