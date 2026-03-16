@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -227,9 +227,13 @@ class RevenueCatService {
     }
   }
 
-  /// Firestore에 구독 상태 동기화
+  /// Firestore에 구독 상태 동기화 (Cloud Function 경유)
   ///
-  /// Cloud Functions(quota.ts)가 이 데이터를 읽어 tier 판별.
+  /// 보안: 클라이언트가 subscription 필드를 직접 쓰지 못하도록
+  /// Firestore Rules에서 차단하고, syncSubscription Cloud Function을
+  /// 통해 Admin SDK로만 기록한다.
+  ///
+  /// 향후: RevenueCat Webhook → Cloud Functions으로 전환 예정
   static Future<void> _syncSubscriptionToFirestore(
     CustomerInfo info,
   ) async {
@@ -240,26 +244,22 @@ class RevenueCatService {
       final entitlement = info.entitlements.active[_entitlementId];
       final isActive = entitlement != null;
 
-      final data = <String, dynamic>{
-        'subscription': {
-          'status': isActive ? 'active' : 'inactive',
-          'expiresAt': entitlement?.expirationDate,
-          'updatedAt': FieldValue.serverTimestamp(),
-          'productId': entitlement?.productIdentifier ?? '',
-        },
-      };
+      final callable = FirebaseFunctions.instanceFor(
+        region: 'us-central1',
+      ).httpsCallable('syncSubscription');
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .set(data, SetOptions(merge: true));
+      await callable.call<dynamic>({
+        'status': isActive ? 'active' : 'inactive',
+        'expiresAt': entitlement?.expirationDate,
+        'productId': entitlement?.productIdentifier ?? '',
+      });
 
       debugPrint(
-        '[RevenueCat] Synced subscription to Firestore: '
+        '[RevenueCat] Synced subscription via Cloud Function: '
         '${isActive ? "active" : "inactive"}',
       );
     } catch (e) {
-      debugPrint('[RevenueCat] Firestore sync error: $e');
+      debugPrint('[RevenueCat] Subscription sync error: $e');
     }
   }
 }

@@ -5,18 +5,14 @@ import 'package:flutter/foundation.dart';
 
 /// Firebase Remote Config 서비스
 ///
-/// Week 3: 클라우드 기반 앱 설정 관리
+/// 클라우드 기반 앱 설정 관리
 ///
 /// 기능:
-/// - OpenRouter API 키 원격 관리
 /// - 레이트 리밋 설정 동적 변경
 /// - 디버그 로그 원격 제어
 ///
-/// Usage:
-/// ```dart
-/// await RemoteConfigService.initialize();
-/// final apiKey = RemoteConfigService.getOpenRouterApiKey();
-/// ```
+/// 참고: API 키는 서버(Cloud Functions)에서만 관리.
+/// 클라이언트에는 API 키를 전달하지 않음.
 class RemoteConfigService {
   static FirebaseRemoteConfig? _remoteConfig;
   static bool _isInitialized = false;
@@ -26,9 +22,7 @@ class RemoteConfigService {
   // ==========================================================================
 
   static const Map<String, dynamic> _defaults = {
-    'openrouter_api_key': '',
-    'groq_api_key': '',
-    'gemini_api_key': '',
+    // API 키는 서버(Cloud Functions)에서만 관리 — 클라이언트에 전달하지 않음
     'rate_limit_daily': 80,
     'rate_limit_hourly': 20,
     'enable_debug_logs': false,
@@ -69,15 +63,6 @@ class RemoteConfigService {
       _isInitialized = true;
 
       debugPrint('✅ RemoteConfig - Initialized successfully');
-      debugPrint(
-        '   - OpenRouter: ${getOpenRouterApiKey().isNotEmpty ? "configured" : "missing"}',
-      );
-      debugPrint(
-        '   - Groq: ${getGroqApiKey().isNotEmpty ? "configured" : "missing"}',
-      );
-      debugPrint(
-        '   - Gemini: ${getGeminiApiKey().isNotEmpty ? "configured" : "missing"}',
-      );
       debugPrint('   - Daily Limit: ${getRateLimitDaily()}');
       debugPrint('   - Hourly Limit: ${getRateLimitHourly()}');
 
@@ -113,55 +98,6 @@ class RemoteConfigService {
   // ==========================================================================
   // Getters (설정값 가져오기)
   // ==========================================================================
-
-  /// OpenRouter API 키 가져오기
-  ///
-  /// Returns: API 키 문자열 (설정되지 않았으면 빈 문자열)
-  static String getOpenRouterApiKey() {
-    if (!_isInitialized || _remoteConfig == null) {
-      return _defaults['openrouter_api_key'] as String;
-    }
-
-    try {
-      final value = _remoteConfig!.getString('openrouter_api_key');
-      return value.isEmpty ? _defaults['openrouter_api_key'] as String : value;
-    } catch (e) {
-      debugPrint('⚠️ RemoteConfig - Failed to get API key: $e');
-      return _defaults['openrouter_api_key'] as String;
-    }
-  }
-
-  /// Groq API 키 가져오기
-  static String getGroqApiKey() {
-    if (!_isInitialized || _remoteConfig == null) {
-      return _defaults['groq_api_key'] as String;
-    }
-    try {
-      final value = _remoteConfig!.getString('groq_api_key');
-      return value.isEmpty ?
-          _defaults['groq_api_key'] as String : value;
-    } catch (e) {
-      debugPrint('⚠️ RemoteConfig - Failed to get Groq API key: $e');
-      return _defaults['groq_api_key'] as String;
-    }
-  }
-
-  /// Gemini API 키 가져오기
-  static String getGeminiApiKey() {
-    if (!_isInitialized || _remoteConfig == null) {
-      return _defaults['gemini_api_key'] as String;
-    }
-    try {
-      final value = _remoteConfig!.getString('gemini_api_key');
-      return value.isEmpty ?
-          _defaults['gemini_api_key'] as String : value;
-    } catch (e) {
-      debugPrint(
-        '⚠️ RemoteConfig - Failed to get Gemini API key: $e',
-      );
-      return _defaults['gemini_api_key'] as String;
-    }
-  }
 
   /// 일일 레이트 리밋 가져오기
   ///

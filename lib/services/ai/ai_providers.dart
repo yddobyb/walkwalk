@@ -9,9 +9,6 @@ import 'conversation_service.dart';
 import 'dialogue_request.dart';
 import 'providers/llm_provider.dart';
 import 'providers/cloud_function_provider.dart';
-import 'providers/openrouter_provider.dart';
-import 'providers/groq_provider.dart';
-import 'providers/gemini_provider.dart';
 import 'rate_limiter.dart';
 
 /// Week 3: AI 서비스 Riverpod Providers
@@ -50,16 +47,14 @@ final rateLimiterProvider = Provider<RateLimiter>((ref) {
 // 3. LLM Provider Chain
 // ==========================================================================
 
-/// LLM Provider 체인 (5-tier fallback)
+/// LLM Provider 체인 (서버 전용)
 ///
-/// 순서: CloudFunction(서버) → OpenRouter → Groq → Gemini → 규칙 기반 폴백
-/// CloudFunction이 최우선: API 키가 서버에만 존재하여 보안 강화
+/// CloudFunction만 사용: API 키가 서버에만 존재하여 보안 강화
+/// chatWithPet Cloud Function 내부에서 OpenRouter → Groq → Gemini 폴백 처리
+/// 모든 provider 실패 시 → 클라이언트의 규칙 기반 폴백 (오프라인)
 final llmProviderChainProvider = Provider<List<LlmProvider>>((ref) {
   return [
     CloudFunctionProvider(),
-    OpenRouterProvider(),
-    GroqProvider(),
-    GeminiProvider(),
   ];
 });
 

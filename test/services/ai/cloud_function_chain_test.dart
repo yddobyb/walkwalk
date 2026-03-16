@@ -8,12 +8,14 @@ import 'package:walk_dog/services/ai/providers/llm_provider.dart';
 
 /// CloudFunction이 Provider 체인에 올바르게 통합되었는지 검증
 ///
+/// 보안 강화: 클라이언트 직접 호출 제거 후 CloudFunction만 사용
+///
 /// 테스트 항목:
-/// 1. CloudFunctionProvider가 체인 첫 번째
-/// 2. 총 4개 Provider (CF → OpenRouter → Groq → Gemini)
-/// 3. 모든 Provider가 LlmProvider 인터페이스 준수
+/// 1. CloudFunctionProvider가 유일한 Provider
+/// 2. 서버에서 OpenRouter → Groq → Gemini 폴백 처리
+/// 3. Provider가 LlmProvider 인터페이스 준수
 void main() {
-  group('LLM Provider Chain - CloudFunction Integration', () {
+  group('LLM Provider Chain - CloudFunction Only (Server-Side)', () {
     late ProviderContainer container;
 
     setUp(() {
@@ -27,39 +29,29 @@ void main() {
     // ========================================================================
     // 1. 체인 구성
     // ========================================================================
-    test('Provider 체인 - 4개 Provider 존재', () {
+    test('Provider 체인 - CloudFunctionProvider만 존재', () {
       final chain = container.read(llmProviderChainProvider);
-      expect(chain.length, equals(4));
-    });
-
-    test('Provider 체인 - CloudFunctionProvider가 첫 번째', () {
-      final chain = container.read(llmProviderChainProvider);
+      expect(chain.length, equals(1));
       expect(chain[0], isA<CloudFunctionProvider>());
+    });
+
+    test('Provider 체인 - CloudFunction 타입 확인', () {
+      final chain = container.read(llmProviderChainProvider);
       expect(chain[0].type, equals(LlmProviderType.cloudFunction));
     });
 
-    test('Provider 체인 - 순서: CF → OpenRouter → Groq → Gemini', () {
-      final chain = container.read(llmProviderChainProvider);
-
-      expect(chain[0].type, equals(LlmProviderType.cloudFunction));
-      expect(chain[1].type, equals(LlmProviderType.openRouter));
-      expect(chain[2].type, equals(LlmProviderType.groq));
-      expect(chain[3].type, equals(LlmProviderType.gemini));
-    });
-
     // ========================================================================
-    // 2. 모든 Provider가 LlmProvider 인터페이스 준수
+    // 2. Provider가 LlmProvider 인터페이스 준수
     // ========================================================================
-    test('모든 Provider - LlmProvider 인터페이스 준수', () {
+    test('CloudFunctionProvider - LlmProvider 인터페이스 준수', () {
       final chain = container.read(llmProviderChainProvider);
+      final provider = chain[0];
 
-      for (final provider in chain) {
-        expect(provider, isA<LlmProvider>());
-        expect(provider.type, isA<LlmProviderType>());
-        expect(provider.displayName, isA<String>());
-        expect(provider.displayName.isNotEmpty, isTrue);
-        expect(provider.isInitialized, isA<bool>());
-      }
+      expect(provider, isA<LlmProvider>());
+      expect(provider.type, isA<LlmProviderType>());
+      expect(provider.displayName, isA<String>());
+      expect(provider.displayName.isNotEmpty, isTrue);
+      expect(provider.isInitialized, isA<bool>());
     });
 
     // ========================================================================

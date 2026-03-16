@@ -15,3 +15,6 @@ export {quota} from "./quota";
 
 // LLM 대화 프록시 (API 키 서버 사이드 관리)
 export {chatWithPet} from "./chatWithPet";
+
+// 구독 상태 동기화 (클라이언트 직접 쓰기 차단 → Cloud Function 경유)
+export {syncSubscription} from "./syncSubscription";
