@@ -10,7 +10,12 @@
  */
 
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 import axios from "axios";
+
+// Rate limit 설정
+const DAILY_LIMIT = 40;
+const HOURLY_LIMIT = 15;
 
 interface ChatRequest {
   systemPrompt: string;
@@ -23,6 +28,13 @@ interface LlmResult {
   text: string;
   provider: string;
   durationMs: number;
+}
+
+interface ChatUsageDoc {
+  dailyCount: number;
+  dailyDate: string;
+  hourlyCount: number;
+  hourlyHour: string;
 }
 
 export const chatWithPet = functions
@@ -44,7 +56,17 @@ export const chatWithPet = functions
       );
     }
 
-    // 3. 입력 검증 + 범위 제한
+    // 3. Rate Limit 검사 (원자적 — Transaction)
+    const uid = context.auth.uid;
+    const rateLimitError = await checkAndReserveChatSlot(uid);
+    if (rateLimitError) {
+      throw new functions.https.HttpsError(
+        "resource-exhausted",
+        rateLimitError
+      );
+    }
+
+    // 4. 입력 검증
     const {
       systemPrompt,
       userMessage,
@@ -73,13 +95,13 @@ export const chatWithPet = functions
       Math.max(data.temperature ?? 0.7, 0), 1.5
     );
 
-    // 4. API 키 로드 (서버 사이드 전용)
+    // 5. API 키 로드 (서버 사이드 전용)
     const config = functions.config();
     const openrouterKey = config.openrouter?.api_key;
     const groqKey = config.groq?.api_key;
     const geminiKey = config.gemini?.api_key;
 
-    // 5. Provider 순회 (폴백)
+    // 6. Provider 순회 (폴백)
     const providers = [
       {
         name: "openrouter",
@@ -118,6 +140,9 @@ export const chatWithPet = functions
         console.log(
           `[chatWithPet] ${provider.name} succeeded (${durationMs}ms)`
         );
+
+        // 사용량 기록 — checkAndReserveChatSlot에서 원자적으로 완료됨
+
         return {
           success: true,
           text: result,
@@ -239,4 +264,63 @@ async function callGemini(
   );
 
   return response.data.candidates[0].content.parts[0].text;
+}
+
+/**
+ * 채팅 Rate Limit 검사 + 슬롯 예약 (원자적)
+ *
+ * Firestore Transaction으로 check + increment 원자적 수행.
+ * TOCTOU race condition 방지 (H-2).
+ * Firestore 오류 시 fail-closed (H-1).
+ *
+ * @returns null if allowed, error message string if denied
+ */
+async function checkAndReserveChatSlot(
+  uid: string
+): Promise<string | null> {
+  const db = admin.firestore();
+  const usageRef = db.collection("chatUsage").doc(uid);
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const hourStr = now.toISOString().slice(0, 13);
+
+  try {
+    return await db.runTransaction(async (tx) => {
+      const usageSnap = await tx.get(usageRef);
+      const usage =
+        usageSnap.data() as ChatUsageDoc | undefined;
+
+      const dailyCount =
+        (usage && usage.dailyDate === todayStr) ?
+          usage.dailyCount : 0;
+      const hourlyCount =
+        (usage && usage.hourlyHour === hourStr) ?
+          usage.hourlyCount : 0;
+
+      if (dailyCount >= DAILY_LIMIT) {
+        return `Daily limit reached (${DAILY_LIMIT}/day)`;
+      }
+      if (hourlyCount >= HOURLY_LIMIT) {
+        return `Hourly limit reached (${HOURLY_LIMIT}/hour)`;
+      }
+
+      // 원자적으로 카운터 증가
+      tx.set(usageRef, {
+        dailyCount: dailyCount + 1,
+        dailyDate: todayStr,
+        hourlyCount: hourlyCount + 1,
+        hourlyHour: hourStr,
+        lastUsedAt:
+          admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      return null;
+    });
+  } catch (error) {
+    console.error(
+      "[chatWithPet] Rate limit check failed:", error
+    );
+    // Firestore 오류 시 차단 (fail-closed)
+    return "Rate limit check failed";
+  }
 }

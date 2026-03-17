@@ -86,7 +86,7 @@ export const genStickerFree = functions
     // =====================
     // 4. 레이트 리밋 체크
     // =====================
-    const rateLimitOk = await checkRateLimit(uid, FREE_USER_DAILY_QUOTA);
+    const rateLimitOk = await checkAndReserveSlot(uid, FREE_USER_DAILY_QUOTA);
     if (!rateLimitOk) {
       console.error(`❌ [genStickerFree] Rate limit exceeded for user ${uid}`);
       throw new functions.https.HttpsError(
@@ -178,7 +178,7 @@ export const genStickerFree = functions
     // =====================
     // 8. 사용량 기록
     // =====================
-    await recordUsage(uid, result.provider);
+    await recordProviderInfo(uid, result.provider);
     console.log(`📊 [genStickerFree] Usage recorded for user ${uid}`);
 
     // =====================
@@ -249,65 +249,79 @@ async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer>
 }
 
 /**
- * 레이트 리밋 체크
+ * 레이트 리밋 체크 + 슬롯 예약 (원자적)
+ *
+ * Firestore Transaction으로 check + increment 원자적 수행.
+ * TOCTOU race condition 방지 (H-2).
+ * Firestore 오류 시 fail-closed (H-1).
  */
-async function checkRateLimit(uid: string, dailyQuota: number): Promise<boolean> {
+async function checkAndReserveSlot(
+  uid: string, dailyQuota: number
+): Promise<boolean> {
   const db = admin.firestore();
   const today = new Date().toISOString().split("T")[0];
+  const usageRef = db.collection("freeImageUsage").doc(uid);
 
   try {
-    const usageRef = db.collection("freeImageUsage").doc(uid);
-    const usageDoc = await usageRef.get();
+    return await db.runTransaction(async (tx) => {
+      const usageDoc = await tx.get(usageRef);
+      const usage = usageDoc.data();
+      const currentCount =
+        (usage && usage.date === today) ?
+          (usage.count || 0) : 0;
 
-    if (!usageDoc.exists) {
+      if (currentCount >= dailyQuota) {
+        return false;
+      }
+
+      // 원자적으로 카운터 증가
+      const now = Date.now();
+      if (!usageDoc.exists || usage?.date !== today) {
+        tx.set(usageRef, {
+          date: today,
+          count: 1,
+          timestamps: [now],
+        });
+      } else {
+        tx.update(usageRef, {
+          count: currentCount + 1,
+          timestamps:
+            admin.firestore.FieldValue.arrayUnion(now),
+        });
+      }
+
       return true;
-    }
-
-    const usage = usageDoc.data();
-    if (!usage || usage.date !== today) {
-      return true;
-    }
-
-    return (usage.count || 0) < dailyQuota;
+    });
   } catch (error) {
-    console.error("❌ [genStickerFree] Error checking rate limit:", error);
-    // Firestore 오류 시 허용 (fail-open)
-    return true;
+    console.error(
+      "❌ [genStickerFree] Rate limit check failed:", error
+    );
+    // Firestore 오류 시 차단 (fail-closed)
+    return false;
   }
 }
 
 /**
- * 사용량 기록
+ * Provider 정보 기록 (모니터링용)
+ *
+ * 카운터는 checkAndReserveSlot에서 이미 원자적으로 증가됨.
+ * 여기서는 provider 메타데이터만 업데이트.
  */
-async function recordUsage(uid: string, provider: string): Promise<void> {
+async function recordProviderInfo(
+  uid: string, provider: string
+): Promise<void> {
   const db = admin.firestore();
-  const now = Date.now();
-  const today = new Date().toISOString().split("T")[0];
+  const usageRef = db.collection("freeImageUsage").doc(uid);
 
   try {
-    const usageRef = db.collection("freeImageUsage").doc(uid);
-    const usageDoc = await usageRef.get();
-
-    if (!usageDoc.exists || usageDoc.data()?.date !== today) {
-      // 새 날짜 또는 새 사용자
-      await usageRef.set({
-        date: today,
-        count: 1,
-        timestamps: [now],
-        providers: [provider],
-        lastProvider: provider,
-      });
-    } else {
-      // 기존 기록 업데이트
-      await usageRef.update({
-        count: admin.firestore.FieldValue.increment(1),
-        timestamps: admin.firestore.FieldValue.arrayUnion(now),
-        providers: admin.firestore.FieldValue.arrayUnion(provider),
-        lastProvider: provider,
-      });
-    }
+    await usageRef.update({
+      providers:
+        admin.firestore.FieldValue.arrayUnion(provider),
+      lastProvider: provider,
+    });
   } catch (error) {
-    console.error("❌ [genStickerFree] Error recording usage:", error);
-    // 사용량 기록 실패해도 이미지 생성은 성공으로 처리
+    console.error(
+      "❌ [genStickerFree] Error recording provider:", error
+    );
   }
 }

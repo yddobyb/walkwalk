@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 import axios from "axios";
 // import * as crypto from "crypto"; // Week 4 테스트: 캐시 비활성화로 미사용
 import sharp from "sharp";
+import {getUserTier} from "./utils/getUserTier";
 
 interface GenStickerRequest {
   petId: string;
@@ -61,7 +62,16 @@ export const genSticker = functions
     const uid = context.auth.uid;
     console.log(`👤 User: ${uid}`);
 
-    // 3. 입력 검증
+    // 3. 프리미엄 구독 검증
+    const tier = await getUserTier(uid);
+    if (tier !== "premium") {
+      throw new functions.https.HttpsError(
+        "permission-denied",
+        "Premium subscription required"
+      );
+    }
+
+    // 4. 입력 검증
     const {petId, breed = "Shiba Inu", color = "orange", accessory = "none",
       style = "sticker-flat", size = 512, bg = "transparent", seed} = data; // force 제거 (캐시 비활성화)
 
@@ -72,8 +82,8 @@ export const genSticker = functions
       throw new functions.https.HttpsError("invalid-argument", "Invalid parameters");
     }
 
-    // 4. 레이트 리밋 체크
-    const rateLimitOk = await checkRateLimit(uid);
+    // 5. 레이트 리밋 체크
+    const rateLimitOk = await checkAndReserveSlot(uid);
     if (!rateLimitOk) {
       throw new functions.https.HttpsError(
         "resource-exhausted",
@@ -115,9 +125,7 @@ export const genSticker = functions
     // 8. 캐시 저장 (임시 비활성화 - Storage bucket 설정 필요)
     // await saveToCache(cacheKey, {data: base64Image, seed: imageData.seed});
 
-    // 9. 사용량 기록
-    await recordUsage(uid);
-    console.log(`📊 Usage recorded for user ${uid}`);
+    // 9. 사용량 기록 — checkAndReserveSlot에서 원자적으로 완료됨
 
     const response = {
       success: true,
@@ -252,55 +260,71 @@ async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer>
 const PREMIUM_DAILY_QUOTA = 50;
 const PREMIUM_RATE_LIMIT_PER_5MIN = 5;
 
-async function checkRateLimit(uid: string): Promise<boolean> {
+/**
+ * 레이트 리밋 체크 + 슬롯 예약 (원자적)
+ *
+ * Firestore Transaction으로 check + increment 원자적 수행.
+ * TOCTOU race condition 방지 (H-2).
+ * Firestore 오류 시 fail-closed (H-1).
+ */
+async function checkAndReserveSlot(
+  uid: string
+): Promise<boolean> {
   const db = admin.firestore();
   const now = Date.now();
   const today = new Date().toISOString().split("T")[0];
-
   const usageRef = db.collection("imageUsage").doc(uid);
-  const usageDoc = await usageRef.get();
 
-  if (!usageDoc.exists) {
-    return true;
-  }
+  try {
+    return await db.runTransaction(async (tx) => {
+      const usageDoc = await tx.get(usageRef);
 
-  const usage = usageDoc.data()!;
+      if (!usageDoc.exists) {
+        tx.set(usageRef, {
+          date: today,
+          count: 1,
+          timestamps: [now],
+        });
+        return true;
+      }
 
-  // 일일 제한 체크
-  if (usage.date === today &&
-    usage.count >= PREMIUM_DAILY_QUOTA) {
-    return false;
-  }
+      const usage = usageDoc.data()!;
 
-  // 5분 제한 체크
-  const recent = (usage.timestamps || [])
-    .filter((ts: number) => now - ts < 5 * 60 * 1000);
-  if (recent.length >= PREMIUM_RATE_LIMIT_PER_5MIN) {
-    return false;
-  }
+      // 일일 제한 체크
+      const dailyCount =
+        (usage.date === today) ?
+          (usage.count || 0) : 0;
+      if (dailyCount >= PREMIUM_DAILY_QUOTA) {
+        return false;
+      }
 
-  return true;
-}
+      // 5분 제한 체크
+      const recent = (usage.timestamps || [])
+        .filter((ts: number) => now - ts < 5 * 60 * 1000);
+      if (recent.length >= PREMIUM_RATE_LIMIT_PER_5MIN) {
+        return false;
+      }
 
-// 사용량 기록
-async function recordUsage(uid: string): Promise<void> {
-  const db = admin.firestore();
-  const now = Date.now();
-  const today = new Date().toISOString().split("T")[0];
+      // 원자적으로 카운터 증가
+      if (usage.date !== today) {
+        tx.set(usageRef, {
+          date: today,
+          count: 1,
+          timestamps: [now],
+        });
+      } else {
+        tx.update(usageRef, {
+          count: dailyCount + 1,
+          timestamps:
+            admin.firestore.FieldValue.arrayUnion(now),
+        });
+      }
 
-  const usageRef = db.collection("imageUsage").doc(uid);
-  const usageDoc = await usageRef.get();
-
-  if (!usageDoc.exists || usageDoc.data()?.date !== today) {
-    await usageRef.set({
-      date: today,
-      count: 1,
-      timestamps: [now],
+      return true;
     });
-  } else {
-    await usageRef.update({
-      count: admin.firestore.FieldValue.increment(1),
-      timestamps: admin.firestore.FieldValue.arrayUnion(now),
-    });
+  } catch (error) {
+    console.error("❌ Rate limit check failed:", error);
+    // Firestore 오류 시 차단 (fail-closed)
+    return false;
   }
 }

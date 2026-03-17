@@ -1,8 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import {getUserTier, UserTier} from "./utils/getUserTier";
 
 // 사용자 등급별 설정
-const TIER_CONFIG = {
+const TIER_CONFIG: Record<UserTier, {
+  dailyQuota: number;
+  collection: string;
+  provider: string;
+}> = {
   free: {
     dailyQuota: 10,
     collection: "freeImageUsage",
@@ -14,41 +19,6 @@ const TIER_CONFIG = {
     provider: "gemini",
   },
 };
-
-type UserTier = "free" | "premium";
-
-/**
- * 사용자 등급 조회
- *
- * Firestore users/{uid}/subscription 문서에서 구독 상태를 확인한다.
- * RevenueCat SDK가 앱에서 구매 성공 시 이 문서를 기록함.
- * 문서가 없거나 만료되었으면 free로 처리.
- */
-async function getUserTier(uid: string): Promise<UserTier> {
-  const db = admin.firestore();
-  try {
-    const userDoc = await db.collection("users").doc(uid).get();
-    if (userDoc.exists) {
-      const sub = userDoc.data()?.subscription;
-      if (
-        sub?.status === "active" &&
-        sub?.expiresAt &&
-        new Date(sub.expiresAt) > new Date()
-      ) {
-        console.log(
-          `[getUserTier] User ${uid}: premium ` +
-          `(expires ${sub.expiresAt})`
-        );
-        return "premium";
-      }
-    }
-  } catch (error) {
-    console.error(`Error reading user tier: ${error}`);
-  }
-
-  console.log(`[getUserTier] User ${uid}: free`);
-  return "free";
-}
 
 /**
  * 사용자 할당량 조회
