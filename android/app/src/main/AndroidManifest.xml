@@ -1,28 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Pedometer permissions -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.BODY_SENSORS" />
 
-    <!-- Health Connect permissions -->
+    <!-- Health Connect permissions (READ only) -->
     <uses-permission android:name="android.permission.health.READ_STEPS"/>
-    <uses-permission android:name="android.permission.health.WRITE_STEPS"/>
-    <uses-permission android:name="android.permission.health.READ_DISTANCE"/>
-    <uses-permission android:name="android.permission.health.WRITE_DISTANCE"/>
-    <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"/>
-    <uses-permission android:name="android.permission.health.WRITE_TOTAL_CALORIES_BURNED"/>
 
-    <!-- Location permissions for GPS outdoor mode -->
+    <!-- Location permissions for GPS outdoor mode (foreground only) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
-    <!-- Foreground service permission for background tracking -->
+    <!-- Foreground service permission for step tracking -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
 
     <!-- Local notification permissions -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
