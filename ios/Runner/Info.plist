@@ -30,8 +30,6 @@
 	<string>WalkDog needs to read your step count data from Apple Health to accurately track your daily walking activity and provide personalized pet interactions.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>WalkDog may write step data to Apple Health to keep your health information up to date.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>WalkDog uses the local network to discover and connect to devices on your network.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>WalkDog uses location data to detect outdoor walks and provide bonus rewards for outdoor activities.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

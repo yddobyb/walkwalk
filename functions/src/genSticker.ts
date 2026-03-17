@@ -107,7 +107,9 @@ export const genSticker = functions
 
     console.log(`📝 petId=${petId}`);
 
-    if (!petId || size < 256 || size > 1024) {
+    const PET_ID_REGEX = /^[a-zA-Z0-9_-]{1,64}$/;
+    if (!petId || !PET_ID_REGEX.test(petId) ||
+      size < 256 || size > 1024) {
       console.error("❌ Invalid parameters");
       throw new functions.https.HttpsError(
         "invalid-argument", "Invalid parameters"
