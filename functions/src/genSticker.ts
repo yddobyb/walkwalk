@@ -4,6 +4,7 @@ import axios from "axios";
 // import * as crypto from "crypto"; // Week 4 테스트: 캐시 비활성화로 미사용
 import sharp from "sharp";
 import {getUserTier} from "./utils/getUserTier";
+import {maskUid} from "./utils/maskUid";
 
 // Prompt injection 방지: 허용 목록 (H-3)
 const ALLOWED_BREEDS = [
@@ -79,7 +80,7 @@ export const genSticker = functions
       );
     }
     const uid = context.auth.uid;
-    console.log(`👤 User: ${uid}`);
+    console.log(`👤 User: ${maskUid(uid)}`);
 
     // 3. 프리미엄 구독 검증
     const tier = await getUserTier(uid);
@@ -143,7 +144,7 @@ export const genSticker = functions
     // 6. Gemini API 호출
     console.log("🚀 Calling Gemini API...");
     const prompt = generatePrompt(breed, color, accessory, style, bg);
-    console.log(`📝 Prompt: ${prompt}`);
+    console.log(`📝 Prompt length: ${prompt.length} chars`);
     const imageData = await callGeminiAPI(prompt, seed);
     console.log(`✅ Gemini API returned image, seed: ${imageData.seed}`);
 

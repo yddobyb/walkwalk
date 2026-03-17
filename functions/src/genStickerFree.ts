@@ -18,6 +18,7 @@ import {
   getProviderDisplayName,
 } from "./utils/fallbackManager";
 import {recordApiCall} from "./utils/monitoring";
+import {maskUid} from "./utils/maskUid";
 
 // Prompt injection 방지: 허용 목록 (H-3)
 const ALLOWED_BREEDS = [
@@ -79,7 +80,7 @@ export const genStickerFree = functions
       );
     }
     const uid = context.auth.uid;
-    console.log(`👤 [genStickerFree] User: ${uid}`);
+    console.log(`👤 [genStickerFree] User: ${maskUid(uid)}`);
 
     // =====================
     // 3. 입력 검증 + allowlist (H-3 prompt injection 방지)
@@ -147,7 +148,7 @@ export const genStickerFree = functions
     // 5. 프롬프트 생성 (genSticker와 동일한 로직)
     // =====================
     const prompt = generatePrompt(breed, color, accessory, style, bg);
-    console.log(`📝 [genStickerFree] Prompt: ${prompt}`);
+    console.log(`📝 [genStickerFree] Prompt length: ${prompt.length} chars`);
 
     // =====================
     // 6. 폴백 시스템으로 이미지 생성
@@ -208,7 +209,7 @@ export const genStickerFree = functions
     // 8. 사용량 기록
     // =====================
     await recordProviderInfo(uid, result.provider);
-    console.log(`📊 [genStickerFree] Usage recorded for user ${uid}`);
+    console.log(`📊 [genStickerFree] Usage recorded for user ${maskUid(uid)}`);
 
     // =====================
     // 9. 응답 반환 (genSticker와 동일한 형식 + 추가 정보)

@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {getUserTier, UserTier} from "./utils/getUserTier";
+import {maskUid} from "./utils/maskUid";
 
 // 사용자 등급별 설정
 const TIER_CONFIG: Record<UserTier, {
@@ -49,7 +50,7 @@ export const quota = functions
       );
     }
     const uid = context.auth.uid;
-    console.log(`📊 [quota] User: ${uid}`);
+    console.log(`📊 [quota] User: ${maskUid(uid)}`);
 
     // 사용자 등급 조회
     const tier = await getUserTier(uid);
@@ -70,7 +71,7 @@ export const quota = functions
         }
       }
 
-      console.log(`📊 [quota] User ${uid}: used=${used}/${config.dailyQuota}`);
+      console.log(`📊 [quota] User ${maskUid(uid)}: used=${used}/${config.dailyQuota}`);
     } catch (error) {
       console.error("❌ [quota] Error fetching usage:", error);
     }

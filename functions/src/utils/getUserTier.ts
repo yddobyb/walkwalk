@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import {maskUid} from "./maskUid";
 
 export type UserTier = "free" | "premium";
 
@@ -24,7 +25,7 @@ export async function getUserTier(
         new Date(sub.expiresAt) > new Date()
       ) {
         console.log(
-          `[getUserTier] User ${uid}: premium ` +
+          `[getUserTier] User ${maskUid(uid)}: premium ` +
           `(expires ${sub.expiresAt})`
         );
         return "premium";
@@ -34,6 +35,6 @@ export async function getUserTier(
     console.error(`Error reading user tier: ${error}`);
   }
 
-  console.log(`[getUserTier] User ${uid}: free`);
+  console.log(`[getUserTier] User ${maskUid(uid)}: free`);
   return "free";
 }
