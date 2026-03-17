@@ -19,15 +19,34 @@ import {
 } from "./utils/fallbackManager";
 import {recordApiCall} from "./utils/monitoring";
 
+// Prompt injection 방지: 허용 목록 (H-3)
+const ALLOWED_BREEDS = [
+  "Golden Retriever", "Labrador", "Shiba Inu",
+  "Pomeranian", "Husky", "Beagle", "Bulldog", "Poodle",
+];
+const ALLOWED_COLORS = [
+  "golden", "brown", "black", "white", "gray", "cream",
+  "orange",
+];
+const ALLOWED_ACCESSORIES = [
+  "none", "bandana", "glasses", "bowtie", "hat", "collar",
+];
+const ALLOWED_STYLES = [
+  "sticker-flat", "sticker-3d", "realistic",
+];
+const ALLOWED_BGS = [
+  "transparent", "white", "gradient",
+];
+
 // genSticker와 동일한 인터페이스
 interface GenStickerFreeRequest {
   petId: string;
   breed?: string;
   color?: string;
-  accessory?: "none" | "bandana" | "glasses" | "bowtie" | "hat" | "collar";
-  style?: "sticker-flat" | "sticker-3d" | "realistic";
+  accessory?: string;
+  style?: string;
   size?: number;
-  bg?: "transparent" | "white" | "gradient";
+  bg?: string;
   seed?: number;
   force?: boolean;
 }
@@ -63,24 +82,34 @@ export const genStickerFree = functions
     console.log(`👤 [genStickerFree] User: ${uid}`);
 
     // =====================
-    // 3. 입력 검증
+    // 3. 입력 검증 + allowlist (H-3 prompt injection 방지)
     // =====================
-    const {
-      petId,
-      breed = "Shiba Inu",
-      color = "orange",
-      accessory = "none",
-      style = "sticker-flat",
-      size = 512,
-      bg = "transparent",
-      seed,
-    } = data;
+    const {petId, size = 512, seed} = data;
+    const breed = ALLOWED_BREEDS
+      .includes(data.breed ?? "") ?
+      data.breed! : "Shiba Inu";
+    const color = ALLOWED_COLORS
+      .includes(data.color ?? "") ?
+      data.color! : "orange";
+    const accessory = ALLOWED_ACCESSORIES
+      .includes(data.accessory ?? "") ?
+      data.accessory! : "none";
+    const style = ALLOWED_STYLES
+      .includes(data.style ?? "") ?
+      data.style! : "sticker-flat";
+    const bg = ALLOWED_BGS
+      .includes(data.bg ?? "") ?
+      data.bg! : "transparent";
 
     console.log(`📝 [genStickerFree] petId=${petId}`);
 
     if (!petId || size < 256 || size > 1024) {
-      console.error("❌ [genStickerFree] Invalid parameters");
-      throw new functions.https.HttpsError("invalid-argument", "Invalid parameters");
+      console.error(
+        "❌ [genStickerFree] Invalid parameters"
+      );
+      throw new functions.https.HttpsError(
+        "invalid-argument", "Invalid parameters"
+      );
     }
 
     // =====================
