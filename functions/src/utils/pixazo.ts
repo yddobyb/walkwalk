@@ -7,6 +7,7 @@
  */
 
 import axios from "axios";
+import {validateImageUrl} from "./validateUrl";
 
 // Pixazo API 설정
 const PIXAZO_API_URL = "https://gateway.pixazo.ai/flux-1-schnell/v1/getData";
@@ -75,7 +76,18 @@ export async function generateImageWithPixazo(
 
     console.log(`✅ [Pixazo] Image URL received: ${imageUrl.substring(0, 50)}...`);
 
-    // 3. 이미지 URL에서 이미지 다운로드
+    // 3. URL 검증 (SSRF 방지)
+    const urlError = validateImageUrl(imageUrl);
+    if (urlError) {
+      console.error(`❌ [Pixazo] URL validation failed: ${urlError}`);
+      return {
+        success: false,
+        error: `URL validation failed: ${urlError}`,
+        provider: "pixazo",
+      };
+    }
+
+    // 4. 이미지 URL에서 이미지 다운로드
     const imageResponse = await axios.get(imageUrl, {
       responseType: "arraybuffer",
       timeout: 10000, // 다운로드 타임아웃 10초

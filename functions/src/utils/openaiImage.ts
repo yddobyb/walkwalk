@@ -7,6 +7,7 @@
  */
 
 import OpenAI from "openai";
+import {validateImageUrl} from "./validateUrl";
 
 // OpenAI 설정
 const OPENAI_TIMEOUT = 30000; // 30초 타임아웃
@@ -88,6 +89,19 @@ export async function generateImageWithOpenAI(
     // URL 데이터 처리 (fallback)
     if (imageData.url) {
       console.log(`✅ [OpenAI] Image URL received: ${imageData.url.substring(0, 50)}...`);
+
+      // URL 검증 (SSRF 방지)
+      const urlError = validateImageUrl(imageData.url);
+      if (urlError) {
+        console.error(
+          `❌ [OpenAI] URL validation failed: ${urlError}`
+        );
+        return {
+          success: false,
+          error: `URL validation failed: ${urlError}`,
+          provider: "openai",
+        };
+      }
 
       // URL에서 이미지 다운로드 (axios 사용)
       const axios = (await import("axios")).default;
