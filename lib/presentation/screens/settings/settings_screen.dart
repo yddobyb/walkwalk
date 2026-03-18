@@ -683,6 +683,9 @@ class _SettingsTile extends StatelessWidget {
 }
 
 /// 계정 섹션 위젯
+///
+/// [AuthService.authStateChanges] 스트림을 구독하여
+/// 로그인/로그아웃 시 자동으로 UI를 갱신한다.
 class _AccountSection extends StatelessWidget {
   const _AccountSection();
 
@@ -690,44 +693,49 @@ class _AccountSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    // Firebase가 초기화되지 않은 환경(테스트 등)에서 안전하게 처리
-    bool isAnonymous;
-    String providerName;
-    String? email;
-    try {
-      isAnonymous = AuthService.isAnonymous;
-      providerName = AuthService.providerName;
-      email = AuthService.currentUser?.email;
-    } catch (_) {
-      isAnonymous = true;
-      providerName = 'anonymous';
-      email = null;
-    }
+    return StreamBuilder(
+      stream: AuthService.authStateChanges,
+      builder: (context, snapshot) {
+        // Firebase가 초기화되지 않은 환경(테스트 등)에서 안전하게 처리
+        bool isAnonymous;
+        String providerName;
+        String? email;
+        try {
+          isAnonymous = AuthService.isAnonymous;
+          providerName = AuthService.providerName;
+          email = AuthService.currentUser?.email;
+        } catch (_) {
+          isAnonymous = true;
+          providerName = 'anonymous';
+          email = null;
+        }
 
-    return _SettingsSection(
-      title: l10n.accountSection,
-      children: [
-        if (isAnonymous) ...[
-          _SettingsTile(
-            icon: Icons.account_circle_outlined,
-            title: l10n.signInTitle,
-            subtitle: l10n.signInSubtitle,
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => _showSignInOptions(context),
-          ),
-        ] else ...[
-          _SettingsTile(
-            icon: Icons.account_circle,
-            title: '$providerName ${l10n.accountConnected}',
-            subtitle: email ?? '',
-            trailing: TextButton(
-              onPressed: () => _confirmSignOut(context),
-              child: Text(l10n.signOut),
-            ),
-            onTap: null,
-          ),
-        ],
-      ],
+        return _SettingsSection(
+          title: l10n.accountSection,
+          children: [
+            if (isAnonymous) ...[
+              _SettingsTile(
+                icon: Icons.account_circle_outlined,
+                title: l10n.signInTitle,
+                subtitle: l10n.signInSubtitle,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showSignInOptions(context),
+              ),
+            ] else ...[
+              _SettingsTile(
+                icon: Icons.account_circle,
+                title: '$providerName ${l10n.accountConnected}',
+                subtitle: email ?? '',
+                trailing: TextButton(
+                  onPressed: () => _confirmSignOut(context),
+                  child: Text(l10n.signOut),
+                ),
+                onTap: null,
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 
@@ -811,7 +819,15 @@ class _AccountSection extends StatelessWidget {
           TextButton(
             onPressed: () async {
               Navigator.pop(ctx);
-              await AuthService.signOut();
+              try {
+                await AuthService.signOut();
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.signInFailed)),
+                  );
+                }
+              }
             },
             child: Text(l10n.signOut),
           ),

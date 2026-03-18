@@ -4,19 +4,33 @@ service cloud.firestore {
 
     // 사용자 프로필: 본인만 읽기/쓰기
     // subscription 필드는 클라이언트 쓰기 차단 (Cloud Functions Admin SDK만 가능)
+    // 허용 필드 화이트리스트로 예기치 않은 필드 주입 방지
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
+      function isOwner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      // 클라이언트가 쓸 수 있는 필드 목록
+      function hasOnlyAllowedFields() {
+        let allowed = ['displayName', 'photoURL', 'dogName',
+          'dogBreed', 'settings', 'createdAt', 'updatedAt'];
+        return request.resource.data.keys().hasOnly(
+          allowed.concat(resource == null ? [] : resource.data.keys().toList())
+        );
+      }
+
+      allow read: if isOwner();
 
       // 신규 문서: subscription 필드 포함 불가
-      allow create: if request.auth != null && request.auth.uid == userId
+      allow create: if isOwner()
         && !request.resource.data.keys().hasAny(['subscription']);
 
       // 기존 문서 수정: subscription 필드 변경 불가
-      allow update: if request.auth != null && request.auth.uid == userId
+      allow update: if isOwner()
         && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['subscription']);
 
       // 문서 삭제: 본인만 가능
-      allow delete: if request.auth != null && request.auth.uid == userId;
+      allow delete: if isOwner();
     }
 
     // 프리미엄 이미지 사용량: 본인만 읽기, 쓰기는 Cloud Functions만

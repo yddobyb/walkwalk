@@ -203,11 +203,11 @@ void main() {
       );
     });
 
-    test('Firestore 동기화에 merge: true 옵션 사용', () {
+    test('Firestore 동기화가 Cloud Function 경유로 수행됨', () {
       expect(
-        rcSource.contains('SetOptions(merge: true)'),
+        rcSource.contains("httpsCallable('syncSubscription')"),
         isTrue,
-        reason: '기존 사용자 데이터를 덮어쓰지 않도록 merge 옵션 필요',
+        reason: 'Firestore 동기화는 Cloud Function 경유 (보안)',
       );
     });
 
@@ -419,7 +419,253 @@ void main() {
   });
 
   // =========================================================
-  // 8. customerInfoStream 안전성
+  // 8. logIn/logOut 연동 테스트 (Phase 14)
+  // =========================================================
+  group('logIn/logOut - unconfigured 모드 안전성', () {
+    test('logIn은 unconfigured 시 에러 없이 즉시 반환', () async {
+      // _isConfigured == false → Purchases.logIn 호출 안 함
+      await RevenueCatService.logIn('test-user-id-123');
+      // 에러 없이 완료되면 성공
+      expect(RevenueCatService.isConfigured, isFalse);
+    });
+
+    test('logOut은 unconfigured 시 에러 없이 즉시 반환', () async {
+      await RevenueCatService.logOut();
+      expect(RevenueCatService.isConfigured, isFalse);
+    });
+
+    test('logIn 빈 문자열 userId도 에러 없음', () async {
+      await RevenueCatService.logIn('');
+      expect(RevenueCatService.isConfigured, isFalse);
+    });
+
+    test('logIn/logOut 반복 호출해도 안전', () async {
+      for (var i = 0; i < 5; i++) {
+        await RevenueCatService.logIn('user-$i');
+        await RevenueCatService.logOut();
+      }
+      expect(RevenueCatService.isConfigured, isFalse);
+    });
+  });
+
+  // =========================================================
+  // 9. logIn/logOut 소스 코드 구조 검증
+  // =========================================================
+  group('logIn/logOut 소스 코드 검증', () {
+    late String rcSource;
+
+    setUpAll(() {
+      final file = File(
+        'lib/services/subscription/revenue_cat_service.dart',
+      );
+      rcSource = file.readAsStringSync();
+    });
+
+    test('logIn 메서드가 존재함', () {
+      expect(
+        rcSource.contains('static Future<void> logIn(String userId)'),
+        isTrue,
+        reason: 'logIn 메서드 필요',
+      );
+    });
+
+    test('logOut 메서드가 존재함', () {
+      expect(
+        rcSource.contains('static Future<void> logOut()'),
+        isTrue,
+        reason: 'logOut 메서드 필요',
+      );
+    });
+
+    test('logIn이 Purchases.logIn을 호출함', () {
+      final startIdx = rcSource.indexOf(
+        'static Future<void> logIn(String userId)',
+      );
+      final endIdx = rcSource.indexOf(
+        '/// RevenueCat 로그아웃',
+      );
+      final methodBody = rcSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('Purchases.logIn(userId)'),
+        isTrue,
+        reason: 'RevenueCat SDK logIn 호출 필요',
+      );
+    });
+
+    test('logOut이 Purchases.logOut을 호출함', () {
+      final startIdx = rcSource.indexOf(
+        'static Future<void> logOut()',
+      );
+      final endIdx = rcSource.indexOf(
+        '/// 앱 시작 시 구독 상태를 자동으로',
+      );
+      final methodBody = rcSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('Purchases.logOut()'),
+        isTrue,
+        reason: 'RevenueCat SDK logOut 호출 필요',
+      );
+    });
+
+    test('logIn이 _isConfigured 가드를 포함함', () {
+      final startIdx = rcSource.indexOf(
+        'static Future<void> logIn(String userId)',
+      );
+      final endIdx = rcSource.indexOf(
+        '/// RevenueCat 로그아웃',
+      );
+      final methodBody = rcSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('if (!_isConfigured) return'),
+        isTrue,
+        reason: 'unconfigured 시 즉시 반환 가드 필요',
+      );
+    });
+
+    test('logOut이 _isConfigured 가드를 포함함', () {
+      final startIdx = rcSource.indexOf(
+        'static Future<void> logOut()',
+      );
+      final endIdx = rcSource.indexOf(
+        '/// 앱 시작 시 구독 상태를 자동으로',
+      );
+      final methodBody = rcSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('if (!_isConfigured) return'),
+        isTrue,
+        reason: 'unconfigured 시 즉시 반환 가드 필요',
+      );
+    });
+
+    test('logIn 후 Firestore 동기화가 호출됨', () {
+      final startIdx = rcSource.indexOf(
+        'static Future<void> logIn(String userId)',
+      );
+      final endIdx = rcSource.indexOf(
+        '/// RevenueCat 로그아웃',
+      );
+      final methodBody = rcSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('_syncSubscriptionToFirestore'),
+        isTrue,
+        reason: 'logIn 후 구독 상태 Firestore 동기화 필요',
+      );
+    });
+
+    test('logIn/logOut이 try-catch로 보호됨', () {
+      final logInStart = rcSource.indexOf(
+        'static Future<void> logIn(String userId)',
+      );
+      final logOutEnd = rcSource.indexOf(
+        '/// 앱 시작 시 구독 상태를 자동으로',
+      );
+      final methodBodies = rcSource.substring(logInStart, logOutEnd);
+
+      // logIn과 logOut 모두 try-catch로 보호
+      final tryCount = 'try {'.allMatches(methodBodies).length;
+      final catchCount = 'catch (e)'.allMatches(methodBodies).length;
+
+      expect(tryCount, greaterThanOrEqualTo(2),
+          reason: 'logIn과 logOut 모두 try-catch 필요');
+      expect(catchCount, greaterThanOrEqualTo(2),
+          reason: 'logIn과 logOut 모두 catch 필요');
+    });
+  });
+
+  // =========================================================
+  // 10. auth_service.dart RevenueCat 연동 소스 코드 검증
+  // =========================================================
+  group('auth_service.dart RevenueCat 연동 검증', () {
+    late String authSource;
+
+    setUpAll(() {
+      final file = File('lib/services/auth/auth_service.dart');
+      authSource = file.readAsStringSync();
+    });
+
+    test('revenue_cat_service.dart import가 존재함', () {
+      expect(
+        authSource.contains(
+          "import '../subscription/revenue_cat_service.dart'",
+        ),
+        isTrue,
+        reason: 'RevenueCatService import 필요',
+      );
+    });
+
+    test('signInWithGoogle에서 RevenueCatService.logIn 호출', () {
+      final startIdx = authSource.indexOf('signInWithGoogle()');
+      final endIdx = authSource.indexOf('// Apple 로그인');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('RevenueCatService.logIn(result.user!.uid)'),
+        isTrue,
+        reason: 'Google 로그인 성공 후 RevenueCat logIn 호출 필요',
+      );
+    });
+
+    test('signInWithApple에서 RevenueCatService.logIn 호출', () {
+      final startIdx = authSource.indexOf('signInWithApple()');
+      final endIdx = authSource.indexOf('// 로그아웃');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('RevenueCatService.logIn(result.user!.uid)'),
+        isTrue,
+        reason: 'Apple 로그인 성공 후 RevenueCat logIn 호출 필요',
+      );
+    });
+
+    test('signOut에서 RevenueCatService.logOut 호출', () {
+      final startIdx = authSource.indexOf('signOut()');
+      final endIdx = authSource.indexOf('// 유틸리티');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('RevenueCatService.logOut()'),
+        isTrue,
+        reason: 'signOut 시 RevenueCat logOut 호출 필요',
+      );
+    });
+
+    test('signOut에서 RevenueCat logOut이 Firebase signOut보다 먼저 호출됨',
+        () {
+      final startIdx = authSource.indexOf('signOut()');
+      final endIdx = authSource.indexOf('// 유틸리티');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      final rcLogOutIdx = methodBody.indexOf('RevenueCatService.logOut()');
+      final firebaseLogOutIdx = methodBody.indexOf('_auth.signOut()');
+
+      expect(
+        rcLogOutIdx,
+        lessThan(firebaseLogOutIdx),
+        reason: 'RevenueCat logOut이 Firebase signOut보다 먼저 '
+            '호출되어야 함 (UID가 아직 유효한 동안)',
+      );
+    });
+
+    test('signInWithGoogle에서 result.user null 체크 후 logIn 호출', () {
+      final startIdx = authSource.indexOf('signInWithGoogle()');
+      final endIdx = authSource.indexOf('// Apple 로그인');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('if (result.user != null)'),
+        isTrue,
+        reason: 'user가 null이 아닌 경우에만 logIn 호출',
+      );
+    });
+  });
+
+  // =========================================================
+  // 11. customerInfoStream 안전성
   // =========================================================
   group('customerInfoStream 안전성', () {
     test('unconfigured 시 empty stream → toList 즉시 완료', () async {
@@ -434,6 +680,293 @@ void main() {
             await RevenueCatService.customerInfoStream.toList();
         expect(events, isEmpty);
       }
+    });
+  });
+
+  // =========================================================
+  // 12. 보안 수정 검증 — Phase 15 Security Hardening
+  // =========================================================
+  group('보안: auth_service.dart TOCTOU 레이스 방지', () {
+    late String authSource;
+
+    setUpAll(() {
+      final file = File('lib/services/auth/auth_service.dart');
+      authSource = file.readAsStringSync();
+    });
+
+    test('signInWithGoogle에서 currentUser를 로컬 변수로 캡처', () {
+      final startIdx = authSource.indexOf('signInWithGoogle()');
+      final endIdx = authSource.indexOf('// Apple 로그인');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('final currentUser = _auth.currentUser'),
+        isTrue,
+        reason: 'currentUser를 로컬 변수로 캡처하여 TOCTOU 방지',
+      );
+
+      // _auth.currentUser! 직접 사용 금지 확인
+      expect(
+        methodBody.contains('_auth.currentUser!.linkWithCredential'),
+        isFalse,
+        reason: 'currentUser를 직접 사용하지 않고 로컬 변수 사용',
+      );
+    });
+
+    test('signInWithApple에서 currentUser를 로컬 변수로 캡처', () {
+      final startIdx = authSource.indexOf('signInWithApple()');
+      final endIdx = authSource.indexOf('// 로그아웃');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('final currentUser = _auth.currentUser'),
+        isTrue,
+        reason: 'currentUser를 로컬 변수로 캡처하여 TOCTOU 방지',
+      );
+
+      expect(
+        methodBody.contains('_auth.currentUser!.linkWithCredential'),
+        isFalse,
+        reason: 'currentUser를 직접 사용하지 않고 로컬 변수 사용',
+      );
+    });
+  });
+
+  group('보안: signOut 부분 실패 방지', () {
+    late String authSource;
+
+    setUpAll(() {
+      final file = File('lib/services/auth/auth_service.dart');
+      authSource = file.readAsStringSync();
+    });
+
+    test('signOut이 각 단계를 개별 try-catch로 보호', () {
+      final startIdx = authSource.indexOf('signOut()');
+      final endIdx = authSource.indexOf('// 유틸리티');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      // RevenueCat logOut이 독립적 try-catch로 보호됨
+      expect(
+        methodBody.contains("await RevenueCatService.logOut();\n"
+            "    } catch (e) {\n"
+            "      debugPrint('[Auth] RevenueCat logOut failed:"),
+        isTrue,
+        reason: 'RevenueCat logOut 실패가 Firebase signOut을 막지 않아야 함',
+      );
+
+      // firstError 패턴으로 에러 수집
+      expect(
+        methodBody.contains('firstError'),
+        isTrue,
+        reason: '부분 실패 시 첫 에러를 보존하여 전파',
+      );
+    });
+
+    test('signOut에서 Firebase signOut이 RevenueCat 이후에 실행', () {
+      final startIdx = authSource.indexOf('signOut()');
+      final endIdx = authSource.indexOf('// 유틸리티');
+      final methodBody = authSource.substring(startIdx, endIdx);
+
+      final rcIdx = methodBody.indexOf('RevenueCatService.logOut()');
+      final fbIdx = methodBody.indexOf('_auth.signOut()');
+
+      expect(rcIdx, lessThan(fbIdx));
+    });
+  });
+
+  group('보안: RevenueCat 디바운스 동기화', () {
+    late String rcSource;
+
+    setUpAll(() {
+      final file = File(
+        'lib/services/subscription/revenue_cat_service.dart',
+      );
+      rcSource = file.readAsStringSync();
+    });
+
+    test('_syncDebounce Timer 필드가 존재함', () {
+      expect(
+        rcSource.contains('static Timer? _syncDebounce'),
+        isTrue,
+        reason: '디바운스를 위한 Timer 필드 필요',
+      );
+    });
+
+    test('_debouncedSync 메서드가 존재함', () {
+      expect(
+        rcSource.contains('static void _debouncedSync('),
+        isTrue,
+        reason: 'customerInfoUpdateListener의 디바운스 래퍼 필요',
+      );
+    });
+
+    test('customerInfoUpdateListener에 디바운스 적용됨', () {
+      expect(
+        rcSource.contains(
+          'addCustomerInfoUpdateListener(\n'
+          '        _debouncedSync,',
+        ),
+        isTrue,
+        reason: '직접 _syncSubscriptionToFirestore 대신 '
+            '_debouncedSync 사용',
+      );
+    });
+  });
+
+  group('보안: 로그아웃 시 inactive 동기화', () {
+    late String rcSource;
+
+    setUpAll(() {
+      final file = File(
+        'lib/services/subscription/revenue_cat_service.dart',
+      );
+      rcSource = file.readAsStringSync();
+    });
+
+    test('logOut에서 _syncInactiveToFirestore 호출', () {
+      final startIdx = rcSource.indexOf('static Future<void> logOut()');
+      final endIdx = rcSource.indexOf('_syncInactiveToFirestore()');
+      // _syncInactiveToFirestore가 logOut 메서드 안에 있는지 확인
+      expect(endIdx, greaterThan(startIdx));
+    });
+
+    test('_syncInactiveToFirestore가 inactive 상태를 전송', () {
+      expect(
+        rcSource.contains("'status': 'inactive'"),
+        isTrue,
+        reason: 'inactive 상태 동기화 필요',
+      );
+    });
+  });
+
+  group('보안: syncSubscription Cloud Function 입력 검증', () {
+    late String cfSource;
+
+    setUpAll(() {
+      final file = File('functions/src/syncSubscription.ts');
+      cfSource = file.readAsStringSync();
+    });
+
+    test('expiresAt 미래 날짜 제한 (13개월)', () {
+      expect(
+        cfSource.contains('maxExpiry.setMonth(maxExpiry.getMonth() + 13)'),
+        isTrue,
+        reason: '13개월 초과 만료일 거부 필요',
+      );
+    });
+
+    test('만료된 날짜로 active 설정 거부', () {
+      expect(
+        cfSource.contains('Cannot set active with expired date'),
+        isTrue,
+        reason: '과거 만료일 + active 조합 거부',
+      );
+    });
+
+    test('productId 화이트리스트 검증', () {
+      expect(
+        cfSource.contains('allowedProducts'),
+        isTrue,
+        reason: '허용된 productId만 수락',
+      );
+
+      expect(
+        cfSource.contains('walkdog_premium_monthly'),
+        isTrue,
+        reason: '월간 구독 상품 ID가 화이트리스트에 포함',
+      );
+    });
+
+    test('App Check 검증', () {
+      expect(
+        cfSource.contains('if (!context.app)'),
+        isTrue,
+        reason: 'App Check 필수',
+      );
+    });
+
+    test('인증 검증', () {
+      expect(
+        cfSource.contains('if (!context.auth)'),
+        isTrue,
+        reason: '인증 필수',
+      );
+    });
+  });
+
+  group('보안: Firestore Rules 필드 보호', () {
+    late String rulesSource;
+
+    setUpAll(() {
+      final file = File('firestore.rules');
+      rulesSource = file.readAsStringSync();
+    });
+
+    test('subscription 필드 클라이언트 쓰기 차단 (create)', () {
+      expect(
+        rulesSource.contains(
+          "!request.resource.data.keys().hasAny(['subscription'])",
+        ),
+        isTrue,
+        reason: '신규 문서에 subscription 필드 차단',
+      );
+    });
+
+    test('subscription 필드 클라이언트 쓰기 차단 (update)', () {
+      expect(
+        rulesSource.contains("affectedKeys().hasAny(['subscription'])"),
+        isTrue,
+        reason: '기존 문서에서 subscription 필드 변경 차단',
+      );
+    });
+
+    test('isOwner 헬퍼 함수 사용', () {
+      expect(
+        rulesSource.contains('function isOwner()'),
+        isTrue,
+        reason: '인증 + 소유자 확인 헬퍼',
+      );
+    });
+
+    test('monitoring 컬렉션 클라이언트 접근 차단', () {
+      expect(
+        rulesSource.contains("match /monitoring/{document=**}"),
+        isTrue,
+      );
+    });
+  });
+
+  group('보안: settings_screen.dart 로그아웃 에러 핸들링', () {
+    late String settingsSource;
+
+    setUpAll(() {
+      final file = File(
+        'lib/presentation/screens/settings/settings_screen.dart',
+      );
+      settingsSource = file.readAsStringSync();
+    });
+
+    test('_confirmSignOut에 try-catch가 있음', () {
+      // _confirmSignOut 메서드를 포함한 _AccountSection 범위
+      final startIdx = settingsSource.indexOf('void _confirmSignOut');
+      final endIdx = settingsSource.indexOf(
+        'class _SubscriptionSection',
+      );
+      expect(startIdx, greaterThan(-1), reason: '_confirmSignOut 메서드 존재');
+      expect(endIdx, greaterThan(startIdx));
+      final methodBody = settingsSource.substring(startIdx, endIdx);
+
+      expect(
+        methodBody.contains('try {'),
+        isTrue,
+        reason: 'signOut 호출에 에러 핸들링 필요',
+      );
+
+      expect(
+        methodBody.contains('} catch (e) {'),
+        isTrue,
+        reason: 'signOut 실패 시 사용자에게 피드백 필요',
+      );
     });
   });
 }

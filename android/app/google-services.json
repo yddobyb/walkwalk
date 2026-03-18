@@ -12,7 +12,12 @@
           "package_name": "com.walkdog.walk_dog"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "701057110809-94a4p3c5k757oi8ptf5meuv7d96jtq7n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDorGbyRC7ljIM_Y4DCZOOB9MmX2AreXZg"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701057110809-94a4p3c5k757oi8ptf5meuv7d96jtq7n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "701057110809-92r6u0o5ggl5emjlkaa54c5tivm1rvg5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.walkdogbin.walkDog"
+              }
+            }
+          ]
         }
       }
     }

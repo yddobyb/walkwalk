@@ -66,9 +66,51 @@ export const syncSubscription = functions
           "Invalid expiresAt date format"
         );
       }
+
+      // 보안: 13개월(연간 구독 + 갱신 여유) 초과 만료일 거부
+      const maxExpiry = new Date();
+      maxExpiry.setMonth(maxExpiry.getMonth() + 13);
+      if (expDate > maxExpiry) {
+        console.warn(
+          `[syncSubscription] Rejected: user ${uid} ` +
+          `sent expiresAt ${expiresAt} beyond max ${maxExpiry.toISOString()}`
+        );
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "expiresAt too far in the future"
+        );
+      }
+
+      // 보안: 과거 만료일인데 active 상태이면 거부
+      if (status === "active" && expDate < new Date()) {
+        console.warn(
+          `[syncSubscription] Rejected: user ${uid} ` +
+          `sent active status with expired date ${expiresAt}`
+        );
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Cannot set active with expired date"
+        );
+      }
     }
 
-    // 4. Firestore에 기록 (Admin SDK → rules 우회)
+    // 4. productId 화이트리스트 검증
+    const allowedProducts = [
+      "walkdog_premium_monthly",
+      "", // inactive 상태에서 빈 문자열 허용
+    ];
+    if (productId && !allowedProducts.includes(productId)) {
+      console.warn(
+        `[syncSubscription] Rejected: user ${uid} ` +
+        `sent unknown productId: ${productId}`
+      );
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Unknown productId"
+      );
+    }
+
+    // 5. Firestore에 기록 (Admin SDK → rules 우회)
     const db = admin.firestore();
     const userRef = db.collection("users").doc(uid);
 

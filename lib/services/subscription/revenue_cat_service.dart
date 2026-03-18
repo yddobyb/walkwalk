@@ -39,6 +39,7 @@ class RevenueCatService {
 
   static bool _isConfigured = false;
   static bool _initialized = false;
+  static Timer? _syncDebounce;
 
   /// SDK가 정상 설정되었는지 여부
   static bool get isConfigured => _isConfigured;
@@ -76,9 +77,9 @@ class RevenueCatService {
 
       debugPrint('[RevenueCat] Configured successfully');
 
-      // 구독 변경 시 Firestore 동기화
+      // 구독 변경 시 Firestore 동기화 (2초 디바운스로 중복 호출 방지)
       Purchases.addCustomerInfoUpdateListener(
-        _syncSubscriptionToFirestore,
+        _debouncedSync,
       );
 
       // 앱 시작 시 구독 상태 자동 확인 및 Firestore 동기화
@@ -202,6 +203,76 @@ class RevenueCatService {
     return controller.stream;
   }
 
+  /// 사용자 ID를 RevenueCat에 연동 (기기 간 구독 자동 복원)
+  ///
+  /// Google/Apple 로그인 성공 후 호출.
+  /// 기존 익명 구독이 있으면 이 계정으로 자동 이전됨.
+  static Future<void> logIn(String userId) async {
+    if (!_isConfigured) return;
+
+    try {
+      final result = await Purchases.logIn(userId);
+      debugPrint(
+        '[RevenueCat] Logged in: $userId, '
+        'premium=${result.customerInfo.entitlements.active.containsKey(_entitlementId)}',
+      );
+      // 로그인 후 구독 상태 Firestore 동기화
+      await _syncSubscriptionToFirestore(result.customerInfo);
+    } catch (e) {
+      debugPrint('[RevenueCat] logIn failed: $e');
+    }
+  }
+
+  /// RevenueCat 로그아웃 (새 익명 ID로 복귀)
+  ///
+  /// Firebase 로그아웃 전에 호출.
+  /// 로그아웃 시 Firestore에 inactive 상태를 동기화하여
+  /// 이전 계정에 프리미엄이 남아있지 않도록 보장.
+  static Future<void> logOut() async {
+    if (!_isConfigured) return;
+
+    try {
+      // 로그아웃 전에 구독 상태를 inactive로 동기화
+      final infoBeforeLogout = await Purchases.getCustomerInfo();
+      if (infoBeforeLogout.entitlements.active
+          .containsKey(_entitlementId)) {
+        await _syncInactiveToFirestore();
+      }
+
+      final info = await Purchases.logOut();
+      debugPrint(
+        '[RevenueCat] Logged out, '
+        'reverted to anonymous: ${info.originalAppUserId}',
+      );
+    } catch (e) {
+      debugPrint('[RevenueCat] logOut failed: $e');
+    }
+  }
+
+  /// Firestore에 inactive 상태 동기화 (로그아웃 시 사용)
+  static Future<void> _syncInactiveToFirestore() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    try {
+      final callable = FirebaseFunctions.instanceFor(
+        region: 'us-central1',
+      ).httpsCallable('syncSubscription');
+
+      await callable.call<dynamic>({
+        'status': 'inactive',
+        'productId': '',
+      });
+      debugPrint(
+        '[RevenueCat] Synced inactive status before logout',
+      );
+    } catch (e) {
+      debugPrint(
+        '[RevenueCat] Inactive sync failed (non-fatal): $e',
+      );
+    }
+  }
+
   /// 앱 시작 시 구독 상태를 자동으로 확인하고 Firestore에 동기화
   ///
   /// [Purchases.getCustomerInfo()]를 사용하여 캐시/서버에서 구독 상태를 읽음.
@@ -225,6 +296,17 @@ class RevenueCatService {
         '[RevenueCat] Auto-restore failed (non-fatal): $e',
       );
     }
+  }
+
+  /// customerInfoUpdateListener 디바운스 래퍼
+  ///
+  /// 짧은 시간 내에 여러 번 호출되면 마지막 호출만 실행.
+  /// RevenueCat이 빠르게 연속 업데이트를 보내는 경우 방지.
+  static void _debouncedSync(CustomerInfo info) {
+    _syncDebounce?.cancel();
+    _syncDebounce = Timer(const Duration(seconds: 2), () {
+      _syncSubscriptionToFirestore(info);
+    });
   }
 
   /// Firestore에 구독 상태 동기화 (Cloud Function 경유)

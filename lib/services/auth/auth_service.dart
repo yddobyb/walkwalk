@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../subscription/revenue_cat_service.dart';
+
 /// 인증 서비스
 ///
 /// 익명 → Google/Apple 로그인 업그레이드 지원.
@@ -54,19 +56,34 @@ class AuthService {
       final credential = GoogleAuthProvider.credential(idToken: idToken);
 
       // 익명 계정이면 링크, 아니면 로그인
-      if (_auth.currentUser != null && _auth.currentUser!.isAnonymous) {
+      // 보안: currentUser를 한 번만 읽어 TOCTOU 레이스 방지
+      final currentUser = _auth.currentUser;
+      UserCredential result;
+      if (currentUser != null && currentUser.isAnonymous) {
         debugPrint('[Auth] Linking anonymous account with Google');
-        final result = await _auth.currentUser!.linkWithCredential(credential);
+        result = await currentUser.linkWithCredential(credential);
         debugPrint('[Auth] Google link success: ${result.user?.uid}');
-        return result;
       } else {
-        final result = await _auth.signInWithCredential(credential);
+        result = await _auth.signInWithCredential(credential);
         debugPrint('[Auth] Google sign-in success: ${result.user?.uid}');
-        return result;
       }
+
+      // RevenueCat에 사용자 ID 연동 (기기 간 구독 자동 복원)
+      if (result.user != null) {
+        await RevenueCatService.logIn(result.user!.uid);
+      }
+
+      return result;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'credential-already-in-use') {
-        debugPrint('[Auth] Google account already linked to another user');
+      if (e.code == 'credential-already-in-use' && e.credential != null) {
+        // 이미 다른 계정에 연결된 Google 계정 → 링크 포기, 직접 로그인
+        debugPrint('[Auth] Google already linked, signing in directly');
+        final result = await _auth.signInWithCredential(e.credential!);
+        debugPrint('[Auth] Google direct sign-in: ${result.user?.uid}');
+        if (result.user != null) {
+          await RevenueCatService.logIn(result.user!.uid);
+        }
+        return result;
       }
       debugPrint('[Auth] Google sign-in error: ${e.code}');
       rethrow;
@@ -101,17 +118,24 @@ class AuthService {
       );
 
       // 익명 계정이면 링크
-      if (_auth.currentUser != null && _auth.currentUser!.isAnonymous) {
+      // 보안: currentUser를 한 번만 읽어 TOCTOU 레이스 방지
+      final currentUser = _auth.currentUser;
+      UserCredential result;
+      if (currentUser != null && currentUser.isAnonymous) {
         debugPrint('[Auth] Linking anonymous account with Apple');
-        final result =
-            await _auth.currentUser!.linkWithCredential(oauthCredential);
+        result = await currentUser.linkWithCredential(oauthCredential);
         debugPrint('[Auth] Apple link success: ${result.user?.uid}');
-        return result;
       } else {
-        final result = await _auth.signInWithCredential(oauthCredential);
+        result = await _auth.signInWithCredential(oauthCredential);
         debugPrint('[Auth] Apple sign-in success: ${result.user?.uid}');
-        return result;
       }
+
+      // RevenueCat에 사용자 ID 연동 (기기 간 구독 자동 복원)
+      if (result.user != null) {
+        await RevenueCatService.logIn(result.user!.uid);
+      }
+
+      return result;
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
         debugPrint('[Auth] Apple sign-in cancelled');
@@ -120,6 +144,16 @@ class AuthService {
       debugPrint('[Auth] Apple sign-in error: ${e.code}');
       rethrow;
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'credential-already-in-use' && e.credential != null) {
+        // 이미 다른 계정에 연결된 Apple 계정 → 직접 로그인
+        debugPrint('[Auth] Apple already linked, signing in directly');
+        final result = await _auth.signInWithCredential(e.credential!);
+        debugPrint('[Auth] Apple direct sign-in: ${result.user?.uid}');
+        if (result.user != null) {
+          await RevenueCatService.logIn(result.user!.uid);
+        }
+        return result;
+      }
       debugPrint('[Auth] Apple sign-in error: ${e.code}');
       rethrow;
     } catch (e) {
@@ -133,23 +167,43 @@ class AuthService {
   // ========================================================================
 
   /// 로그아웃 후 익명 로그인으로 복귀
+  ///
+  /// 순서: RevenueCat logOut → Google SDK signOut → Firebase signOut → 익명 로그인
+  /// RevenueCat logOut은 Firebase signOut 전에 호출 (UID가 유효해야 함).
+  /// 각 단계 실패 시에도 다음 단계를 계속 진행하여 부분 실패 방지.
   static Future<void> signOut() async {
+    Object? firstError;
+
+    // 1. RevenueCat 로그아웃 (새 익명 ID로 복귀)
     try {
-      // Google SDK는 초기화된 경우에만 signOut (Apple 로그인 시 불필요)
-      if (_googleInitialized) {
-        try {
-          await GoogleSignIn.instance.signOut();
-        } catch (e) {
-          debugPrint('[Auth] Google signOut skipped: $e');
-        }
+      await RevenueCatService.logOut();
+    } catch (e) {
+      debugPrint('[Auth] RevenueCat logOut failed: $e');
+      firstError ??= e;
+    }
+
+    // 2. Google SDK signOut (초기화된 경우에만)
+    if (_googleInitialized) {
+      try {
+        await GoogleSignIn.instance.signOut();
+      } catch (e) {
+        debugPrint('[Auth] Google signOut skipped: $e');
       }
+    }
+
+    // 3. Firebase signOut + 익명 로그인 복귀
+    try {
       await _auth.signOut();
-      // 익명 로그인으로 복귀 (앱 기능 유지)
       await _auth.signInAnonymously();
       debugPrint('[Auth] Signed out, reverted to anonymous');
     } catch (e) {
-      debugPrint('[Auth] Sign out failed: $e');
-      rethrow;
+      debugPrint('[Auth] Firebase signOut failed: $e');
+      firstError ??= e;
+    }
+
+    // 어느 단계에서든 에러가 있었으면 전파
+    if (firstError != null) {
+      throw firstError;
     }
   }
 
