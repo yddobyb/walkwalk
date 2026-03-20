@@ -201,6 +201,22 @@ class LLMService {
     );
   }
 
+  /// 프롬프트 인젝션 방지용 sanitizer
+  ///
+  /// 제어 문자, 프롬프트 구분자, 시스템 명령어 패턴 제거
+  static String _sanitizeForPrompt(String input) {
+    return input
+        // 제어 문자 및 줄바꿈 제거
+        .replaceAll(RegExp(r'[\x00-\x1F\x7F]'), '')
+        // 프롬프트 구분자 패턴 제거
+        .replaceAll(RegExp(r'\[/?SYSTEM\]', caseSensitive: false), '')
+        .replaceAll(RegExp(r'\[/?INST\]', caseSensitive: false), '')
+        .replaceAll(RegExp(r'</?system>', caseSensitive: false), '')
+        .replaceAll(RegExp(r'</?user>', caseSensitive: false), '')
+        .replaceAll(RegExp(r'</?assistant>', caseSensitive: false), '')
+        .trim();
+  }
+
   /// 컨텍스트 기반 대화 생성
   Future<String> generateDialogue({
     required String dogName,
@@ -210,10 +226,14 @@ class LLMService {
     Map<String, dynamic>? contextData,
     required String locale,
   }) async {
+    // 보안: 사용자 입력값 sanitize
+    final safeName = _sanitizeForPrompt(dogName);
+    final safeBreed = _sanitizeForPrompt(dogBreed);
+
     await AnalyticsService.logLlmRequestStarted(
       context: context,
-      dogName: dogName,
-      dogBreed: dogBreed,
+      dogName: safeName,
+      dogBreed: safeBreed,
       happinessLevel: happinessLevel,
     );
 
@@ -224,8 +244,8 @@ class LLMService {
 
     try {
       final systemPrompt = _buildSystemPrompt(
-        dogName: dogName,
-        dogBreed: dogBreed,
+        dogName: safeName,
+        dogBreed: safeBreed,
         happinessLevel: happinessLevel,
         locale: locale,
       );

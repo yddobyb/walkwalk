@@ -10,7 +10,7 @@
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import sharp from "sharp";
+// sharp는 convertToWebP()에서 lazy require (다른 함수의 cold start 차단 방지)
 import {
   generateImageWithFallback,
   FallbackConfig,
@@ -274,7 +274,8 @@ function generatePrompt(
  * WebP 변환
  */
 async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer> {
-  return await sharp(imageBuffer)
+  const {default: sharpModule} = await import("sharp");
+  return await sharpModule(imageBuffer)
     .resize(size, size)
     .webp({quality: 90})
     .toBuffer();

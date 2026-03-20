@@ -56,11 +56,11 @@ interface ChatUsageDoc {
 export const chatWithPet = functions
   .region("us-central1")
   .https.onCall(async (data: ChatRequest, context) => {
-    // 1. App Check
+    // 1. App Check (Firebase Console에서 enforcement 설정)
     if (!context.app) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "App Check required"
+      console.warn(
+        "[chatWithPet] App Check token missing — " +
+        "enable enforcement in Firebase Console before production"
       );
     }
 
@@ -163,6 +163,16 @@ export const chatWithPet = functions
 
       try {
         const result = await provider.fn();
+
+        // null/빈 응답은 다음 프로바이더로 폴백
+        if (!result) {
+          console.log(
+            `[chatWithPet] ${provider.name} returned empty, ` +
+            "falling back"
+          );
+          continue;
+        }
+
         const durationMs = Date.now() - startTime;
         console.log(
           `[chatWithPet] ${provider.name} succeeded (${durationMs}ms)`
@@ -211,7 +221,7 @@ async function callOpenRouter(
       temperature,
     },
     {
-      timeout: 8000,
+      timeout: 5000,
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "HTTP-Referer": "com.walkdog.app",

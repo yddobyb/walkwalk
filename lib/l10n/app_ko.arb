@@ -331,6 +331,11 @@
     "description": "펫 이름 길이 에러 메시지"
   },
 
+  "petNameInvalidCharsError": "한글, 영문, 숫자, 공백, 하이픈만 사용 가능합니다",
+  "@petNameInvalidCharsError": {
+    "description": "펫 이름 허용되지 않는 문자 에러 메시지"
+  },
+
   "petBreed": "품종",
   "@petBreed": {
     "description": "펫 품종 레이블"

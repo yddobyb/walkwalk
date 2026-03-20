@@ -202,6 +202,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get petNameLengthError => 'Name must be 10 characters or less';
 
   @override
+  String get petNameInvalidCharsError =>
+      'Only letters, numbers, spaces, hyphens allowed';
+
+  @override
   String get petBreed => 'Breed';
 
   @override

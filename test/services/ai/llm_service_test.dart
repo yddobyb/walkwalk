@@ -1,5 +1,7 @@
 // test/services/ai/llm_service_test.dart
 
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:walk_dog/services/ai/llm_service.dart';
@@ -294,6 +296,85 @@ void main() {
       expect(llmService.isInitialized, false);
 
       debugPrint('✅ dispose 후 상태 리셋 확인 완료');
+    });
+  });
+
+  // ==========================================================================
+  // 보안: 프롬프트 인젝션 방지 (소스 코드 검증)
+  // ==========================================================================
+  group('Security - Prompt Injection Prevention', () {
+    late String llmSource;
+
+    setUpAll(() {
+      llmSource = File(
+        'lib/services/ai/llm_service.dart',
+      ).readAsStringSync();
+    });
+
+    test('_sanitizeForPrompt 메서드가 존재함', () {
+      expect(
+        llmSource.contains('_sanitizeForPrompt'),
+        isTrue,
+        reason: '프롬프트 sanitizer가 존재해야 함',
+      );
+    });
+
+    test('제어 문자 제거 패턴이 있음', () {
+      expect(
+        llmSource.contains(r'[\x00-\x1F\x7F]'),
+        isTrue,
+        reason: '제어 문자 제거 regex가 있어야 함',
+      );
+    });
+
+    test('[SYSTEM] 태그 제거 패턴이 있음', () {
+      expect(
+        llmSource.contains('SYSTEM'),
+        isTrue,
+        reason: '[SYSTEM] 인젝션 패턴 제거가 있어야 함',
+      );
+    });
+
+    test('[INST] 태그 제거 패턴이 있음', () {
+      expect(
+        llmSource.contains('INST'),
+        isTrue,
+        reason: '[INST] 인젝션 패턴 제거가 있어야 함',
+      );
+    });
+
+    test('<system> 태그 제거 패턴이 있음', () {
+      expect(
+        llmSource.contains('</?system>'),
+        isTrue,
+        reason: '<system> HTML 태그 인젝션 패턴 제거가 있어야 함',
+      );
+    });
+
+    test('generateDialogue에서 sanitize 호출됨', () {
+      expect(
+        llmSource.contains('_sanitizeForPrompt(dogName)'),
+        isTrue,
+        reason: 'dogName이 sanitize되어야 함',
+      );
+      expect(
+        llmSource.contains('_sanitizeForPrompt(dogBreed)'),
+        isTrue,
+        reason: 'dogBreed가 sanitize되어야 함',
+      );
+    });
+
+    test('sanitize된 값이 프롬프트에 전달됨', () {
+      expect(
+        llmSource.contains('dogName: safeName'),
+        isTrue,
+        reason: 'sanitize된 이름이 프롬프트에 전달되어야 함',
+      );
+      expect(
+        llmSource.contains('dogBreed: safeBreed'),
+        isTrue,
+        reason: 'sanitize된 품종이 프롬프트에 전달되어야 함',
+      );
     });
   });
 }

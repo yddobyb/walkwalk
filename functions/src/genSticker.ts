@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import axios from "axios";
 // import * as crypto from "crypto"; // Week 4 테스트: 캐시 비활성화로 미사용
-import sharp from "sharp";
+// sharp는 convertToWebP()에서 lazy require (다른 함수의 cold start 차단 방지)
 import {getUserTier} from "./utils/getUserTier";
 import {maskUid} from "./utils/maskUid";
 
@@ -263,7 +263,8 @@ async function callGeminiAPI(prompt: string, seed?: number): Promise<GeminiImage
 
 // WebP 변환
 async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer> {
-  return await sharp(imageBuffer)
+  const {default: sharpModule} = await import("sharp");
+  return await sharpModule(imageBuffer)
     .resize(size, size)
     .webp({quality: 90})
     .toBuffer();

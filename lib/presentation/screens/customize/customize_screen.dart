@@ -27,10 +27,28 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
   PetAccessory _selectedAccessory = PetAccessory.none;
 
   // 스티커 생성 옵션 (기본값)
-  String _breed = 'Shiba Inu';
+  String _breed = 'Golden Retriever';
   String _color = 'golden'; // UI 색상 목록의 첫 번째 항목과 일치
   StickerStyle _style = StickerStyle.stickerFlat;
   StickerBackground _bg = StickerBackground.transparent;
+
+  bool _breedInitialized = false;
+
+  /// Pet.breed (로컬라이즈된 이름) → 영어 breed 값으로 역매핑
+  String? _reverseMapBreed(String localizedBreed) {
+    final l10n = AppLocalizations.of(context);
+    final mapping = {
+      l10n.breedGoldenRetriever: 'Golden Retriever',
+      l10n.breedLabrador: 'Labrador',
+      l10n.breedShiba: 'Shiba Inu',
+      l10n.breedPomeranian: 'Pomeranian',
+      l10n.breedHusky: 'Husky',
+      l10n.breedBeagle: 'Beagle',
+      l10n.breedBulldog: 'Bulldog',
+      l10n.breedPoodle: 'Poodle',
+    };
+    return mapping[localizedBreed];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +57,15 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     final quotaAsync = ref.watch(quotaProvider);
     final applyState = ref.watch(stickerApplyProvider);
     final petAsync = ref.watch(activePetProvider);
+
+    // 온보딩에서 선택한 품종으로 이미지 생성 기본값 설정 (최초 1회)
+    if (!_breedInitialized && petAsync.hasValue && petAsync.value != null) {
+      final mappedBreed = _reverseMapBreed(petAsync.value!.breed);
+      if (mappedBreed != null) {
+        _breed = mappedBreed;
+      }
+      _breedInitialized = true;
+    }
 
     return Scaffold(
       appBar: AppBar(

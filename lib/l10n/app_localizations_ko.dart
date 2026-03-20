@@ -199,6 +199,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get petNameLengthError => '이름은 10자 이하로 입력해주세요';
 
   @override
+  String get petNameInvalidCharsError => '한글, 영문, 숫자, 공백, 하이픈만 사용 가능합니다';
+
+  @override
   String get petBreed => '품종';
 
   @override

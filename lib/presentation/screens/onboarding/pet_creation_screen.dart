@@ -6,6 +6,8 @@ import '../../../l10n/app_localizations.dart';
 import '../../../domain/entities/pet.dart';
 import '../../../data/models/pet_model.dart';
 import '../../../data/datasources/database_service.dart';
+import '../../../services/pet/pet_reward_service.dart';
+import '../../../services/tracking/step_tracking_service.dart';
 import '../home/home_screen.dart';
 
 class PetCreationScreen extends ConsumerStatefulWidget {
@@ -20,8 +22,6 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _selectedBreed = 'goldenRetriever'; // ARB key identifier
-  String _selectedColor = 'golden'; // ARB key identifier
-  PetPersonality _selectedPersonality = PetPersonality.cheerful;
 
   bool _isCreating = false;
 
@@ -37,31 +37,6 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
       'beagle': l10n.breedBeagle,
       'bulldog': l10n.breedBulldog,
       'poodle': l10n.breedPoodle,
-    };
-  }
-
-  // 색상 매핑 (키 -> 표시 이름)
-  Map<String, String> _getColorMap(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return {
-      'golden': l10n.colorGolden,
-      'brown': l10n.colorBrown,
-      'black': l10n.colorBlack,
-      'white': l10n.colorWhite,
-      'gray': l10n.colorGray,
-      'cream': l10n.colorCream,
-    };
-  }
-
-  // 성격 매핑
-  Map<PetPersonality, String> _getPersonalityMap(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return {
-      PetPersonality.cheerful: l10n.personalityCheerful,
-      PetPersonality.calm: l10n.personalityCalm,
-      PetPersonality.energetic: l10n.personalityEnergetic,
-      PetPersonality.shy: l10n.personalityShy,
-      PetPersonality.playful: l10n.personalityPlayful,
     };
   }
 
@@ -81,13 +56,12 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
     try {
       final now = DateTime.now();
       final breedMap = _getBreedMap(context);
-      final colorMap = _getColorMap(context);
 
       final pet = Pet(
         petId: const Uuid().v4(),
         name: _nameController.text.trim(),
         breed: breedMap[_selectedBreed] ?? _selectedBreed,
-        color: colorMap[_selectedColor] ?? _selectedColor,
+        color: 'golden', // 기본값 (커스터마이즈 탭에서 변경 가능)
         accessory: PetAccessory.none,
         happiness: 100, // 초기 행복도 100
         treats: 10, // 시작 간식 10개
@@ -97,7 +71,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
         totalSteps: 0,
         lastUpdate: now,
         lastDecayDate: now, // 생성일에는 감소하지 않음
-        personality: _selectedPersonality,
+        personality: PetPersonality.cheerful, // 기본값
         isActive: true,
         createdAt: now,
         consecutiveDays: 0,
@@ -109,6 +83,16 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
       await isar.writeTxn(() async {
         await isar.petModels.put(PetModel.fromDomain(pet));
       });
+
+      if (!mounted) return;
+
+      // Provider 갱신: 새로 생성된 펫을 모든 관련 provider에 반영
+      ref.invalidate(activePetProvider);
+      final stepService = ref.read(stepTrackingServiceProvider);
+      if (stepService.isInitialized) {
+        await stepService.reloadCurrentPet();
+      }
+      ref.invalidate(petTrackingProvider);
 
       if (!mounted) return;
 
@@ -183,12 +167,10 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                   ),
                   Builder(
                     builder: (context) {
-                      final colorMap = _getColorMap(context);
                       final breedMap = _getBreedMap(context);
-                      final colorName = colorMap[_selectedColor] ?? '';
                       final breedName = breedMap[_selectedBreed] ?? '';
                       return Text(
-                        '$colorName $breedName',
+                        breedName,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
@@ -221,6 +203,12 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                 }
                 if (value.trim().length > 10) {
                   return AppLocalizations.of(context).petNameLengthError;
+                }
+                // 보안: 프롬프트 인젝션 방지 — 허용 문자만 통과
+                // 한글, 영문, 숫자, 공백, 하이픈, 마침표만 허용
+                final sanitized = value.trim();
+                if (!RegExp(r'^[\w\sㄱ-ㅎㅏ-ㅣ가-힣\-\.]+$').hasMatch(sanitized)) {
+                  return AppLocalizations.of(context).petNameInvalidCharsError;
                 }
                 return null;
               },
@@ -260,72 +248,6 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
                       });
                     }
                   },
-                );
-              },
-            ),
-
-            const SizedBox(height: 24),
-
-            // 색상 선택
-            Text(
-              AppLocalizations.of(context).petColor,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Builder(
-              builder: (context) {
-                final colorMap = _getColorMap(context);
-                return Wrap(
-                  spacing: 8,
-                  children: colorMap.entries.map((entry) {
-                    final isSelected = _selectedColor == entry.key;
-                    return ChoiceChip(
-                      label: Text(entry.value),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() {
-                            _selectedColor = entry.key;
-                          });
-                        }
-                      },
-                    );
-                  }).toList(),
-                );
-              },
-            ),
-
-            const SizedBox(height: 24),
-
-            // 성격 선택
-            Text(
-              AppLocalizations.of(context).petPersonality,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Builder(
-              builder: (context) {
-                final personalityMap = _getPersonalityMap(context);
-                return Wrap(
-                  spacing: 8,
-                  children: personalityMap.entries.map((entry) {
-                    final isSelected = _selectedPersonality == entry.key;
-                    return ChoiceChip(
-                      label: Text(entry.value),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() {
-                            _selectedPersonality = entry.key;
-                          });
-                        }
-                      },
-                    );
-                  }).toList(),
                 );
               },
             ),

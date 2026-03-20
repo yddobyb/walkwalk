@@ -28,7 +28,7 @@ class CloudFunctionProvider extends LlmProvider {
       _callable = FirebaseFunctions.instanceFor(region: 'us-central1')
           .httpsCallable(
         'chatWithPet',
-        options: HttpsCallableOptions(timeout: const Duration(seconds: 15)),
+        options: HttpsCallableOptions(timeout: const Duration(seconds: 30)),
       );
       _isInitialized = true;
       debugPrint('✅ CloudFunctionProvider - Initialized');

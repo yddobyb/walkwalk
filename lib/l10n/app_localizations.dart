@@ -458,6 +458,12 @@ abstract class AppLocalizations {
   /// **'Name must be 10 characters or less'**
   String get petNameLengthError;
 
+  /// Pet name invalid characters error message
+  ///
+  /// In en, this message translates to:
+  /// **'Only letters, numbers, spaces, hyphens allowed'**
+  String get petNameInvalidCharsError;
+
   /// Pet breed label
   ///
   /// In en, this message translates to:

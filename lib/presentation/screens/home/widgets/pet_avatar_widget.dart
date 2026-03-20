@@ -3,29 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../domain/entities/pet.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import 'pet_dialogue_widget.dart';
 
 class PetAvatarWidget extends ConsumerWidget {
   const PetAvatarWidget({super.key});
-
-  String _getPersonalityText(PetPersonality personality, BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    switch (personality) {
-      case PetPersonality.cheerful:
-        return l10n.personalityCheerfulDesc;
-      case PetPersonality.calm:
-        return l10n.personalityCalmDesc;
-      case PetPersonality.energetic:
-        return l10n.personalityEnergeticDesc;
-      case PetPersonality.shy:
-        return l10n.personalityShyDesc;
-      case PetPersonality.playful:
-        return l10n.personalityPlayfulDesc;
-    }
-  }
 
   /// 펫 아바타 빌드 (스티커가 있으면 이미지, 없으면 이모지)
   Widget _buildPetAvatar(String? stickerPath) {
@@ -79,7 +62,6 @@ class PetAvatarWidget extends ConsumerWidget {
         final l10n = AppLocalizations.of(context);
         final petName = pet?.name ?? l10n.defaultPetName;
         final petBreed = pet?.breed ?? l10n.defaultPetBreed;
-        final petPersonality = pet != null ? _getPersonalityText(pet.personality, context) : l10n.personalityCheerfulDesc;
 
         return Container(
           width: double.infinity,
@@ -135,7 +117,7 @@ class PetAvatarWidget extends ConsumerWidget {
 
               // 펫 설명
               Text(
-                '$petBreed • $petPersonality',
+                petBreed,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                 ),

@@ -331,6 +331,11 @@
     "description": "Pet name length error message"
   },
 
+  "petNameInvalidCharsError": "Only letters, numbers, spaces, hyphens allowed",
+  "@petNameInvalidCharsError": {
+    "description": "Pet name invalid characters error message"
+  },
+
   "petBreed": "Breed",
   "@petBreed": {
     "description": "Pet breed label"
