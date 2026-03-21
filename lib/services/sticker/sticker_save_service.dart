@@ -89,19 +89,22 @@ class StickerSaveService {
     }
   }
 
-  /// Pet 엔티티 업데이트 (스티커 경로 저장)
+  /// Pet 엔티티 업데이트 (스티커 경로 + 품종 저장)
   ///
   /// [pet] 업데이트할 Pet
   /// [stickerPath] 저장된 스티커 파일 경로
+  /// [breed] 변경할 품종 (null이면 기존 유지)
   Future<Pet?> updatePetWithSticker({
     required Pet pet,
     required String stickerPath,
+    String? breed,
   }) async {
     try {
       // Pet 엔티티 업데이트
       final updatedPet = pet.copyWith(
         stickerPath: stickerPath,
         stickerGeneratedAt: DateTime.now(),
+        breed: breed ?? pet.breed,
       );
 
       // 데이터베이스에 저장
@@ -161,11 +164,13 @@ class StickerSaveService {
   ///
   /// [pet] 업데이트할 Pet
   /// [imageBytes] 이미지 바이트
+  /// [breed] 변경할 품종 (null이면 기존 유지)
   ///
   /// Returns: 업데이트된 Pet (실패 시 null)
   Future<Pet?> saveAndApplySticker({
     required Pet pet,
     required Uint8List imageBytes,
+    String? breed,
   }) async {
     // 1. 스티커 파일 저장
     final stickerPath = await saveStickerToPet(
@@ -178,10 +183,11 @@ class StickerSaveService {
       return null;
     }
 
-    // 2. Pet 엔티티 업데이트
+    // 2. Pet 엔티티 업데이트 (품종 포함)
     final updatedPet = await updatePetWithSticker(
       pet: pet,
       stickerPath: stickerPath,
+      breed: breed,
     );
 
     return updatedPet;
@@ -210,7 +216,9 @@ class StickerApplyNotifier extends StateNotifier<AsyncValue<StickerApplyState>> 
   StickerApplyNotifier(this.ref) : super(const AsyncValue.data(StickerApplyState.idle));
 
   /// 스티커 적용
-  Future<bool> applySticker(Uint8List imageBytes) async {
+  ///
+  /// [breed] 변경할 품종 (null이면 기존 유지)
+  Future<bool> applySticker(Uint8List imageBytes, {String? breed}) async {
     state = const AsyncValue.loading();
 
     try {
@@ -227,10 +235,11 @@ class StickerApplyNotifier extends StateNotifier<AsyncValue<StickerApplyState>> 
       // 스티커 저장 서비스
       final service = ref.read(stickerSaveServiceProvider);
 
-      // 스티커 저장 및 Pet 업데이트
+      // 스티커 저장 및 Pet 업데이트 (품종 포함)
       final updatedPet = await service.saveAndApplySticker(
         pet: pet,
         imageBytes: imageBytes,
+        breed: breed,
       );
 
       if (updatedPet == null) {

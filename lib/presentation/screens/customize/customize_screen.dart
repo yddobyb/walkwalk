@@ -941,9 +941,12 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     );
   }
 
-  /// 스티커 적용 (저장 및 Pet 업데이트)
+  /// 스티커 적용 (저장 및 Pet 업데이트 + 품종 동기화)
   Future<void> _applySticker(Uint8List imageBytes) async {
-    final success = await ref.read(stickerApplyProvider.notifier).applySticker(imageBytes);
+    final success = await ref.read(stickerApplyProvider.notifier).applySticker(
+      imageBytes,
+      breed: _breed,
+    );
 
     if (!mounted) return;
 

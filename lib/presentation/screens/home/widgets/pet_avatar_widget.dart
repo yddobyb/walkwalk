@@ -10,6 +10,22 @@ import 'pet_dialogue_widget.dart';
 class PetAvatarWidget extends ConsumerWidget {
   const PetAvatarWidget({super.key});
 
+  /// 영문 breed → 현재 로케일에 맞게 변환
+  String? _localizeBreed(String? breed, AppLocalizations l10n) {
+    if (breed == null) return null;
+    final mapping = {
+      'Golden Retriever': l10n.breedGoldenRetriever,
+      'Labrador': l10n.breedLabrador,
+      'Shiba Inu': l10n.breedShiba,
+      'Pomeranian': l10n.breedPomeranian,
+      'Husky': l10n.breedHusky,
+      'Beagle': l10n.breedBeagle,
+      'Bulldog': l10n.breedBulldog,
+      'Poodle': l10n.breedPoodle,
+    };
+    return mapping[breed] ?? breed;
+  }
+
   /// 펫 아바타 빌드 (스티커가 있으면 이미지, 없으면 이모지)
   Widget _buildPetAvatar(String? stickerPath) {
     // 스티커 경로가 있으면 이미지 표시
@@ -61,7 +77,7 @@ class PetAvatarWidget extends ConsumerWidget {
       data: (pet) {
         final l10n = AppLocalizations.of(context);
         final petName = pet?.name ?? l10n.defaultPetName;
-        final petBreed = pet?.breed ?? l10n.defaultPetBreed;
+        final petBreed = _localizeBreed(pet?.breed, l10n) ?? l10n.defaultPetBreed;
 
         return Container(
           width: double.infinity,

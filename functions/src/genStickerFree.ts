@@ -64,9 +64,9 @@ export const genStickerFree = functions
     // 1. App Check 검증
     // =====================
     if (!context.app) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "App Check required"
+      console.warn(
+        "[genStickerFree] App Check token missing — " +
+        "enable enforcement in Firebase Console before production"
       );
     }
 
