@@ -693,10 +693,17 @@ class _AccountSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
+    // Firebase 미초기화 환경(테스트 등)에서 stream 생성 자체가 실패할 수 있음
+    Stream? authStream;
+    try {
+      authStream = AuthService.authStateChanges;
+    } catch (_) {
+      authStream = null;
+    }
+
     return StreamBuilder(
-      stream: AuthService.authStateChanges,
+      stream: authStream,
       builder: (context, snapshot) {
-        // Firebase가 초기화되지 않은 환경(테스트 등)에서 안전하게 처리
         bool isAnonymous;
         String providerName;
         String? email;
