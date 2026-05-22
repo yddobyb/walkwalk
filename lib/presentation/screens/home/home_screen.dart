@@ -93,19 +93,6 @@ class _HomeTabContent extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('WalkDog'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: 알림 화면으로 이동
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context).notificationComingSoon),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Stack(

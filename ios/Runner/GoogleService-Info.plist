@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>701057110809-92r6u0o5ggl5emjlkaa54c5tivm1rvg5.apps.googleusercontent.com</string>
+	<string>701057110809-gnqvsf90nr6mid5u9f2qo6fgijfc7j17.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.701057110809-92r6u0o5ggl5emjlkaa54c5tivm1rvg5</string>
+	<string>com.googleusercontent.apps.701057110809-gnqvsf90nr6mid5u9f2qo6fgijfc7j17</string>
 	<key>API_KEY</key>
 	<string>AIzaSyClLFoC3Zcc7AmfNCXpGsxs6FiAottlnwM</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.walkdogbin.walkDog</string>
+	<string>com.walkdog.walkDog</string>
 	<key>PROJECT_ID</key>
 	<string>walkwalkddog</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:701057110809:ios:b021e3f705864e189a2b88</string>
+	<string>1:701057110809:ios:ece40fa68f5eac209a2b88</string>
 </dict>
 </plist>

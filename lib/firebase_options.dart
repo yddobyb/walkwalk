@@ -24,13 +24,12 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
-      case TargetPlatform.macOS:
-        return macos;
       case TargetPlatform.windows:
         return windows;
+      case TargetPlatform.macOS:
       case TargetPlatform.linux:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
+          'DefaultFirebaseOptions have not been configured for this platform - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
@@ -60,16 +59,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyClLFoC3Zcc7AmfNCXpGsxs6FiAottlnwM',
-    appId: '1:701057110809:ios:b021e3f705864e189a2b88',
-    messagingSenderId: '701057110809',
-    projectId: 'walkwalkddog',
-    storageBucket: 'walkwalkddog.firebasestorage.app',
-    iosBundleId: 'com.walkdogbin.walkDog',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyClLFoC3Zcc7AmfNCXpGsxs6FiAottlnwM',
-    appId: '1:701057110809:ios:921556afe387d6b99a2b88',
+    appId: '1:701057110809:ios:ece40fa68f5eac209a2b88',
     messagingSenderId: '701057110809',
     projectId: 'walkwalkddog',
     storageBucket: 'walkwalkddog.firebasestorage.app',
