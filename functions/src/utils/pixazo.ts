@@ -2,8 +2,13 @@
  * Pixazo Flux Schnell API Wrapper
  * 무료 사용자용 1차 이미지 생성 API
  *
- * 가격: $0.0012/이미지
+ * 가격: $0/이미지 (FLUX.1 Schnell은 모든 해상도 무료, Pixazo 공식 확인 2026-05)
  * 테스트 결과: 10.51초 응답시간
+ *
+ * ⚠️ 주의:
+ * - 월간/요청 한도가 공시되지 않음
+ * - Pixazo가 향후 한도를 도입할 수 있음
+ * - 출시 후 Pixazo 대시보드에서 한도/사용량 주기적으로 확인 권장
  */
 
 import axios from "axios";

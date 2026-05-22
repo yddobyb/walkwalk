@@ -10,8 +10,9 @@ import * as admin from "firebase-admin";
 import {ImageProvider} from "./fallbackManager";
 
 // 비용 테이블 (USD per image)
+// ⚠️ Pixazo는 FLUX.1 Schnell이 현재 무료. 향후 유료화 시 업데이트 필요
 const COST_PER_IMAGE: Record<string, number> = {
-  pixazo: 0.0012,
+  pixazo: 0,
   openai: 0.005,
   gemini: 0.039,
 };

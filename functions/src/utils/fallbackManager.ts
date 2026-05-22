@@ -3,8 +3,12 @@
  * 2단계 폴백 시스템: Pixazo → OpenAI
  *
  * 순서:
- * 1차: Pixazo ($0.0012) - 최저가, 베타
+ * 1차: Pixazo ($0, FLUX.1 Schnell 무료)
  * 2차: OpenAI ($0.005) - 가장 안정적
+ *
+ * ⚠️ 주의:
+ * - Pixazo는 월간/요청 한도가 공시되지 않음
+ * - 향후 한도를 도입할 수 있으므로 대시보드에서 주기적으로 사용량 확인 권장
  */
 
 import {generateImageWithPixazo, PixazoRequest} from "./pixazo";
@@ -149,7 +153,7 @@ export async function generateImageWithFallback(
  */
 export function calculateCost(provider: ImageProvider): number {
   const costs: Record<ImageProvider, number> = {
-    pixazo: 0.0012,
+    pixazo: 0,
     openai: 0.005,
     none: 0,
   };
