@@ -314,6 +314,24 @@ abstract class AppLocalizations {
   /// **'Data handling and privacy protection'**
   String get privacyPolicyDescription;
 
+  /// Terms of service label
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// Terms of service description
+  ///
+  /// In en, this message translates to:
+  /// **'Service usage terms and policies'**
+  String get termsOfServiceDescription;
+
+  /// External link open failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open link'**
+  String get couldNotOpenLink;
+
   /// Coming soon message
   ///
   /// In en, this message translates to:

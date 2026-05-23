@@ -123,6 +123,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicyDescription => 'Data handling and privacy protection';
 
   @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get termsOfServiceDescription => 'Service usage terms and policies';
+
+  @override
+  String get couldNotOpenLink => 'Could not open link';
+
+  @override
   String get comingSoon => 'Coming soon!';
 
   @override

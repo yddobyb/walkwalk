@@ -1,6 +1,7 @@
 // lib/presentation/screens/settings/settings_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../services/settings/settings_service.dart';
 import '../../../services/mission/mission_service.dart';
@@ -12,7 +13,19 @@ import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
 import '../subscription/paywall_screen.dart';
 import 'help_screen.dart';
-import 'privacy_policy_screen.dart';
+
+const _privacyPolicyUrl = 'https://walkwalkddog.web.app/privacy-policy';
+const _termsOfServiceUrl = 'https://walkwalkddog.web.app/terms-of-service';
+
+Future<void> _openExternalUrl(BuildContext context, String url) async {
+  final uri = Uri.parse(url);
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).couldNotOpenLink)),
+    );
+  }
+}
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -205,14 +218,15 @@ class SettingsScreen extends ConsumerWidget {
                 icon: Icons.privacy_tip,
                 title: AppLocalizations.of(context).privacyPolicy,
                 subtitle: AppLocalizations.of(context).privacyPolicyDescription,
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const PrivacyPolicyScreen(),
-                    ),
-                  );
-                },
+                trailing: const Icon(Icons.open_in_new, size: 18),
+                onTap: () => _openExternalUrl(context, _privacyPolicyUrl),
+              ),
+              _SettingsTile(
+                icon: Icons.description_outlined,
+                title: AppLocalizations.of(context).termsOfService,
+                subtitle: AppLocalizations.of(context).termsOfServiceDescription,
+                trailing: const Icon(Icons.open_in_new, size: 18),
+                onTap: () => _openExternalUrl(context, _termsOfServiceUrl),
               ),
             ],
           ),

@@ -193,6 +193,21 @@
     "description": "개인정보 처리방침 설명"
   },
 
+  "termsOfService": "이용약관",
+  "@termsOfService": {
+    "description": "이용약관 레이블"
+  },
+
+  "termsOfServiceDescription": "서비스 이용 조건 및 정책",
+  "@termsOfServiceDescription": {
+    "description": "이용약관 설명"
+  },
+
+  "couldNotOpenLink": "링크를 열 수 없습니다",
+  "@couldNotOpenLink": {
+    "description": "외부 링크 열기 실패 메시지"
+  },
+
   "comingSoon": "곧 구현될 예정입니다!",
   "@comingSoon": {
     "description": "곧 구현될 예정 메시지"

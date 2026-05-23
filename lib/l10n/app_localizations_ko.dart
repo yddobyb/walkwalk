@@ -121,6 +121,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get privacyPolicyDescription => '데이터 처리 및 개인정보 보호';
 
   @override
+  String get termsOfService => '이용약관';
+
+  @override
+  String get termsOfServiceDescription => '서비스 이용 조건 및 정책';
+
+  @override
+  String get couldNotOpenLink => '링크를 열 수 없습니다';
+
+  @override
   String get comingSoon => '곧 구현될 예정입니다!';
 
   @override

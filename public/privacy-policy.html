@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy | WalkDog</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+    line-height: 1.65;
+    color: #1f2937;
+    background: #fff;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .logo { font-weight: 700; font-size: 18px; color: #ea580c; }
+  .lang-toggle button {
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 13px;
+  }
+  .lang-toggle button.active {
+    background: #ea580c;
+    color: #fff;
+    border-color: #ea580c;
+  }
+  h1 { font-size: 28px; margin-top: 8px; }
+  h2 { font-size: 20px; margin-top: 32px; color: #111827; }
+  h3 { font-size: 16px; margin-top: 18px; }
+  p, li { color: #374151; }
+  ul { padding-left: 22px; }
+  code, .mono {
+    background: #f3f4f6;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 0.92em;
+  }
+  .meta { color: #6b7280; font-size: 13px; }
+  footer { margin-top: 56px; color: #9ca3af; font-size: 13px; text-align: center; }
+  article[hidden] { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🐕 WalkDog</div>
+  <div class="lang-toggle">
+    <button id="btn-ko" onclick="setLang('ko')">한국어</button>
+    <button id="btn-en" onclick="setLang('en')">English</button>
+  </div>
+</header>
+
+<article id="article-ko" lang="ko">
+  <h1>개인정보 처리방침</h1>
+  <p class="meta">최종 업데이트: 2026-05-23</p>
+
+  <p>WalkDog Team(이하 “회사”)은 이용자의 개인정보를 중요하게 생각하며, 관련 법령을 준수하기 위해 노력합니다. 본 방침은 WalkDog(이하 “서비스”)이 어떤 정보를 수집·이용하며 어떻게 보호하는지 설명합니다.</p>
+
+  <h2>1. 수집하는 개인정보</h2>
+  <h3>1-1. 계정 정보</h3>
+  <ul>
+    <li>이메일 주소, 이름(표시명) — Google 또는 Apple 소셜 로그인을 통해 제공받음</li>
+    <li>고유 사용자 식별자(UID) — Firebase Authentication이 자동 생성</li>
+  </ul>
+  <h3>1-2. 서비스 이용 정보</h3>
+  <ul>
+    <li>펫 프로필(이름, 종, 색상 등) — 이용자가 직접 입력</li>
+    <li>AI 생성 이미지(스티커), AI 대화 기록</li>
+    <li>일일 사용량(이미지 생성 횟수, AI 대화 횟수)</li>
+    <li>구독 상태(프리미엄 여부, 만료일) — RevenueCat 연동</li>
+  </ul>
+  <h3>1-3. 디바이스 및 사용 통계</h3>
+  <ul>
+    <li>디바이스 식별자, OS 버전, 앱 버전</li>
+    <li>화면 조회, 기능 사용 빈도(Firebase Analytics)</li>
+    <li>오류 및 크래시 로그</li>
+  </ul>
+  <h3>1-4. 단말기에만 저장되는 정보(서버 전송 안 함)</h3>
+  <ul>
+    <li>걸음 수(Apple Health, Android Health Connect) — 로컬 처리 전용</li>
+    <li>위치 정보(실외 산책 감지 시) — 로컬 처리 전용, 위치 좌표 외부 전송 없음</li>
+  </ul>
+
+  <h2>2. 수집 목적</h2>
+  <ul>
+    <li>회원 식별 및 로그인 제공</li>
+    <li>펫 케어, AI 대화, 이미지 생성 등 핵심 기능 제공</li>
+    <li>일일 사용량 관리 및 무료/프리미엄 정책 적용</li>
+    <li>서비스 개선을 위한 통계 분석</li>
+    <li>오류 진단 및 보안 사고 대응</li>
+  </ul>
+
+  <h2>3. 제3자 제공 및 처리위탁</h2>
+  <p>회사는 서비스 제공을 위해 다음 제3자에게 일부 데이터를 전송하거나 처리를 위탁합니다.</p>
+  <ul>
+    <li><strong>Google Firebase</strong>(Authentication, Firestore, Functions, Analytics, App Check, Remote Config) — 인증, 데이터 저장, 통계</li>
+    <li><strong>OpenAI</strong> — 이미지 생성(폴백) 요청 처리</li>
+    <li><strong>Google Gemini</strong> — 이미지 생성(프리미엄) 및 AI 대화(폴백)</li>
+    <li><strong>Pixazo (FLUX.1 Schnell)</strong> — 이미지 생성 1차 요청 처리</li>
+    <li><strong>OpenRouter, Groq</strong> — AI 대화 요청 처리</li>
+    <li><strong>RevenueCat</strong> — 구독 상태 동기화</li>
+    <li><strong>Apple, Google</strong> — 소셜 로그인 인증</li>
+  </ul>
+  <p class="meta">위 제3자는 자체 개인정보 처리방침에 따라 데이터를 처리합니다.</p>
+
+  <h2>4. 보관 기간</h2>
+  <ul>
+    <li>계정 정보 및 펫 데이터: 회원 탈퇴 시까지</li>
+    <li>탈퇴 후 30일 이내 모든 개인정보 영구 삭제</li>
+    <li>법령에 따른 보관 의무가 있는 경우 해당 기간까지 별도 보관</li>
+  </ul>
+
+  <h2>5. 이용자의 권리</h2>
+  <p>이용자는 언제든지 다음 권리를 행사할 수 있습니다.</p>
+  <ul>
+    <li>개인정보 열람, 정정, 삭제 요청</li>
+    <li>회원 탈퇴(앱 설정 → 계정 → 탈퇴)</li>
+    <li>처리 정지 요청</li>
+  </ul>
+  <p>권리 행사는 앱 내 설정 또는 아래 연락처를 통해 가능합니다.</p>
+
+  <h2>6. 보안 조치</h2>
+  <ul>
+    <li>모든 통신은 HTTPS/TLS로 암호화</li>
+    <li>API 키 및 민감 정보는 Google Cloud Secret Manager에 암호화 저장</li>
+    <li>Firebase App Check를 통한 비인가 클라이언트 차단</li>
+    <li>최소 권한 원칙(IAM)에 따른 접근 통제</li>
+  </ul>
+
+  <h2>7. 어린이 개인정보</h2>
+  <p>본 서비스는 만 13세 미만(또는 국가별 법정 연령) 어린이의 개인정보를 의도적으로 수집하지 않습니다. 어린이의 개인정보가 수집된 사실이 확인되면 즉시 삭제합니다.</p>
+
+  <h2>8. 방침 변경</h2>
+  <p>본 방침은 법령 또는 서비스 변경에 따라 개정될 수 있으며, 변경 시 앱 및 본 페이지에서 공지합니다.</p>
+
+  <h2>9. 연락처</h2>
+  <p>개인정보 관련 문의는 아래로 연락 주시기 바랍니다.</p>
+  <ul>
+    <li>운영자: WalkDog Team</li>
+    <li>이메일: <span class="mono">gmkid6841@gmail.com</span></li>
+  </ul>
+</article>
+
+<article id="article-en" lang="en" hidden>
+  <h1>Privacy Policy</h1>
+  <p class="meta">Last updated: 2026-05-23</p>
+
+  <p>WalkDog Team (“we”, “us”) values your privacy. This Privacy Policy explains what information the WalkDog mobile app (“Service”) collects, how we use it, and how we protect it.</p>
+
+  <h2>1. Information We Collect</h2>
+  <h3>1-1. Account Information</h3>
+  <ul>
+    <li>Email address and display name — provided by Google or Apple Sign-In</li>
+    <li>User Identifier (UID) — auto-generated by Firebase Authentication</li>
+  </ul>
+  <h3>1-2. Service Usage Information</h3>
+  <ul>
+    <li>Pet profile (name, breed, color, etc.) — entered by you</li>
+    <li>AI-generated images (stickers) and AI chat history</li>
+    <li>Daily quota usage (image generation count, AI chat count)</li>
+    <li>Subscription status (premium tier, expiration) — via RevenueCat</li>
+  </ul>
+  <h3>1-3. Device and Analytics</h3>
+  <ul>
+    <li>Device identifier, OS version, app version</li>
+    <li>Screen views and feature usage frequency (Firebase Analytics)</li>
+    <li>Error and crash logs</li>
+  </ul>
+  <h3>1-4. Stored Locally Only (Never Sent to Servers)</h3>
+  <ul>
+    <li>Step count (Apple Health, Android Health Connect) — processed locally only</li>
+    <li>Location data (during outdoor walk tracking) — processed locally; coordinates are not transmitted externally</li>
+  </ul>
+
+  <h2>2. Purpose of Collection</h2>
+  <ul>
+    <li>User identification and authentication</li>
+    <li>Providing core features such as pet care, AI chat, and image generation</li>
+    <li>Enforcing daily quotas and free/premium policies</li>
+    <li>Statistical analysis to improve the Service</li>
+    <li>Diagnosing errors and responding to security incidents</li>
+  </ul>
+
+  <h2>3. Third-Party Sharing and Processing</h2>
+  <p>We share or delegate processing of certain data with the following third parties to deliver the Service:</p>
+  <ul>
+    <li><strong>Google Firebase</strong> (Authentication, Firestore, Functions, Analytics, App Check, Remote Config) — authentication, data storage, analytics</li>
+    <li><strong>OpenAI</strong> — image generation (fallback)</li>
+    <li><strong>Google Gemini</strong> — premium image generation and AI chat fallback</li>
+    <li><strong>Pixazo (FLUX.1 Schnell)</strong> — primary image generation</li>
+    <li><strong>OpenRouter, Groq</strong> — AI chat processing</li>
+    <li><strong>RevenueCat</strong> — subscription state sync</li>
+    <li><strong>Apple, Google</strong> — social login authentication</li>
+  </ul>
+  <p class="meta">Each third party processes data according to its own privacy policy.</p>
+
+  <h2>4. Retention Period</h2>
+  <ul>
+    <li>Account information and pet data: kept until account deletion</li>
+    <li>All personal data is permanently deleted within 30 days after account deletion</li>
+    <li>Data legally required to be retained is kept for the period required by applicable law</li>
+  </ul>
+
+  <h2>5. Your Rights</h2>
+  <p>You may exercise the following rights at any time:</p>
+  <ul>
+    <li>Request access, correction, or deletion of your personal data</li>
+    <li>Delete your account (App Settings → Account → Delete Account)</li>
+    <li>Request processing restriction</li>
+  </ul>
+  <p>You may exercise these rights via the in-app settings or the contact information below.</p>
+
+  <h2>6. Security Measures</h2>
+  <ul>
+    <li>All communication is encrypted via HTTPS/TLS</li>
+    <li>API keys and sensitive credentials are stored encrypted in Google Cloud Secret Manager</li>
+    <li>Firebase App Check blocks unauthorized clients</li>
+    <li>Least-privilege access control via IAM</li>
+  </ul>
+
+  <h2>7. Children’s Privacy</h2>
+  <p>The Service does not knowingly collect personal data from children under 13 (or the applicable age in your jurisdiction). If we discover that we have collected such data, we will delete it promptly.</p>
+
+  <h2>8. Changes to This Policy</h2>
+  <p>This policy may change in response to legal or service updates. We will announce changes in the app and on this page.</p>
+
+  <h2>9. Contact</h2>
+  <p>For privacy-related inquiries, please contact:</p>
+  <ul>
+    <li>Operator: WalkDog Team</li>
+    <li>Email: <span class="mono">gmkid6841@gmail.com</span></li>
+  </ul>
+</article>
+
+<footer>© 2026 WalkDog Team</footer>
+
+<script>
+  function setLang(lang) {
+    const ko = document.getElementById('article-ko');
+    const en = document.getElementById('article-en');
+    const btnKo = document.getElementById('btn-ko');
+    const btnEn = document.getElementById('btn-en');
+    if (lang === 'ko') {
+      ko.hidden = false; en.hidden = true;
+      btnKo.classList.add('active'); btnEn.classList.remove('active');
+      document.documentElement.lang = 'ko';
+    } else {
+      ko.hidden = true; en.hidden = false;
+      btnEn.classList.add('active'); btnKo.classList.remove('active');
+      document.documentElement.lang = 'en';
+    }
+  }
+  // Initial language from URL ?lang= or browser
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  const browserKo = navigator.language && navigator.language.toLowerCase().startsWith('ko');
+  setLang(urlLang === 'en' ? 'en' : urlLang === 'ko' ? 'ko' : (browserKo ? 'ko' : 'en'));
+</script>
+</body>
+</html>

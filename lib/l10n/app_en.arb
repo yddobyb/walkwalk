@@ -193,6 +193,21 @@
     "description": "Privacy policy description"
   },
 
+  "termsOfService": "Terms of Service",
+  "@termsOfService": {
+    "description": "Terms of service label"
+  },
+
+  "termsOfServiceDescription": "Service usage terms and policies",
+  "@termsOfServiceDescription": {
+    "description": "Terms of service description"
+  },
+
+  "couldNotOpenLink": "Could not open link",
+  "@couldNotOpenLink": {
+    "description": "External link open failure message"
+  },
+
   "comingSoon": "Coming soon!",
   "@comingSoon": {
     "description": "Coming soon message"
