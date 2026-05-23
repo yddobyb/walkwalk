@@ -61,6 +61,7 @@ interface GeminiImageData {
 
 export const genSticker = functions
   .region("us-central1")
+  .runWith({secrets: ["GEMINI_API_KEY"]})
   .https.onCall(async (data: GenStickerRequest, context) => {
     console.log("🎨 genSticker called");
 
@@ -205,8 +206,7 @@ function generatePrompt(breed: string, color: string, accessory: string, style: 
 
 // Gemini 2.5 Flash Image API 호출
 async function callGeminiAPI(prompt: string, seed?: number): Promise<GeminiImageData> {
-  const config = functions.config();
-  const apiKey = config.gemini.api_key;
+  const apiKey = process.env.GEMINI_API_KEY ?? "";
 
   console.log("🔑 API key exists:", !!apiKey);
 

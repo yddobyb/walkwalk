@@ -55,6 +55,9 @@ interface ChatUsageDoc {
 
 export const chatWithPet = functions
   .region("us-central1")
+  .runWith({
+    secrets: ["OPENROUTER_API_KEY", "GROQ_API_KEY", "GEMINI_API_KEY"],
+  })
   .https.onCall(async (data: ChatRequest, context) => {
     // 1. App Check (Firebase Console에서 enforcement 설정)
     if (!context.app) {
@@ -122,11 +125,10 @@ export const chatWithPet = functions
       Math.max(data.temperature ?? 0.7, 0), 1.5
     );
 
-    // 5. API 키 로드 (서버 사이드 전용)
-    const config = functions.config();
-    const openrouterKey = config.openrouter?.api_key;
-    const groqKey = config.groq?.api_key;
-    const geminiKey = config.gemini?.api_key;
+    // 5. API 키 로드 (Secret Manager)
+    const openrouterKey = process.env.OPENROUTER_API_KEY ?? "";
+    const groqKey = process.env.GROQ_API_KEY ?? "";
+    const geminiKey = process.env.GEMINI_API_KEY ?? "";
 
     // 6. Provider 순회 (폴백)
     const providers = [

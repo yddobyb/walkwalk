@@ -59,6 +59,7 @@ const FREE_USER_DAILY_QUOTA = 10;
 
 export const genStickerFree = functions
   .region("us-central1")
+  .runWith({secrets: ["PIXAZO_API_KEY", "OPENAI_API_KEY"]})
   .https.onCall(async (data: GenStickerFreeRequest, context) => {
     console.log("🎨 [genStickerFree] Called");
 
@@ -130,11 +131,10 @@ export const genStickerFree = functions
     }
 
     // =====================
-    // 4. API 키 로드
+    // 4. API 키 로드 (Secret Manager)
     // =====================
-    const config = functions.config();
-    const pixazoApiKey = config.pixazo?.api_key;
-    const openaiApiKey = config.openai?.api_key;
+    const pixazoApiKey = process.env.PIXAZO_API_KEY;
+    const openaiApiKey = process.env.OPENAI_API_KEY;
 
     if (!pixazoApiKey) {
       console.error("❌ [genStickerFree] Pixazo API key not configured");
