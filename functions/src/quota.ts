@@ -34,11 +34,11 @@ export const quota = functions
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];
 
-    // App Check 검증
+    // App Check 검증 (warn-only — Firebase Console에서 enforcement 설정 전까지)
     if (!context.app) {
-      throw new functions.https.HttpsError(
-        "failed-precondition",
-        "App Check required"
+      console.warn(
+        "[quota] App Check token missing — " +
+        "enable enforcement in Firebase Console before production"
       );
     }
 

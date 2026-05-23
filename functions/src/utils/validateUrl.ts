@@ -15,6 +15,12 @@ const ALLOWED_HOSTS = [
   "dalleproduse.blob.core.windows.net",
 ];
 
+// 정규식 기반 허용 호스트 패턴
+// Pixazo가 이미지를 Cloudflare R2 public bucket(pub-{32hex}.r2.dev)으로 서빙함
+const ALLOWED_HOST_PATTERNS = [
+  /^pub-[a-f0-9]{32}\.r2\.dev$/,
+];
+
 // Private/내부 IP 대역 (CIDR)
 const PRIVATE_IP_PATTERNS = [
   /^127\./,
@@ -50,12 +56,13 @@ export function validateImageUrl(
     return `Invalid protocol: ${parsed.protocol}`;
   }
 
-  // 3. 도메인 화이트리스트
+  // 3. 도메인 화이트리스트 (정적 + 패턴)
   const host = parsed.hostname.toLowerCase();
-  const allowed = ALLOWED_HOSTS.some(
+  const allowedByHost = ALLOWED_HOSTS.some(
     (h) => host === h || host.endsWith(`.${h}`)
   );
-  if (!allowed) {
+  const allowedByPattern = ALLOWED_HOST_PATTERNS.some((p) => p.test(host));
+  if (!allowedByHost && !allowedByPattern) {
     return `Host not allowed: ${host}`;
   }
 
