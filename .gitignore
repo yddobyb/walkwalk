@@ -46,6 +46,8 @@ app.*.map.json
 /android/app/release
 
 /.claude/
+docs/
+claude.md
 
 # API key test scripts (hardcoded keys)
 scripts/api-test/
