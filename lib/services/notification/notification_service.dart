@@ -149,7 +149,7 @@ class NotificationService {
       );
 
       await _plugin.initialize(
-        initSettings,
+        settings: initSettings,
         onDidReceiveNotificationResponse:
             _onNotificationTapped,
       );
@@ -514,10 +514,10 @@ class NotificationService {
     );
 
     await _plugin.show(
-      NotificationIds.lowHappiness,
-      title,
-      body,
-      NotificationDetails(
+      id: NotificationIds.lowHappiness,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
         android: androidDetails,
         iOS: iosDetails,
       ),
@@ -538,7 +538,7 @@ class NotificationService {
   /// 특정 알림 취소
   Future<void> _cancelById(int id) async {
     if (!_isInitialized) return;
-    await _plugin.cancel(id);
+    await _plugin.cancel(id: id);
   }
 
   /// one-time 알림 스케줄 (matchDateTimeComponents 없음)
@@ -562,11 +562,11 @@ class NotificationService {
     );
 
     await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledTime,
-      NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduledTime,
+      notificationDetails: NotificationDetails(
         android: androidDetails,
         iOS: iosDetails,
       ),
@@ -604,11 +604,11 @@ class NotificationService {
     );
 
     await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledTime,
-      NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduledTime,
+      notificationDetails: NotificationDetails(
         android: androidDetails,
         iOS: iosDetails,
       ),

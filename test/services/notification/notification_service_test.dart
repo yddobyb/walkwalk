@@ -27,8 +27,8 @@ class MockNotificationsPlugin
   bool cancelAllCalled = false;
 
   @override
-  Future<bool?> initialize(
-    InitializationSettings initializationSettings, {
+  Future<bool?> initialize({
+    required InitializationSettings settings,
     DidReceiveNotificationResponseCallback?
         onDidReceiveNotificationResponse,
     DidReceiveBackgroundNotificationResponseCallback?
@@ -38,14 +38,13 @@ class MockNotificationsPlugin
   }
 
   @override
-  Future<void> zonedSchedule(
-    int id,
+  Future<void> zonedSchedule({
+    required int id,
     String? title,
     String? body,
-    tz.TZDateTime scheduledDate,
-    NotificationDetails notificationDetails, {
-    AndroidScheduleMode androidScheduleMode =
-        AndroidScheduleMode.exact,
+    required tz.TZDateTime scheduledDate,
+    required NotificationDetails notificationDetails,
+    required AndroidScheduleMode androidScheduleMode,
     DateTimeComponents? matchDateTimeComponents,
     String? payload,
   }) async {
@@ -60,7 +59,7 @@ class MockNotificationsPlugin
   }
 
   @override
-  Future<void> cancel(int id, {String? tag}) async {
+  Future<void> cancel({required int id, String? tag}) async {
     cancelledIds.add(id);
   }
 
