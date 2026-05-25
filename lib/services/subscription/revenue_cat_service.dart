@@ -129,13 +129,14 @@ class RevenueCatService {
     }
 
     try {
-      final info = await Purchases.purchaseStoreProduct(product);
-      final active = info.entitlements.active.containsKey(
+      final result = await Purchases.purchaseStoreProduct(product);
+      final customerInfo = result.customerInfo;
+      final active = customerInfo.entitlements.active.containsKey(
         _entitlementId,
       );
 
       if (active) {
-        await _syncSubscriptionToFirestore(info);
+        await _syncSubscriptionToFirestore(customerInfo);
         return const PurchaseResult(success: true);
       }
 
