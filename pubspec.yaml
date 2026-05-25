@@ -84,7 +84,7 @@ dependencies:
   cloud_firestore: ^5.5.0
 
   # Network (Week 3 - Optimization)
-  connectivity_plus: ^6.1.2
+  connectivity_plus: ^7.0.0
 
   # Local Notifications (Week 5.5 - Push Notifications)
   flutter_local_notifications: ^19.0.0
