@@ -1,6 +1,6 @@
 // lib/services/sensors/pedometer_service.dart
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:health/health.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -195,6 +195,13 @@ class PedometerService {
 
   /// 걸음수 가져와서 스트림에 emit
   Future<void> _fetchAndEmitStepCount() async {
+    // Android 14+ Health Connect는 백그라운드 읽기에 별도 권한
+    // (READ_HEALTH_DATA_IN_BACKGROUND)이 필요. 포그라운드(resumed)가 아닐 때는
+    // polling을 건너뛰어 SecurityException 로그를 방지한다.
+    if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+      return;
+    }
+
     try {
       final steps = await getTodaySteps();
 
