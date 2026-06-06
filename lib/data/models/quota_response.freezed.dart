@@ -220,7 +220,7 @@ mixin _$QuotaData {
   /// 등급 표시 이름 (무료, 프리미엄)
   String get tierDisplayName => throw _privateConstructorUsedError;
 
-  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  /// 사용 중인 이미지 생성 provider (cloudflare, gemini)
   String get provider => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -391,7 +391,7 @@ class _$QuotaDataImpl implements _QuotaData {
       @JsonKey(name: 'nextResetIn') required this.nextResetIn,
       this.tier = 'free',
       this.tierDisplayName = '무료',
-      this.provider = 'pixazo'});
+      this.provider = 'cloudflare'});
 
   factory _$QuotaDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuotaDataImplFromJson(json);
@@ -428,7 +428,7 @@ class _$QuotaDataImpl implements _QuotaData {
   @JsonKey()
   final String tierDisplayName;
 
-  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  /// 사용 중인 이미지 생성 provider (cloudflare, gemini)
   @override
   @JsonKey()
   final String provider;
@@ -521,7 +521,7 @@ abstract class _QuotaData implements QuotaData {
   String get tierDisplayName;
   @override
 
-  /// 사용 중인 이미지 생성 provider (pixazo, gemini)
+  /// 사용 중인 이미지 생성 provider (cloudflare, gemini)
   String get provider;
   @override
   @JsonKey(ignore: true)

@@ -12,7 +12,7 @@ const TIER_CONFIG: Record<UserTier, {
   free: {
     dailyQuota: 10,
     collection: "freeImageUsage",
-    provider: "pixazo",
+    provider: "cloudflare",
   },
   premium: {
     dailyQuota: 50,

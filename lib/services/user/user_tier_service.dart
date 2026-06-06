@@ -6,7 +6,7 @@ import '../subscription/revenue_cat_service.dart';
 
 /// 사용자 등급
 enum UserTier {
-  /// 무료 사용자 - genStickerFree 사용 (Pixazo -> OpenAI 폴백)
+  /// 무료 사용자 - genStickerFree 사용 (Cloudflare -> OpenAI 폴백)
   free,
 
   /// 프리미엄 사용자 - genSticker 사용 (Gemini)

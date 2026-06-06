@@ -7,7 +7,7 @@ admin.initializeApp();
 // 프리미엄 사용자용 (Gemini API)
 export {genSticker} from "./genSticker";
 
-// 무료 사용자용 (Pixazo → OpenAI 폴백)
+// 무료 사용자용 (Cloudflare → OpenAI 폴백)
 export {genStickerFree} from "./genStickerFree";
 
 // 할당량 조회

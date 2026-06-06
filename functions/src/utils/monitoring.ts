@@ -10,9 +10,9 @@ import * as admin from "firebase-admin";
 import {ImageProvider} from "./fallbackManager";
 
 // 비용 테이블 (USD per image)
-// ⚠️ Pixazo는 FLUX.1 Schnell이 현재 무료. 향후 유료화 시 업데이트 필요
+// ⚠️ Cloudflare FLUX.1 Schnell은 무료 한도 내 $0 (초과 시 ~$0.0006/장)
 const COST_PER_IMAGE: Record<string, number> = {
-  pixazo: 0,
+  cloudflare: 0,
   openai: 0.005,
   gemini: 0.039,
 };
@@ -52,8 +52,8 @@ export async function recordApiCall(event: MonitoringEvent): Promise<void> {
         totalCalls: admin.firestore.FieldValue.increment(1),
         successCount: admin.firestore.FieldValue.increment(event.success ? 1 : 0),
         failCount: admin.firestore.FieldValue.increment(event.success ? 0 : 1),
-        pixazoCount: admin.firestore.FieldValue.increment(
-          event.provider === "pixazo" && event.success ? 1 : 0
+        cloudflareCount: admin.firestore.FieldValue.increment(
+          event.provider === "cloudflare" && event.success ? 1 : 0
         ),
         openaiCount: admin.firestore.FieldValue.increment(
           event.provider === "openai" && event.success ? 1 : 0
@@ -143,8 +143,8 @@ export async function getDailyStats(date?: string): Promise<Record<string, unkno
       ...data,
       successRate: totalCalls > 0 ? ((successCount / totalCalls) * 100).toFixed(1) + "%" : "N/A",
       avgResponseTime: totalCalls > 0 ? Math.round(totalDuration / totalCalls) + "ms" : "N/A",
-      pixazoRate: totalCalls > 0 ?
-        (((data.pixazoCount || 0) / successCount) * 100).toFixed(1) + "%" :
+      cloudflareRate: totalCalls > 0 ?
+        (((data.cloudflareCount || 0) / successCount) * 100).toFixed(1) + "%" :
         "N/A",
       fallbackRate: totalCalls > 0 ?
         (((data.fallbackCount || 0) / totalCalls) * 100).toFixed(1) + "%" :

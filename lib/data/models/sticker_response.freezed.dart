@@ -217,7 +217,7 @@ mixin _$StickerData {
   /// 메타데이터 (cached: false일 때만)
   StickerMetadata? get metadata =>
       throw _privateConstructorUsedError; // === genStickerFree 추가 필드 ===
-  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  /// 사용된 provider (cloudflare, openai) - genStickerFree 전용
   String? get provider => throw _privateConstructorUsedError;
 
   /// Provider 표시 이름 - genStickerFree 전용
@@ -485,7 +485,7 @@ class _$StickerDataImpl implements _StickerData {
   @override
   final StickerMetadata? metadata;
 // === genStickerFree 추가 필드 ===
-  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  /// 사용된 provider (cloudflare, openai) - genStickerFree 전용
   @override
   final String? provider;
 
@@ -608,7 +608,7 @@ abstract class _StickerData implements StickerData {
   /// 메타데이터 (cached: false일 때만)
   StickerMetadata? get metadata;
   @override // === genStickerFree 추가 필드 ===
-  /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+  /// 사용된 provider (cloudflare, openai) - genStickerFree 전용
   String? get provider;
   @override
 
@@ -982,7 +982,7 @@ ProviderAttempt _$ProviderAttemptFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProviderAttempt {
-  /// Provider 이름 (pixazo, openai)
+  /// Provider 이름 (cloudflare, openai)
   String get provider => throw _privateConstructorUsedError;
 
   /// 성공 여부
@@ -1108,7 +1108,7 @@ class _$ProviderAttemptImpl implements _ProviderAttempt {
   factory _$ProviderAttemptImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProviderAttemptImplFromJson(json);
 
-  /// Provider 이름 (pixazo, openai)
+  /// Provider 이름 (cloudflare, openai)
   @override
   final String provider;
 
@@ -1174,7 +1174,7 @@ abstract class _ProviderAttempt implements ProviderAttempt {
 
   @override
 
-  /// Provider 이름 (pixazo, openai)
+  /// Provider 이름 (cloudflare, openai)
   String get provider;
   @override
 

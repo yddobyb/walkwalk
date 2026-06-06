@@ -47,7 +47,7 @@ class StickerData with _$StickerData {
 
     // === genStickerFree 추가 필드 ===
 
-    /// 사용된 provider (pixazo, openai) - genStickerFree 전용
+    /// 사용된 provider (cloudflare, openai) - genStickerFree 전용
     String? provider,
 
     /// Provider 표시 이름 - genStickerFree 전용
@@ -94,7 +94,7 @@ class StickerMetadata with _$StickerMetadata {
 @freezed
 class ProviderAttempt with _$ProviderAttempt {
   const factory ProviderAttempt({
-    /// Provider 이름 (pixazo, openai)
+    /// Provider 이름 (cloudflare, openai)
     required String provider,
 
     /// 성공 여부

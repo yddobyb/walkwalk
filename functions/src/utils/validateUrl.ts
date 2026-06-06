@@ -6,19 +6,11 @@
  */
 
 // 허용된 이미지 호스트 도메인
+// (Cloudflare는 base64 직접 반환이라 URL 검증 불필요 — OpenAI 폴백만 사용)
 const ALLOWED_HOSTS = [
-  // Pixazo
-  "gateway.pixazo.ai",
-  "pixazo.ai",
   // OpenAI / Azure Blob (DALL-E 이미지 호스팅)
   "oaidalleapiprodscus.blob.core.windows.net",
   "dalleproduse.blob.core.windows.net",
-];
-
-// 정규식 기반 허용 호스트 패턴
-// Pixazo가 이미지를 Cloudflare R2 public bucket(pub-{32hex}.r2.dev)으로 서빙함
-const ALLOWED_HOST_PATTERNS = [
-  /^pub-[a-f0-9]{32}\.r2\.dev$/,
 ];
 
 // Private/내부 IP 대역 (CIDR)
@@ -56,13 +48,12 @@ export function validateImageUrl(
     return `Invalid protocol: ${parsed.protocol}`;
   }
 
-  // 3. 도메인 화이트리스트 (정적 + 패턴)
+  // 3. 도메인 화이트리스트
   const host = parsed.hostname.toLowerCase();
   const allowedByHost = ALLOWED_HOSTS.some(
     (h) => host === h || host.endsWith(`.${h}`)
   );
-  const allowedByPattern = ALLOWED_HOST_PATTERNS.some((p) => p.test(host));
-  if (!allowedByHost && !allowedByPattern) {
+  if (!allowedByHost) {
     return `Host not allowed: ${host}`;
   }
 

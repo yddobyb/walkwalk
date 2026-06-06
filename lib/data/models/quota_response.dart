@@ -50,8 +50,8 @@ class QuotaData with _$QuotaData {
     /// 등급 표시 이름 (무료, 프리미엄)
     @Default('무료') String tierDisplayName,
 
-    /// 사용 중인 이미지 생성 provider (pixazo, gemini)
-    @Default('pixazo') String provider,
+    /// 사용 중인 이미지 생성 provider (cloudflare, gemini)
+    @Default('cloudflare') String provider,
   }) = _QuotaData;
 
   factory QuotaData.fromJson(Map<String, dynamic> json) =>
@@ -97,8 +97,8 @@ extension QuotaDataX on QuotaData {
     switch (provider) {
       case 'gemini':
         return 'Gemini';
-      case 'pixazo':
-        return 'Pixazo';
+      case 'cloudflare':
+        return 'Cloudflare';
       case 'openai':
         return 'OpenAI';
       default:

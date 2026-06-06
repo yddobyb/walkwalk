@@ -27,7 +27,7 @@ _$QuotaDataImpl _$$QuotaDataImplFromJson(Map<String, dynamic> json) =>
       nextResetIn: (json['nextResetIn'] as num).toInt(),
       tier: json['tier'] as String? ?? 'free',
       tierDisplayName: json['tierDisplayName'] as String? ?? '무료',
-      provider: json['provider'] as String? ?? 'pixazo',
+      provider: json['provider'] as String? ?? 'cloudflare',
     );
 
 Map<String, dynamic> _$$QuotaDataImplToJson(_$QuotaDataImpl instance) =>

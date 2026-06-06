@@ -1500,8 +1500,8 @@ class _ProviderBadge extends StatelessWidget {
     switch (provider.toLowerCase()) {
       case 'gemini':
         return 'Gemini';
-      case 'pixazo':
-        return 'Pixazo';
+      case 'cloudflare':
+        return 'Cloudflare';
       case 'openai':
         return 'OpenAI';
       default:

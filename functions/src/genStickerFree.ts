@@ -2,10 +2,10 @@
  * genStickerFree - 무료 사용자용 스티커 생성 함수
  *
  * 2단계 폴백 시스템 사용:
- * 1차: Pixazo ($0, FLUX.1 Schnell 무료)
+ * 1차: Cloudflare Workers AI (FLUX.1 Schnell, 매일 10,000 neurons 무료 ≈ 170장/일)
  * 2차: OpenAI ($0.005/이미지)
  *
- * ⚠️ Pixazo는 월간/요청 한도가 공시되지 않음 — 대시보드에서 주기적 확인 권장
+ * ⚠️ Cloudflare 무료 한도 초과 시 Workers Paid($5/월) + 종량제 필요 (매일 00:00 UTC 리셋)
  *
  * 기존 genSticker와 동일한 인터페이스 유지
  */
@@ -59,7 +59,11 @@ const FREE_USER_DAILY_QUOTA = 10;
 
 export const genStickerFree = functions
   .region("us-central1")
-  .runWith({secrets: ["PIXAZO_API_KEY", "OPENAI_API_KEY"]})
+  .runWith({secrets: [
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_API_TOKEN",
+    "OPENAI_API_KEY",
+  ]})
   .https.onCall(async (data: GenStickerFreeRequest, context) => {
     console.log("🎨 [genStickerFree] Called");
 
@@ -133,12 +137,14 @@ export const genStickerFree = functions
     // =====================
     // 4. API 키 로드 (Secret Manager)
     // =====================
-    const pixazoApiKey = process.env.PIXAZO_API_KEY;
+    const cloudflareAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+    const cloudflareApiToken = process.env.CLOUDFLARE_API_TOKEN;
     const openaiApiKey = process.env.OPENAI_API_KEY;
 
-    if (!pixazoApiKey) {
-      console.error("❌ [genStickerFree] Pixazo API key not configured");
-      throw new functions.https.HttpsError("internal", "Pixazo API key not configured");
+    if (!cloudflareAccountId || !cloudflareApiToken) {
+      console.error("❌ [genStickerFree] Cloudflare credentials not configured");
+      throw new functions.https.HttpsError(
+        "internal", "Cloudflare credentials not configured");
     }
 
     if (!openaiApiKey) {
@@ -158,7 +164,8 @@ export const genStickerFree = functions
     // 6. 폴백 시스템으로 이미지 생성
     // =====================
     const fallbackConfig: FallbackConfig = {
-      pixazoApiKey,
+      cloudflareAccountId,
+      cloudflareApiToken,
       openaiApiKey,
     };
 
@@ -189,7 +196,8 @@ export const genStickerFree = functions
     }
 
     // 성공 모니터링 기록
-    const fallbackUsed = result.attempts.length > 1 && result.provider !== "pixazo";
+    const fallbackUsed =
+      result.attempts.length > 1 && result.provider !== "cloudflare";
     await recordApiCall({
       provider: result.provider,
       success: true,

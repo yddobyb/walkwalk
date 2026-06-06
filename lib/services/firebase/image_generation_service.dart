@@ -171,7 +171,7 @@ class ImageGenerationService {
   ///
   /// Returns: 스티커 응답 (Base64 인코딩된 WebP 이미지 포함)
   ///
-  /// genStickerFree Cloud Function 호출 (Pixazo → OpenAI 폴백)
+  /// genStickerFree Cloud Function 호출 (Cloudflare → OpenAI 폴백)
   /// 응답에 provider, estimatedCost, attempts 정보 포함
   ///
   /// Throws:
@@ -230,7 +230,7 @@ class ImageGenerationService {
         );
       }
 
-      // Cloud Functions 호출 - genStickerFree (Pixazo → OpenAI 폴백)
+      // Cloud Functions 호출 - genStickerFree (Cloudflare → OpenAI 폴백)
       debugPrint('📞 [STICKER-FREE] Calling Cloud Functions (genStickerFree)...');
       final callable = _functions.httpsCallable('genStickerFree');
 

@@ -1,29 +1,30 @@
 /**
  * Fallback Manager for Free User Image Generation
- * 2단계 폴백 시스템: Pixazo → OpenAI
+ * 2단계 폴백 시스템: Cloudflare → OpenAI
  *
  * 순서:
- * 1차: Pixazo ($0, FLUX.1 Schnell 무료)
+ * 1차: Cloudflare Workers AI (FLUX.1 Schnell, 매일 10,000 neurons 무료 ≈ 170장/일)
  * 2차: OpenAI ($0.005) - 가장 안정적
  *
  * ⚠️ 주의:
- * - Pixazo는 월간/요청 한도가 공시되지 않음
- * - 향후 한도를 도입할 수 있으므로 대시보드에서 주기적으로 사용량 확인 권장
+ * - Cloudflare 무료 한도(매일 10,000 neurons)를 초과하면 Workers Paid($5/월) + 종량제 필요
+ * - 무료 한도는 매일 00:00 UTC 리셋
  */
 
-import {generateImageWithPixazo, PixazoRequest} from "./pixazo";
+import {generateImageWithCloudflare, CloudflareRequest} from "./cloudflare";
 import {generateImageWithOpenAI, OpenAIImageRequest} from "./openaiImage";
 
-export type ImageProvider = "pixazo" | "openai" | "none";
+export type ImageProvider = "cloudflare" | "openai" | "none";
 
 export interface FallbackConfig {
-  pixazoApiKey: string;
+  cloudflareAccountId: string;
+  cloudflareApiToken: string;
   openaiApiKey: string;
 }
 
 export interface FallbackRequest {
   prompt: string;
-  size?: number; // 정사각형 사이즈 (512, 1024 등)
+  size?: number; // 정사각형 사이즈 (512, 1024 등) — Cloudflare flux-1-schnell은 고정 출력
   seed?: number;
 }
 
@@ -42,7 +43,7 @@ export interface FallbackResponse {
 
 /**
  * 2단계 폴백 시스템으로 이미지 생성
- * 1차: Pixazo → 실패 시 → 2차: OpenAI
+ * 1차: Cloudflare → 실패 시 → 2차: OpenAI
  *
  * @param config API 키 설정
  * @param request 이미지 생성 요청
@@ -57,44 +58,47 @@ export async function generateImageWithFallback(
   const attempts: FallbackResponse["attempts"] = [];
 
   // =====================
-  // 1차: Pixazo 시도
+  // 1차: Cloudflare 시도
   // =====================
-  console.log("📍 [FallbackManager] Attempt 1: Pixazo");
-  const pixazoStartTime = Date.now();
+  console.log("📍 [FallbackManager] Attempt 1: Cloudflare");
+  const cloudflareStartTime = Date.now();
 
-  const pixazoRequest: PixazoRequest = {
+  const cloudflareRequest: CloudflareRequest = {
     prompt: request.prompt,
-    height: request.size || 1024,
-    width: request.size || 1024,
     seed: request.seed,
-    numSteps: 4,
+    steps: 4,
   };
 
-  const pixazoResult = await generateImageWithPixazo(
-    config.pixazoApiKey,
-    pixazoRequest
+  const cloudflareResult = await generateImageWithCloudflare(
+    config.cloudflareAccountId,
+    config.cloudflareApiToken,
+    cloudflareRequest
   );
 
-  const pixazoDuration = Date.now() - pixazoStartTime;
+  const cloudflareDuration = Date.now() - cloudflareStartTime;
 
   attempts.push({
-    provider: "pixazo",
-    success: pixazoResult.success,
-    error: pixazoResult.error,
-    durationMs: pixazoDuration,
+    provider: "cloudflare",
+    success: cloudflareResult.success,
+    error: cloudflareResult.error,
+    durationMs: cloudflareDuration,
   });
 
-  if (pixazoResult.success && pixazoResult.imageBuffer) {
-    console.log(`✅ [FallbackManager] Pixazo succeeded in ${pixazoDuration}ms`);
+  if (cloudflareResult.success && cloudflareResult.imageBuffer) {
+    console.log(
+      `✅ [FallbackManager] Cloudflare succeeded in ${cloudflareDuration}ms`
+    );
     return {
       success: true,
-      imageBuffer: pixazoResult.imageBuffer,
-      provider: "pixazo",
+      imageBuffer: cloudflareResult.imageBuffer,
+      provider: "cloudflare",
       attempts,
     };
   }
 
-  console.log(`⚠️ [FallbackManager] Pixazo failed: ${pixazoResult.error}`);
+  console.log(
+    `⚠️ [FallbackManager] Cloudflare failed: ${cloudflareResult.error}`
+  );
 
   // =====================
   // 2차: OpenAI 시도
@@ -153,7 +157,7 @@ export async function generateImageWithFallback(
  */
 export function calculateCost(provider: ImageProvider): number {
   const costs: Record<ImageProvider, number> = {
-    pixazo: 0,
+    cloudflare: 0, // 무료 한도 내 $0 (초과 시 ~$0.0006/장)
     openai: 0.005,
     none: 0,
   };
@@ -167,7 +171,7 @@ export function calculateCost(provider: ImageProvider): number {
  */
 export function getProviderDisplayName(provider: ImageProvider): string {
   const names: Record<ImageProvider, string> = {
-    pixazo: "Pixazo (Flux Schnell)",
+    cloudflare: "Cloudflare (Flux Schnell)",
     openai: "OpenAI (gpt-image-1)",
     none: "None",
   };

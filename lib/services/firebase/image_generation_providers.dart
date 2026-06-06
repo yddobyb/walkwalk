@@ -45,7 +45,7 @@ Future<QuotaData> quota(Ref ref) async {
 /// 스티커 생성 프로바이더
 ///
 /// 사용자 등급에 따라 적절한 Cloud Function 호출:
-/// - Free: genStickerFree (Pixazo → OpenAI 폴백)
+/// - Free: genStickerFree (Cloudflare → OpenAI 폴백)
 /// - Premium: genSticker (Gemini)
 @riverpod
 class StickerGenerator extends _$StickerGenerator {
@@ -74,8 +74,8 @@ class StickerGenerator extends _$StickerGenerator {
         debugPrint('💎 [StickerGenerator] Using genSticker (Premium - Gemini)');
         response = await service.generateSticker(request);
       } else {
-        // 무료 사용자: genStickerFree (Pixazo → OpenAI)
-        debugPrint('🆓 [StickerGenerator] Using genStickerFree (Free - Pixazo/OpenAI)');
+        // 무료 사용자: genStickerFree (Cloudflare → OpenAI)
+        debugPrint('🆓 [StickerGenerator] Using genStickerFree (Free - Cloudflare/OpenAI)');
         response = await service.generateStickerFree(request);
       }
 
