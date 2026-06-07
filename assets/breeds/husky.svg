@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- pointy ears -->
+  <path d="M21 42 L29 9 L47 31 Z" fill="#7E8A98"/>
+  <path d="M79 42 L71 9 L53 31 Z" fill="#7E8A98"/>
+  <path d="M27 34 L31 17 L41 30 Z" fill="#C98B86"/>
+  <path d="M73 34 L69 17 L59 30 Z" fill="#C98B86"/>
+  <!-- head -->
+  <circle cx="50" cy="50" r="29" fill="#7E8A98"/>
+  <!-- white blaze + muzzle mask -->
+  <path d="M50 25 L44 52 L56 52 Z" fill="#F4F1EC"/>
+  <ellipse cx="50" cy="63" rx="16" ry="12" fill="#F4F1EC"/>
+  <!-- eyes (blue) -->
+  <circle cx="39.5" cy="47" r="3.6" fill="#4FA3D1"/>
+  <circle cx="60.5" cy="47" r="3.6" fill="#4FA3D1"/>
+  <!-- nose -->
+  <ellipse cx="50" cy="58" rx="5" ry="4" fill="#2E2A28"/>
+  <!-- mouth -->
+  <path d="M50 61 Q50 67 44.5 67 M50 61 Q50 67 55.5 67" stroke="#2E2A28" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+</svg>

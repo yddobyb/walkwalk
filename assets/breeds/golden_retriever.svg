@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- floppy ears -->
+  <ellipse cx="23" cy="56" rx="12" ry="21" fill="#D89A3E"/>
+  <ellipse cx="77" cy="56" rx="12" ry="21" fill="#D89A3E"/>
+  <!-- head -->
+  <circle cx="50" cy="50" r="29" fill="#ECB45C"/>
+  <!-- muzzle -->
+  <ellipse cx="50" cy="63" rx="16" ry="12" fill="#F7E3B5"/>
+  <!-- eyes -->
+  <circle cx="40" cy="47" r="3.5" fill="#3D2A1A"/>
+  <circle cx="60" cy="47" r="3.5" fill="#3D2A1A"/>
+  <!-- nose -->
+  <ellipse cx="50" cy="58" rx="5" ry="4" fill="#3D2A1A"/>
+  <!-- mouth -->
+  <path d="M50 61 Q50 67 44.5 67 M50 61 Q50 67 55.5 67" stroke="#3D2A1A" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+</svg>

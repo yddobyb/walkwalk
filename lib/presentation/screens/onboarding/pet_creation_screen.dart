@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../../core/utils/breed_assets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../domain/entities/pet.dart';
 import '../../../data/models/pet_model.dart';
@@ -24,6 +25,12 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
   String _selectedBreed = 'goldenRetriever'; // ARB key identifier
 
   bool _isCreating = false;
+
+  /// 선택된 품종의 플랫 아이콘 (에셋 없으면 이모지 폴백)
+  Widget _buildBreedImage() {
+    return BreedAssets.iconForKey(_selectedBreed, size: 120) ??
+        const Text('🐕', style: TextStyle(fontSize: 100));
+  }
 
   // 품종 매핑 (키 -> 표시 이름)
   Map<String, String> _getBreedMap(BuildContext context) {
@@ -138,7 +145,7 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
             // 펫 미리보기 영역
             Container(
               width: double.infinity,
-              height: 200,
+              padding: const EdgeInsets.symmetric(vertical: 24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -152,12 +159,10 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // 임시 강아지 이모지 (추후 벡터 아바타로 교체)
-                  const Text(
-                    '🐕',
-                    style: TextStyle(fontSize: 100),
-                  ),
+                  // 품종별 플랫 아이콘 (SVG) — 없으면 이모지 폴백
+                  _buildBreedImage(),
                   const SizedBox(height: 8),
                   Text(
                     _nameController.text.isEmpty ? AppLocalizations.of(context).noName : _nameController.text,

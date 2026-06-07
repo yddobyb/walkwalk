@@ -14,6 +14,7 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
+import '../../../core/utils/breed_assets.dart';
 import '../subscription/paywall_screen.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
@@ -101,6 +102,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       // 펫 아바타 - 저장된 스티커가 있으면 표시, 없으면 이모지
                       _PetPreviewAvatar(
                         stickerPath: petAsync.valueOrNull?.stickerPath,
+                        breed: _breed,
                         selectedAccessory: _selectedAccessory,
                         getAccessoryEmoji: _getAccessoryEmoji,
                       ),
@@ -1515,11 +1517,13 @@ class _ProviderBadge extends StatelessWidget {
 /// 저장된 스티커가 있으면 표시, 없으면 이모지 표시
 class _PetPreviewAvatar extends StatelessWidget {
   final String? stickerPath;
+  final String? breed;
   final PetAccessory selectedAccessory;
   final String Function(PetAccessory) getAccessoryEmoji;
 
   const _PetPreviewAvatar({
     required this.stickerPath,
+    required this.breed,
     required this.selectedAccessory,
     required this.getAccessoryEmoji,
   });
@@ -1541,30 +1545,36 @@ class _PetPreviewAvatar extends StatelessWidget {
                 height: 120,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
-                  // 이미지 로드 실패 시 이모지 폴백
-                  return _buildEmojiAvatar();
+                  // 이미지 로드 실패 시 폴백
+                  return _buildEmojiAvatar(context);
                 },
               ),
             );
           }
-          // 파일이 존재하지 않으면 이모지
-          return _buildEmojiAvatar();
+          // 파일이 존재하지 않으면 품종 아이콘/이모지
+          return _buildEmojiAvatar(context);
         },
       );
     }
 
-    // 스티커가 없으면 이모지 표시
-    return _buildEmojiAvatar();
+    // 스티커가 없으면 품종 아이콘/이모지 표시
+    return _buildEmojiAvatar(context);
   }
 
-  Widget _buildEmojiAvatar() {
+  Widget _buildEmojiAvatar(BuildContext context) {
+    final breedIcon = BreedAssets.iconForBreed(
+      breed,
+      AppLocalizations.of(context),
+      size: 120,
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
-        const Text(
-          '🐕',
-          style: TextStyle(fontSize: 100),
-        ),
+        breedIcon ??
+            const Text(
+              '🐕',
+              style: TextStyle(fontSize: 100),
+            ),
         // 액세서리 표시
         if (selectedAccessory != PetAccessory.none)
           Positioned(

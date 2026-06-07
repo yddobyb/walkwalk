@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import 'pet_dialogue_widget.dart';
+import '../../../../core/utils/breed_assets.dart';
 
 class PetAvatarWidget extends ConsumerWidget {
   const PetAvatarWidget({super.key});
@@ -26,8 +27,9 @@ class PetAvatarWidget extends ConsumerWidget {
     return mapping[breed] ?? breed;
   }
 
-  /// 펫 아바타 빌드 (스티커가 있으면 이미지, 없으면 이모지)
-  Widget _buildPetAvatar(String? stickerPath) {
+  /// 펫 아바타 빌드 (스티커가 있으면 이미지, 없으면 품종 아이콘 → 이모지)
+  Widget _buildPetAvatar(
+      BuildContext context, String? stickerPath, String? breed) {
     // 스티커 경로가 있으면 이미지 표시
     if (stickerPath != null && stickerPath.isNotEmpty) {
       final file = File(stickerPath);
@@ -42,30 +44,29 @@ class PetAvatarWidget extends ConsumerWidget {
                 width: 130,
                 height: 130,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  // 이미지 로드 실패 시 이모지 폴백
-                  return const Text(
-                    '🐕',
-                    style: TextStyle(fontSize: 80),
-                  );
-                },
+                errorBuilder: (context, error, stackTrace) =>
+                    _fallbackAvatar(context, breed),
               ),
             );
           }
-          // 파일이 존재하지 않으면 이모지
-          return const Text(
-            '🐕',
-            style: TextStyle(fontSize: 80),
-          );
+          // 파일이 존재하지 않으면 품종 아이콘/이모지
+          return _fallbackAvatar(context, breed);
         },
       );
     }
 
-    // 스티커가 없으면 이모지
-    return const Text(
-      '🐕',
-      style: TextStyle(fontSize: 80),
+    // 스티커가 없으면 품종 아이콘/이모지
+    return _fallbackAvatar(context, breed);
+  }
+
+  /// 스티커가 없을 때 폴백: 품종 플랫 아이콘(있으면) → 이모지
+  Widget _fallbackAvatar(BuildContext context, String? breed) {
+    final icon = BreedAssets.iconForBreed(
+      breed,
+      AppLocalizations.of(context),
+      size: 110,
     );
+    return icon ?? const Text('🐕', style: TextStyle(fontSize: 80));
   }
 
   @override
@@ -114,7 +115,7 @@ class PetAvatarWidget extends ConsumerWidget {
                     ],
                   ),
                   child: Center(
-                    child: _buildPetAvatar(pet?.stickerPath),
+                    child: _buildPetAvatar(context, pet?.stickerPath, pet?.breed),
                   ),
                 ),
               ),
