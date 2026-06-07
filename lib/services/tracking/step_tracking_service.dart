@@ -99,6 +99,10 @@ class StepTrackingService {
   static const Duration _missionUpdateInterval = Duration(seconds: 10); // 10초마다 업데이트
   static const int _missionUpdateStepThreshold = 50; // 또는 50걸음마다 업데이트
 
+  // 주간 걸음수 재계산 throttle (Health Connect 레이트 리밋 회피)
+  DateTime? _lastWeeklyCalcTime;
+  static const Duration _weeklyCalcInterval = Duration(seconds: 20);
+
   bool get isInitialized => _isInitialized;
   StepTrackingState get currentState => _currentState;
   int get currentDailySteps => _currentDailySteps;
@@ -235,15 +239,28 @@ class StepTrackingService {
     // 별도의 계산 없이 바로 사용
     final todaySteps = stepData.steps;
 
-    // 일일 걸음수 업데이트
+    // 걸음수가 실제로 바뀌었을 때만 무거운 작업(주간 Health 쿼리·DB저장)을 수행.
+    // 폴링이 주기적으로 일어나므로, 변화 없을 때 반복하면 Health Connect
+    // 레이트 리밋(API call quota exceeded)에 걸린다.
+    final stepsChanged = todaySteps != _currentDailySteps;
+
+    // 일일 걸음수 업데이트 (가벼움)
     _currentDailySteps = todaySteps;
     _dailyStepsController.add(_currentDailySteps);
 
-    // 주간 걸음수 업데이트 (일일 걸음수가 변경될 때마다)
-    final weeklySteps = await _pedometerService.getWeeklyStepsFromHealth();
-    _currentWeeklySteps = weeklySteps;
-    _weeklyStepsController.add(_currentWeeklySteps);
-    debugPrint('📊 StepTrackingService - Steps updated: daily=$_currentDailySteps, weekly=$_currentWeeklySteps');
+    if (!stepsChanged) return;
+
+    // 주간 걸음수 재계산은 Health Connect 호출이 7회(요일별)라 비싸므로
+    // 최소 간격(_weeklyCalcInterval)을 두어 레이트 리밋을 회피한다.
+    final now = DateTime.now();
+    if (_lastWeeklyCalcTime == null ||
+        now.difference(_lastWeeklyCalcTime!) >= _weeklyCalcInterval) {
+      _lastWeeklyCalcTime = now;
+      final weeklySteps = await _pedometerService.getWeeklyStepsFromHealth();
+      _currentWeeklySteps = weeklySteps;
+      _weeklyStepsController.add(_currentWeeklySteps);
+      debugPrint('📊 StepTrackingService - Steps updated: daily=$_currentDailySteps, weekly=$_currentWeeklySteps');
+    }
 
     // 세션 중인 경우 세션 걸음수 계산
     if (_currentState == StepTrackingState.walking && _sessionStartSteps > 0) {
@@ -365,13 +382,16 @@ class StepTrackingService {
       }
 
       // 첫 번째 쿼리: 즉시 걸음수 가져오기
+      // Health Connect가 일시적으로 막혀(quota 등) null이면 캐시된 일일 걸음수로
+      // 폴백해, 산책이 종료되지 못하는 문제를 방지한다.
       final currentStepCount = await _getCurrentStepCount();
+      final baseSteps = currentStepCount?.steps ?? _currentDailySteps;
       if (currentStepCount == null) {
-        debugPrint('StepTrackingService - Could not get current step count');
-        return null;
+        debugPrint('StepTrackingService - Step read failed (quota?), '
+            'fallback to cached daily steps: $_currentDailySteps');
       }
 
-      int sessionSteps = max(0, currentStepCount.steps - _sessionStartSteps);
+      int sessionSteps = max(0, baseSteps - _sessionStartSteps);
 
       // Health Kit 동기화 대기 후 재쿼리 (짧은 산책 시 0걸음 방지)
       // 3초 대기 (iOS Health Kit이 걸음수를 배치로 처리하므로)

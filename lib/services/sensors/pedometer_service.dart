@@ -187,7 +187,8 @@ class PedometerService {
     // 즉시 한 번 실행
     await _fetchAndEmitStepCount();
 
-    // 2초마다 업데이트 (실시간 반응성 개선)
+    // 2초마다 업데이트 (실시간 반응성). 주간 재계산은 _handleStepCount에서
+    // 게이팅/throttle되므로 이 주기(쿼리 1회/2초)로도 Health Connect 레이트 리밋에 안전.
     _stepCountTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
       await _fetchAndEmitStepCount();
     });
