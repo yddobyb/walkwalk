@@ -388,7 +388,8 @@ class DatabaseService {
     final isar = await instance;
 
     // Isar의 watch 기능을 사용하여 실시간 업데이트
-    await for (final _ in isar.missionModels.watchLazy()) {
+    // fireImmediately: 구독 즉시 현재 상태를 1회 emit (없으면 첫 DB 변경까지 무한로딩)
+    await for (final _ in isar.missionModels.watchLazy(fireImmediately: true)) {
       final now = DateTime.now();
       final missionModels = await isar.missionModels
           .filter()

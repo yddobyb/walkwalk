@@ -82,14 +82,15 @@ class MissionService {
 
       // 미션 타입에 따른 진행도 계산
       if (mission.targetSteps > 0) {
-        // 걸음수 미션
-        if (mission.type == 'weekly') {
-          // 주간 미션: 이번 주 전체 걸음수로 업데이트
-          newProgress = await _getWeeklyTotalSteps();
-        } else {
-          // 일일 미션: 오늘 걸음수로 업데이트
-          newProgress = totalSteps;
-        }
+        // 걸음수 미션 (절대값)
+        final computedSteps = (mission.type == 'weekly')
+            // 주간 미션: 이번 주 "앱 산책" 걸음수 합 (walk session 기준)
+            ? await _getWeeklyTotalSteps()
+            // 일일 미션: 오늘 걸음수 (Health 당일 총합)
+            : totalSteps;
+        // 진행도 역행 방지: 산책 종료 경로가 더 작은 값(세션 걸음 합)을 넘겨도
+        // 기존 진행도가 줄지 않도록 max 적용
+        newProgress = max(mission.currentProgress, computedSteps);
         shouldUpdate = true;
       } else if (mission.targetDuration > 0) {
         // 시간 미션 (누적)
@@ -626,7 +627,7 @@ final completedMissionsProvider = StreamProvider<List<Mission>>((ref) async* {
   final isar = await DatabaseService.instance;
 
   // Isar의 watch 기능을 사용하여 실시간 업데이트
-  await for (final _ in isar.missionModels.watchLazy()) {
+  await for (final _ in isar.missionModels.watchLazy(fireImmediately: true)) {
     // 완료된 미션을 DB에서 조회
     final missions = await databaseService.getCompletedMissions();
     yield missions;
