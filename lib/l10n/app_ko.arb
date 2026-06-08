@@ -2541,5 +2541,13 @@
   "signOutConfirm": "로그아웃하면 익명 계정으로 전환됩니다. 계속하시겠습니까?",
   "@signOutConfirm": {
     "description": "Sign out confirmation message"
+  },
+  "dailyMissionStepsHint": "오늘 전체 걸음수 기준이에요",
+  "@dailyMissionStepsHint": {
+    "description": "Hint that daily missions count total daily steps"
+  },
+  "weeklyMissionStepsHint": "앱 산책 걸음수만 집계돼요",
+  "@weeklyMissionStepsHint": {
+    "description": "Hint that weekly missions count only in-app walk steps"
   }
 }

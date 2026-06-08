@@ -1561,4 +1561,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get signOutConfirm => '로그아웃하면 익명 계정으로 전환됩니다. 계속하시겠습니까?';
+
+  @override
+  String get dailyMissionStepsHint => '오늘 전체 걸음수 기준이에요';
+
+  @override
+  String get weeklyMissionStepsHint => '앱 산책 걸음수만 집계돼요';
 }

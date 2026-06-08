@@ -2983,6 +2983,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Signing out will switch to anonymous mode. Continue?'**
   String get signOutConfirm;
+
+  /// Hint that daily missions count total daily steps
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your total daily steps'**
+  String get dailyMissionStepsHint;
+
+  /// Hint that weekly missions count only in-app walk steps
+  ///
+  /// In en, this message translates to:
+  /// **'In-app walk steps only'**
+  String get weeklyMissionStepsHint;
 }
 
 class _AppLocalizationsDelegate

@@ -1593,4 +1593,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signOutConfirm =>
       'Signing out will switch to anonymous mode. Continue?';
+
+  @override
+  String get dailyMissionStepsHint => 'Based on your total daily steps';
+
+  @override
+  String get weeklyMissionStepsHint => 'In-app walk steps only';
 }

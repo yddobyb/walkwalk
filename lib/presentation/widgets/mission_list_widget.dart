@@ -122,43 +122,85 @@ class _MissionListWidgetState extends ConsumerState<MissionListWidget>
     );
   }
 
+  /// 미션 집계 기준 안내 캡션 (일일=전체 걸음수, 주간=앱 산책 걸음수)
+  Widget _buildMissionSourceHint(String text) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+      child: Row(
+        children: [
+          Icon(
+            Icons.info_outline,
+            size: 14,
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.85),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDailyMissions() {
     final dailyMissionsAsync = ref.watch(dailyMissionsProvider);
 
-    return dailyMissionsAsync.when(
-      data: (missions) {
-        if (missions.isEmpty) {
-          return _buildEmptyState(
-            icon: Icons.today,
-            title: AppLocalizations.of(context).noDailyMissions,
-            subtitle: AppLocalizations.of(context).newMissionsComingSoon,
-          );
-        }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildMissionSourceHint(AppLocalizations.of(context).dailyMissionStepsHint),
+        Expanded(
+          child: dailyMissionsAsync.when(
+            data: (missions) {
+              if (missions.isEmpty) {
+                return _buildEmptyState(
+                  icon: Icons.today,
+                  title: AppLocalizations.of(context).noDailyMissions,
+                  subtitle: AppLocalizations.of(context).newMissionsComingSoon,
+                );
+              }
 
-        return _buildMissionList(missions);
-      },
-      loading: () => _buildLoadingState(),
-      error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingDailyMissions),
+              return _buildMissionList(missions);
+            },
+            loading: () => _buildLoadingState(),
+            error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingDailyMissions),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildWeeklyMissions() {
     final weeklyMissionsAsync = ref.watch(weeklyMissionsProvider);
 
-    return weeklyMissionsAsync.when(
-      data: (missions) {
-        if (missions.isEmpty) {
-          return _buildEmptyState(
-            icon: Icons.date_range,
-            title: AppLocalizations.of(context).noWeeklyMissions,
-            subtitle: AppLocalizations.of(context).newWeeklyMissionsComingSoon,
-          );
-        }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildMissionSourceHint(AppLocalizations.of(context).weeklyMissionStepsHint),
+        Expanded(
+          child: weeklyMissionsAsync.when(
+            data: (missions) {
+              if (missions.isEmpty) {
+                return _buildEmptyState(
+                  icon: Icons.date_range,
+                  title: AppLocalizations.of(context).noWeeklyMissions,
+                  subtitle: AppLocalizations.of(context).newWeeklyMissionsComingSoon,
+                );
+              }
 
-        return _buildMissionList(missions);
-      },
-      loading: () => _buildLoadingState(),
-      error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingWeeklyMissions),
+              return _buildMissionList(missions);
+            },
+            loading: () => _buildLoadingState(),
+            error: (error, stackTrace) => _buildErrorState(AppLocalizations.of(context).errorLoadingWeeklyMissions),
+          ),
+        ),
+      ],
     );
   }
 

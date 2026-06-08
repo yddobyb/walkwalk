@@ -2558,5 +2558,13 @@
   "signOutConfirm": "Signing out will switch to anonymous mode. Continue?",
   "@signOutConfirm": {
     "description": "Sign out confirmation message"
+  },
+  "dailyMissionStepsHint": "Based on your total daily steps",
+  "@dailyMissionStepsHint": {
+    "description": "Hint that daily missions count total daily steps"
+  },
+  "weeklyMissionStepsHint": "In-app walk steps only",
+  "@weeklyMissionStepsHint": {
+    "description": "Hint that weekly missions count only in-app walk steps"
   }
 }
