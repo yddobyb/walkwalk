@@ -90,15 +90,14 @@ class PedometerService {
       await _health.configure();
       debugPrint('PedometerService - Health configured');
 
-      // 권한 확인 및 요청
+      // 권한 확인만 수행 — 요청은 하지 않음.
+      // OS 권한 다이얼로그는 온보딩의 권한 안내 화면(PermissionPrimingScreen)에서
+      // 맥락과 함께 띄운다. 여기서 요청하면 앱 시작이 다이얼로그에 블로킹된다.
       final hasPermission = await this.hasPermission();
       if (!hasPermission) {
-        debugPrint('PedometerService - No permission, requesting...');
-        final granted = await requestPermission();
-        if (!granted) {
-          _errorController.add('걸음수 트래킹을 위해서는 건강 데이터 접근 권한이 필요합니다.');
-          return false;
-        }
+        debugPrint('PedometerService - No health permission yet; '
+            'init deferred until permission is granted');
+        return false;
       }
 
       // 정기적으로 걸음수 업데이트 (30초마다)

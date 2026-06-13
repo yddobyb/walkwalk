@@ -8,8 +8,10 @@ import '../../../domain/entities/pet.dart';
 import '../../../data/models/pet_model.dart';
 import '../../../data/datasources/database_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
+import '../../../services/sensors/pedometer_service.dart';
 import '../../../services/tracking/step_tracking_service.dart';
 import '../home/home_screen.dart';
+import 'permission_priming_screen.dart';
 
 class PetCreationScreen extends ConsumerStatefulWidget {
   const PetCreationScreen({super.key});
@@ -101,12 +103,17 @@ class _PetCreationScreenState extends ConsumerState<PetCreationScreen> {
       }
       ref.invalidate(petTrackingProvider);
 
+      // 건강 권한이 없으면 권한 안내 화면을 거쳐 홈으로, 있으면 바로 홈으로
+      final hasHealthPermission =
+          await ref.read(pedometerServiceProvider).hasPermission();
+
       if (!mounted) return;
 
-      // 홈 화면으로 이동 (생성된 Pet 객체 전달)
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => HomeScreen(initialPet: pet),
+          builder: (context) => hasHealthPermission
+              ? HomeScreen(initialPet: pet)
+              : PermissionPrimingScreen(pet: pet),
         ),
         (route) => false,
       );

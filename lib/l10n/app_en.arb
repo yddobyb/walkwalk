@@ -2566,5 +2566,54 @@
   "weeklyMissionStepsHint": "In-app walk steps only",
   "@weeklyMissionStepsHint": {
     "description": "Hint that weekly missions count only in-app walk steps"
+  },
+  "permissionPrimingBubble": "Let's walk together!",
+  "@permissionPrimingBubble": {
+    "description": "Speech bubble from the newly created pet on the permission priming screen"
+  },
+  "permissionPrimingTitle": "Two quick things\nbefore our first walk",
+  "@permissionPrimingTitle": {
+    "description": "Title of the permission priming screen"
+  },
+  "permissionStepsTitle": "Step tracking",
+  "@permissionStepsTitle": {
+    "description": "Title of the step permission card"
+  },
+  "permissionStepsDesc": "Every step you take makes {petName} happier and helps them grow",
+  "@permissionStepsDesc": {
+    "description": "Description of the step permission card",
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStepsBadge": "Health Connect · read-only",
+  "@permissionStepsBadge": {
+    "description": "Badge on the step permission card"
+  },
+  "permissionNotifTitle": "Walk reminders",
+  "@permissionNotifTitle": {
+    "description": "Title of the notification permission card"
+  },
+  "permissionNotifDesc": "A gentle nudge when it's a great time for a walk",
+  "@permissionNotifDesc": {
+    "description": "Description of the notification permission card"
+  },
+  "permissionNotifBadge": "1–2 a day",
+  "@permissionNotifBadge": {
+    "description": "Badge on the notification permission card"
+  },
+  "permissionPrivacyNote": "Step data never leaves your phone",
+  "@permissionPrivacyNote": {
+    "description": "Privacy microcopy on the permission priming screen"
+  },
+  "permissionPrimingCta": "Let's walk! 🐾",
+  "@permissionPrimingCta": {
+    "description": "Primary CTA that triggers the OS permission dialogs"
+  },
+  "permissionPrimingSkip": "Maybe later",
+  "@permissionPrimingSkip": {
+    "description": "Skip link on the permission priming screen"
   }
 }

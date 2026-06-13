@@ -2549,5 +2549,54 @@
   "weeklyMissionStepsHint": "앱 산책 걸음수만 집계돼요",
   "@weeklyMissionStepsHint": {
     "description": "Hint that weekly missions count only in-app walk steps"
+  },
+  "permissionPrimingBubble": "주인님, 저랑 같이 걸어요!",
+  "@permissionPrimingBubble": {
+    "description": "Speech bubble from the newly created pet on the permission priming screen"
+  },
+  "permissionPrimingTitle": "산책 준비,\n딱 두 가지만 필요해요",
+  "@permissionPrimingTitle": {
+    "description": "Title of the permission priming screen"
+  },
+  "permissionStepsTitle": "걸음수 연결",
+  "@permissionStepsTitle": {
+    "description": "Title of the step permission card"
+  },
+  "permissionStepsDesc": "걸은 만큼 {petName}의 행복도가 쑥쑥 올라가요",
+  "@permissionStepsDesc": {
+    "description": "Description of the step permission card",
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionStepsBadge": "헬스 커넥트 · 읽기 전용",
+  "@permissionStepsBadge": {
+    "description": "Badge on the step permission card"
+  },
+  "permissionNotifTitle": "산책 알림",
+  "@permissionNotifTitle": {
+    "description": "Title of the notification permission card"
+  },
+  "permissionNotifDesc": "산책하기 좋은 시간을 살짝 알려드려요",
+  "@permissionNotifDesc": {
+    "description": "Description of the notification permission card"
+  },
+  "permissionNotifBadge": "하루 1~2번",
+  "@permissionNotifBadge": {
+    "description": "Badge on the notification permission card"
+  },
+  "permissionPrivacyNote": "걸음 데이터는 휴대폰 밖으로 나가지 않아요",
+  "@permissionPrivacyNote": {
+    "description": "Privacy microcopy on the permission priming screen"
+  },
+  "permissionPrimingCta": "좋아, 같이 걷자! 🐾",
+  "@permissionPrimingCta": {
+    "description": "Primary CTA that triggers the OS permission dialogs"
+  },
+  "permissionPrimingSkip": "나중에 설정할게요",
+  "@permissionPrimingSkip": {
+    "description": "Skip link on the permission priming screen"
   }
 }

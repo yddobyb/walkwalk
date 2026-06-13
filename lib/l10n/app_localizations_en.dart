@@ -1599,4 +1599,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyMissionStepsHint => 'In-app walk steps only';
+
+  @override
+  String get permissionPrimingBubble => 'Let\'s walk together!';
+
+  @override
+  String get permissionPrimingTitle =>
+      'Two quick things\nbefore our first walk';
+
+  @override
+  String get permissionStepsTitle => 'Step tracking';
+
+  @override
+  String permissionStepsDesc(String petName) {
+    return 'Every step you take makes $petName happier and helps them grow';
+  }
+
+  @override
+  String get permissionStepsBadge => 'Health Connect · read-only';
+
+  @override
+  String get permissionNotifTitle => 'Walk reminders';
+
+  @override
+  String get permissionNotifDesc =>
+      'A gentle nudge when it\'s a great time for a walk';
+
+  @override
+  String get permissionNotifBadge => '1–2 a day';
+
+  @override
+  String get permissionPrivacyNote => 'Step data never leaves your phone';
+
+  @override
+  String get permissionPrimingCta => 'Let\'s walk! 🐾';
+
+  @override
+  String get permissionPrimingSkip => 'Maybe later';
 }

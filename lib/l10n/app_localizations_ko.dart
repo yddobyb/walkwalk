@@ -1567,4 +1567,39 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get weeklyMissionStepsHint => '앱 산책 걸음수만 집계돼요';
+
+  @override
+  String get permissionPrimingBubble => '주인님, 저랑 같이 걸어요!';
+
+  @override
+  String get permissionPrimingTitle => '산책 준비,\n딱 두 가지만 필요해요';
+
+  @override
+  String get permissionStepsTitle => '걸음수 연결';
+
+  @override
+  String permissionStepsDesc(String petName) {
+    return '걸은 만큼 $petName의 행복도가 쑥쑥 올라가요';
+  }
+
+  @override
+  String get permissionStepsBadge => '헬스 커넥트 · 읽기 전용';
+
+  @override
+  String get permissionNotifTitle => '산책 알림';
+
+  @override
+  String get permissionNotifDesc => '산책하기 좋은 시간을 살짝 알려드려요';
+
+  @override
+  String get permissionNotifBadge => '하루 1~2번';
+
+  @override
+  String get permissionPrivacyNote => '걸음 데이터는 휴대폰 밖으로 나가지 않아요';
+
+  @override
+  String get permissionPrimingCta => '좋아, 같이 걷자! 🐾';
+
+  @override
+  String get permissionPrimingSkip => '나중에 설정할게요';
 }

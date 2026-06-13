@@ -2995,6 +2995,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'In-app walk steps only'**
   String get weeklyMissionStepsHint;
+
+  /// Speech bubble from the newly created pet on the permission priming screen
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s walk together!'**
+  String get permissionPrimingBubble;
+
+  /// Title of the permission priming screen
+  ///
+  /// In en, this message translates to:
+  /// **'Two quick things\nbefore our first walk'**
+  String get permissionPrimingTitle;
+
+  /// Title of the step permission card
+  ///
+  /// In en, this message translates to:
+  /// **'Step tracking'**
+  String get permissionStepsTitle;
+
+  /// Description of the step permission card
+  ///
+  /// In en, this message translates to:
+  /// **'Every step you take makes {petName} happier and helps them grow'**
+  String permissionStepsDesc(String petName);
+
+  /// Badge on the step permission card
+  ///
+  /// In en, this message translates to:
+  /// **'Health Connect · read-only'**
+  String get permissionStepsBadge;
+
+  /// Title of the notification permission card
+  ///
+  /// In en, this message translates to:
+  /// **'Walk reminders'**
+  String get permissionNotifTitle;
+
+  /// Description of the notification permission card
+  ///
+  /// In en, this message translates to:
+  /// **'A gentle nudge when it\'s a great time for a walk'**
+  String get permissionNotifDesc;
+
+  /// Badge on the notification permission card
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 a day'**
+  String get permissionNotifBadge;
+
+  /// Privacy microcopy on the permission priming screen
+  ///
+  /// In en, this message translates to:
+  /// **'Step data never leaves your phone'**
+  String get permissionPrivacyNote;
+
+  /// Primary CTA that triggers the OS permission dialogs
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s walk! 🐾'**
+  String get permissionPrimingCta;
+
+  /// Skip link on the permission priming screen
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get permissionPrimingSkip;
 }
 
 class _AppLocalizationsDelegate
