@@ -93,13 +93,21 @@ class DailyStatsWidget extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                AppLocalizations.of(context).todaysActivity,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+              // 영어 등 긴 제목이 상태/날짜 배지와 겹쳐 overflow 나지 않도록 Flexible+ellipsis
+              Flexible(
+                child: Text(
+                  AppLocalizations.of(context).todaysActivity,
+                  // 다른 카드 헤더(주간/월간 차트)와 동일하게 titleMedium 사용 —
+                  // titleLarge는 영어 제목이 상태/날짜 배지와 겹쳐 잘렸음
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              const SizedBox(width: 8),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // 트래킹 상태 표시
                   stepTrackingStateAsync.when(
