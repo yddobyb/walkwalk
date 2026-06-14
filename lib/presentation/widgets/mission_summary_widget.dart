@@ -61,16 +61,26 @@ class MissionSummaryWidget extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  AppLocalizations.of(context).todaysMissions,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                // Expanded + ellipsis: 영어 등 긴 제목이 "View all" 버튼과 겹쳐
+                // overflow 나지 않도록 (Spacer 대신 남은 폭을 제목이 차지)
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context).todaysMissions,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Spacer(),
                 if (showViewAllButton)
                   TextButton(
                     onPressed: () => _navigateToMissionList(context),
+                    // 기본 패딩이 넉넉해 제목 공간을 빼앗으므로 컴팩트하게
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     child: Text(AppLocalizations.of(context).viewAll),
                   ),
               ],
