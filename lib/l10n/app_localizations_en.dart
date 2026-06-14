@@ -1644,4 +1644,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get permissionPrimingSkip => 'Maybe later';
+
+  @override
+  String get stepPermissionOffDesc => 'Activity permission is off';
+
+  @override
+  String get stepPermissionEnableCta => 'Turn on';
+
+  @override
+  String get stepPermissionGranted => 'Step tracking is on! 🎉';
+
+  @override
+  String get stepPermissionDeniedHint =>
+      'Turn on the activity (steps) permission in Settings';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get stepLinkSectionTitle => 'Permissions & linking';
+
+  @override
+  String get stepLinkTitle => 'Step tracking';
+
+  @override
+  String get stepLinkConnectedSubtitle => 'Connected to health data';
+
+  @override
+  String get stepLinkDisconnectedSubtitle => 'Not connected — tap to turn on';
+
+  @override
+  String get stepLinkAlreadyConnected => 'Already connected';
 }

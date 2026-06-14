@@ -120,6 +120,10 @@ class _PermissionPrimingScreenState
   }
 
   void _goHome() {
+    // 펫을 트래킹 서비스에 로드해 홈의 펫 상태/대화가 바로 뜨도록 한다.
+    // 특히 "나중에" 스킵 경로는 권한 초기화를 건너뛰므로, 이게 없으면
+    // StepTrackingService._currentPet가 비어 채팅이 빈/로딩 상태가 된다.
+    StepTrackingService().reloadCurrentPet();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => HomeScreen(initialPet: widget.pet),

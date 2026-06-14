@@ -9,6 +9,8 @@ import '../../../services/notification/notification_service.dart';
 import '../../../services/user/user_tier_providers.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../services/user/user_tier_service.dart';
+import '../../../services/sensors/pedometer_service.dart';
+import '../../widgets/step_permission_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
 import '../subscription/paywall_screen.dart';
@@ -59,6 +61,10 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildSettingsContent(BuildContext context, WidgetRef ref, ThemeData theme, settings) {
+    final stepLinked = ref.watch(healthPermissionProvider).maybeWhen(
+          data: (granted) => granted,
+          orElse: () => false,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -155,6 +161,37 @@ class SettingsScreen extends ConsumerWidget {
                         .withValues(alpha: 0.45),
                   ),
             ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // 권한·연동 (걸음수 연동)
+          _SettingsSection(
+            title: AppLocalizations.of(context).stepLinkSectionTitle,
+            children: [
+              _SettingsTile(
+                icon: Icons.directions_walk,
+                title: AppLocalizations.of(context).stepLinkTitle,
+                subtitle: stepLinked
+                    ? AppLocalizations.of(context).stepLinkConnectedSubtitle
+                    : AppLocalizations.of(context).stepLinkDisconnectedSubtitle,
+                trailing: stepLinked
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : const Icon(Icons.chevron_right),
+                onTap: () {
+                  if (stepLinked) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)
+                            .stepLinkAlreadyConnected),
+                      ),
+                    );
+                  } else {
+                    requestStepPermission(context, ref);
+                  }
+                },
+              ),
+            ],
           ),
 
           const SizedBox(height: 24),

@@ -257,3 +257,12 @@ final pedometerErrorProvider = StreamProvider<String?>((ref) {
   final service = ref.watch(pedometerServiceProvider);
   return service.errorStream;
 });
+
+/// Health(걸음수) 권한 보유 여부 Provider
+///
+/// 온보딩에서 "나중에 설정할게요"로 스킵한 사용자는 걸음수 권한이 없는 채로
+/// 홈에 진입한다. 홈 걸음수 카드 / 설정 "걸음수 연동" 타일이 이 값을 watch 해서
+/// 권한이 없을 때 "권한 켜기" CTA를 노출한다. 권한 요청 후 invalidate 하면 갱신된다.
+final healthPermissionProvider = FutureProvider<bool>((ref) async {
+  return ref.watch(pedometerServiceProvider).hasPermission();
+});

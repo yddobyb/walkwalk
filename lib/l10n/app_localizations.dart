@@ -3073,6 +3073,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maybe later'**
   String get permissionPrimingSkip;
+
+  /// Home steps card subtitle when health permission is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Activity permission is off'**
+  String get stepPermissionOffDesc;
+
+  /// Button label to (re)request the step/health permission
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get stepPermissionEnableCta;
+
+  /// Snackbar shown after the step permission is granted
+  ///
+  /// In en, this message translates to:
+  /// **'Step tracking is on! 🎉'**
+  String get stepPermissionGranted;
+
+  /// Snackbar when the in-app request is blocked and the user must use OS settings
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on the activity (steps) permission in Settings'**
+  String get stepPermissionDeniedHint;
+
+  /// Snackbar action that opens the OS app settings
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// Settings section header for permissions/linking
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions & linking'**
+  String get stepLinkSectionTitle;
+
+  /// Settings tile title for the step/health link
+  ///
+  /// In en, this message translates to:
+  /// **'Step tracking'**
+  String get stepLinkTitle;
+
+  /// Settings tile subtitle when step permission is granted
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to health data'**
+  String get stepLinkConnectedSubtitle;
+
+  /// Settings tile subtitle when step permission is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected — tap to turn on'**
+  String get stepLinkDisconnectedSubtitle;
+
+  /// Snackbar when tapping the step link tile while already connected
+  ///
+  /// In en, this message translates to:
+  /// **'Already connected'**
+  String get stepLinkAlreadyConnected;
 }
 
 class _AppLocalizationsDelegate

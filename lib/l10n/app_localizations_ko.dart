@@ -1610,4 +1610,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get permissionPrimingSkip => '나중에 설정할게요';
+
+  @override
+  String get stepPermissionOffDesc => '활동 권한이 꺼져 있어요';
+
+  @override
+  String get stepPermissionEnableCta => '권한 켜기';
+
+  @override
+  String get stepPermissionGranted => '걸음수 연동을 켰어요! 🎉';
+
+  @override
+  String get stepPermissionDeniedHint => '설정에서 \'활동(걸음수)\' 권한을 켜주세요';
+
+  @override
+  String get openSettings => '설정 열기';
+
+  @override
+  String get stepLinkSectionTitle => '권한·연동';
+
+  @override
+  String get stepLinkTitle => '걸음수 연동';
+
+  @override
+  String get stepLinkConnectedSubtitle => '건강 데이터 연결됨';
+
+  @override
+  String get stepLinkDisconnectedSubtitle => '연결 안 됨 — 탭하여 켜기';
+
+  @override
+  String get stepLinkAlreadyConnected => '이미 연결되어 있어요';
 }

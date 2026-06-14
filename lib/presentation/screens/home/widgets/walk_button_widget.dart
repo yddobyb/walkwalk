@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
+import '../../../widgets/step_permission_button.dart';
 import 'pet_dialogue_widget.dart';
 
 class WalkButtonWidget extends ConsumerWidget {
@@ -282,6 +283,8 @@ class WalkButtonWidget extends ConsumerWidget {
             ),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 16),
+          const StepPermissionButton(onDark: true),
         ],
       ),
     );

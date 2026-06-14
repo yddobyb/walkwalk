@@ -2628,5 +2628,45 @@
   "permissionPrimingSkip": "Maybe later",
   "@permissionPrimingSkip": {
     "description": "Skip link on the permission priming screen"
+  },
+  "stepPermissionOffDesc": "Activity permission is off",
+  "@stepPermissionOffDesc": {
+    "description": "Home steps card subtitle when health permission is missing"
+  },
+  "stepPermissionEnableCta": "Turn on",
+  "@stepPermissionEnableCta": {
+    "description": "Button label to (re)request the step/health permission"
+  },
+  "stepPermissionGranted": "Step tracking is on! 🎉",
+  "@stepPermissionGranted": {
+    "description": "Snackbar shown after the step permission is granted"
+  },
+  "stepPermissionDeniedHint": "Turn on the activity (steps) permission in Settings",
+  "@stepPermissionDeniedHint": {
+    "description": "Snackbar when the in-app request is blocked and the user must use OS settings"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Snackbar action that opens the OS app settings"
+  },
+  "stepLinkSectionTitle": "Permissions & linking",
+  "@stepLinkSectionTitle": {
+    "description": "Settings section header for permissions/linking"
+  },
+  "stepLinkTitle": "Step tracking",
+  "@stepLinkTitle": {
+    "description": "Settings tile title for the step/health link"
+  },
+  "stepLinkConnectedSubtitle": "Connected to health data",
+  "@stepLinkConnectedSubtitle": {
+    "description": "Settings tile subtitle when step permission is granted"
+  },
+  "stepLinkDisconnectedSubtitle": "Not connected — tap to turn on",
+  "@stepLinkDisconnectedSubtitle": {
+    "description": "Settings tile subtitle when step permission is missing"
+  },
+  "stepLinkAlreadyConnected": "Already connected",
+  "@stepLinkAlreadyConnected": {
+    "description": "Snackbar when tapping the step link tile while already connected"
   }
 }

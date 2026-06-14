@@ -57,9 +57,7 @@ class StepTrackingService {
   /// 일일 걸음수 스트림
   /// 새로운 구독자는 즉시 현재 캐시된 값을 받고, 이후 업데이트를 스트림으로 받음
   Stream<int> get dailyStepsStream async* {
-    if (!_isInitialized) {
-      return;
-    }
+    // 미초기화 시에도 캐시값(0)부터 방출 — 구독자가 loading에 머물지 않도록.
     yield _currentDailySteps;
     yield* _dailyStepsController.stream;
   }
@@ -67,9 +65,7 @@ class StepTrackingService {
   /// 주간 걸음수 스트림
   /// 새로운 구독자는 즉시 현재 캐시된 값을 받고, 이후 업데이트를 스트림으로 받음
   Stream<int> get weeklyStepsStream async* {
-    if (!_isInitialized) {
-      return;
-    }
+    // 미초기화 시에도 캐시값(0)부터 방출 — 구독자가 loading에 머물지 않도록.
     yield _currentWeeklySteps;
     yield* _weeklyStepsController.stream;
   }
@@ -77,9 +73,8 @@ class StepTrackingService {
   /// 펫 업데이트 스트림
   /// 새로운 구독자는 즉시 현재 펫 정보를 받음
   Stream<Pet?> get petUpdateStream async* {
-    if (!_isInitialized) {
-      return;
-    }
+    // 펫 데이터는 걸음수 권한/초기화 상태와 무관 — 항상 현재 값(null 포함)부터
+    // 방출해, 권한을 스킵한 사용자도 펫 UI가 무한 로딩에 빠지지 않게 한다.
     yield _currentPet;
     yield* _petUpdateController.stream;
   }
@@ -118,18 +113,21 @@ class StepTrackingService {
     }
 
     try {
-      // Pedometer 서비스 초기화
+      // DB + 펫은 걸음수 권한과 무관하게 먼저 로드한다.
+      // 홈의 펫 상태/대화는 걸음수 권한 없이도 동작해야 하므로, 권한을 "나중에"
+      // 스킵한 사용자도 펫 UI(채팅·간식 등)가 무한 로딩에 빠지지 않도록 한다.
+      await _databaseService.initialize();
+      await _loadCurrentPet();
+
+      // Pedometer(걸음수 권한) 초기화 — 실패(권한 없음)면 펫은 이미 로드됐고
+      // 걸음수 트래킹만 보류한다. 이후 권한 허용 시 initialize()가 다시 호출된다.
       final pedometerInitialized = await _pedometerService.initialize();
       if (!pedometerInitialized) {
-        debugPrint('StepTrackingService - Pedometer initialization failed');
+        debugPrint('StepTrackingService - Pedometer init failed (no permission); '
+            'pet loaded, step tracking deferred');
+        _updateState(StepTrackingState.stopped);
         return false;
       }
-
-      // 데이터베이스 초기화
-      await _databaseService.initialize();
-
-      // 현재 펫 정보 로드
-      await _loadCurrentPet();
 
       // 걸음수 스트림 구독 (먼저 구독해서 캐시를 채움)
       _subscribeToStepCount();

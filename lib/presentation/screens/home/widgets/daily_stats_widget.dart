@@ -6,6 +6,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 import '../../../../services/statistics/statistics_service.dart';
 import '../../../../services/settings/settings_service.dart';
+import '../../../../services/sensors/pedometer_service.dart';
+import '../../../widgets/step_permission_button.dart';
 
 class DailyStatsWidget extends ConsumerWidget {
   const DailyStatsWidget({super.key});
@@ -13,6 +15,14 @@ class DailyStatsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    // 걸음수 권한이 없으면(온보딩에서 "나중에" 스킵 등) 무엇보다 먼저 "권한 켜기" 안내
+    final permissionMissing = ref
+        .watch(healthPermissionProvider)
+        .maybeWhen(data: (granted) => !granted, orElse: () => false);
+    if (permissionMissing) {
+      return _buildPermissionState(context, theme);
+    }
 
     // 실시간 걸음수 데이터 가져오기
     final dailyStepsAsync = ref.watch(dailyStepsProvider);
@@ -341,6 +351,49 @@ class DailyStatsWidget extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// 걸음수 권한이 없을 때: "권한 켜기" CTA 카드 (온보딩 스킵 사용자 복구 경로)
+  Widget _buildPermissionState(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Text('👟', style: TextStyle(fontSize: 40)),
+          const SizedBox(height: 12),
+          Text(
+            l10n.cannotLoadSteps,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l10n.stepPermissionOffDesc,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          const StepPermissionButton(),
+        ],
       ),
     );
   }
