@@ -2567,6 +2567,19 @@
   "@missionWalkMetricHint": {
     "description": "Per-card hint: this mission counts in-app walk sessions"
   },
+  "missionCompleteCelebration": "🎉 Mission complete!",
+  "@missionCompleteCelebration": {
+    "description": "Header of the mission-complete celebration toast"
+  },
+  "missionAchievedSteps": "Already {steps} steps!",
+  "@missionAchievedSteps": {
+    "description": "Celebration line showing the steps already achieved",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
   "permissionPrimingBubble": "Let's walk together!",
   "@permissionPrimingBubble": {
     "description": "Speech bubble from the newly created pet on the permission priming screen"

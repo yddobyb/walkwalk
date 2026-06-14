@@ -1601,6 +1601,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get missionWalkMetricHint => 'Counts your in-app walks';
 
   @override
+  String get missionCompleteCelebration => '🎉 Mission complete!';
+
+  @override
+  String missionAchievedSteps(String steps) {
+    return 'Already $steps steps!';
+  }
+
+  @override
   String get permissionPrimingBubble => 'Let\'s walk together!';
 
   @override

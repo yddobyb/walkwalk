@@ -38,6 +38,21 @@ class MissionService {
       StreamController<MissionCompletionNotification>.broadcast();
   Stream<MissionCompletionNotification> get missionCompletionStream => _missionCompletionController.stream;
 
+  // 표시되지 못한(리스너 없던) 완료 축하 버퍼.
+  // 홈 진입 전 자동완료된 미션(설치/권한 허용 직후)의 축하를 홈 마운트 시 재생하기 위함.
+  final List<MissionCompletionNotification> _pendingCelebrations = [];
+
+  /// 버퍼된 축하를 모두 가져오고 비운다 (홈 마운트 시 호출).
+  List<MissionCompletionNotification> takePendingCelebrations() {
+    final list = List<MissionCompletionNotification>.of(_pendingCelebrations);
+    _pendingCelebrations.clear();
+    return list;
+  }
+
+  /// 라이브로 이미 표시된 축하는 버퍼에서 제거 (중복 표시 방지).
+  void clearPendingCelebration(MissionCompletionNotification n) =>
+      _pendingCelebrations.remove(n);
+
   /// 서비스 초기화
   Future<void> initialize() async {
     await _databaseService.removeDuplicateMissions();
@@ -150,6 +165,8 @@ class MissionService {
       mission: mission,
       message: '${mission.title} - ${l10n.missionComplete}',
     );
+    // 버퍼에 보관(홈이 아직 없으면 재생용) + 라이브 스트림으로도 발행
+    _pendingCelebrations.add(notification);
     _missionCompletionController.add(notification);
   }
 

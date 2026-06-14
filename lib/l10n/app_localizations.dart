@@ -2996,6 +2996,18 @@ abstract class AppLocalizations {
   /// **'Counts your in-app walks'**
   String get missionWalkMetricHint;
 
+  /// Header of the mission-complete celebration toast
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 Mission complete!'**
+  String get missionCompleteCelebration;
+
+  /// Celebration line showing the steps already achieved
+  ///
+  /// In en, this message translates to:
+  /// **'Already {steps} steps!'**
+  String missionAchievedSteps(String steps);
+
   /// Speech bubble from the newly created pet on the permission priming screen
   ///
   /// In en, this message translates to:

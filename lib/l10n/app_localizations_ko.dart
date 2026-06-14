@@ -1569,6 +1569,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get missionWalkMetricHint => '앱 산책 기록으로 집계돼요';
 
   @override
+  String get missionCompleteCelebration => '🎉 미션 완료!';
+
+  @override
+  String missionAchievedSteps(String steps) {
+    return '이미 $steps보 달성!';
+  }
+
+  @override
   String get permissionPrimingBubble => '주인님, 저랑 같이 걸어요!';
 
   @override

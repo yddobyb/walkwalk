@@ -2550,6 +2550,19 @@
   "@missionWalkMetricHint": {
     "description": "Per-card hint: this mission counts in-app walk sessions"
   },
+  "missionCompleteCelebration": "🎉 미션 완료!",
+  "@missionCompleteCelebration": {
+    "description": "Header of the mission-complete celebration toast"
+  },
+  "missionAchievedSteps": "이미 {steps}보 달성!",
+  "@missionAchievedSteps": {
+    "description": "Celebration line showing the steps already achieved",
+    "placeholders": {
+      "steps": {
+        "type": "String"
+      }
+    }
+  },
   "permissionPrimingBubble": "주인님, 저랑 같이 걸어요!",
   "@permissionPrimingBubble": {
     "description": "Speech bubble from the newly created pet on the permission priming screen"
