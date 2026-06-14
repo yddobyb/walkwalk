@@ -2984,17 +2984,17 @@ abstract class AppLocalizations {
   /// **'Signing out will switch to anonymous mode. Continue?'**
   String get signOutConfirm;
 
-  /// Hint that daily missions count total daily steps
+  /// Per-card hint: this mission counts total (Health) steps
   ///
   /// In en, this message translates to:
-  /// **'Based on your total daily steps'**
-  String get dailyMissionStepsHint;
+  /// **'Counts your total steps'**
+  String get missionStepsMetricHint;
 
-  /// Hint that weekly missions count only in-app walk steps
+  /// Per-card hint: this mission counts in-app walk sessions
   ///
   /// In en, this message translates to:
-  /// **'In-app walk steps only'**
-  String get weeklyMissionStepsHint;
+  /// **'Counts your in-app walks'**
+  String get missionWalkMetricHint;
 
   /// Speech bubble from the newly created pet on the permission priming screen
   ///

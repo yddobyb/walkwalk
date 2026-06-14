@@ -1595,10 +1595,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Signing out will switch to anonymous mode. Continue?';
 
   @override
-  String get dailyMissionStepsHint => 'Based on your total daily steps';
+  String get missionStepsMetricHint => 'Counts your total steps';
 
   @override
-  String get weeklyMissionStepsHint => 'In-app walk steps only';
+  String get missionWalkMetricHint => 'Counts your in-app walks';
 
   @override
   String get permissionPrimingBubble => 'Let\'s walk together!';

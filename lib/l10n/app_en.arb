@@ -2559,13 +2559,13 @@
   "@signOutConfirm": {
     "description": "Sign out confirmation message"
   },
-  "dailyMissionStepsHint": "Based on your total daily steps",
-  "@dailyMissionStepsHint": {
-    "description": "Hint that daily missions count total daily steps"
+  "missionStepsMetricHint": "Counts your total steps",
+  "@missionStepsMetricHint": {
+    "description": "Per-card hint: this mission counts total (Health) steps"
   },
-  "weeklyMissionStepsHint": "In-app walk steps only",
-  "@weeklyMissionStepsHint": {
-    "description": "Hint that weekly missions count only in-app walk steps"
+  "missionWalkMetricHint": "Counts your in-app walks",
+  "@missionWalkMetricHint": {
+    "description": "Per-card hint: this mission counts in-app walk sessions"
   },
   "permissionPrimingBubble": "Let's walk together!",
   "@permissionPrimingBubble": {

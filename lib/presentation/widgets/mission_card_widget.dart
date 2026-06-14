@@ -75,6 +75,35 @@ class MissionCardWidget extends ConsumerWidget {
                             color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
+                        const SizedBox(height: 4),
+                        // 집계 기준 힌트: 걸음수 미션=전체 걸음수, 시간/거리 미션=앱 산책
+                        Row(
+                          children: [
+                            Icon(
+                              mission.targetSteps > 0
+                                  ? Icons.directions_walk
+                                  : Icons.pets,
+                              size: 12,
+                              color: theme.colorScheme.onSurface
+                                  .withValues(alpha: 0.45),
+                            ),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                mission.targetSteps > 0
+                                    ? AppLocalizations.of(context)
+                                        .missionStepsMetricHint
+                                    : AppLocalizations.of(context)
+                                        .missionWalkMetricHint,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontSize: 11,
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.45),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

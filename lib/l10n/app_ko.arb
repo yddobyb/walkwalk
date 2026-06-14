@@ -2542,13 +2542,13 @@
   "@signOutConfirm": {
     "description": "Sign out confirmation message"
   },
-  "dailyMissionStepsHint": "오늘 전체 걸음수 기준이에요",
-  "@dailyMissionStepsHint": {
-    "description": "Hint that daily missions count total daily steps"
+  "missionStepsMetricHint": "전체 걸음수로 집계돼요",
+  "@missionStepsMetricHint": {
+    "description": "Per-card hint: this mission counts total (Health) steps"
   },
-  "weeklyMissionStepsHint": "앱 산책 걸음수만 집계돼요",
-  "@weeklyMissionStepsHint": {
-    "description": "Hint that weekly missions count only in-app walk steps"
+  "missionWalkMetricHint": "앱 산책 기록으로 집계돼요",
+  "@missionWalkMetricHint": {
+    "description": "Per-card hint: this mission counts in-app walk sessions"
   },
   "permissionPrimingBubble": "주인님, 저랑 같이 걸어요!",
   "@permissionPrimingBubble": {
