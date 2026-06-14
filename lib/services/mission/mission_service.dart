@@ -70,7 +70,9 @@ class MissionService {
   }
 
   /// 미션 진행도 업데이트 (걸음수 기반)
-  Future<List<Mission>> updateMissionProgressFromSteps(int totalSteps, int sessionSteps, int sessionDuration, double sessionDistance) async {
+  Future<List<Mission>> updateMissionProgressFromSteps(
+      int totalSteps, int weeklySteps, int sessionSteps,
+      int sessionDuration, double sessionDistance) async {
     final activeMissions = await getActiveMissions();
     final completedMissions = <Mission>[];
 
@@ -82,14 +84,12 @@ class MissionService {
 
       // 미션 타입에 따른 진행도 계산
       if (mission.targetSteps > 0) {
-        // 걸음수 미션 (절대값)
-        final computedSteps = (mission.type == 'weekly')
-            // 주간 미션: 이번 주 "앱 산책" 걸음수 합 (walk session 기준)
-            ? await _getWeeklyTotalSteps()
-            // 일일 미션: 오늘 걸음수 (Health 당일 총합)
-            : totalSteps;
-        // 진행도 역행 방지: 산책 종료 경로가 더 작은 값(세션 걸음 합)을 넘겨도
-        // 기존 진행도가 줄지 않도록 max 적용
+        // 걸음수 미션 (절대값) — 일일/주간 모두 Health 전체 걸음수 기준.
+        // ("걸음수 챌린지"는 이름대로 전체 걸음수를 세고, "앱 산책"은 아래
+        //  시간/거리 미션이 담당한다.)
+        final computedSteps =
+            (mission.type == 'weekly') ? weeklySteps : totalSteps;
+        // 진행도 역행 방지: 산책 종료 경로가 더 작은 값을 넘겨도 줄지 않도록 max
         newProgress = max(mission.currentProgress, computedSteps);
         shouldUpdate = true;
       } else if (mission.targetDuration > 0) {
@@ -542,27 +542,6 @@ class MissionService {
       debugPrint('MissionService - Error updating missions locale: $e');
       rethrow;
     }
-  }
-
-  /// 이번 주 총 걸음수 계산 (월요일부터 오늘까지)
-  Future<int> _getWeeklyTotalSteps() async {
-    final now = DateTime.now();
-    final weekday = now.weekday; // 1 = Monday, 7 = Sunday
-    final mondayDate = now.subtract(Duration(days: weekday - 1));
-    final monday = DateTime(mondayDate.year, mondayDate.month, mondayDate.day);
-
-    int totalWeeklySteps = 0;
-
-    // 월요일부터 오늘까지의 모든 Walk Session 가져오기
-    for (int i = 0; i < weekday; i++) {
-      final currentDay = monday.add(Duration(days: i));
-      final sessions = await _databaseService.getWalkSessionsByDate(currentDay);
-      final daySteps = sessions.fold<int>(0, (sum, session) => sum + session.totalSteps);
-      totalWeeklySteps += daySteps;
-    }
-
-    debugPrint('MissionService - Weekly total steps calculated: $totalWeeklySteps');
-    return totalWeeklySteps;
   }
 
   /// 서비스 해제

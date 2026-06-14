@@ -214,6 +214,17 @@ class StepTrackingService {
       _dailyStepsController.add(_currentDailySteps);
       _weeklyStepsController.add(_currentWeeklySteps);
       debugPrint('StepTrackingService - Initialized with actual steps from health: daily=$_currentDailySteps, weekly=$_currentWeeklySteps');
+
+      // 초기 미션 동기화: 이미 목표를 넘긴 걸음수 미션은 즉시 완료/보상 처리.
+      // (설치·초기화 또는 권한 허용 직후, 걷지 않아도 기존 걸음수가 반영되도록)
+      if (_currentDailySteps > 0 || _currentWeeklySteps > 0) {
+        final completed = await _missionService.updateMissionProgressFromSteps(
+          _currentDailySteps, _currentWeeklySteps, 0, 0, 0);
+        // 보상으로 펫(간식/행복도)이 바뀌었으면 화면 갱신 위해 펫 리로드
+        if (completed.isNotEmpty) {
+          await reloadCurrentPet();
+        }
+      }
     } catch (e) {
       debugPrint('StepTrackingService - Error initializing today steps: $e');
     }
@@ -269,7 +280,7 @@ class StepTrackingService {
     }
 
     // 펫 상태 업데이트
-    _updatePetWithSteps(_currentDailySteps, todaySteps);
+    await _updatePetWithSteps(_currentDailySteps, todaySteps);
 
     // 미션 진행도 실시간 업데이트 (throttling 적용)
     _updateMissionsRealtime(_currentDailySteps);
@@ -307,12 +318,17 @@ class StepTrackingService {
       // 미션 서비스를 통해 진행도 업데이트
       // 거리와 시간은 실시간으로 계산하기 어려우므로 0으로 전달
       // (실제 산책 세션 종료 시 정확한 값으로 다시 업데이트됨)
-      await _missionService.updateMissionProgressFromSteps(
-        dailySteps,  // 오늘 총 걸음수
-        0,           // 세션 걸음수 (실시간에서는 0)
-        0,           // 세션 시간 (실시간에서는 0)
-        0,           // 세션 거리 (실시간에서는 0)
+      final completed = await _missionService.updateMissionProgressFromSteps(
+        dailySteps,           // 오늘 총 걸음수 (일일 걸음수 미션)
+        _currentWeeklySteps,  // 이번 주 Health 총 걸음수 (주간 걸음수 미션)
+        0,                    // 세션 걸음수 (실시간에서는 0)
+        0,                    // 세션 시간 (실시간에서는 0)
+        0,                    // 세션 거리 (실시간에서는 0)
       );
+      // 보상으로 펫이 바뀌었으면 화면 갱신 위해 리로드
+      if (completed.isNotEmpty) {
+        await reloadCurrentPet();
+      }
 
       debugPrint('StepTrackingService - Missions updated in realtime with $dailySteps steps');
     } catch (e) {
@@ -530,11 +546,15 @@ class StepTrackingService {
   }
 
   /// 펫 상태 업데이트
-  void _updatePetWithSteps(int dailySteps, int totalSteps) {
+  Future<void> _updatePetWithSteps(int dailySteps, int totalSteps) async {
     if (_currentPet == null) return;
 
     try {
-      final updatedPet = _currentPet!.copyWith(
+      // 다른 경로(미션 보상, 간식 주기 등)가 바꾼 간식/행복도를 덮어쓰지 않도록
+      // DB의 최신 펫을 기준으로 걸음 관련 필드만 갱신한다. (stale _currentPet 클로버 방지)
+      final latest =
+          await _databaseService.getPetById(_currentPet!.petId) ?? _currentPet!;
+      final updatedPet = latest.copyWith(
         stepsToday: dailySteps,
         totalSteps: totalSteps,
         lastUpdate: DateTime.now(),
@@ -544,11 +564,7 @@ class StepTrackingService {
       _currentPet = updatedPet;
       _petUpdateController.add(updatedPet);
 
-      // 데이터베이스에 저장 (await 없이 fire-and-forget 방식으로 실행)
-      // 중요: 데이터 손실 방지를 위해 Future를 무시하지 않고 에러 처리
-      _databaseService.savePet(updatedPet).catchError((error) {
-        debugPrint('StepTrackingService - Error saving pet to database: $error');
-      });
+      await _databaseService.savePet(updatedPet);
     } catch (e) {
       debugPrint('StepTrackingService - Error updating pet: $e');
     }
@@ -643,6 +659,7 @@ class StepTrackingService {
 
       final completedMissions = await _missionService.updateMissionProgressFromSteps(
         totalTodaySteps,
+        _currentWeeklySteps,
         walkSession.totalSteps,
         walkSession.duration,
         walkSession.distance,
