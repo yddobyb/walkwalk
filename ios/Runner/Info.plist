@@ -38,6 +38,20 @@
 	<string>WalkDog uses location data to detect outdoor walks and provide bonus rewards for outdoor activities.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>WalkDog uses motion data to track your steps and provide personalized pet interactions based on your walking activity.</string>
+	<!-- AdMob App ID — ⚠️ TEST ID (Google sample). Replace with the real AdMob App ID before release -->
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<!-- App Tracking Transparency (ATT) prompt copy for personalized ads -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Your data will be used to show you more relevant ads. WalkDog never shares information that personally identifies you.</string>
+	<!-- SKAdNetwork (iOS 광고 기여 측정) — ⚠️ 출시 전 Google AdMob 최신 전체 목록으로 보강 권장 -->
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>cstr6suwn9.skadnetwork</string>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

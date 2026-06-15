@@ -76,18 +76,21 @@ final quotaProvider = AutoDisposeFutureProvider<QuotaData>.internal(
 );
 
 typedef QuotaRef = AutoDisposeFutureProviderRef<QuotaData>;
-String _$stickerGeneratorHash() => r'293690a8e245fa706e4a1ef0e5ad317492060156';
+String _$stickerGeneratorHash() => r'62c63b9d61658f0da68003b9662cfc4d56f0581d';
 
 /// 스티커 생성 프로바이더
 ///
 /// 사용자 등급에 따라 적절한 Cloud Function 호출:
-/// - Free: genStickerFree (Pixazo → OpenAI 폴백)
+/// - Free: genStickerFree (Cloudflare → OpenAI 폴백)
 /// - Premium: genSticker (Gemini)
+///
+/// keepAlive: 리워드 전면 광고(풀스크린) 동안 autoDispose로 상태가 리셋돼
+/// 광고 후 생성 결과가 사라지던 문제 방지.
 ///
 /// Copied from [StickerGenerator].
 @ProviderFor(StickerGenerator)
-final stickerGeneratorProvider = AutoDisposeAsyncNotifierProvider<
-    StickerGenerator, StickerResponse?>.internal(
+final stickerGeneratorProvider =
+    AsyncNotifierProvider<StickerGenerator, StickerResponse?>.internal(
   StickerGenerator.new,
   name: r'stickerGeneratorProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -97,6 +100,6 @@ final stickerGeneratorProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$StickerGenerator = AutoDisposeAsyncNotifier<StickerResponse?>;
+typedef _$StickerGenerator = AsyncNotifier<StickerResponse?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

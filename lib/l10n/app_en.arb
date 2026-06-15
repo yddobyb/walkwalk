@@ -2368,7 +2368,7 @@
   "@paywallBenefitQuality": {
     "description": "Premium benefit - image quality"
   },
-  "paywallBenefitQuota": "50 images per day",
+  "paywallBenefitQuota": "5 images per day",
   "@paywallBenefitQuota": {
     "description": "Premium benefit - quota"
   },
@@ -2507,7 +2507,7 @@
   "@premiumUpgradeTitle": {
     "description": "Premium upgrade banner title"
   },
-  "premiumUpgradeBenefits": "• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed",
+  "premiumUpgradeBenefits": "• High-quality AI images (Gemini)\n• 5 generations per day\n• Ad-free experience\n• Faster generation speed",
   "@premiumUpgradeBenefits": {
     "description": "Premium upgrade banner benefits list"
   },
@@ -2668,5 +2668,25 @@
   "stepLinkAlreadyConnected": "Already connected",
   "@stepLinkAlreadyConnected": {
     "description": "Snackbar when tapping the step link tile while already connected"
+  },
+  "outOfQuotaTitle": "You've used all your free images today",
+  "@outOfQuotaTitle": {
+    "description": "Dialog title when a free user runs out of daily image quota"
+  },
+  "outOfQuotaAdMessage": "Watch a short ad to create 1 more sticker today.",
+  "@outOfQuotaAdMessage": {
+    "description": "Dialog body offering a rewarded ad for one more image"
+  },
+  "outOfQuotaWatchAd": "Watch ad for +1",
+  "@outOfQuotaWatchAd": {
+    "description": "Button to watch a rewarded ad for one more image"
+  },
+  "outOfQuotaUpgrade": "Upgrade to Premium",
+  "@outOfQuotaUpgrade": {
+    "description": "Button to open the paywall from the out-of-quota dialog"
+  },
+  "adNotReady": "The ad isn't ready yet. Please try again in a moment.",
+  "@adNotReady": {
+    "description": "Snackbar when a rewarded ad is not loaded yet"
   }
 }

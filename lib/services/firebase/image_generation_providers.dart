@@ -47,7 +47,10 @@ Future<QuotaData> quota(Ref ref) async {
 /// 사용자 등급에 따라 적절한 Cloud Function 호출:
 /// - Free: genStickerFree (Cloudflare → OpenAI 폴백)
 /// - Premium: genSticker (Gemini)
-@riverpod
+///
+/// keepAlive: 리워드 전면 광고(풀스크린) 동안 autoDispose로 상태가 리셋돼
+/// 광고 후 생성 결과가 사라지던 문제 방지.
+@Riverpod(keepAlive: true)
 class StickerGenerator extends _$StickerGenerator {
   @override
   FutureOr<StickerResponse?> build() {

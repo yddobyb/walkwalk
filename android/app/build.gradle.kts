@@ -19,10 +19,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.walkdog.walk_dog"
@@ -48,6 +44,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+}
+
+// Kotlin 2.2+ DSL 변경: kotlinOptions(String jvmTarget) 제거됨 → compilerOptions 사용
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
 

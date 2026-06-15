@@ -39,12 +39,12 @@ void main() {
       expect(UserTier.premium.displayName, equals('Premium'));
     });
 
-    test('free tier has daily limit of 10', () {
-      expect(UserTier.free.dailyImageLimit, equals(10));
+    test('free tier has daily base limit of 2', () {
+      expect(UserTier.free.dailyImageLimit, equals(2));
     });
 
-    test('premium tier has daily limit of 50', () {
-      expect(UserTier.premium.dailyImageLimit, equals(50));
+    test('premium tier has daily limit of 5', () {
+      expect(UserTier.premium.dailyImageLimit, equals(5));
     });
 
     test('free tier uses genStickerFree function', () {

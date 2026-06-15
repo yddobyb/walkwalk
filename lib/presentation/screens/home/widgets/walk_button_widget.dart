@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
+import '../../../../services/ads/ad_service.dart';
+import '../../../../services/user/user_tier_providers.dart';
 import '../../../widgets/step_permission_button.dart';
 import 'pet_dialogue_widget.dart';
 
@@ -453,6 +455,16 @@ class WalkButtonWidget extends ConsumerWidget {
               ),
             ),
           );
+
+          // 산책 완료 시트가 닫힌 뒤 전면광고 (레벨업 시 생략 — 축하 흐름 방해 X).
+          // 프리미엄 제외/빈도 제한은 AdService가 처리.
+          if (!didLevelUp && context.mounted) {
+            final isPremium =
+                ref.read(isPremiumUserProvider).valueOrNull ?? false;
+            ref
+                .read(adServiceProvider)
+                .maybeShowWalkInterstitial(isPremium: isPremium);
+          }
 
           // 레벨업 발생 시 추가 AI 대화 Bottom Sheet (level_up)
           if (didLevelUp) {

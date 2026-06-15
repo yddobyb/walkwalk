@@ -54,8 +54,10 @@ interface GenStickerFreeRequest {
   force?: boolean;
 }
 
-// 무료 사용자 일일 할당량
-const FREE_USER_DAILY_QUOTA = 10;
+// 무료 사용자 일일 하드캡 = 기본 2 + 리워드 광고 보너스 2.
+// quota 함수는 base(2)만 노출하고, 클라이언트가 2 소진 후 광고 시청 시 3·4번째를 허용.
+// 서버는 어뷰징 방지를 위해 최대 4로 하드캡(초과 생성 차단).
+const FREE_USER_DAILY_QUOTA = 4;
 
 export const genStickerFree = functions
   .region("us-central1")

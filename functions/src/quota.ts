@@ -10,12 +10,13 @@ const TIER_CONFIG: Record<UserTier, {
   provider: string;
 }> = {
   free: {
-    dailyQuota: 10,
+    // 무료 기본 2회/일 (리워드 광고로 최대 +2 → 4회까지, genStickerFree에서 보너스 처리)
+    dailyQuota: 2,
     collection: "freeImageUsage",
     provider: "cloudflare",
   },
   premium: {
-    dailyQuota: 50,
+    dailyQuota: 5,
     collection: "imageUsage",
     provider: "gemini",
   },
@@ -25,8 +26,8 @@ const TIER_CONFIG: Record<UserTier, {
  * 사용자 할당량 조회
  *
  * 사용자 등급에 따라 다른 컬렉션과 한도 적용:
- * - 무료: freeImageUsage, 10회/일
- * - 프리미엄: imageUsage, 50회/일
+ * - 무료: freeImageUsage, 2회/일 (+ 리워드 광고 보너스 최대 2회)
+ * - 프리미엄: imageUsage, 5회/일
  */
 export const quota = functions
   .region("us-central1")

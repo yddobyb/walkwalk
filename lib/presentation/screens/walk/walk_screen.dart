@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/tracking/step_tracking_service.dart';
+import '../../../services/ads/ad_service.dart';
+import '../../../services/user/user_tier_providers.dart';
 import 'widgets/walk_active_view.dart';
 import 'widgets/walk_idle_view.dart';
 import 'widgets/walk_result_bottom_sheet.dart';
@@ -205,6 +207,15 @@ class _WalkScreenState extends ConsumerState<WalkScreen> {
             levelBefore: levelBefore,
             levelAfter: levelAfter,
           );
+        }
+        // 산책 완료 시트가 닫힌 뒤 전면광고 (레벨업 시 생략 — 축하 흐름 방해 X).
+        // 프리미엄 제외/빈도 제한은 AdService가 처리.
+        if (mounted && levelAfter <= levelBefore) {
+          final isPremium =
+              ref.read(isPremiumUserProvider).valueOrNull ?? false;
+          ref
+              .read(adServiceProvider)
+              .maybeShowWalkInterstitial(isPremium: isPremium);
         }
       } else {
         if (mounted) {

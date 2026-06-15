@@ -14,7 +14,9 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
+import '../../../core/constants/ad_constants.dart';
 import '../../../core/utils/breed_assets.dart';
+import '../../../services/ads/ad_service.dart';
 import '../subscription/paywall_screen.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
@@ -974,6 +976,17 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
   }
 
   void _generateSticker() {
+    // 할당량 소진 시: 무료+광고 보너스 가능하면 리워드 다이얼로그, 아니면 안내
+    final quota = ref.read(quotaProvider).valueOrNull;
+    if (quota != null && quota.isExhausted) {
+      _showOutOfQuotaDialog(quota);
+      return;
+    }
+    _doGenerate();
+  }
+
+  /// 실제 스티커 생성 (할당량 통과 후 또는 리워드 광고 시청 후 호출)
+  void _doGenerate() {
     // PetAccessory -> StickerAccessory 변환
     final stickerAccessory = _convertAccessory(_selectedAccessory);
 
@@ -987,6 +1000,74 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     );
 
     ref.read(stickerGeneratorProvider.notifier).generate(request);
+  }
+
+  /// 무료 유저가 리워드 광고로 추가 생성 가능한지 (기본 소진 후 최대 maxImageAdBonus장)
+  bool _adEligible(QuotaData quota) =>
+      quota.isFree && quota.used < quota.total + AdConstants.maxImageAdBonus;
+
+  /// 할당량 소진 다이얼로그 — [광고 보고 +1] / [프리미엄] / [닫기]
+  void _showOutOfQuotaDialog(QuotaData quota) {
+    final l10n = AppLocalizations.of(context);
+    final adEligible = _adEligible(quota);
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.outOfQuotaTitle),
+        content: Text(
+          adEligible
+              ? l10n.outOfQuotaAdMessage
+              : l10n.quotaResetsIn(quota.formattedTimeUntilReset),
+        ),
+        actions: [
+          if (adEligible)
+            FilledButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                _watchAdThenGenerate();
+              },
+              child: Text(l10n.outOfQuotaWatchAd),
+            ),
+          if (quota.isFree)
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                _openPaywall();
+              },
+              child: Text(l10n.outOfQuotaUpgrade),
+            ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 리워드 광고 시청 → 보상 획득 시 생성, 광고 없으면 안내
+  void _watchAdThenGenerate() {
+    ref.read(adServiceProvider).showRewarded(
+          onReward: () {
+            if (mounted) _doGenerate();
+          },
+          onUnavailable: () {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(AppLocalizations.of(context).adNotReady)),
+            );
+          },
+        );
+  }
+
+  /// 페이월 열기 (구독 성공 시 할당량 갱신)
+  Future<void> _openPaywall() async {
+    final subscribed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => const PaywallScreen()),
+    );
+    if (subscribed == true && mounted) {
+      ref.invalidate(quotaProvider);
+    }
   }
 
   /// PetAccessory -> StickerAccessory 변환
@@ -1015,9 +1096,10 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     // 로딩 중이면 비활성화
     if (stickerState.isLoading) return false;
 
-    // 할당량 확인
+    // 할당량 확인 — 무료 유저는 소진돼도 활성화(탭 시 광고/프리미엄 다이얼로그).
+    // 프리미엄은 소진 시 비활성(리셋 대기).
     return quotaAsync.maybeWhen(
-      data: (quota) => !quota.isExhausted,
+      data: (quota) => !quota.isExhausted || quota.isFree,
       orElse: () => true, // 할당량 로딩 중/에러 시에도 일단 허용
     );
   }

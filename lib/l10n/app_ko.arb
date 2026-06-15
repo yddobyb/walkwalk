@@ -2351,7 +2351,7 @@
   "@paywallBenefitQuality": {
     "description": "Premium benefit - image quality"
   },
-  "paywallBenefitQuota": "일일 50회 이미지 생성",
+  "paywallBenefitQuota": "일일 5회 이미지 생성",
   "@paywallBenefitQuota": {
     "description": "Premium benefit - quota"
   },
@@ -2490,7 +2490,7 @@
   "@premiumUpgradeTitle": {
     "description": "Premium upgrade banner title"
   },
-  "premiumUpgradeBenefits": "• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도",
+  "premiumUpgradeBenefits": "• 고품질 AI 이미지 (Gemini)\n• 일일 5회 생성\n• 광고 없는 경험\n• 더 빠른 생성 속도",
   "@premiumUpgradeBenefits": {
     "description": "Premium upgrade banner benefits list"
   },
@@ -2621,5 +2621,10 @@
   "stepLinkTitle": "걸음수 연동",
   "stepLinkConnectedSubtitle": "건강 데이터 연결됨",
   "stepLinkDisconnectedSubtitle": "연결 안 됨 — 탭하여 켜기",
-  "stepLinkAlreadyConnected": "이미 연결되어 있어요"
+  "stepLinkAlreadyConnected": "이미 연결되어 있어요",
+  "outOfQuotaTitle": "오늘 무료 이미지를 다 썼어요",
+  "outOfQuotaAdMessage": "광고를 보면 오늘 1장 더 만들 수 있어요.",
+  "outOfQuotaWatchAd": "광고 보고 +1장",
+  "outOfQuotaUpgrade": "프리미엄으로 업그레이드",
+  "adNotReady": "광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해주세요."
 }

@@ -56,13 +56,14 @@ extension UserTierExtension on UserTier {
     }
   }
 
-  /// 일일 이미지 생성 한도
+  /// 일일 이미지 생성 기본 한도 (참고용 — 실제 한도는 서버 quota가 권위)
+  /// 무료 2회(+리워드 광고 보너스 최대 2회), 프리미엄 5회
   int get dailyImageLimit {
     switch (this) {
       case UserTier.free:
-        return 10;
+        return 2;
       case UserTier.premium:
-        return 50;
+        return 5;
     }
   }
 

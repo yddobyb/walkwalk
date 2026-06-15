@@ -292,7 +292,7 @@ async function convertToWebP(imageBuffer: Buffer, size: number): Promise<Buffer>
 } */
 
 // 프리미엄 사용자 할당량
-const PREMIUM_DAILY_QUOTA = 50;
+const PREMIUM_DAILY_QUOTA = 5;
 const PREMIUM_RATE_LIMIT_PER_5MIN = 5;
 
 /**

@@ -2717,7 +2717,7 @@ abstract class AppLocalizations {
   /// Premium benefit - quota
   ///
   /// In en, this message translates to:
-  /// **'50 images per day'**
+  /// **'5 images per day'**
   String get paywallBenefitQuota;
 
   /// Premium benefit - no ads
@@ -2909,7 +2909,7 @@ abstract class AppLocalizations {
   /// Premium upgrade banner benefits list
   ///
   /// In en, this message translates to:
-  /// **'• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed'**
+  /// **'• High-quality AI images (Gemini)\n• 5 generations per day\n• Ad-free experience\n• Faster generation speed'**
   String get premiumUpgradeBenefits;
 
   /// Premium upgrade banner button text
@@ -3133,6 +3133,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Already connected'**
   String get stepLinkAlreadyConnected;
+
+  /// Dialog title when a free user runs out of daily image quota
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used all your free images today'**
+  String get outOfQuotaTitle;
+
+  /// Dialog body offering a rewarded ad for one more image
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short ad to create 1 more sticker today.'**
+  String get outOfQuotaAdMessage;
+
+  /// Button to watch a rewarded ad for one more image
+  ///
+  /// In en, this message translates to:
+  /// **'Watch ad for +1'**
+  String get outOfQuotaWatchAd;
+
+  /// Button to open the paywall from the out-of-quota dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get outOfQuotaUpgrade;
+
+  /// Snackbar when a rewarded ad is not loaded yet
+  ///
+  /// In en, this message translates to:
+  /// **'The ad isn\'t ready yet. Please try again in a moment.'**
+  String get adNotReady;
 }
 
 class _AppLocalizationsDelegate

@@ -1453,7 +1453,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallBenefitQuality => 'High-quality AI images (Gemini)';
 
   @override
-  String get paywallBenefitQuota => '50 images per day';
+  String get paywallBenefitQuota => '5 images per day';
 
   @override
   String get paywallBenefitAds => 'Ad-free experience';
@@ -1555,7 +1555,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumUpgradeBenefits =>
-      '• High-quality AI images (Gemini)\n• 50 generations per day\n• Faster generation speed';
+      '• High-quality AI images (Gemini)\n• 5 generations per day\n• Ad-free experience\n• Faster generation speed';
 
   @override
   String get premiumUpgradeButton => 'Upgrade Now';
@@ -1675,4 +1675,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stepLinkAlreadyConnected => 'Already connected';
+
+  @override
+  String get outOfQuotaTitle => 'You\'ve used all your free images today';
+
+  @override
+  String get outOfQuotaAdMessage =>
+      'Watch a short ad to create 1 more sticker today.';
+
+  @override
+  String get outOfQuotaWatchAd => 'Watch ad for +1';
+
+  @override
+  String get outOfQuotaUpgrade => 'Upgrade to Premium';
+
+  @override
+  String get adNotReady =>
+      'The ad isn\'t ready yet. Please try again in a moment.';
 }

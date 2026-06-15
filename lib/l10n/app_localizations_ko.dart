@@ -1422,7 +1422,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get paywallBenefitQuality => '고품질 AI 이미지 (Gemini)';
 
   @override
-  String get paywallBenefitQuota => '일일 50회 이미지 생성';
+  String get paywallBenefitQuota => '일일 5회 이미지 생성';
 
   @override
   String get paywallBenefitAds => '광고 없는 경험';
@@ -1524,7 +1524,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get premiumUpgradeBenefits =>
-      '• 고품질 AI 이미지 (Gemini)\n• 일일 50회 생성\n• 더 빠른 생성 속도';
+      '• 고품질 AI 이미지 (Gemini)\n• 일일 5회 생성\n• 광고 없는 경험\n• 더 빠른 생성 속도';
 
   @override
   String get premiumUpgradeButton => '업그레이드하기';
@@ -1640,4 +1640,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get stepLinkAlreadyConnected => '이미 연결되어 있어요';
+
+  @override
+  String get outOfQuotaTitle => '오늘 무료 이미지를 다 썼어요';
+
+  @override
+  String get outOfQuotaAdMessage => '광고를 보면 오늘 1장 더 만들 수 있어요.';
+
+  @override
+  String get outOfQuotaWatchAd => '광고 보고 +1장';
+
+  @override
+  String get outOfQuotaUpgrade => '프리미엄으로 업그레이드';
+
+  @override
+  String get adNotReady => '광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해주세요.';
 }
