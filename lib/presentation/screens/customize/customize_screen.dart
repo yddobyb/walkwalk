@@ -1096,12 +1096,9 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     // 로딩 중이면 비활성화
     if (stickerState.isLoading) return false;
 
-    // 할당량 확인 — 무료 유저는 소진돼도 활성화(탭 시 광고/프리미엄 다이얼로그).
-    // 프리미엄은 소진 시 비활성(리셋 대기).
-    return quotaAsync.maybeWhen(
-      data: (quota) => !quota.isExhausted || quota.isFree,
-      orElse: () => true, // 할당량 로딩 중/에러 시에도 일단 허용
-    );
+    // 소진 여부와 무관하게 버튼은 활성 — 소진 시 _generateSticker가 적절한
+    // 다이얼로그(무료: 광고/업그레이드, 프리미엄: 리셋 안내)를 띄운다.
+    return true;
   }
 }
 

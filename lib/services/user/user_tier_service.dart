@@ -1,5 +1,7 @@
 // lib/services/user/user_tier_service.dart
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../subscription/revenue_cat_service.dart';
@@ -19,16 +21,47 @@ enum UserTier {
 /// SDK가 미설정(플레이스홀더 키)이면 모든 사용자를 무료로 처리.
 class UserTierService {
   /// 현재 사용자 등급 조회
+  ///
+  /// RevenueCat 구성 시 엔타이틀먼트가 1차 기준.
+  /// 미구성(placeholder)이면 서버 getUserTier와 동일하게 Firestore
+  /// users/{uid}.subscription 으로 판별 (RevenueCat 키 적용 전 폴백).
   Future<UserTier> getCurrentTier() async {
     debugPrint('[UserTier] Checking user tier...');
 
-    final isPremium =
-        await RevenueCatService.hasPremiumEntitlement();
-    final tier =
-        isPremium ? UserTier.premium : UserTier.free;
+    if (RevenueCatService.isConfigured) {
+      final isPremium = await RevenueCatService.hasPremiumEntitlement();
+      final tier = isPremium ? UserTier.premium : UserTier.free;
+      debugPrint('[UserTier] Current tier (RevenueCat): ${tier.name}');
+      return tier;
+    }
 
-    debugPrint('[UserTier] Current tier: ${tier.name}');
+    final tier = await _tierFromFirestoreSubscription();
+    debugPrint('[UserTier] Current tier (Firestore): ${tier.name}');
     return tier;
+  }
+
+  /// Firestore users/{uid}.subscription 으로 등급 판별 (서버 getUserTier와 동일 규칙)
+  Future<UserTier> _tierFromFirestoreSubscription() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) return UserTier.free;
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+      final sub = doc.data()?['subscription'];
+      if (sub is Map &&
+          sub['status'] == 'active' &&
+          sub['expiresAt'] is String) {
+        final expiresAt = DateTime.tryParse(sub['expiresAt'] as String);
+        if (expiresAt != null && expiresAt.isAfter(DateTime.now())) {
+          return UserTier.premium;
+        }
+      }
+    } catch (e) {
+      debugPrint('[UserTier] Firestore tier check failed: $e');
+    }
+    return UserTier.free;
   }
 
   /// 프리미엄 여부 확인

@@ -37,6 +37,8 @@ QuotaService quotaService(Ref ref) {
 /// 할당량 조회 프로바이더
 @riverpod
 Future<QuotaData> quota(Ref ref) async {
+  // 등급(로그인/로그아웃) 변화 시 할당량도 자동 재조회
+  await ref.watch(currentUserTierProvider.future);
   final service = ref.watch(quotaServiceProvider);
   final response = await service.getQuota();
   return response.data;

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,9 +24,18 @@ UserTierService userTierService(Ref ref) {
 @Riverpod(keepAlive: true)
 class CurrentUserTier extends _$CurrentUserTier {
   StreamSubscription<dynamic>? _sub;
+  StreamSubscription<dynamic>? _authSub;
 
   @override
   Future<UserTier> build() async {
+    // 로그인/로그아웃 시 등급 재평가 (Firestore 폴백·RevenueCat 모두 영향).
+    // skip(1): 구독 시 즉시 방출되는 현재 상태는 무시 → invalidate 무한루프 방지.
+    _authSub?.cancel();
+    _authSub = FirebaseAuth.instance.authStateChanges().skip(1).listen(
+          (_) => ref.invalidateSelf(),
+        );
+    ref.onDispose(() => _authSub?.cancel());
+
     // 구독 변경 시 자동 갱신
     if (RevenueCatService.isConfigured) {
       _sub?.cancel();

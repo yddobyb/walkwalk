@@ -211,8 +211,9 @@ class _WalkScreenState extends ConsumerState<WalkScreen> {
         // 산책 완료 시트가 닫힌 뒤 전면광고 (레벨업 시 생략 — 축하 흐름 방해 X).
         // 프리미엄 제외/빈도 제한은 AdService가 처리.
         if (mounted && levelAfter <= levelBefore) {
-          final isPremium =
-              ref.read(isPremiumUserProvider).valueOrNull ?? false;
+          // .future로 await — valueOrNull은 autoDispose 미해결 시 null→false라
+          // 프리미엄인데도 광고가 뜨던 버그 방지
+          final isPremium = await ref.read(isPremiumUserProvider.future);
           ref
               .read(adServiceProvider)
               .maybeShowWalkInterstitial(isPremium: isPremium);
