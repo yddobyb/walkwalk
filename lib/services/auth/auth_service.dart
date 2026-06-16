@@ -41,7 +41,12 @@ class AuthService {
       // GoogleSignIn v7+ API
       final googleSignIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await googleSignIn.initialize();
+        // serverClientId(웹 OAuth 클라이언트 ID)는 v7에서 Android idToken 발급에 필수.
+        // google-services.json의 client_type 3 client_id와 동일.
+        await googleSignIn.initialize(
+          serverClientId:
+              '701057110809-94a4p3c5k757oi8ptf5meuv7d96jtq7n.apps.googleusercontent.com',
+        );
         _googleInitialized = true;
       }
 
@@ -61,8 +66,22 @@ class AuthService {
       UserCredential result;
       if (currentUser != null && currentUser.isAnonymous) {
         debugPrint('[Auth] Linking anonymous account with Google');
-        result = await currentUser.linkWithCredential(credential);
-        debugPrint('[Auth] Google link success: ${result.user?.uid}');
+        try {
+          result = await currentUser.linkWithCredential(credential);
+          debugPrint('[Auth] Google link success: ${result.user?.uid}');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'credential-already-in-use' ||
+              e.code == 'email-already-in-use') {
+            // 이미 다른 계정에 연결된 Google → 원본 credential로 직접 로그인.
+            // (e.credential 재사용은 firebase_auth Android의 Long→Integer 캐스트
+            //  버그를 유발하므로 반드시 위에서 만든 원본 credential을 사용)
+            debugPrint('[Auth] Google already linked → direct sign-in');
+            result = await _auth.signInWithCredential(credential);
+            debugPrint('[Auth] Google direct sign-in: ${result.user?.uid}');
+          } else {
+            rethrow;
+          }
+        }
       } else {
         result = await _auth.signInWithCredential(credential);
         debugPrint('[Auth] Google sign-in success: ${result.user?.uid}');
@@ -75,16 +94,6 @@ class AuthService {
 
       return result;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'credential-already-in-use' && e.credential != null) {
-        // 이미 다른 계정에 연결된 Google 계정 → 링크 포기, 직접 로그인
-        debugPrint('[Auth] Google already linked, signing in directly');
-        final result = await _auth.signInWithCredential(e.credential!);
-        debugPrint('[Auth] Google direct sign-in: ${result.user?.uid}');
-        if (result.user != null) {
-          await RevenueCatService.logIn(result.user!.uid);
-        }
-        return result;
-      }
       debugPrint('[Auth] Google sign-in error: ${e.code}');
       rethrow;
     } catch (e) {

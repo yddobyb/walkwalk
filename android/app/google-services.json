@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "701057110809-s2mkduuo1k6hsaanv3j9l7jc4c6poq03.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.walkdog.walk_dog",
+            "certificate_hash": "e711c024ef3591f0181686acb4001999bed62804"
+          }
+        },
+        {
           "client_id": "701057110809-94a4p3c5k757oi8ptf5meuv7d96jtq7n.apps.googleusercontent.com",
           "client_type": 3
         }
