@@ -15,6 +15,7 @@ import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
 import '../subscription/paywall_screen.dart';
 import 'help_screen.dart';
+import 'widgets/link_account_sheet.dart';
 
 const _privacyPolicyUrl = 'https://walkwalkddog.web.app/privacy-policy';
 const _termsOfServiceUrl = 'https://walkwalkddog.web.app/terms-of-service';
@@ -672,6 +673,8 @@ class _SettingsTile extends StatelessWidget {
   final String subtitle;
   final Widget? trailing;
   final VoidCallback? onTap;
+  final Color? iconColor;
+  final Color? iconBgColor;
 
   const _SettingsTile({
     required this.icon,
@@ -679,6 +682,8 @@ class _SettingsTile extends StatelessWidget {
     required this.subtitle,
     this.trailing,
     this.onTap,
+    this.iconColor,
+    this.iconBgColor,
   });
 
   @override
@@ -696,12 +701,12 @@ class _SettingsTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
+                color: iconBgColor ?? theme.colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
                 icon,
-                color: theme.colorScheme.onPrimaryContainer,
+                color: iconColor ?? theme.colorScheme.onPrimaryContainer,
                 size: 20,
               ),
             ),
@@ -737,12 +742,16 @@ class _SettingsTile extends StatelessWidget {
 ///
 /// [AuthService.authStateChanges] 스트림을 구독하여
 /// 로그인/로그아웃 시 자동으로 UI를 갱신한다.
-class _AccountSection extends StatelessWidget {
+class _AccountSection extends ConsumerWidget {
   const _AccountSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final isPremium = ref.watch(currentUserTierProvider).maybeWhen(
+          data: (tier) => tier == UserTier.premium,
+          orElse: () => false,
+        );
 
     // Firebase 미초기화 환경(테스트 등)에서 stream 생성 자체가 실패할 수 있음
     Stream? authStream;
@@ -772,13 +781,27 @@ class _AccountSection extends StatelessWidget {
           title: l10n.accountSection,
           children: [
             if (isAnonymous) ...[
-              _SettingsTile(
-                icon: Icons.account_circle_outlined,
-                title: l10n.signInTitle,
-                subtitle: l10n.signInSubtitle,
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => _showSignInOptions(context),
-              ),
+              if (isPremium)
+                // 익명 + 프리미엄: 계정 연결로 프리미엄 보호 유도(골드 강조)
+                _SettingsTile(
+                  icon: Icons.shield_outlined,
+                  iconColor: const Color(0xFFB8860B),
+                  iconBgColor: const Color(0xFFFFD700).withValues(alpha: 0.2),
+                  title: l10n.protectPremiumTileTitle,
+                  subtitle: l10n.protectPremiumTileSubtitle,
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () =>
+                      LinkAccountSheet.show(context, isPremium: true),
+                )
+              else
+                _SettingsTile(
+                  icon: Icons.account_circle_outlined,
+                  title: l10n.signInTitle,
+                  subtitle: l10n.signInSubtitle,
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () =>
+                      LinkAccountSheet.show(context, isPremium: false),
+                ),
             ] else ...[
               _SettingsTile(
                 icon: Icons.account_circle,
@@ -794,71 +817,6 @@ class _AccountSection extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  void _showSignInOptions(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    showModalBottomSheet(
-      context: context,
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                l10n.signInTitle,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.g_mobiledata, size: 32),
-              title: Text(l10n.signInWithGoogle),
-              onTap: () async {
-                Navigator.pop(ctx);
-                try {
-                  await AuthService.signInWithGoogle();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.signInSuccess)),
-                    );
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.signInFailed)),
-                    );
-                  }
-                }
-              },
-            ),
-            if (AuthService.isAppleSignInAvailable)
-              ListTile(
-                leading: const Icon(Icons.apple, size: 32),
-                title: Text(l10n.signInWithApple),
-                onTap: () async {
-                  Navigator.pop(ctx);
-                  try {
-                    await AuthService.signInWithApple();
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.signInSuccess)),
-                      );
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.signInFailed)),
-                      );
-                    }
-                  }
-                },
-              ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
     );
   }
 

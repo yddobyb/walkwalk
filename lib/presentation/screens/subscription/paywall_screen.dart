@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../../services/auth/auth_service.dart';
 import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/subscription/revenue_cat_service.dart';
 import '../../../services/user/user_tier_providers.dart';
+import '../settings/widgets/link_account_sheet.dart';
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
@@ -61,11 +63,20 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       ref.invalidate(currentUserTierProvider);
       ref.invalidate(quotaProvider);
       _showSnackBar(AppLocalizations.of(context).paywallSuccess);
-      Navigator.of(context).pop(true);
+      await _promptLinkIfAnonymous();
+      if (mounted) Navigator.of(context).pop(true);
     } else if (result.isCancelled) {
       // 사용자가 취소한 경우 아무 동작 없음
     } else if (result.errorMessage != null) {
       _showSnackBar(result.errorMessage!);
+    }
+  }
+
+  /// 익명(게스트) 사용자가 결제/복원에 성공하면, 프리미엄을 계정에 묶도록
+  /// 연동을 유도한다(선택). 연동 시 uid가 보존돼 프리미엄이 그대로 유지된다.
+  Future<void> _promptLinkIfAnonymous() async {
+    if (AuthService.isAnonymous && mounted) {
+      await LinkAccountSheet.show(context, isPremium: true);
     }
   }
 
@@ -88,7 +99,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       ref.invalidate(currentUserTierProvider);
       ref.invalidate(quotaProvider);
       _showSnackBar(AppLocalizations.of(context).paywallSuccess);
-      Navigator.of(context).pop(true);
+      await _promptLinkIfAnonymous();
+      if (mounted) Navigator.of(context).pop(true);
     } else {
       _showSnackBar(
         AppLocalizations.of(context).paywallRestoreNotFound,

@@ -2731,5 +2731,33 @@
   "outOfQuotaUpgradeBenefits": "No ads · High quality · 5 per day",
   "@outOfQuotaUpgradeBenefits": {
     "description": "Premium upsell benefits one-liner"
+  },
+  "linkAccountTitlePremium": "Keep your Premium safe",
+  "@linkAccountTitlePremium": {
+    "description": "Link-account sheet title for premium users"
+  },
+  "linkAccountBodyPremium": "Link an account so your Premium stays with you across reinstalls and new devices.",
+  "@linkAccountBodyPremium": {
+    "description": "Link-account sheet body for premium users"
+  },
+  "linkAccountTitleDefault": "Link your account",
+  "@linkAccountTitleDefault": {
+    "description": "Link-account sheet title for non-premium users"
+  },
+  "linkAccountBodyDefault": "Back up your data and continue on any device.",
+  "@linkAccountBodyDefault": {
+    "description": "Link-account sheet body for non-premium users"
+  },
+  "linkAccountLater": "Maybe later",
+  "@linkAccountLater": {
+    "description": "Dismiss button on the link-account sheet"
+  },
+  "protectPremiumTileTitle": "Protect your Premium",
+  "@protectPremiumTileTitle": {
+    "description": "Settings account tile title shown to anonymous premium users"
+  },
+  "protectPremiumTileSubtitle": "Link an account to keep it across devices",
+  "@protectPremiumTileSubtitle": {
+    "description": "Settings account tile subtitle shown to anonymous premium users"
   }
 }

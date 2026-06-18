@@ -1719,4 +1719,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get outOfQuotaUpgradeBenefits => 'No ads · High quality · 5 per day';
+
+  @override
+  String get linkAccountTitlePremium => 'Keep your Premium safe';
+
+  @override
+  String get linkAccountBodyPremium =>
+      'Link an account so your Premium stays with you across reinstalls and new devices.';
+
+  @override
+  String get linkAccountTitleDefault => 'Link your account';
+
+  @override
+  String get linkAccountBodyDefault =>
+      'Back up your data and continue on any device.';
+
+  @override
+  String get linkAccountLater => 'Maybe later';
+
+  @override
+  String get protectPremiumTileTitle => 'Protect your Premium';
+
+  @override
+  String get protectPremiumTileSubtitle =>
+      'Link an account to keep it across devices';
 }

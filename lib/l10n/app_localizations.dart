@@ -3205,6 +3205,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No ads · High quality · 5 per day'**
   String get outOfQuotaUpgradeBenefits;
+
+  /// Link-account sheet title for premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your Premium safe'**
+  String get linkAccountTitlePremium;
+
+  /// Link-account sheet body for premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Link an account so your Premium stays with you across reinstalls and new devices.'**
+  String get linkAccountBodyPremium;
+
+  /// Link-account sheet title for non-premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Link your account'**
+  String get linkAccountTitleDefault;
+
+  /// Link-account sheet body for non-premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your data and continue on any device.'**
+  String get linkAccountBodyDefault;
+
+  /// Dismiss button on the link-account sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get linkAccountLater;
+
+  /// Settings account tile title shown to anonymous premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Protect your Premium'**
+  String get protectPremiumTileTitle;
+
+  /// Settings account tile subtitle shown to anonymous premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Link an account to keep it across devices'**
+  String get protectPremiumTileSubtitle;
 }
 
 class _AppLocalizationsDelegate

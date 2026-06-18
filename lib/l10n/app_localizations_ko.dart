@@ -1682,4 +1682,26 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get outOfQuotaUpgradeBenefits => '광고 없이 · 고품질 · 하루 5장';
+
+  @override
+  String get linkAccountTitlePremium => '프리미엄을 안전하게 지켜요';
+
+  @override
+  String get linkAccountBodyPremium =>
+      '계정을 연결하면 기기를 바꾸거나 앱을 다시 설치해도 프리미엄이 유지돼요.';
+
+  @override
+  String get linkAccountTitleDefault => '계정 연결하기';
+
+  @override
+  String get linkAccountBodyDefault => '데이터를 백업하고 여러 기기에서 이어서 사용하세요.';
+
+  @override
+  String get linkAccountLater => '나중에';
+
+  @override
+  String get protectPremiumTileTitle => '프리미엄 보호하기';
+
+  @override
+  String get protectPremiumTileSubtitle => '계정을 연결해 기기를 바꿔도 유지하세요';
 }
