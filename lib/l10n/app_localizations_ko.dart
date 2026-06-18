@@ -1655,4 +1655,31 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get adNotReady => '광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해주세요.';
+
+  @override
+  String get outOfQuotaFreeAdTitle => '오늘 무료 스티커를 다 썼어요';
+
+  @override
+  String get outOfQuotaFreeAdBody => '광고를 보면 1장 더 만들 수 있어요';
+
+  @override
+  String outOfQuotaAdRemaining(int count) {
+    return '오늘 광고로 $count번 더 만들 수 있어요';
+  }
+
+  @override
+  String get outOfQuotaMaxedTitle => '오늘 스티커를 다 만들었어요';
+
+  @override
+  String outOfQuotaPremiumTitle(int count) {
+    return '오늘 $count장 다 만들었어요! 🐾';
+  }
+
+  @override
+  String outOfQuotaPremiumBody(String time) {
+    return '$time 후 다시 충전돼요 · 내일 또 만나요!';
+  }
+
+  @override
+  String get outOfQuotaUpgradeBenefits => '광고 없이 · 고품질 · 하루 5장';
 }

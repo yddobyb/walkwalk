@@ -2688,5 +2688,48 @@
   "adNotReady": "The ad isn't ready yet. Please try again in a moment.",
   "@adNotReady": {
     "description": "Snackbar when a rewarded ad is not loaded yet"
+  },
+  "outOfQuotaFreeAdTitle": "You've used today's free stickers",
+  "@outOfQuotaFreeAdTitle": {
+    "description": "Out-of-quota sheet title, free user with ad bonus available"
+  },
+  "outOfQuotaFreeAdBody": "Watch a short ad to make one more",
+  "@outOfQuotaFreeAdBody": {
+    "description": "Out-of-quota sheet body, free user with ad bonus available"
+  },
+  "outOfQuotaAdRemaining": "{count} more available via ads today",
+  "@outOfQuotaAdRemaining": {
+    "description": "Remaining rewarded-ad bonus count caption",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "outOfQuotaMaxedTitle": "You're out of stickers for today",
+  "@outOfQuotaMaxedTitle": {
+    "description": "Out-of-quota sheet title, free user fully maxed (no ads left)"
+  },
+  "outOfQuotaPremiumTitle": "All {count} made for today! 🐾",
+  "@outOfQuotaPremiumTitle": {
+    "description": "Out-of-quota sheet title for premium users",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "outOfQuotaPremiumBody": "Refills in {time} — see you tomorrow!",
+  "@outOfQuotaPremiumBody": {
+    "description": "Out-of-quota sheet body for premium users",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "outOfQuotaUpgradeBenefits": "No ads · High quality · 5 per day",
+  "@outOfQuotaUpgradeBenefits": {
+    "description": "Premium upsell benefits one-liner"
   }
 }

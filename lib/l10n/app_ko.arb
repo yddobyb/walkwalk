@@ -2626,5 +2626,12 @@
   "outOfQuotaAdMessage": "광고를 보면 오늘 1장 더 만들 수 있어요.",
   "outOfQuotaWatchAd": "광고 보고 +1장",
   "outOfQuotaUpgrade": "프리미엄으로 업그레이드",
-  "adNotReady": "광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해주세요."
+  "adNotReady": "광고가 아직 준비되지 않았어요. 잠시 후 다시 시도해주세요.",
+  "outOfQuotaFreeAdTitle": "오늘 무료 스티커를 다 썼어요",
+  "outOfQuotaFreeAdBody": "광고를 보면 1장 더 만들 수 있어요",
+  "outOfQuotaAdRemaining": "오늘 광고로 {count}번 더 만들 수 있어요",
+  "outOfQuotaMaxedTitle": "오늘 스티커를 다 만들었어요",
+  "outOfQuotaPremiumTitle": "오늘 {count}장 다 만들었어요! 🐾",
+  "outOfQuotaPremiumBody": "{time} 후 다시 충전돼요 · 내일 또 만나요!",
+  "outOfQuotaUpgradeBenefits": "광고 없이 · 고품질 · 하루 5장"
 }

@@ -1692,4 +1692,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get adNotReady =>
       'The ad isn\'t ready yet. Please try again in a moment.';
+
+  @override
+  String get outOfQuotaFreeAdTitle => 'You\'ve used today\'s free stickers';
+
+  @override
+  String get outOfQuotaFreeAdBody => 'Watch a short ad to make one more';
+
+  @override
+  String outOfQuotaAdRemaining(int count) {
+    return '$count more available via ads today';
+  }
+
+  @override
+  String get outOfQuotaMaxedTitle => 'You\'re out of stickers for today';
+
+  @override
+  String outOfQuotaPremiumTitle(int count) {
+    return 'All $count made for today! 🐾';
+  }
+
+  @override
+  String outOfQuotaPremiumBody(String time) {
+    return 'Refills in $time — see you tomorrow!';
+  }
+
+  @override
+  String get outOfQuotaUpgradeBenefits => 'No ads · High quality · 5 per day';
 }

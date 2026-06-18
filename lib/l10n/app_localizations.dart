@@ -3163,6 +3163,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The ad isn\'t ready yet. Please try again in a moment.'**
   String get adNotReady;
+
+  /// Out-of-quota sheet title, free user with ad bonus available
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used today\'s free stickers'**
+  String get outOfQuotaFreeAdTitle;
+
+  /// Out-of-quota sheet body, free user with ad bonus available
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a short ad to make one more'**
+  String get outOfQuotaFreeAdBody;
+
+  /// Remaining rewarded-ad bonus count caption
+  ///
+  /// In en, this message translates to:
+  /// **'{count} more available via ads today'**
+  String outOfQuotaAdRemaining(int count);
+
+  /// Out-of-quota sheet title, free user fully maxed (no ads left)
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re out of stickers for today'**
+  String get outOfQuotaMaxedTitle;
+
+  /// Out-of-quota sheet title for premium users
+  ///
+  /// In en, this message translates to:
+  /// **'All {count} made for today! 🐾'**
+  String outOfQuotaPremiumTitle(int count);
+
+  /// Out-of-quota sheet body for premium users
+  ///
+  /// In en, this message translates to:
+  /// **'Refills in {time} — see you tomorrow!'**
+  String outOfQuotaPremiumBody(String time);
+
+  /// Premium upsell benefits one-liner
+  ///
+  /// In en, this message translates to:
+  /// **'No ads · High quality · 5 per day'**
+  String get outOfQuotaUpgradeBenefits;
 }
 
 class _AppLocalizationsDelegate

@@ -14,10 +14,10 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
-import '../../../core/constants/ad_constants.dart';
 import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
 import '../subscription/paywall_screen.dart';
+import 'widgets/out_of_quota_sheet.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
   const CustomizeScreen({super.key});
@@ -979,7 +979,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     // 할당량 소진 시: 무료+광고 보너스 가능하면 리워드 다이얼로그, 아니면 안내
     final quota = ref.read(quotaProvider).valueOrNull;
     if (quota != null && quota.isExhausted) {
-      _showOutOfQuotaDialog(quota);
+      _showOutOfQuotaSheet(quota);
       return;
     }
     _doGenerate();
@@ -1002,46 +1002,15 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     ref.read(stickerGeneratorProvider.notifier).generate(request);
   }
 
-  /// 무료 유저가 리워드 광고로 추가 생성 가능한지 (기본 소진 후 최대 maxImageAdBonus장)
-  bool _adEligible(QuotaData quota) =>
-      quota.isFree && quota.used < quota.total + AdConstants.maxImageAdBonus;
-
-  /// 할당량 소진 다이얼로그 — [광고 보고 +1] / [프리미엄] / [닫기]
-  void _showOutOfQuotaDialog(QuotaData quota) {
-    final l10n = AppLocalizations.of(context);
-    final adEligible = _adEligible(quota);
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.outOfQuotaTitle),
-        content: Text(
-          adEligible
-              ? l10n.outOfQuotaAdMessage
-              : l10n.quotaResetsIn(quota.formattedTimeUntilReset),
-        ),
-        actions: [
-          if (adEligible)
-            FilledButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                _watchAdThenGenerate();
-              },
-              child: Text(l10n.outOfQuotaWatchAd),
-            ),
-          if (quota.isFree)
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                _openPaywall();
-              },
-              child: Text(l10n.outOfQuotaUpgrade),
-            ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l10n.close),
-          ),
-        ],
-      ),
+  /// 할당량 소진 안내 시트 — 3상태(무료+광고 / 무료 소진 / 프리미엄 소진).
+  /// 버튼 탭 시 시트가 먼저 닫힌 뒤 콜백이 실행된다.
+  void _showOutOfQuotaSheet(QuotaData quota) {
+    OutOfQuotaSheet.show(
+      context,
+      quota: quota,
+      breed: _breed,
+      onWatchAd: _watchAdThenGenerate,
+      onUpgrade: _openPaywall,
     );
   }
 
@@ -1462,7 +1431,7 @@ class _PremiumUpgradeBanner extends StatelessWidget {
                     children: [
                       _featureChip('✨ HD Quality', isDark),
                       const SizedBox(width: 6),
-                      _featureChip('∞ 50/day', isDark),
+                      _featureChip('🎨 5/day', isDark),
                       const SizedBox(width: 6),
                       _featureChip('⚡ Fast', isDark),
                     ],
