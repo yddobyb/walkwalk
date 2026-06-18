@@ -5,6 +5,7 @@ import '../../../../core/constants/ad_constants.dart';
 import '../../../../core/utils/breed_assets.dart';
 import '../../../../data/models/quota_response.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../widgets/reset_countdown.dart';
 
 /// 이미지 할당량 소진 안내 바텀시트 ("펫 충전 시트")
 ///
@@ -147,15 +148,8 @@ class _OutOfQuotaContent extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // 본문
-            Text(
-              _body(l10n),
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                height: 1.4,
-              ),
-            ),
+            // 본문 (소진 상태는 실시간 카운트다운)
+            _buildBody(context, l10n, theme),
             const SizedBox(height: 22),
 
             // 상태별 액션
@@ -177,14 +171,39 @@ class _OutOfQuotaContent extends StatelessWidget {
     }
   }
 
-  String _body(AppLocalizations l10n) {
+  Widget _buildBody(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
+    final style = theme.textTheme.bodyMedium?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+      height: 1.4,
+    );
     switch (_state) {
       case _QuotaSheetState.freeAdEligible:
-        return l10n.outOfQuotaFreeAdBody;
+        return Text(
+          l10n.outOfQuotaFreeAdBody,
+          textAlign: TextAlign.center,
+          style: style,
+        );
       case _QuotaSheetState.freeMaxed:
-        return l10n.quotaResetsIn(quota.formattedTimeUntilReset);
+        // 시트는 일시적이라 자동 갱신은 끄고(autoRefresh:false) 표시만 실시간
+        return ResetCountdown(
+          resetAt: quota.resetAtDateTime,
+          label: (t) => l10n.quotaResetsIn(t),
+          autoRefresh: false,
+          textAlign: TextAlign.center,
+          style: style,
+        );
       case _QuotaSheetState.premiumExhausted:
-        return l10n.outOfQuotaPremiumBody(quota.formattedTimeUntilReset);
+        return ResetCountdown(
+          resetAt: quota.resetAtDateTime,
+          label: (t) => l10n.outOfQuotaPremiumBody(t),
+          autoRefresh: false,
+          textAlign: TextAlign.center,
+          style: style,
+        );
     }
   }
 

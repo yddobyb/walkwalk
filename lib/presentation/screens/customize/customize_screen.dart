@@ -16,6 +16,7 @@ import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
 import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
+import '../../widgets/reset_countdown.dart';
 import '../subscription/paywall_screen.dart';
 import 'widgets/out_of_quota_sheet.dart';
 
@@ -1170,10 +1171,10 @@ class _QuotaIndicator extends StatelessWidget {
                   color: Colors.red.withValues(alpha: 0.7),
                 ),
                 const SizedBox(width: 4),
-                Text(
-                  AppLocalizations.of(context).quotaResetsIn(
-                    quota.formattedTimeUntilReset,
-                  ),
+                ResetCountdown(
+                  resetAt: quota.resetAtDateTime,
+                  label: (t) =>
+                      AppLocalizations.of(context).quotaResetsIn(t),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.red.withValues(alpha: 0.7),
                   ),
