@@ -740,8 +740,9 @@ class _SettingsTile extends StatelessWidget {
 
 /// 계정 섹션 위젯
 ///
-/// [AuthService.authStateChanges] 스트림을 구독하여
-/// 로그인/로그아웃 시 자동으로 UI를 갱신한다.
+/// [AuthService.userChanges] 스트림을 구독하여
+/// 로그인/로그아웃뿐 아니라 익명→Google/Apple 링크(uid 보존) 직후에도
+/// 자동으로 UI를 갱신한다. (authStateChanges는 링크 시 방출하지 않음)
 class _AccountSection extends ConsumerWidget {
   const _AccountSection();
 
@@ -756,7 +757,7 @@ class _AccountSection extends ConsumerWidget {
     // Firebase 미초기화 환경(테스트 등)에서 stream 생성 자체가 실패할 수 있음
     Stream? authStream;
     try {
-      authStream = AuthService.authStateChanges;
+      authStream = AuthService.userChanges;
     } catch (_) {
       authStream = null;
     }

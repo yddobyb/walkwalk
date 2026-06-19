@@ -26,8 +26,15 @@ class AuthService {
   /// 익명 사용자 여부
   static bool get isAnonymous => _auth.currentUser?.isAnonymous ?? true;
 
-  /// 인증 상태 스트림
+  /// 인증 상태 스트림 (로그인/로그아웃 = uid 변경 시에만 방출)
   static Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  /// 사용자 변경 스트림 (로그인/로그아웃 + 링크·프로필 변경까지 포함)
+  ///
+  /// 익명→Google/Apple 링크 승격은 uid가 보존되어 [authStateChanges]가
+  /// 방출하지 않는다. 계정 연결 상태를 표시하는 UI는 이 스트림을 구독해야
+  /// 링크 직후 즉시 갱신된다.
+  static Stream<User?> get userChanges => _auth.userChanges();
 
   // ========================================================================
   // Google 로그인
