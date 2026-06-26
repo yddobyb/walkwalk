@@ -6,8 +6,11 @@
 -keep class com.google.firebase.** { *; }
 -dontwarn com.google.firebase.**
 
-# Play Integrity (App Check)
+# Play Integrity (App Check) — 사용함, keep
 -keep class com.google.android.play.core.integrity.** { *; }
+
+# Play Core (Flutter deferred-components/split-install 참조) — 앱 미사용 → R8 누락 클래스 경고 무시
+-dontwarn com.google.android.play.core.**
 
 # Isar
 -keep class dev.isar.** { *; }
