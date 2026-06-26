@@ -1,0 +1,15 @@
+# Android 릴리스 서명 설정 예시
+#
+# 사용법:
+#   1) keytool로 업로드 keystore 생성 (아래 README 명령 참고)
+#   2) 이 파일을 복사해 android/key.properties 로 만들고 실제 값으로 채움
+#   3) android/key.properties 와 *.jks 는 .gitignore 처리되어 커밋되지 않음
+#
+# ⚠️ key.properties / keystore(.jks) 는 절대 git/공개 저장소에 올리지 말 것.
+#    분실 시 동일 키로 재서명 불가 → 앱 업데이트 불가(단, Play App Signing 사용 시 업로드 키는 재설정 가능).
+
+storePassword=<키스토어 비밀번호>
+keyPassword=<키 비밀번호>
+keyAlias=upload
+# keystore 절대 경로 권장 (예: 홈 디렉터리). app/ 기준 상대경로도 가능.
+storeFile=/Users/<you>/walkdog-upload-keystore.jks
