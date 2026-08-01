@@ -15,12 +15,18 @@ import 'fallback_responses.dart';
 class ConversationService {
   final LLMService _llmService;
   final FallbackResponses _fallbackResponses;
+  final Future<bool> Function() _consentGate;
 
+  /// [consentGate]는 제3자 AI로 데이터를 내보내도 되는지 판단한다(Phase 27).
+  /// `false`면 외부 LLM 호출을 건너뛰고 단말기 안의 규칙 기반 폴백만 사용한다.
+  /// 실수로 빠뜨려 fail-open 되지 않도록 **필수** 파라미터로 둔다.
   ConversationService({
     required LLMService llmService,
     required FallbackResponses fallbackResponses,
+    required Future<bool> Function() consentGate,
   })  : _llmService = llmService,
-        _fallbackResponses = fallbackResponses;
+        _fallbackResponses = fallbackResponses,
+        _consentGate = consentGate;
 
   /// 대화 응답 생성
   ///
@@ -43,6 +49,15 @@ class ConversationService {
     required String locale,
   }) async {
     try {
+      // 0. 제3자 AI 전송 동의 확인 (Phase 27)
+      //    미동의면 네트워크로 아무것도 내보내지 않고 로컬 폴백만 사용한다.
+      if (!await _consentGate()) {
+        if (ApiConfig.enableDebugLogs) {
+          debugPrint('🚫 ConversationService - No AI consent, using local fallback');
+        }
+        return _fallbackResponses.getResponse(context, contextData, locale);
+      }
+
       // 1. LLM 서비스가 초기화되어 있으면 API 호출 시도
       if (_llmService.isInitialized) {
         if (ApiConfig.enableDebugLogs) {

@@ -1743,4 +1743,174 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get protectPremiumTileSubtitle =>
       'Link an account to keep it across devices';
+
+  @override
+  String get aiSectionTitle => 'AI features';
+
+  @override
+  String get aiDisclosureTileTitle => 'About AI features';
+
+  @override
+  String get aiDisclosureTileSubtitle => 'See how this app uses AI';
+
+  @override
+  String get aiDisclosureTitle => 'This service uses AI';
+
+  @override
+  String get aiDisclosureIntro =>
+      'The following WalkDog features are powered by generative artificial intelligence.';
+
+  @override
+  String get aiDisclosureStickerTitle => 'AI sticker generation';
+
+  @override
+  String get aiDisclosureStickerBody =>
+      'AI creates a new pet image from the breed, color and style you pick. These are not real photographs.';
+
+  @override
+  String get aiDisclosureDialogueTitle => 'Pet remarks';
+
+  @override
+  String get aiDisclosureDialogueBody =>
+      'AI writes what your pet says after a walk, a treat and other moments. These lines are not written by a person.';
+
+  @override
+  String get aiDisclosureLimitTitle => 'Good to know';
+
+  @override
+  String get aiDisclosureLimitBody =>
+      'AI output can be inaccurate or unexpected. Do not rely on it for medical or health decisions.';
+
+  @override
+  String get aiDisclosureClose => 'Got it';
+
+  @override
+  String get aiConsentTitle => 'Allow AI features?';
+
+  @override
+  String get aiConsentIntro =>
+      'To create AI stickers and pet remarks, the information below is sent to external AI services.';
+
+  @override
+  String get aiConsentSentTitle => 'What is sent';
+
+  @override
+  String get aiConsentSentItems =>
+      '• Pet name, breed, color and style choices\n• Happiness level and walk/mission progress\n• Account identifier (UID)';
+
+  @override
+  String get aiConsentNotSentTitle => 'What is never sent';
+
+  @override
+  String get aiConsentNotSentItems =>
+      '• Location (GPS) data\n• Step counts and other health data\n• Contacts, photos and other on-device personal data';
+
+  @override
+  String get aiConsentThirdPartyTitle => 'Who receives it';
+
+  @override
+  String get aiConsentThirdPartyItems =>
+      'Cloudflare Workers AI, OpenAI, Google Gemini, OpenRouter, Groq';
+
+  @override
+  String get aiConsentOverseasTitle => 'Cross-border transfer';
+
+  @override
+  String get aiConsentOverseasBody =>
+      'These services run on servers outside your country, including in the United States, so your information is transferred abroad. It is transferred to generate AI output and is retained or deleted under each provider\'s own policy. See our Privacy Policy for details.';
+
+  @override
+  String get aiConsentWithdrawNote =>
+      'You can still use walks, missions, stats and everything else without agreeing. You can withdraw consent at any time in Settings.';
+
+  @override
+  String get aiConsentViewPolicy => 'View Privacy Policy';
+
+  @override
+  String get aiConsentAgree => 'Agree and continue';
+
+  @override
+  String get aiConsentDecline => 'Not now';
+
+  @override
+  String get aiConsentRequiredMessage =>
+      'AI features need your consent to share data.';
+
+  @override
+  String get aiConsentTileTitle => 'AI data sharing';
+
+  @override
+  String get aiConsentTileOn => 'Allowed · tap to withdraw';
+
+  @override
+  String get aiConsentTileOff => 'Not allowed · tap to allow';
+
+  @override
+  String get aiConsentWithdrawTitle => 'Withdraw consent?';
+
+  @override
+  String get aiConsentWithdrawBody =>
+      'AI sticker generation and pet remarks will stop working. Stickers you already made are kept.';
+
+  @override
+  String get aiConsentWithdrawConfirm => 'Withdraw';
+
+  @override
+  String get aiConsentWithdrawn => 'AI data sharing consent withdrawn';
+
+  @override
+  String get aiConsentGranted => 'AI data sharing allowed';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get aiGeneratedBadge => 'AI-generated';
+
+  @override
+  String get aiGeneratedImageNotice =>
+      'This image was created with generative AI.';
+
+  @override
+  String get aiGeneratedTextNotice => 'Written by AI';
+
+  @override
+  String get reportContentButton => 'Report';
+
+  @override
+  String get reportContentTitle => 'Report inappropriate content';
+
+  @override
+  String get reportContentBody =>
+      'Is something wrong with this AI output? Pick a reason. We review every report.';
+
+  @override
+  String get reportReasonInappropriate => 'Inappropriate or offensive';
+
+  @override
+  String get reportReasonViolent => 'Violent or hateful';
+
+  @override
+  String get reportReasonSexual => 'Sexual content';
+
+  @override
+  String get reportReasonMisleading => 'Misleading or false';
+
+  @override
+  String get reportReasonOther => 'Something else';
+
+  @override
+  String get reportSubmit => 'Submit report';
+
+  @override
+  String get reportSubmitted => 'Report received. We\'ll review it shortly.';
+
+  @override
+  String get reportFailed => 'Couldn\'t send the report. Please try again.';
+
+  @override
+  String get locationTermsTitle => 'Location-Based Services Terms';
+
+  @override
+  String get locationTermsDescription => 'Terms for using location information';
 }

@@ -114,16 +114,25 @@ void main() {
       final listView = find.byType(ListView);
       expect(listView, findsOneWidget);
 
-      // 스크롤 다운하여 앱 설정/정보 섹션 노출
-      await tester.drag(listView, const Offset(0, -300));
-      await tester.pumpAndSettle();
+      // 고정 픽셀 드래그는 섹션이 추가될 때마다 깨지므로 scrollUntilVisible 사용.
+      // scrollable에는 ListView가 아니라 그 안의 Scrollable을 넘겨야 한다.
+      final scrollable = find.descendant(
+        of: listView,
+        matching: find.byType(Scrollable),
+      );
+      Future<void> scrollTo(Finder target) async {
+        await tester.scrollUntilVisible(target, 200, scrollable: scrollable);
+        await tester.pumpAndSettle();
+      }
 
+      await scrollTo(find.text('앱 설정'));
       expect(find.text('앱 설정'), findsOneWidget);
 
-      // 더 스크롤
-      await tester.drag(listView, const Offset(0, -300));
-      await tester.pumpAndSettle();
+      // Phase 27: AI 고지·동의 섹션
+      await scrollTo(find.text('AI 기능'));
+      expect(find.text('AI 기능'), findsOneWidget);
 
+      await scrollTo(find.text('정보'));
       expect(find.text('정보'), findsOneWidget);
     });
 

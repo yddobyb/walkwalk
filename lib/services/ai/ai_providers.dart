@@ -3,6 +3,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../network/network_providers.dart';
+import 'ai_consent_service.dart';
 import 'fallback_responses.dart';
 import 'llm_service.dart';
 import 'conversation_service.dart';
@@ -112,10 +113,14 @@ final llmInitializationProvider = FutureProvider<bool>((ref) async {
 final conversationServiceProvider = Provider<ConversationService>((ref) {
   final llmService = ref.watch(llmServiceProvider);
   final fallbackResponses = ref.watch(fallbackResponsesProvider);
+  final consentService = ref.watch(aiConsentServiceProvider);
 
   return ConversationService(
     llmService: llmService,
     fallbackResponses: fallbackResponses,
+    // Phase 27: 제3자 AI 전송 동의가 없으면 로컬 폴백만 사용한다.
+    // 매 호출마다 조회하므로 설정에서 철회하면 즉시 반영된다.
+    consentGate: consentService.hasConsent,
   );
 });
 

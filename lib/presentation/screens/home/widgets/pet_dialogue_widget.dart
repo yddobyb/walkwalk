@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../presentation/widgets/ai_generated_badge.dart';
 import '../../../../services/ai/ai_providers.dart';
 import '../../../../services/ai/dialogue_request.dart';
 import '../../../../services/settings/settings_service.dart';
@@ -108,13 +109,20 @@ class PetDialogueWidget extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // 대화 텍스트
+            // 대화 텍스트 + AI 생성 표시(AI기본법 제31조 ②항)
             Expanded(
-              child: Text(
-                text,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  height: 1.4,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const AiGeneratedTextTag(),
+                ],
               ),
             ),
           ],

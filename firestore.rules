@@ -57,6 +57,25 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // AI 결과물 신고 (Phase 27 — Google Play 생성형 AI 정책 / Apple 1.2)
+    // 로그인 사용자는 신고 접수(create)만 가능. 열람·수정·삭제는 운영자(Admin SDK) 전용.
+    // 다른 사용자의 신고를 읽을 수 없어야 하므로 read도 차단한다.
+    match /contentReports/{reportId} {
+      function isValidReport() {
+        let data = request.resource.data;
+        return data.keys().hasOnly(
+            ['uid', 'reason', 'contentType', 'provider', 'createdAt'])
+          && data.uid == request.auth.uid
+          && data.reason is string
+          && data.reason.size() <= 40
+          && data.contentType is string
+          && data.contentType.size() <= 20;
+      }
+
+      allow create: if request.auth != null && isValidReport();
+      allow read, update, delete: if false;
+    }
+
     // 기본: 모든 접근 거부
     match /{document=**} {
       allow read, write: if false;

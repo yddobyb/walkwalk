@@ -3247,6 +3247,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Link an account to keep it across devices'**
   String get protectPremiumTileSubtitle;
+
+  /// Settings section title for AI disclosure and consent
+  ///
+  /// In en, this message translates to:
+  /// **'AI features'**
+  String get aiSectionTitle;
+
+  /// Settings tile opening the AI disclosure sheet
+  ///
+  /// In en, this message translates to:
+  /// **'About AI features'**
+  String get aiDisclosureTileTitle;
+
+  /// Settings tile subtitle for the AI disclosure sheet
+  ///
+  /// In en, this message translates to:
+  /// **'See how this app uses AI'**
+  String get aiDisclosureTileSubtitle;
+
+  /// Title of the AI disclosure sheet
+  ///
+  /// In en, this message translates to:
+  /// **'This service uses AI'**
+  String get aiDisclosureTitle;
+
+  /// Intro line of the AI disclosure sheet
+  ///
+  /// In en, this message translates to:
+  /// **'The following WalkDog features are powered by generative artificial intelligence.'**
+  String get aiDisclosureIntro;
+
+  /// AI disclosure sheet: sticker feature heading
+  ///
+  /// In en, this message translates to:
+  /// **'AI sticker generation'**
+  String get aiDisclosureStickerTitle;
+
+  /// AI disclosure sheet: sticker feature body
+  ///
+  /// In en, this message translates to:
+  /// **'AI creates a new pet image from the breed, color and style you pick. These are not real photographs.'**
+  String get aiDisclosureStickerBody;
+
+  /// AI disclosure sheet: dialogue feature heading
+  ///
+  /// In en, this message translates to:
+  /// **'Pet remarks'**
+  String get aiDisclosureDialogueTitle;
+
+  /// AI disclosure sheet: dialogue feature body
+  ///
+  /// In en, this message translates to:
+  /// **'AI writes what your pet says after a walk, a treat and other moments. These lines are not written by a person.'**
+  String get aiDisclosureDialogueBody;
+
+  /// AI disclosure sheet: limitations heading
+  ///
+  /// In en, this message translates to:
+  /// **'Good to know'**
+  String get aiDisclosureLimitTitle;
+
+  /// AI disclosure sheet: limitations body
+  ///
+  /// In en, this message translates to:
+  /// **'AI output can be inaccurate or unexpected. Do not rely on it for medical or health decisions.'**
+  String get aiDisclosureLimitBody;
+
+  /// Close button on the AI disclosure sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get aiDisclosureClose;
+
+  /// Title of the third-party AI data sharing consent sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Allow AI features?'**
+  String get aiConsentTitle;
+
+  /// Intro line of the AI consent sheet
+  ///
+  /// In en, this message translates to:
+  /// **'To create AI stickers and pet remarks, the information below is sent to external AI services.'**
+  String get aiConsentIntro;
+
+  /// AI consent sheet: shared data heading
+  ///
+  /// In en, this message translates to:
+  /// **'What is sent'**
+  String get aiConsentSentTitle;
+
+  /// AI consent sheet: list of shared data
+  ///
+  /// In en, this message translates to:
+  /// **'• Pet name, breed, color and style choices\n• Happiness level and walk/mission progress\n• Account identifier (UID)'**
+  String get aiConsentSentItems;
+
+  /// AI consent sheet: excluded data heading
+  ///
+  /// In en, this message translates to:
+  /// **'What is never sent'**
+  String get aiConsentNotSentTitle;
+
+  /// AI consent sheet: list of excluded data
+  ///
+  /// In en, this message translates to:
+  /// **'• Location (GPS) data\n• Step counts and other health data\n• Contacts, photos and other on-device personal data'**
+  String get aiConsentNotSentItems;
+
+  /// AI consent sheet: third-party recipients heading
+  ///
+  /// In en, this message translates to:
+  /// **'Who receives it'**
+  String get aiConsentThirdPartyTitle;
+
+  /// AI consent sheet: list of third-party AI recipients
+  ///
+  /// In en, this message translates to:
+  /// **'Cloudflare Workers AI, OpenAI, Google Gemini, OpenRouter, Groq'**
+  String get aiConsentThirdPartyItems;
+
+  /// AI consent sheet: overseas transfer heading
+  ///
+  /// In en, this message translates to:
+  /// **'Cross-border transfer'**
+  String get aiConsentOverseasTitle;
+
+  /// AI consent sheet: overseas transfer body
+  ///
+  /// In en, this message translates to:
+  /// **'These services run on servers outside your country, including in the United States, so your information is transferred abroad. It is transferred to generate AI output and is retained or deleted under each provider\'s own policy. See our Privacy Policy for details.'**
+  String get aiConsentOverseasBody;
+
+  /// AI consent sheet: note that consent is optional and revocable
+  ///
+  /// In en, this message translates to:
+  /// **'You can still use walks, missions, stats and everything else without agreeing. You can withdraw consent at any time in Settings.'**
+  String get aiConsentWithdrawNote;
+
+  /// Link to the privacy policy from the AI consent sheet
+  ///
+  /// In en, this message translates to:
+  /// **'View Privacy Policy'**
+  String get aiConsentViewPolicy;
+
+  /// Accept button on the AI consent sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and continue'**
+  String get aiConsentAgree;
+
+  /// Decline button on the AI consent sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get aiConsentDecline;
+
+  /// Snackbar shown when an AI feature is used without consent
+  ///
+  /// In en, this message translates to:
+  /// **'AI features need your consent to share data.'**
+  String get aiConsentRequiredMessage;
+
+  /// Settings tile for managing AI data sharing consent
+  ///
+  /// In en, this message translates to:
+  /// **'AI data sharing'**
+  String get aiConsentTileTitle;
+
+  /// Settings tile subtitle when AI consent is granted
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed · tap to withdraw'**
+  String get aiConsentTileOn;
+
+  /// Settings tile subtitle when AI consent is not granted
+  ///
+  /// In en, this message translates to:
+  /// **'Not allowed · tap to allow'**
+  String get aiConsentTileOff;
+
+  /// Title of the consent withdrawal dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw consent?'**
+  String get aiConsentWithdrawTitle;
+
+  /// Body of the consent withdrawal dialog
+  ///
+  /// In en, this message translates to:
+  /// **'AI sticker generation and pet remarks will stop working. Stickers you already made are kept.'**
+  String get aiConsentWithdrawBody;
+
+  /// Confirm button on the consent withdrawal dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get aiConsentWithdrawConfirm;
+
+  /// Snackbar confirming consent withdrawal
+  ///
+  /// In en, this message translates to:
+  /// **'AI data sharing consent withdrawn'**
+  String get aiConsentWithdrawn;
+
+  /// Snackbar confirming consent was granted
+  ///
+  /// In en, this message translates to:
+  /// **'AI data sharing allowed'**
+  String get aiConsentGranted;
+
+  /// Generic cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Badge overlaid on AI-generated images
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated'**
+  String get aiGeneratedBadge;
+
+  /// Notice shown under an AI-generated image
+  ///
+  /// In en, this message translates to:
+  /// **'This image was created with generative AI.'**
+  String get aiGeneratedImageNotice;
+
+  /// Label marking AI-generated pet dialogue
+  ///
+  /// In en, this message translates to:
+  /// **'Written by AI'**
+  String get aiGeneratedTextNotice;
+
+  /// Button that opens the content report sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get reportContentButton;
+
+  /// Title of the content report sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Report inappropriate content'**
+  String get reportContentTitle;
+
+  /// Body of the content report sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Is something wrong with this AI output? Pick a reason. We review every report.'**
+  String get reportContentBody;
+
+  /// Report reason option
+  ///
+  /// In en, this message translates to:
+  /// **'Inappropriate or offensive'**
+  String get reportReasonInappropriate;
+
+  /// Report reason option
+  ///
+  /// In en, this message translates to:
+  /// **'Violent or hateful'**
+  String get reportReasonViolent;
+
+  /// Report reason option
+  ///
+  /// In en, this message translates to:
+  /// **'Sexual content'**
+  String get reportReasonSexual;
+
+  /// Report reason option
+  ///
+  /// In en, this message translates to:
+  /// **'Misleading or false'**
+  String get reportReasonMisleading;
+
+  /// Report reason option
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get reportReasonOther;
+
+  /// Submit button on the content report sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get reportSubmit;
+
+  /// Snackbar confirming a report was submitted
+  ///
+  /// In en, this message translates to:
+  /// **'Report received. We\'ll review it shortly.'**
+  String get reportSubmitted;
+
+  /// Snackbar shown when submitting a report fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the report. Please try again.'**
+  String get reportFailed;
+
+  /// Settings tile title for the location-based services terms
+  ///
+  /// In en, this message translates to:
+  /// **'Location-Based Services Terms'**
+  String get locationTermsTitle;
+
+  /// Settings tile subtitle for the location-based services terms
+  ///
+  /// In en, this message translates to:
+  /// **'Terms for using location information'**
+  String get locationTermsDescription;
 }
 
 class _AppLocalizationsDelegate

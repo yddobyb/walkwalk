@@ -10,6 +10,9 @@ import '../../../services/user/user_tier_providers.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../services/user/user_tier_service.dart';
 import '../../../services/sensors/pedometer_service.dart';
+import '../../../services/ai/ai_consent_service.dart';
+import '../../widgets/ai_consent_sheet.dart';
+import '../../widgets/ai_disclosure_sheet.dart';
 import '../../widgets/step_permission_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../achievements/achievements_screen.dart';
@@ -19,6 +22,7 @@ import 'widgets/link_account_sheet.dart';
 
 const _privacyPolicyUrl = 'https://walkwalkddog.web.app/privacy-policy';
 const _termsOfServiceUrl = 'https://walkwalkddog.web.app/terms-of-service';
+const _locationTermsUrl = 'https://walkwalkddog.web.app/location-terms';
 
 Future<void> _openExternalUrl(BuildContext context, String url) async {
   final uri = Uri.parse(url);
@@ -226,6 +230,23 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
+          // AI 기능 (Phase 27 — AI기본법 사전고지 + 제3자 전송 동의 관리)
+          _SettingsSection(
+            title: AppLocalizations.of(context).aiSectionTitle,
+            children: [
+              _SettingsTile(
+                icon: Icons.auto_awesome,
+                title: AppLocalizations.of(context).aiDisclosureTileTitle,
+                subtitle: AppLocalizations.of(context).aiDisclosureTileSubtitle,
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => AiDisclosureSheet.show(context),
+              ),
+              const _AiConsentTile(),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
           // 정보
           _SettingsSection(
             title: AppLocalizations.of(context).information,
@@ -265,6 +286,14 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: AppLocalizations.of(context).termsOfServiceDescription,
                 trailing: const Icon(Icons.open_in_new, size: 18),
                 onTap: () => _openExternalUrl(context, _termsOfServiceUrl),
+              ),
+              // 위치정보법 대응 — 위치기반서비스 이용약관은 별도 문서
+              _SettingsTile(
+                icon: Icons.my_location_outlined,
+                title: AppLocalizations.of(context).locationTermsTitle,
+                subtitle: AppLocalizations.of(context).locationTermsDescription,
+                trailing: const Icon(Icons.open_in_new, size: 18),
+                onTap: () => _openExternalUrl(context, _locationTermsUrl),
               ),
             ],
           ),
@@ -618,6 +647,93 @@ class SettingsScreen extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// 제3자 AI 데이터 전송 동의 관리 타일 (Phase 27).
+///
+/// 동의 철회 경로를 상시 제공해야 하므로(Apple 5.1.1(ii) "동의 철회 수단",
+/// 개인정보보호법 동의 철회권) 설정에 고정 노출한다.
+class _AiConsentTile extends ConsumerWidget {
+  const _AiConsentTile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final consentAsync = ref.watch(aiConsentProvider);
+    final consented = consentAsync.valueOrNull ?? false;
+
+    return _SettingsTile(
+      icon: consented ? Icons.verified_user : Icons.privacy_tip_outlined,
+      iconColor: consented ? Colors.green : null,
+      title: l10n.aiConsentTileTitle,
+      subtitle: consented ? l10n.aiConsentTileOn : l10n.aiConsentTileOff,
+      trailing: Switch(
+        value: consented,
+        onChanged: consentAsync.isLoading
+            ? null
+            : (_) => _toggle(context, ref, consented),
+      ),
+      onTap: consentAsync.isLoading
+          ? null
+          : () => _toggle(context, ref, consented),
+    );
+  }
+
+  Future<void> _toggle(
+    BuildContext context,
+    WidgetRef ref,
+    bool consented,
+  ) async {
+    final service = ref.read(aiConsentServiceProvider);
+
+    if (consented) {
+      final confirmed = await _confirmWithdraw(context);
+      if (confirmed != true) return;
+      await service.withdraw();
+      ref.invalidate(aiConsentProvider);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).aiConsentWithdrawn),
+        ),
+      );
+      return;
+    }
+
+    // 미동의 → 동의 시트를 거쳐서만 켤 수 있다(스위치 단독 토글로는 동의 성립 X).
+    final agreed = await AiConsentSheet.show(context);
+    if (!agreed) return;
+    await service.grant();
+    ref.invalidate(aiConsentProvider);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).aiConsentGranted)),
+    );
+  }
+
+  Future<bool?> _confirmWithdraw(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.aiConsentWithdrawTitle),
+        content: Text(l10n.aiConsentWithdrawBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.aiConsentWithdrawConfirm,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

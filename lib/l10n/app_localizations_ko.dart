@@ -1704,4 +1704,170 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get protectPremiumTileSubtitle => '계정을 연결해 기기를 바꿔도 유지하세요';
+
+  @override
+  String get aiSectionTitle => 'AI 기능';
+
+  @override
+  String get aiDisclosureTileTitle => 'AI 기능 안내';
+
+  @override
+  String get aiDisclosureTileSubtitle => '이 앱이 AI를 어떻게 사용하는지 확인하세요';
+
+  @override
+  String get aiDisclosureTitle => 'AI 기반 서비스 안내';
+
+  @override
+  String get aiDisclosureIntro => 'WalkDog의 아래 기능은 생성형 인공지능(AI)으로 동작합니다.';
+
+  @override
+  String get aiDisclosureStickerTitle => 'AI 스티커 생성';
+
+  @override
+  String get aiDisclosureStickerBody =>
+      '선택한 품종·색상·스타일을 바탕으로 AI가 펫 이미지를 새로 만들어 냅니다. 실제 사진이 아닙니다.';
+
+  @override
+  String get aiDisclosureDialogueTitle => '펫 한마디';
+
+  @override
+  String get aiDisclosureDialogueBody =>
+      '산책 완료·간식 주기 등 상황에 맞춰 AI가 펫의 대사를 만들어 냅니다. 사람이 쓴 글이 아닙니다.';
+
+  @override
+  String get aiDisclosureLimitTitle => '알아두세요';
+
+  @override
+  String get aiDisclosureLimitBody =>
+      'AI 결과물은 부정확하거나 의도와 다를 수 있습니다. 의학·건강 관련 판단의 근거로 사용하지 마세요.';
+
+  @override
+  String get aiDisclosureClose => '확인';
+
+  @override
+  String get aiConsentTitle => 'AI 기능 사용에 동의해 주세요';
+
+  @override
+  String get aiConsentIntro => 'AI 스티커와 펫 한마디를 만들려면 아래 정보가 외부 AI 서비스로 전송됩니다.';
+
+  @override
+  String get aiConsentSentTitle => '전송되는 정보';
+
+  @override
+  String get aiConsentSentItems =>
+      '• 펫 이름·품종·색상·스타일 선택값\n• 행복도 수치와 산책/미션 진행 상황\n• 계정 식별자(UID)';
+
+  @override
+  String get aiConsentNotSentTitle => '전송되지 않는 정보';
+
+  @override
+  String get aiConsentNotSentItems =>
+      '• 위치(GPS) 정보\n• 걸음 수 등 건강 데이터\n• 연락처·사진 등 기기 내 개인 정보';
+
+  @override
+  String get aiConsentThirdPartyTitle => '전송받는 곳';
+
+  @override
+  String get aiConsentThirdPartyItems =>
+      'Cloudflare Workers AI, OpenAI, Google Gemini, OpenRouter, Groq';
+
+  @override
+  String get aiConsentOverseasTitle => '국외 이전 안내';
+
+  @override
+  String get aiConsentOverseasBody =>
+      '위 서비스는 미국 등 해외에 서버를 두고 있어, 정보가 국외로 이전됩니다. 이전 목적은 AI 결과물 생성이며, 처리 후 각 서비스의 정책에 따라 보관·삭제됩니다. 자세한 내용은 개인정보 처리방침에서 확인하세요.';
+
+  @override
+  String get aiConsentWithdrawNote =>
+      '동의하지 않아도 산책·미션·통계 등 다른 기능은 모두 사용할 수 있습니다. 동의는 설정에서 언제든 철회할 수 있습니다.';
+
+  @override
+  String get aiConsentViewPolicy => '개인정보 처리방침 보기';
+
+  @override
+  String get aiConsentAgree => '동의하고 계속하기';
+
+  @override
+  String get aiConsentDecline => '동의하지 않음';
+
+  @override
+  String get aiConsentRequiredMessage => 'AI 기능을 사용하려면 데이터 전송에 동의해야 합니다.';
+
+  @override
+  String get aiConsentTileTitle => 'AI 데이터 전송 동의';
+
+  @override
+  String get aiConsentTileOn => '동의함 · 탭하여 철회';
+
+  @override
+  String get aiConsentTileOff => '동의하지 않음 · 탭하여 동의';
+
+  @override
+  String get aiConsentWithdrawTitle => '동의를 철회할까요?';
+
+  @override
+  String get aiConsentWithdrawBody =>
+      '철회하면 AI 스티커 생성과 펫 한마디 기능을 사용할 수 없습니다. 이미 만든 스티커는 그대로 남습니다.';
+
+  @override
+  String get aiConsentWithdrawConfirm => '철회하기';
+
+  @override
+  String get aiConsentWithdrawn => 'AI 데이터 전송 동의를 철회했습니다';
+
+  @override
+  String get aiConsentGranted => 'AI 데이터 전송에 동의했습니다';
+
+  @override
+  String get commonCancel => '취소';
+
+  @override
+  String get aiGeneratedBadge => 'AI 생성';
+
+  @override
+  String get aiGeneratedImageNotice => '이 이미지는 생성형 AI로 만들어졌습니다.';
+
+  @override
+  String get aiGeneratedTextNotice => 'AI가 만든 대사예요';
+
+  @override
+  String get reportContentButton => '신고';
+
+  @override
+  String get reportContentTitle => '부적절한 콘텐츠 신고';
+
+  @override
+  String get reportContentBody =>
+      '이 AI 결과물에 문제가 있나요? 사유를 선택해 주세요. 신고 내용은 검토 후 조치됩니다.';
+
+  @override
+  String get reportReasonInappropriate => '부적절하거나 불쾌한 내용';
+
+  @override
+  String get reportReasonViolent => '폭력적이거나 혐오스러운 내용';
+
+  @override
+  String get reportReasonSexual => '성적인 내용';
+
+  @override
+  String get reportReasonMisleading => '오해를 부르거나 허위인 내용';
+
+  @override
+  String get reportReasonOther => '기타';
+
+  @override
+  String get reportSubmit => '신고하기';
+
+  @override
+  String get reportSubmitted => '신고가 접수되었습니다. 검토 후 조치하겠습니다.';
+
+  @override
+  String get reportFailed => '신고를 보내지 못했습니다. 잠시 후 다시 시도해 주세요.';
+
+  @override
+  String get locationTermsTitle => '위치기반서비스 이용약관';
+
+  @override
+  String get locationTermsDescription => '위치정보 이용에 관한 약관';
 }

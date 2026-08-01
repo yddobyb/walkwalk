@@ -30,6 +30,9 @@ void main() {
     conversationService = ConversationService(
       llmService: llmService,
       fallbackResponses: fallbackResponses,
+      // 기존 테스트는 LLM 경로 자체를 검증하므로 동의된 상태로 고정.
+      // 미동의 경로는 아래 'AI 전송 동의 게이트' 그룹에서 별도로 검증한다.
+      consentGate: () async => true,
     );
   });
 
@@ -420,6 +423,68 @@ void main() {
       debugPrint('✅ 폴백 동작 확인 완료');
       debugPrint('   - LLM 미초기화 시 FallbackResponses 사용');
       debugPrint('   - 응답: $response');
+    });
+  });
+
+  // ==========================================================================
+  // AI 전송 동의 게이트 (Phase 27 — Apple 5.1.2(i) / PIPA 국외이전)
+  // ==========================================================================
+  group('AI 전송 동의 게이트', () {
+    test('미동의 시 LLM을 호출하지 않고 로컬 폴백 응답을 반환', () async {
+      var gateCalls = 0;
+      final gated = ConversationService(
+        llmService: llmService,
+        fallbackResponses: fallbackResponses,
+        consentGate: () async {
+          gateCalls++;
+          return false;
+        },
+      );
+
+      final response = await gated.getGreeting(
+        dogName: 'Consent Test',
+        dogBreed: 'Test Breed',
+        happinessLevel: 50,
+        locale: 'ko',
+      );
+
+      // 게이트가 실제로 조회됐고, 응답은 로컬 폴백에서 나온다.
+      expect(gateCalls, 1);
+      expect(response.isNotEmpty, true);
+      expect(fallbackResponses.isFromFallback(response), true);
+
+      debugPrint('✅ 미동의 시 로컬 폴백만 사용 확인');
+    });
+
+    test('동의 상태는 호출마다 다시 조회된다 (설정에서 철회 시 즉시 반영)', () async {
+      var consented = true;
+      final gated = ConversationService(
+        llmService: llmService,
+        fallbackResponses: fallbackResponses,
+        consentGate: () async => consented,
+      );
+
+      final before = await gated.getGreeting(
+        dogName: 'Max',
+        dogBreed: 'Test Breed',
+        happinessLevel: 50,
+        locale: 'ko',
+      );
+      expect(before.isNotEmpty, true);
+
+      // 철회 후에도 서비스 재생성 없이 미동의 경로를 타야 한다.
+      consented = false;
+      final after = await gated.getGreeting(
+        dogName: 'Max',
+        dogBreed: 'Test Breed',
+        happinessLevel: 50,
+        locale: 'ko',
+      );
+
+      expect(after.isNotEmpty, true);
+      expect(fallbackResponses.isFromFallback(after), true);
+
+      debugPrint('✅ 동의 철회 즉시 반영 확인');
     });
   });
 }

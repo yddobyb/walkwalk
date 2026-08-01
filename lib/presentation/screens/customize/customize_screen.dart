@@ -16,6 +16,11 @@ import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
 import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
+import '../../../services/ai/ai_consent_service.dart';
+import '../../../services/moderation/content_report_service.dart';
+import '../../widgets/ai_consent_sheet.dart';
+import '../../widgets/ai_generated_badge.dart';
+import '../../widgets/report_content_sheet.dart';
 import '../../widgets/reset_countdown.dart';
 import '../subscription/paywall_screen.dart';
 import 'widgets/out_of_quota_sheet.dart';
@@ -392,8 +397,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                         _ProviderBadge(provider: response.data.provider!),
                       ],
                       const SizedBox(height: 16),
-                      _StickerImage(imageBytes: imageBytes),
-                      const SizedBox(height: 12),
+                      // AI기본법 제31조 ②항: 생성형 AI 결과물임을 이미지 위에 표시
+                      AiGeneratedImageFrame(
+                        child: _StickerImage(imageBytes: imageBytes),
+                      ),
+                      const SizedBox(height: 10),
+                      const AiGeneratedImageNotice(),
+                      const SizedBox(height: 8),
                       Text(
                         '${response.data.size.width}x${response.data.size.height}',
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -435,6 +445,23 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                      // 부적절 생성물 신고 (Google Play 생성형 AI 정책 / Apple 1.2)
+                      TextButton.icon(
+                        onPressed: () => ReportContentSheet.show(
+                          context,
+                          contentType: ReportedContentType.sticker,
+                          provider: response.data.provider,
+                        ),
+                        icon: const Icon(Icons.flag_outlined, size: 16),
+                        label: Text(
+                          AppLocalizations.of(context).reportContentButton,
+                        ),
+                        style: TextButton.styleFrom(
+                          foregroundColor:
+                              theme.colorScheme.onSurface.withValues(alpha: 0.55),
+                          minimumSize: const Size(0, 36),
                         ),
                       ),
                     ],
@@ -976,7 +1003,11 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
   }
 
-  void _generateSticker() {
+  Future<void> _generateSticker() async {
+    // Phase 27: 제3자 AI 전송 동의가 없으면 생성 자체를 시작하지 않는다.
+    // (Apple 5.1.2(i) / 개인정보보호법 제28조의8 국외이전)
+    if (!await _ensureAiConsent()) return;
+
     // 할당량 소진 시: 무료+광고 보너스 가능하면 리워드 다이얼로그, 아니면 안내
     final quota = ref.read(quotaProvider).valueOrNull;
     if (quota != null && quota.isExhausted) {
@@ -984,6 +1015,31 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       return;
     }
     _doGenerate();
+  }
+
+  /// AI 전송 동의를 확인하고, 없으면 동의 시트를 띄운다.
+  ///
+  /// 동의를 받으면 true, 거부하거나 시트를 닫으면 안내 후 false를 반환한다.
+  Future<bool> _ensureAiConsent() async {
+    final consentService = ref.read(aiConsentServiceProvider);
+    if (await consentService.hasConsent()) return true;
+    if (!mounted) return false;
+
+    final agreed = await AiConsentSheet.show(context);
+    if (!mounted) return false;
+
+    if (agreed) {
+      await consentService.grant();
+      ref.invalidate(aiConsentProvider);
+      return true;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context).aiConsentRequiredMessage),
+      ),
+    );
+    return false;
   }
 
   /// 실제 스티커 생성 (할당량 통과 후 또는 리워드 광고 시청 후 호출)

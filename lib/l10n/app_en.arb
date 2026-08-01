@@ -2759,5 +2759,218 @@
   "protectPremiumTileSubtitle": "Link an account to keep it across devices",
   "@protectPremiumTileSubtitle": {
     "description": "Settings account tile subtitle shown to anonymous premium users"
+  },
+
+  "aiSectionTitle": "AI features",
+  "@aiSectionTitle": {
+    "description": "Settings section title for AI disclosure and consent"
+  },
+  "aiDisclosureTileTitle": "About AI features",
+  "@aiDisclosureTileTitle": {
+    "description": "Settings tile opening the AI disclosure sheet"
+  },
+  "aiDisclosureTileSubtitle": "See how this app uses AI",
+  "@aiDisclosureTileSubtitle": {
+    "description": "Settings tile subtitle for the AI disclosure sheet"
+  },
+  "aiDisclosureTitle": "This service uses AI",
+  "@aiDisclosureTitle": {
+    "description": "Title of the AI disclosure sheet"
+  },
+  "aiDisclosureIntro": "The following WalkDog features are powered by generative artificial intelligence.",
+  "@aiDisclosureIntro": {
+    "description": "Intro line of the AI disclosure sheet"
+  },
+  "aiDisclosureStickerTitle": "AI sticker generation",
+  "@aiDisclosureStickerTitle": {
+    "description": "AI disclosure sheet: sticker feature heading"
+  },
+  "aiDisclosureStickerBody": "AI creates a new pet image from the breed, color and style you pick. These are not real photographs.",
+  "@aiDisclosureStickerBody": {
+    "description": "AI disclosure sheet: sticker feature body"
+  },
+  "aiDisclosureDialogueTitle": "Pet remarks",
+  "@aiDisclosureDialogueTitle": {
+    "description": "AI disclosure sheet: dialogue feature heading"
+  },
+  "aiDisclosureDialogueBody": "AI writes what your pet says after a walk, a treat and other moments. These lines are not written by a person.",
+  "@aiDisclosureDialogueBody": {
+    "description": "AI disclosure sheet: dialogue feature body"
+  },
+  "aiDisclosureLimitTitle": "Good to know",
+  "@aiDisclosureLimitTitle": {
+    "description": "AI disclosure sheet: limitations heading"
+  },
+  "aiDisclosureLimitBody": "AI output can be inaccurate or unexpected. Do not rely on it for medical or health decisions.",
+  "@aiDisclosureLimitBody": {
+    "description": "AI disclosure sheet: limitations body"
+  },
+  "aiDisclosureClose": "Got it",
+  "@aiDisclosureClose": {
+    "description": "Close button on the AI disclosure sheet"
+  },
+
+  "aiConsentTitle": "Allow AI features?",
+  "@aiConsentTitle": {
+    "description": "Title of the third-party AI data sharing consent sheet"
+  },
+  "aiConsentIntro": "To create AI stickers and pet remarks, the information below is sent to external AI services.",
+  "@aiConsentIntro": {
+    "description": "Intro line of the AI consent sheet"
+  },
+  "aiConsentSentTitle": "What is sent",
+  "@aiConsentSentTitle": {
+    "description": "AI consent sheet: shared data heading"
+  },
+  "aiConsentSentItems": "• Pet name, breed, color and style choices\n• Happiness level and walk/mission progress\n• Account identifier (UID)",
+  "@aiConsentSentItems": {
+    "description": "AI consent sheet: list of shared data"
+  },
+  "aiConsentNotSentTitle": "What is never sent",
+  "@aiConsentNotSentTitle": {
+    "description": "AI consent sheet: excluded data heading"
+  },
+  "aiConsentNotSentItems": "• Location (GPS) data\n• Step counts and other health data\n• Contacts, photos and other on-device personal data",
+  "@aiConsentNotSentItems": {
+    "description": "AI consent sheet: list of excluded data"
+  },
+  "aiConsentThirdPartyTitle": "Who receives it",
+  "@aiConsentThirdPartyTitle": {
+    "description": "AI consent sheet: third-party recipients heading"
+  },
+  "aiConsentThirdPartyItems": "Cloudflare Workers AI, OpenAI, Google Gemini, OpenRouter, Groq",
+  "@aiConsentThirdPartyItems": {
+    "description": "AI consent sheet: list of third-party AI recipients"
+  },
+  "aiConsentOverseasTitle": "Cross-border transfer",
+  "@aiConsentOverseasTitle": {
+    "description": "AI consent sheet: overseas transfer heading"
+  },
+  "aiConsentOverseasBody": "These services run on servers outside your country, including in the United States, so your information is transferred abroad. It is transferred to generate AI output and is retained or deleted under each provider's own policy. See our Privacy Policy for details.",
+  "@aiConsentOverseasBody": {
+    "description": "AI consent sheet: overseas transfer body"
+  },
+  "aiConsentWithdrawNote": "You can still use walks, missions, stats and everything else without agreeing. You can withdraw consent at any time in Settings.",
+  "@aiConsentWithdrawNote": {
+    "description": "AI consent sheet: note that consent is optional and revocable"
+  },
+  "aiConsentViewPolicy": "View Privacy Policy",
+  "@aiConsentViewPolicy": {
+    "description": "Link to the privacy policy from the AI consent sheet"
+  },
+  "aiConsentAgree": "Agree and continue",
+  "@aiConsentAgree": {
+    "description": "Accept button on the AI consent sheet"
+  },
+  "aiConsentDecline": "Not now",
+  "@aiConsentDecline": {
+    "description": "Decline button on the AI consent sheet"
+  },
+  "aiConsentRequiredMessage": "AI features need your consent to share data.",
+  "@aiConsentRequiredMessage": {
+    "description": "Snackbar shown when an AI feature is used without consent"
+  },
+  "aiConsentTileTitle": "AI data sharing",
+  "@aiConsentTileTitle": {
+    "description": "Settings tile for managing AI data sharing consent"
+  },
+  "aiConsentTileOn": "Allowed · tap to withdraw",
+  "@aiConsentTileOn": {
+    "description": "Settings tile subtitle when AI consent is granted"
+  },
+  "aiConsentTileOff": "Not allowed · tap to allow",
+  "@aiConsentTileOff": {
+    "description": "Settings tile subtitle when AI consent is not granted"
+  },
+  "aiConsentWithdrawTitle": "Withdraw consent?",
+  "@aiConsentWithdrawTitle": {
+    "description": "Title of the consent withdrawal dialog"
+  },
+  "aiConsentWithdrawBody": "AI sticker generation and pet remarks will stop working. Stickers you already made are kept.",
+  "@aiConsentWithdrawBody": {
+    "description": "Body of the consent withdrawal dialog"
+  },
+  "aiConsentWithdrawConfirm": "Withdraw",
+  "@aiConsentWithdrawConfirm": {
+    "description": "Confirm button on the consent withdrawal dialog"
+  },
+  "aiConsentWithdrawn": "AI data sharing consent withdrawn",
+  "@aiConsentWithdrawn": {
+    "description": "Snackbar confirming consent withdrawal"
+  },
+  "aiConsentGranted": "AI data sharing allowed",
+  "@aiConsentGranted": {
+    "description": "Snackbar confirming consent was granted"
+  },
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Generic cancel button label"
+  },
+
+  "aiGeneratedBadge": "AI-generated",
+  "@aiGeneratedBadge": {
+    "description": "Badge overlaid on AI-generated images"
+  },
+  "aiGeneratedImageNotice": "This image was created with generative AI.",
+  "@aiGeneratedImageNotice": {
+    "description": "Notice shown under an AI-generated image"
+  },
+  "aiGeneratedTextNotice": "Written by AI",
+  "@aiGeneratedTextNotice": {
+    "description": "Label marking AI-generated pet dialogue"
+  },
+
+  "reportContentButton": "Report",
+  "@reportContentButton": {
+    "description": "Button that opens the content report sheet"
+  },
+  "reportContentTitle": "Report inappropriate content",
+  "@reportContentTitle": {
+    "description": "Title of the content report sheet"
+  },
+  "reportContentBody": "Is something wrong with this AI output? Pick a reason. We review every report.",
+  "@reportContentBody": {
+    "description": "Body of the content report sheet"
+  },
+  "reportReasonInappropriate": "Inappropriate or offensive",
+  "@reportReasonInappropriate": {
+    "description": "Report reason option"
+  },
+  "reportReasonViolent": "Violent or hateful",
+  "@reportReasonViolent": {
+    "description": "Report reason option"
+  },
+  "reportReasonSexual": "Sexual content",
+  "@reportReasonSexual": {
+    "description": "Report reason option"
+  },
+  "reportReasonMisleading": "Misleading or false",
+  "@reportReasonMisleading": {
+    "description": "Report reason option"
+  },
+  "reportReasonOther": "Something else",
+  "@reportReasonOther": {
+    "description": "Report reason option"
+  },
+  "reportSubmit": "Submit report",
+  "@reportSubmit": {
+    "description": "Submit button on the content report sheet"
+  },
+  "reportSubmitted": "Report received. We'll review it shortly.",
+  "@reportSubmitted": {
+    "description": "Snackbar confirming a report was submitted"
+  },
+  "reportFailed": "Couldn't send the report. Please try again.",
+  "@reportFailed": {
+    "description": "Snackbar shown when submitting a report fails"
+  },
+
+  "locationTermsTitle": "Location-Based Services Terms",
+  "@locationTermsTitle": {
+    "description": "Settings tile title for the location-based services terms"
+  },
+  "locationTermsDescription": "Terms for using location information",
+  "@locationTermsDescription": {
+    "description": "Settings tile subtitle for the location-based services terms"
   }
 }
