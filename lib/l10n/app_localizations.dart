@@ -3751,6 +3751,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Merle'**
   String get colorMerle;
+
+  /// Paywall benefit - premium-only cosmetics
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusive accessories, styles & backgrounds'**
+  String get paywallBenefitCosmetics;
 }
 
 class _AppLocalizationsDelegate

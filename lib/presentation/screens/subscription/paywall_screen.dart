@@ -173,6 +173,12 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     title: l10n.paywallBenefitSpeed,
                     theme: theme,
                   ),
+                  // 잠긴 액세서리를 눌러 여기 온 이용자가 곧바로 이유를 보게 한다
+                  _BenefitTile(
+                    icon: Icons.palette_rounded,
+                    title: l10n.paywallBenefitCosmetics,
+                    theme: theme,
+                  ),
 
                   const SizedBox(height: 24),
 

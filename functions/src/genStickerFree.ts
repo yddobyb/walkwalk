@@ -29,6 +29,7 @@ import {
   ALLOWED_BGS,
   pick,
   generatePrompt,
+  restrictToFreeTier,
 } from "./utils/stickerPrompt";
 
 // genSticker와 동일한 인터페이스
@@ -97,9 +98,22 @@ export const genStickerFree = functions
     const {petId, size = 512, seed} = data;
     const breed = pick(ALLOWED_BREEDS, data.breed, "Shiba Inu");
     const color = pick(ALLOWED_COLORS, data.color, "orange");
-    const accessory = pick(ALLOWED_ACCESSORIES, data.accessory, "none");
-    const style = pick(ALLOWED_STYLES, data.style, "sticker-flat");
-    const bg = pick(ALLOWED_BGS, data.bg, "transparent");
+
+    // 이 함수는 무료 티어 전용이므로 프리미엄 장식은 여기서 강등한다.
+    // 클라이언트도 잠그지만 그건 UI일 뿐 — 변조된 클라이언트는 그냥 보낸다.
+    // (품종·색상은 무료도 전부 쓸 수 있어 제한 대상이 아니다)
+    const restricted = restrictToFreeTier(
+      pick(ALLOWED_ACCESSORIES, data.accessory, "none"),
+      pick(ALLOWED_STYLES, data.style, "sticker-flat"),
+      pick(ALLOWED_BGS, data.bg, "transparent")
+    );
+    const {accessory, style, bg} = restricted;
+    if (restricted.downgraded.length > 0) {
+      console.warn(
+        "⬇️ [genStickerFree] premium cosmetics downgraded for " +
+        `${maskUid(uid)}: ${restricted.downgraded.join(", ")}`
+      );
+    }
 
     console.log(`📝 [genStickerFree] petId=${petId}`);
 

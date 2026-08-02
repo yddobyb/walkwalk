@@ -53,12 +53,30 @@ void main() {
       expect(find.text('\u{1F48E}'), findsOneWidget);
     });
 
-    testWidgets('renders 4 benefit tiles', (tester) async {
+    // 개수를 박아두면 혜택을 추가할 때마다 깨진다(Phase 29-3에서 4→5).
+    // 지켜야 할 건 "모든 혜택 행에 체크 표시가 붙는다"는 것.
+    testWidgets('모든 혜택 행에 체크 표시가 붙는다', (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      // 새 디자인: check_circle_rounded 아이콘 사용
-      expect(find.byIcon(Icons.check_circle_rounded), findsNWidgets(4));
+      final checks =
+          tester.widgetList(find.byIcon(Icons.check_circle_rounded)).length;
+      expect(checks, greaterThanOrEqualTo(4),
+          reason: '혜택 행이 최소 4개는 있어야 함');
+
+      // 혜택 문구 개수와 체크 개수가 같아야 한다(짝이 안 맞으면 렌더 누락)
+      final l10n = await AppLocalizations.delegate.load(const Locale('ko'));
+      final benefitTexts = [
+        l10n.paywallBenefitQuality,
+        l10n.paywallBenefitQuota,
+        l10n.paywallBenefitAds,
+        l10n.paywallBenefitSpeed,
+        l10n.paywallBenefitCosmetics,
+      ];
+      for (final t in benefitTexts) {
+        expect(find.text(t), findsOneWidget, reason: '혜택 문구 누락: $t');
+      }
+      expect(checks, equals(benefitTexts.length));
     });
 
     testWidgets('renders benefit icons', (tester) async {

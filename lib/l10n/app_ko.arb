@@ -2823,5 +2823,10 @@
   "colorMerle": "멀",
   "@colorMerle": {
     "description": "Color - Merle"
+  },
+
+  "paywallBenefitCosmetics": "전용 액세서리·스타일·배경",
+  "@paywallBenefitCosmetics": {
+    "description": "Paywall benefit - premium-only cosmetics"
   }
 }

@@ -56,6 +56,62 @@ export function pick(
   return allowed.includes(value ?? "") ? value! : fallback;
 }
 
+// ===================================================================
+// 무료 티어에 열어주는 장식 (Phase 29-3)
+// ===================================================================
+// 원칙: **품종·색상은 잠그지 않는다.** 그건 "내 개가 무엇인가"라서,
+// 막으면 열망이 아니라 벌로 읽힌다. 잠그는 건 장식(액세서리/스타일/배경)뿐.
+//
+// 무료 집합 = Phase 29-2 확대 **이전에 있던 것 그대로**. 늘어난 것만 프리미엄이라
+// 아무도 쓰던 걸 잃지 않는다.
+//
+// ⚠️ 클라이언트(`lib/core/constants/cosmetic_tiers.dart`)와 반드시 일치해야 한다.
+// 어긋나면 이용자에겐 열려 보이는데 서버가 기본값으로 바꿔버린다 →
+// `test/data/sticker_option_allowlist_test.dart`가 드리프트를 잡는다.
+
+export const FREE_ACCESSORIES = [
+  "none", "bandana", "glasses", "bowtie", "hat", "collar",
+];
+
+export const FREE_STYLES = [
+  "sticker-flat", "sticker-3d", "realistic",
+];
+
+export const FREE_BGS = [
+  "transparent", "white", "gradient",
+];
+
+/**
+ * 무료 티어가 프리미엄 전용 장식을 요청하면 기본값으로 강등한다.
+ *
+ * 클라이언트도 막지만 그건 UI일 뿐이라, 변조된 클라이언트는 그냥 보낼 수 있다.
+ * 원가 차이는 없지만(같은 Cloudflare 호출) **그게 유료 기능 자체**라서
+ * 서버에서도 막는다. 거부가 아니라 강등인 이유: 기존 입력 검증과 동작을
+ * 맞추고, 정상 이용자가 경계에서 에러를 보지 않게 하려는 것.
+ */
+export function restrictToFreeTier(
+  accessory: string,
+  style: string,
+  bg: string
+): {accessory: string; style: string; bg: string; downgraded: string[]} {
+  const downgraded: string[] = [];
+
+  if (!FREE_ACCESSORIES.includes(accessory)) {
+    downgraded.push(`accessory:${accessory}`);
+    accessory = "none";
+  }
+  if (!FREE_STYLES.includes(style)) {
+    downgraded.push(`style:${style}`);
+    style = "sticker-flat";
+  }
+  if (!FREE_BGS.includes(bg)) {
+    downgraded.push(`bg:${bg}`);
+    bg = "transparent";
+  }
+
+  return {accessory, style, bg, downgraded};
+}
+
 /** 액세서리 → 프롬프트 조각. "none"은 호출 전에 걸러진다. */
 const ACCESSORY_PROMPTS: Record<string, string> = {
   bandana: "red bandana accessory",

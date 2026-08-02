@@ -1968,4 +1968,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get colorMerle => '멀';
+
+  @override
+  String get paywallBenefitCosmetics => '전용 액세서리·스타일·배경';
 }

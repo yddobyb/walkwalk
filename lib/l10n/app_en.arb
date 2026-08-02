@@ -3110,5 +3110,10 @@
   "colorMerle": "Merle",
   "@colorMerle": {
     "description": "Color - Merle"
+  },
+
+  "paywallBenefitCosmetics": "Exclusive accessories, styles & backgrounds",
+  "@paywallBenefitCosmetics": {
+    "description": "Paywall benefit - premium-only cosmetics"
   }
 }

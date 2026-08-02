@@ -14,12 +14,15 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
+import '../../../services/user/user_tier_providers.dart';
+import '../../../core/constants/cosmetic_tiers.dart';
 import '../../../core/utils/accessory_assets.dart';
 import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
 import '../../../services/ai/ai_consent_service.dart';
 import '../../../services/moderation/content_report_service.dart';
 import '../../widgets/accessory_badge.dart';
+import '../../widgets/locked_option_overlay.dart';
 import '../../widgets/ad_banner.dart';
 import '../../widgets/ai_consent_sheet.dart';
 import '../../widgets/ai_generated_badge.dart';
@@ -92,6 +95,11 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     final quotaAsync = ref.watch(quotaProvider);
     final applyState = ref.watch(stickerApplyProvider);
     final petAsync = ref.watch(activePetProvider);
+
+    // 등급 미확정(null)이면 잠금을 걸지 않는다 — 결제한 이용자에게 자물쇠가
+    // 잠깐이라도 보이는 편이 더 나쁘고, 실제 차단은 서버가 한다
+    // (`genStickerFree`의 restrictToFreeTier). AdBanner와 같은 규칙.
+    final isPremium = ref.watch(isPremiumUserProvider).valueOrNull ?? true;
 
     // 온보딩에서 선택한 품종으로 이미지 생성 기본값 설정 (최초 1회)
     if (!_breedInitialized && petAsync.hasValue && petAsync.value != null) {
@@ -186,15 +194,21 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               itemBuilder: (context, index) {
                 final accessory = PetAccessory.values[index];
                 final isSelected = _selectedAccessory == accessory;
+                final locked = CosmeticTiers.isAccessoryLocked(
+                  accessory,
+                  isPremium: isPremium,
+                );
 
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedAccessory = accessory;
-                    });
-                    _persistAccessory(accessory);
-                    _showApplyDialog();
-                  },
+                final tile = GestureDetector(
+                  onTap: locked
+                      ? _openPaywall
+                      : () {
+                          setState(() {
+                            _selectedAccessory = accessory;
+                          });
+                          _persistAccessory(accessory);
+                          _showApplyDialog();
+                        },
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSelected
@@ -237,6 +251,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     ),
                   ),
                 );
+
+                return locked ? LockedOptionOverlay(child: tile) : tile;
               },
             ),
 
@@ -274,7 +290,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildStyleSelector(theme),
+            _buildStyleSelector(theme, isPremium),
 
             const SizedBox(height: 32),
 
@@ -286,7 +302,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildBackgroundSelector(theme),
+            _buildBackgroundSelector(theme, isPremium),
 
             const SizedBox(height: 32),
 
@@ -857,6 +873,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     required String Function(T) emojiOf,
     required String Function(T) nameOf,
     required void Function(T) onSelect,
+    bool Function(T)? isLocked,
   }) {
     return GridView.builder(
       shrinkWrap: true,
@@ -871,9 +888,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       itemBuilder: (context, index) {
         final value = values[index];
         final isSelected = value == selected;
+        final locked = isLocked?.call(value) ?? false;
 
-        return GestureDetector(
-          onTap: () => setState(() => onSelect(value)),
+        final tile = GestureDetector(
+          // 잠긴 칸도 탭은 받는다 — 막힌 느낌 대신 업그레이드 안내로 잇는다
+          onTap: locked
+              ? _openPaywall
+              : () => setState(() => onSelect(value)),
           child: Container(
             decoration: BoxDecoration(
               color: isSelected
@@ -919,11 +940,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
             ),
           ),
         );
+
+        return locked ? LockedOptionOverlay(child: tile) : tile;
       },
     );
   }
 
-  Widget _buildStyleSelector(ThemeData theme) {
+  Widget _buildStyleSelector(ThemeData theme, bool isPremium) {
     return _buildOptionGrid<StickerStyle>(
       theme: theme,
       values: StickerStyle.values,
@@ -931,6 +954,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       emojiOf: _getStyleEmoji,
       nameOf: _getStyleName,
       onSelect: (v) => _style = v,
+      isLocked: (v) =>
+          CosmeticTiers.isStyleLocked(v, isPremium: isPremium),
     );
   }
 
@@ -978,7 +1003,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
   }
 
-  Widget _buildBackgroundSelector(ThemeData theme) {
+  Widget _buildBackgroundSelector(ThemeData theme, bool isPremium) {
     return _buildOptionGrid<StickerBackground>(
       theme: theme,
       values: StickerBackground.values,
@@ -986,6 +1011,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       emojiOf: _getBackgroundEmoji,
       nameOf: _getBackgroundName,
       onSelect: (v) => _bg = v,
+      isLocked: (v) =>
+          CosmeticTiers.isBackgroundLocked(v, isPremium: isPremium),
     );
   }
 

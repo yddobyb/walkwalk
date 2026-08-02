@@ -117,6 +117,109 @@ void main() {
     }
   });
 
+  // ---- 무료/프리미엄 구분 (Phase 29-3) ----
+  //
+  // 두 쪽이 어긋나면 이용자에겐 열려 보이는데 서버가 기본값으로 바꿔버린다
+  // (또는 반대로, 결제한 기능이 잠겨 보인다). 둘 다 조용해서 알아채기 어렵다.
+
+  /// 서버 `FREE_*` 집합
+  Set<String> serverFreeSet(String name) => serverAllowlist(name);
+
+  /// 클라이언트 `CosmeticTiers`의 free 집합에서 enum 멤버명 추출
+  Set<String> clientFreeMembers(String field, String enumName) {
+    final source =
+        File('lib/core/constants/cosmetic_tiers.dart').readAsStringSync();
+    final start = source.indexOf('$field = {');
+    expect(start, greaterThanOrEqualTo(0), reason: '$field를 찾지 못함');
+    final end = source.indexOf('};', start);
+    return RegExp('$enumName\\.(\\w+)')
+        .allMatches(source.substring(start, end))
+        .map((m) => m.group(1)!)
+        .toSet();
+  }
+
+  /// Dart enum 멤버명 → @JsonValue 문자열
+  Map<String, String> memberToJsonValue(String enumName) {
+    final start = stickerRequestSource.indexOf('enum $enumName {');
+    final end = stickerRequestSource.indexOf('\n}', start);
+    final block = stickerRequestSource.substring(start, end);
+    final out = <String, String>{};
+    for (final m
+        in RegExp(r'@JsonValue\("([^"]+)"\)\s*\n\s*(\w+),').allMatches(block)) {
+      out[m.group(2)!] = m.group(1)!;
+    }
+    return out;
+  }
+
+  void expectFreeSetsMatch(
+    String label,
+    Set<String> clientMembers,
+    Map<String, String> toJson,
+    Set<String> serverFree,
+  ) {
+    final clientJson = clientMembers.map((m) {
+      final v = toJson[m];
+      expect(v, isNotNull, reason: '$label: $m의 JsonValue를 찾지 못함');
+      return v!;
+    }).toSet();
+
+    expect(clientJson, isNotEmpty, reason: '$label 파싱 실패');
+    expect(
+      clientJson,
+      equals(serverFree),
+      reason: '$label: 무료 집합이 클라이언트와 서버에서 다르다 — '
+          '한쪽에만 열려 있으면 이용자가 골라도 서버가 기본값으로 바꾸거나, '
+          '결제한 기능이 잠겨 보인다',
+    );
+  }
+
+  test('무료 액세서리 집합이 서버와 일치', () {
+    expectFreeSetsMatch(
+      'accessory',
+      clientFreeMembers('freeAccessories', 'PetAccessory'),
+      // PetAccessory는 도메인 enum이라 JsonValue가 없다 — 이름이 곧 전송값
+      {
+        for (final m in clientFreeMembers('freeAccessories', 'PetAccessory'))
+          m: m
+      },
+      serverFreeSet('FREE_ACCESSORIES'),
+    );
+  });
+
+  test('무료 스타일 집합이 서버와 일치', () {
+    expectFreeSetsMatch(
+      'style',
+      clientFreeMembers('freeStyles', 'StickerStyle'),
+      memberToJsonValue('StickerStyle'),
+      serverFreeSet('FREE_STYLES'),
+    );
+  });
+
+  test('무료 배경 집합이 서버와 일치', () {
+    expectFreeSetsMatch(
+      'background',
+      clientFreeMembers('freeBackgrounds', 'StickerBackground'),
+      memberToJsonValue('StickerBackground'),
+      serverFreeSet('FREE_BGS'),
+    );
+  });
+
+  test('무료 집합은 전체 allowlist의 부분집합', () {
+    expect(
+      serverFreeSet('FREE_ACCESSORIES')
+          .difference(serverAllowlist('ALLOWED_ACCESSORIES')),
+      isEmpty,
+    );
+    expect(
+      serverFreeSet('FREE_STYLES').difference(serverAllowlist('ALLOWED_STYLES')),
+      isEmpty,
+    );
+    expect(
+      serverFreeSet('FREE_BGS').difference(serverAllowlist('ALLOWED_BGS')),
+      isEmpty,
+    );
+  });
+
   test('none을 뺀 모든 액세서리가 프롬프트 조각을 가짐', () {
     for (final a in enumJsonValues('StickerAccessory')) {
       if (a == 'none') continue;
