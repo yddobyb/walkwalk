@@ -1913,4 +1913,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get locationTermsDescription => 'Terms for using location information';
+
+  @override
+  String get walkStepsOnlyTip =>
+      'Walks are tracked by step count. No location data is used.';
 }

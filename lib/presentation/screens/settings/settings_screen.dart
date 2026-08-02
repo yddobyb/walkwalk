@@ -11,6 +11,7 @@ import '../../../services/auth/auth_service.dart';
 import '../../../services/user/user_tier_service.dart';
 import '../../../services/sensors/pedometer_service.dart';
 import '../../../services/ai/ai_consent_service.dart';
+import '../../../services/location/location_availability_service.dart';
 import '../../widgets/ai_consent_sheet.dart';
 import '../../widgets/ai_disclosure_sheet.dart';
 import '../../widgets/step_permission_button.dart';
@@ -287,14 +288,18 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.open_in_new, size: 18),
                 onTap: () => _openExternalUrl(context, _termsOfServiceUrl),
               ),
-              // 위치정보법 대응 — 위치기반서비스 이용약관은 별도 문서
-              _SettingsTile(
-                icon: Icons.my_location_outlined,
-                title: AppLocalizations.of(context).locationTermsTitle,
-                subtitle: AppLocalizations.of(context).locationTermsDescription,
-                trailing: const Icon(Icons.open_in_new, size: 18),
-                onTap: () => _openExternalUrl(context, _locationTermsUrl),
-              ),
+              // 위치정보법 대응 — 위치기반서비스 이용약관은 별도 문서.
+              // Phase 27-8: 위치 기능을 제공하지 않는 지역에서는 노출하지 않는다
+              // (제공하지도 않는 서비스의 약관을 보여주면 오히려 혼란).
+              if (ref.watch(locationFeatureEnabledProvider))
+                _SettingsTile(
+                  icon: Icons.my_location_outlined,
+                  title: AppLocalizations.of(context).locationTermsTitle,
+                  subtitle:
+                      AppLocalizations.of(context).locationTermsDescription,
+                  trailing: const Icon(Icons.open_in_new, size: 18),
+                  onTap: () => _openExternalUrl(context, _locationTermsUrl),
+                ),
             ],
           ),
 

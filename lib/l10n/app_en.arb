@@ -2972,5 +2972,10 @@
   "locationTermsDescription": "Terms for using location information",
   "@locationTermsDescription": {
     "description": "Settings tile subtitle for the location-based services terms"
+  },
+
+  "walkStepsOnlyTip": "Walks are tracked by step count. No location data is used.",
+  "@walkStepsOnlyTip": {
+    "description": "Tip shown where location features are unavailable (e.g. South Korea)"
   }
 }

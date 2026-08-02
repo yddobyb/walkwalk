@@ -26,6 +26,11 @@ class RemoteConfigService {
     'rate_limit_daily': 80,
     'rate_limit_hourly': 20,
     'enable_debug_logs': false,
+    // 위치(실외모드) 기능 제공 여부 — Phase 27-8.
+    // Firebase Console에서 "Country/Region = South Korea" 조건으로 false를 내려
+    // 한국 이용자에게는 위치 기능을 제공하지 않는다(위치정보법 신고 회피).
+    // 조건은 **디바이스 IP 기준**으로 판정된다.
+    'location_features_enabled': true,
   };
 
   // ==========================================================================
@@ -47,10 +52,13 @@ class RemoteConfigService {
       _remoteConfig = FirebaseRemoteConfig.instance;
 
       // 설정 지정 (Fetch 간격)
+      // 디버그 빌드는 스로틀 없이 매번 가져온다 — 지역 게이트 같은 설정을
+      // 콘솔에서 바꾸고 바로 실기기로 확인하려면 1시간 캐시가 방해된다.
       await _remoteConfig!.setConfigSettings(
         RemoteConfigSettings(
           fetchTimeout: const Duration(seconds: 10),
-          minimumFetchInterval: const Duration(hours: 1),
+          minimumFetchInterval:
+              kDebugMode ? Duration.zero : const Duration(hours: 1),
         ),
       );
 
@@ -144,6 +152,24 @@ class RemoteConfigService {
     } catch (e) {
       debugPrint('⚠️ RemoteConfig - Failed to get debug logs flag: $e');
       return _defaults['enable_debug_logs'] as bool;
+    }
+  }
+
+  /// 위치(실외모드) 기능 제공 여부 (Phase 27-8)
+  ///
+  /// Firebase Console의 Country/Region 조건으로 한국(KR) IP에는 false를 내린다.
+  /// 초기화 실패/오프라인이면 기본값 true → 클라이언트의 디바이스 지역 체크
+  /// ([LocationAvailabilityService])가 2차 방어선 역할을 한다.
+  static bool isLocationFeaturesEnabled() {
+    if (!_isInitialized || _remoteConfig == null) {
+      return _defaults['location_features_enabled'] as bool;
+    }
+
+    try {
+      return _remoteConfig!.getBool('location_features_enabled');
+    } catch (e) {
+      debugPrint('⚠️ RemoteConfig - Failed to get location flag: $e');
+      return _defaults['location_features_enabled'] as bool;
     }
   }
 

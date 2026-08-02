@@ -1870,4 +1870,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get locationTermsDescription => '위치정보 이용에 관한 약관';
+
+  @override
+  String get walkStepsOnlyTip => '걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요.';
 }

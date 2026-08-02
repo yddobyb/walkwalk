@@ -3559,6 +3559,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms for using location information'**
   String get locationTermsDescription;
+
+  /// Tip shown where location features are unavailable (e.g. South Korea)
+  ///
+  /// In en, this message translates to:
+  /// **'Walks are tracked by step count. No location data is used.'**
+  String get walkStepsOnlyTip;
 }
 
 class _AppLocalizationsDelegate

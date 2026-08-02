@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../domain/entities/mission.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../services/location/location_availability_service.dart';
 import '../../../../services/mission/mission_service.dart';
 import '../../../../services/settings/settings_service.dart';
 import '../../../../services/statistics/statistics_service.dart';
@@ -24,6 +25,7 @@ class WalkIdleView extends ConsumerWidget {
     final settingsAsync = ref.watch(settingsNotifierProvider);
     final streakAsync = ref.watch(streakDataProvider);
     final missionsAsync = ref.watch(activeMissionsStreamProvider);
+    final locationEnabled = ref.watch(locationFeatureEnabledProvider);
 
     final int goalSteps = settingsAsync.when(
       data: (settings) => settings.dailyStepGoal,
@@ -63,15 +65,21 @@ class WalkIdleView extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // 4. 산책 시작 섹션
+          // Phase 27-8: 위치 미제공 지역에서는 실외 선택지를 아예 노출하지 않는다.
           _WalkStartSection(
             onStartWalk: onStartWalk,
+            locationEnabled: locationEnabled,
             theme: theme,
             l10n: l10n,
           ),
           const SizedBox(height: 16),
 
           // 5. 팁 카드
-          _WalkTipsCard(theme: theme, l10n: l10n),
+          _WalkTipsCard(
+            locationEnabled: locationEnabled,
+            theme: theme,
+            l10n: l10n,
+          ),
           const SizedBox(height: 16),
         ],
       ),
@@ -489,11 +497,15 @@ class _MissionProgressItem extends StatelessWidget {
 /// 4. 산책 시작 섹션 (실내/실외 버튼)
 class _WalkStartSection extends StatelessWidget {
   final void Function(bool isOutdoor) onStartWalk;
+
+  /// false면 실외 버튼을 숨기고 실내 산책 단일 버튼만 보여준다(Phase 27-8).
+  final bool locationEnabled;
   final ThemeData theme;
   final AppLocalizations l10n;
 
   const _WalkStartSection({
     required this.onStartWalk,
+    required this.locationEnabled,
     required this.theme,
     required this.l10n,
   });
@@ -532,63 +544,69 @@ class _WalkStartSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => onStartWalk(false),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor:
-                        theme.colorScheme.primary,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.home),
-                      const SizedBox(width: 8),
-                      Text(l10n.walkIndoor),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () => onStartWalk(true),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.white.withValues(alpha: 0.2),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(12),
-                      side: const BorderSide(
-                        color: Colors.white,
-                        width: 1,
+          if (locationEnabled)
+            Row(
+              children: [
+                Expanded(child: _indoorButton()),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => onStartWalk(true),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.white.withValues(alpha: 0.2),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(12),
+                        side: const BorderSide(
+                          color: Colors.white,
+                          width: 1,
+                        ),
                       ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.location_on),
-                      const SizedBox(width: 8),
-                      Text(l10n.walkOutdoor),
-                    ],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.location_on),
+                        const SizedBox(width: 8),
+                        Text(l10n.walkOutdoor),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            )
+          else
+            // 위치 미제공 지역: 실내/실외 구분 없이 단일 시작 버튼
+            SizedBox(
+              width: double.infinity,
+              child: _indoorButton(label: l10n.walkStartWalk),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _indoorButton({String? label}) {
+    return ElevatedButton(
+      onPressed: () => onStartWalk(false),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: theme.colorScheme.primary,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(label == null ? Icons.home : Icons.directions_walk),
+          const SizedBox(width: 8),
+          Text(label ?? l10n.walkIndoor),
         ],
       ),
     );
@@ -597,10 +615,13 @@ class _WalkStartSection extends StatelessWidget {
 
 /// 5. 팁 카드
 class _WalkTipsCard extends StatelessWidget {
+  /// false면 실외 보너스 대신 걸음수 기반 안내를 보여준다(Phase 27-8).
+  final bool locationEnabled;
   final ThemeData theme;
   final AppLocalizations l10n;
 
   const _WalkTipsCard({
+    required this.locationEnabled,
     required this.theme,
     required this.l10n,
   });
@@ -625,7 +646,9 @@ class _WalkTipsCard extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              l10n.walkOutdoorBonus,
+              locationEnabled
+                  ? l10n.walkOutdoorBonus
+                  : l10n.walkStepsOnlyTip,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface
                     .withValues(alpha: 0.7),

@@ -2697,5 +2697,7 @@
   "reportFailed": "신고를 보내지 못했습니다. 잠시 후 다시 시도해 주세요.",
 
   "locationTermsTitle": "위치기반서비스 이용약관",
-  "locationTermsDescription": "위치정보 이용에 관한 약관"
+  "locationTermsDescription": "위치정보 이용에 관한 약관",
+
+  "walkStepsOnlyTip": "걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요."
 }

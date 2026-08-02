@@ -11,6 +11,7 @@ import '../../data/datasources/database_service.dart';
 import '../sensors/pedometer_service.dart';
 import '../pet/pet_reward_service.dart';
 import '../achievement/achievement_service.dart';
+import '../location/location_availability_service.dart';
 import '../location/location_service.dart';
 import '../mission/mission_service.dart';
 import '../notification/notification_service.dart';
@@ -28,6 +29,14 @@ class StepTrackingService {
   final AchievementService _achievementService = AchievementService.instance;
   final LocationService _locationService = LocationService.instance;
   final MissionService _missionService = MissionService.instance;
+
+  /// 위치 기능 지역 게이트 (Phase 27-8).
+  ///
+  /// UI가 `enableGPS: true`를 넘겨도 이 게이트가 막으면 위치 추적을 시작하지
+  /// 않는다. UI 조건 하나에만 의존하면 새 진입점이 생겼을 때 조용히 새기 때문에
+  /// **위치를 실제로 켜는 지점**에서 최종 확인한다. 테스트에서 교체 가능.
+  LocationAvailabilityService locationAvailability =
+      LocationAvailabilityService();
 
   StreamSubscription<StepData>? _stepCountSubscription;
 
@@ -358,7 +367,13 @@ class StepTrackingService {
       _sessionStartTime = DateTime.now();
 
       // GPS 위치 추적 시작 (선택적)
-      if (enableGPS) {
+      // Phase 27-8: 위치 미제공 지역(한국)에서는 요청이 와도 켜지 않는다.
+      if (enableGPS && !locationAvailability.isEnabled()) {
+        debugPrint(
+          'StepTrackingService - Location features unavailable in this region, '
+          'continuing indoors',
+        );
+      } else if (enableGPS) {
         final locationStarted = await _locationService.startLocationTracking();
         if (locationStarted) {
           debugPrint('StepTrackingService - GPS tracking started');

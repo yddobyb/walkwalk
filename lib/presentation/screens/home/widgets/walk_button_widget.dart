@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../services/location/location_availability_service.dart';
 import '../../../../services/tracking/step_tracking_service.dart';
 import '../../../../services/ads/ad_service.dart';
 import '../../../../services/user/user_tier_providers.dart';
@@ -25,6 +26,7 @@ class WalkButtonWidget extends ConsumerWidget {
 
   Widget _buildWalkButton(BuildContext context, WidgetRef ref, ThemeData theme, StepTrackingState state) {
     final isWalking = state == StepTrackingState.walking;
+    final locationEnabled = ref.watch(locationFeatureEnabledProvider);
 
     return Container(
       width: double.infinity,
@@ -122,30 +124,12 @@ class WalkButtonWidget extends ConsumerWidget {
                 ),
               ),
             )
-          else
-            // 산책 시작 버튼들
+          else if (locationEnabled)
+            // 산책 시작 버튼들 (실내 / 실외)
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _startWalk(context, ref, false),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: theme.colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.home),
-                        const SizedBox(width: 8),
-                        Text(AppLocalizations.of(context).walkIndoor),
-                      ],
-                    ),
-                  ),
+                  child: _buildIndoorButton(context, ref, theme),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -174,6 +158,17 @@ class WalkButtonWidget extends ConsumerWidget {
                   ),
                 ),
               ],
+            )
+          else
+            // Phase 27-8: 위치 미제공 지역 — 단일 시작 버튼
+            SizedBox(
+              width: double.infinity,
+              child: _buildIndoorButton(
+                context,
+                ref,
+                theme,
+                label: AppLocalizations.of(context).walkStartWalk,
+              ),
             ),
 
           const SizedBox(height: 12),
@@ -198,7 +193,9 @@ class WalkButtonWidget extends ConsumerWidget {
                   child: Text(
                     isWalking
                         ? AppLocalizations.of(context).walkingNow
-                        : AppLocalizations.of(context).walkOutdoorBonus,
+                        : (locationEnabled
+                            ? AppLocalizations.of(context).walkOutdoorBonus
+                            : AppLocalizations.of(context).walkStepsOnlyTip),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.white.withValues(alpha: 0.8),
                     ),
@@ -287,6 +284,34 @@ class WalkButtonWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           const StepPermissionButton(onDark: true),
+        ],
+      ),
+    );
+  }
+
+  /// 실내 산책 시작 버튼. [label]이 주어지면 위치 미제공 지역용 단일 버튼.
+  Widget _buildIndoorButton(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeData theme, {
+    String? label,
+  }) {
+    return ElevatedButton(
+      onPressed: () => _startWalk(context, ref, false),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        foregroundColor: theme.colorScheme.primary,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(label == null ? Icons.home : Icons.directions_walk),
+          const SizedBox(width: 8),
+          Text(label ?? AppLocalizations.of(context).walkIndoor),
         ],
       ),
     );

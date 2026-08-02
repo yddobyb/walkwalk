@@ -1,0 +1,41 @@
+{
+  "parameters": {
+    "rate_limit_hourly": {
+      "defaultValue": {
+        "value": "20"
+      },
+      "valueType": "NUMBER"
+    },
+    "rate_limit_daily": {
+      "defaultValue": {
+        "value": "80"
+      },
+      "valueType": "NUMBER"
+    },
+    "enable_debug_logs": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "location_features_enabled": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "conditionalValues": {
+        "South Korea": {
+          "value": "false"
+        }
+      },
+      "description": "Phase 27-8: location (outdoor walk) features. Disabled in South Korea so the app does not collect location there (avoids the Location Information Act LBS business filing). Country is matched by device IP.",
+      "valueType": "BOOLEAN"
+    }
+  },
+  "conditions": [
+    {
+      "name": "South Korea",
+      "expression": "device.country in ['kr']",
+      "tagColor": "ORANGE"
+    }
+  ]
+}
