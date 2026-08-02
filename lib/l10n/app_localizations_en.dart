@@ -1462,6 +1462,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallBenefitSpeed => 'Faster generation speed';
 
   @override
+  String get paywallPriceFallback => '\$6.99';
+
+  @override
   String get paywallPricePerMonth => 'month';
 
   @override

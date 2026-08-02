@@ -88,13 +88,16 @@ void main() {
       expect(find.byType(TextButton), findsOneWidget);
     });
 
-    testWidgets('renders price text with won symbol',
+    testWidgets('스토어 가격을 못 받으면 locale별 폴백 가격을 표시한다',
         (tester) async {
       await tester.pumpWidget(buildTestWidget());
       await tester.pumpAndSettle();
 
-      // 기본 가격 표시 (₩4,900)
-      expect(find.textContaining('\u20a94,900'), findsOneWidget);
+      // 가격은 스토어에서 받아오고 시장별로 다르므로(US/CA/KR), 특정 금액을
+      // 하드코딩해 검사하면 가격을 조정할 때마다 테스트가 깨진다.
+      // 여기서는 "폴백 문자열이 실제로 렌더링되는가"만 확인한다.
+      final l10n = await AppLocalizations.delegate.load(const Locale('ko'));
+      expect(find.textContaining(l10n.paywallPriceFallback), findsOneWidget);
     });
 
     testWidgets(

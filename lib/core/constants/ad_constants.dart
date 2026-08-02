@@ -14,9 +14,10 @@ class AdConstants {
   /// true면 구글 테스트 광고, false면 실제 광고 단위 사용
   static const bool useTestAds = true;
 
-  /// 무료 유저가 리워드 광고로 추가 생성할 수 있는 최대 이미지 수 (기본 2 + 이만큼).
-  /// 서버 genStickerFree 하드캡(=기본2+이값)과 반드시 일치해야 함.
-  static const int maxImageAdBonus = 2;
+  /// 무료 유저가 리워드 광고로 추가 생성할 수 있는 최대 이미지 수 (기본 1 + 이만큼).
+  /// 서버 genStickerFree 하드캡(=quota.ts의 free.dailyQuota + 이값)과 반드시 일치해야 함.
+  /// Phase 28-9: 프리미엄(5장)과 격차를 벌리려고 무료를 최대 4장 → 2장으로 축소.
+  static const int maxImageAdBonus = 1;
 
   // --- 구글 공식 테스트 광고 단위 ID (안전하게 테스트 광고만 노출) ---
   static const String _testRewardedAndroid =

@@ -2732,6 +2732,12 @@ abstract class AppLocalizations {
   /// **'Faster generation speed'**
   String get paywallBenefitSpeed;
 
+  /// Shown only if the store price fails to load. Keep in sync with App Store Connect.
+  ///
+  /// In en, this message translates to:
+  /// **'\$6.99'**
+  String get paywallPriceFallback;
+
   /// Per month label
   ///
   /// In en, this message translates to:

@@ -2363,6 +2363,7 @@
   "@paywallBenefitSpeed": {
     "description": "Premium benefit - speed"
   },
+  "paywallPriceFallback": "₩9,900",
   "paywallPricePerMonth": "월",
   "@paywallPricePerMonth": {
     "description": "Per month label"

@@ -2380,6 +2380,10 @@
   "@paywallBenefitSpeed": {
     "description": "Premium benefit - speed"
   },
+  "paywallPriceFallback": "$6.99",
+  "@paywallPriceFallback": {
+    "description": "Shown only if the store price fails to load. Keep in sync with App Store Connect."
+  },
   "paywallPricePerMonth": "month",
   "@paywallPricePerMonth": {
     "description": "Per month label"

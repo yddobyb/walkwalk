@@ -1431,6 +1431,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get paywallBenefitSpeed => '더 빠른 생성 속도';
 
   @override
+  String get paywallPriceFallback => '₩9,900';
+
+  @override
   String get paywallPricePerMonth => '월';
 
   @override

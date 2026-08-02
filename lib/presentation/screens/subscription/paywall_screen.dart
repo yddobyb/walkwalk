@@ -118,7 +118,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final priceString = _product?.priceString ?? '\u20a94,900';
+    // \uc2e4\uc81c \uac00\uaca9\uc740 \uc2a4\ud1a0\uc5b4\uc5d0\uc11c \ubc1b\uc544\uc628\ub2e4(\uc2dc\uc7a5\ubcc4\ub85c \ub2e4\ub984). \uc544\ub798\ub294 \ub85c\ub4dc \uc2e4\ud328 \uc2dc
+    // \ud3f4\ubc31\uc774\uba70 locale\ubcc4 \uac12\uc774\ub77c App Store Connect\uc758 \uac00\uaca9\uacfc \ud568\uaed8 \uac31\uc2e0\ud560 \uac83.
+    // (Phase 28-9 \uae30\uc900: \ud83c\uddfa\ud83c\uddf8 $6.99 / \ud83c\udde8\ud83c\udde6 C$9.99 / \ud83c\uddf0\ud83c\uddf7 \u20a99,900)
+    final priceString = _product?.priceString ?? l10n.paywallPriceFallback;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(

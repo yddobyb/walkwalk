@@ -10,8 +10,9 @@ const TIER_CONFIG: Record<UserTier, {
   provider: string;
 }> = {
   free: {
-    // 무료 기본 2회/일 (리워드 광고로 최대 +2 → 4회까지, genStickerFree에서 보너스 처리)
-    dailyQuota: 2,
+    // 무료 기본 1회/일 (리워드 광고로 +1 → 최대 2회, genStickerFree에서 보너스 처리)
+    // Phase 28-9: 프리미엄(5회)과의 격차를 벌리려고 4회 → 2회로 축소
+    dailyQuota: 1,
     collection: "freeImageUsage",
     provider: "cloudflare",
   },
