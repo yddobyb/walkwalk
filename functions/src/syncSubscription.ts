@@ -21,7 +21,7 @@ interface SyncSubscriptionRequest {
 
 export const syncSubscription = functions
   .region("us-central1")
-  .runWith({maxInstances: 10})
+  .runWith({maxInstances: 10, enforceAppCheck: true})
   .https.onCall(async (data: SyncSubscriptionRequest, context) => {
     // 1. App Check
     if (!context.app) {

@@ -33,16 +33,18 @@ export const quota = functions
   .region("us-central1")
   // 외부 API를 부르지 않는 조회 함수라 단가는 낮지만, 상한이 없으면
   // 남용 시 함수 호출·Firestore 읽기 비용이 무한정 늘어난다.
-  .runWith({maxInstances: 20})
+  .runWith({maxInstances: 20, enforceAppCheck: true})
   .https.onCall(async (data, context) => {
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];
 
     // App Check 검증 (warn-only — Firebase Console에서 enforcement 설정 전까지)
+    // runWith의 enforceAppCheck가 플랫폼 단에서 먼저 막지만,
+    // 그 설정이 빠지더라도 새지 않도록 코드에서도 닫는다.
     if (!context.app) {
-      console.warn(
-        "[quota] App Check token missing — " +
-        "enable enforcement in Firebase Console before production"
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
       );
     }
 

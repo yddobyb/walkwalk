@@ -69,6 +69,7 @@ export const genStickerFree = functions
     ],
     // Cloudflare는 $0이지만 실패 시 OpenAI($0.005/장)로 폴백하므로 상한 필요
     maxInstances: 10,
+    enforceAppCheck: true,
   })
   .https.onCall(async (data: GenStickerFreeRequest, context) => {
     console.log("🎨 [genStickerFree] Called");
@@ -76,10 +77,12 @@ export const genStickerFree = functions
     // =====================
     // 1. App Check 검증
     // =====================
+    // runWith의 enforceAppCheck가 플랫폼 단에서 먼저 막지만,
+    // 그 설정이 빠지더라도 새지 않도록 코드에서도 닫는다.
     if (!context.app) {
-      console.warn(
-        "[genStickerFree] App Check token missing — " +
-        "enable enforcement in Firebase Console before production"
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
       );
     }
 

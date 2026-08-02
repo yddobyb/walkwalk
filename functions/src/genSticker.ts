@@ -62,15 +62,21 @@ interface GeminiImageData {
 export const genSticker = functions
   .region("us-central1")
   // maxInstances: 프리미엄 전용(Gemini $0.039/장)이라 가장 비싼 경로 — 낮게 묶는다
-  .runWith({secrets: ["GEMINI_API_KEY"], maxInstances: 5})
+  .runWith({
+    secrets: ["GEMINI_API_KEY"],
+    maxInstances: 5,
+    enforceAppCheck: true,
+  })
   .https.onCall(async (data: GenStickerRequest, context) => {
     console.log("🎨 genSticker called");
 
     // 1. App Check 검증
+    // runWith의 enforceAppCheck가 플랫폼 단에서 먼저 막지만,
+    // 그 설정이 빠지더라도 새지 않도록 코드에서도 닫는다.
     if (!context.app) {
-      console.warn(
-        "[genSticker] App Check token missing — " +
-        "enable enforcement in Firebase Console before production"
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "App Check required"
       );
     }
 
