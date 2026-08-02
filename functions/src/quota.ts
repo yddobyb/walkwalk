@@ -31,6 +31,9 @@ const TIER_CONFIG: Record<UserTier, {
  */
 export const quota = functions
   .region("us-central1")
+  // 외부 API를 부르지 않는 조회 함수라 단가는 낮지만, 상한이 없으면
+  // 남용 시 함수 호출·Firestore 읽기 비용이 무한정 늘어난다.
+  .runWith({maxInstances: 20})
   .https.onCall(async (data, context) => {
     const db = admin.firestore();
     const today = new Date().toISOString().split("T")[0];

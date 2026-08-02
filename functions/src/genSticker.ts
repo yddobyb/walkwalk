@@ -61,7 +61,8 @@ interface GeminiImageData {
 
 export const genSticker = functions
   .region("us-central1")
-  .runWith({secrets: ["GEMINI_API_KEY"]})
+  // maxInstances: 프리미엄 전용(Gemini $0.039/장)이라 가장 비싼 경로 — 낮게 묶는다
+  .runWith({secrets: ["GEMINI_API_KEY"], maxInstances: 5})
   .https.onCall(async (data: GenStickerRequest, context) => {
     console.log("🎨 genSticker called");
 

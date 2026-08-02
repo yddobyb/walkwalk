@@ -57,6 +57,9 @@ export const chatWithPet = functions
   .region("us-central1")
   .runWith({
     secrets: ["OPENROUTER_API_KEY", "GROQ_API_KEY", "GEMINI_API_KEY"],
+    // 폭주 시 과금 상한. 정상 트래픽은 이 값으로 충분하고, 남용이 들어와도
+    // 동시 실행이 묶여 LLM 호출량과 함수 비용이 선형 이상으로 늘지 않는다.
+    maxInstances: 10,
   })
   .https.onCall(async (data: ChatRequest, context) => {
     // 1. App Check (Firebase Console에서 enforcement 설정)

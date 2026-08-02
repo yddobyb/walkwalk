@@ -61,11 +61,15 @@ const FREE_USER_DAILY_QUOTA = 4;
 
 export const genStickerFree = functions
   .region("us-central1")
-  .runWith({secrets: [
-    "CLOUDFLARE_ACCOUNT_ID",
-    "CLOUDFLARE_API_TOKEN",
-    "OPENAI_API_KEY",
-  ]})
+  .runWith({
+    secrets: [
+      "CLOUDFLARE_ACCOUNT_ID",
+      "CLOUDFLARE_API_TOKEN",
+      "OPENAI_API_KEY",
+    ],
+    // Cloudflare는 $0이지만 실패 시 OpenAI($0.005/장)로 폴백하므로 상한 필요
+    maxInstances: 10,
+  })
   .https.onCall(async (data: GenStickerFreeRequest, context) => {
     console.log("🎨 [genStickerFree] Called");
 
