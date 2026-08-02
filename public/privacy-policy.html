@@ -144,6 +144,14 @@
     <li><strong>전송되지 않는 정보</strong>: 위치(GPS) 정보, 걸음 수 등 건강 데이터, 연락처·사진 등 기기 내 개인 정보</li>
     <li><strong>동의</strong>: AI 기능을 처음 사용할 때 별도 동의를 받으며, 동의하지 않아도 산책·미션·통계 등 나머지 기능은 모두 이용할 수 있습니다. 동의는 앱 <em>설정 → AI 기능 → AI 데이터 전송 동의</em>에서 언제든 철회할 수 있습니다. 철회 시 AI 기능은 단말기 내 규칙 기반 응답으로 대체되며 외부 전송이 중단됩니다.</li>
     <li><strong>AI 결과물 안내</strong>: AI가 생성한 이미지·문구에는 AI 생성물임을 표시합니다. AI 결과물은 부정확할 수 있으며 의학적·건강상 판단의 근거로 사용해서는 안 됩니다.</li>
+    <li><strong>전송된 정보의 AI 학습 사용 가능성</strong>: 일부 AI 제공자는 무료 이용 조건으로 <strong>전송된 입력·출력을 자사 모델 학습에 사용할 수 있습니다.</strong> 각 제공자의 정책은 다음과 같습니다.
+      <ul>
+        <li><strong>Google Gemini</strong>(프리미엄 이미지·대화 폴백): 유료 이용 조건이 적용되어 <strong>학습에 사용되지 않습니다.</strong></li>
+        <li><strong>Groq</strong>(대화 1차): 제공자 정책상 <strong>API 입력을 학습에 사용하지 않습니다.</strong></li>
+        <li><strong>OpenRouter</strong>(대화 폴백): 무료 모델 이용 시 <strong>입력·출력이 학습에 사용되거나 공개될 수 있습니다.</strong></li>
+        <li><strong>Cloudflare Workers AI, OpenAI</strong>(이미지): 입력·출력의 권리는 이용자에게 있습니다.</li>
+      </ul>
+      대화 기능에 전송되는 이용자 작성 정보는 <strong>펫 이름</strong>뿐이며, 이용자가 입력한 대화 문장은 전송되지 않습니다(본 서비스에는 자유 대화 입력 기능이 없습니다). AI 기능 동의를 철회하면 전송이 중단됩니다.</li>
   </ul>
 
   <h3>3-2. 개인정보의 국외 이전</h3>
@@ -279,6 +287,14 @@
     <li><strong>What is never sent</strong>: location (GPS) data, step counts and other health data, contacts, photos and other on-device personal data</li>
     <li><strong>Consent</strong>: we ask for your explicit consent before you use an AI feature for the first time. You can decline and still use walks, missions, statistics and every other feature. You may withdraw consent at any time in <em>Settings → AI features → AI data sharing</em>; once withdrawn, AI features fall back to on-device rule-based responses and nothing is sent externally.</li>
     <li><strong>About AI output</strong>: images and text produced by AI are labeled as AI-generated. AI output can be inaccurate and must not be relied on for medical or health decisions.</li>
+    <li><strong>Possible use of transmitted data for AI training</strong>: some AI providers may <strong>use transmitted inputs and outputs to train their own models</strong> as a condition of free use. Provider by provider:
+      <ul>
+        <li><strong>Google Gemini</strong> (premium images, chat fallback): paid terms apply, so <strong>data is not used for training.</strong></li>
+        <li><strong>Groq</strong> (primary chat): <strong>does not use API inputs for training</strong>, per its policy.</li>
+        <li><strong>OpenRouter</strong> (chat fallback): when free models are used, <strong>inputs and outputs may be used for training or published.</strong></li>
+        <li><strong>Cloudflare Workers AI, OpenAI</strong> (images): you retain the rights to inputs and outputs.</li>
+      </ul>
+      The only user-authored data sent to the chat feature is the <strong>pet's name</strong>; user-written messages are never sent, because the Service has no free-form chat input. Withdrawing AI consent stops all such transmission.</li>
   </ul>
 
   <h3>3-2. International Data Transfers</h3>

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 /// LLM API 호출은 모두 chatWithPet Cloud Function을 통해 서버에서 수행.
 /// 클라이언트에는 API 키를 전달하지 않음 (보안).
 ///
-/// 서버 내부 폴백: OpenRouter → Groq → Gemini → 에러
+/// 서버 내부 폴백: Groq → OpenRouter → Gemini → 에러
 /// 클라이언트 폴백: Cloud Function 실패 시 → 규칙 기반 오프라인 응답
 class ApiConfig {
   // ==========================================================

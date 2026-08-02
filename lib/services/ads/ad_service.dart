@@ -15,6 +15,13 @@ import '../../core/constants/ad_constants.dart';
 /// - 리워드/전면 광고 로드·표시·자동 재로드
 /// - 프리미엄 분기는 호출부(UI)가 isPremium 확인 후 호출 (프리미엄은 광고 미표시)
 ///
+/// ⚠️ **[initialize]는 무료 이용자에게만 호출할 것** (Phase 28-8).
+/// 예전엔 `main()`에서 등급과 무관하게 호출했는데, 그러면 광고를 없애려고
+/// 결제한 이용자에게도 ATT 추적 동의 팝업이 뜨고 광고 요청이 나가면서
+/// 광고 식별자가 AdMob으로 전달됐다. 처리방침의 "광고 식별자 처리(무료
+/// 이용자 한정)"와 어긋나는 동작이었다.
+/// 이제 [AdGate]가 등급이 확정된 뒤 free일 때만 호출한다.
+///
 /// ⚠️ 광고 단위/앱 ID는 테스트값([AdConstants.useTestAds]). 출시 전 실제 ID 교체.
 class AdService {
   AdService._();
@@ -36,6 +43,15 @@ class AdService {
   Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
+
+    // 0. AdMob SDK 초기화 — 무료 이용자로 확정된 뒤에야 SDK를 올린다.
+    //    (예전엔 main()에서 등급 확인 전에 호출했다)
+    try {
+      await MobileAds.instance.initialize();
+      debugPrint('[Ads] ✅ MobileAds initialized');
+    } catch (e) {
+      debugPrint('[Ads] ❌ MobileAds init failed: $e');
+    }
 
     // 1. iOS ATT (App Tracking Transparency) — Android에서는 no-op
     if (Platform.isIOS) {

@@ -4,8 +4,8 @@
  * API 키를 서버 사이드에서만 관리하여 클라이언트 노출을 방지한다.
  *
  * 3단계 폴백:
- * 1차: OpenRouter Free (자동 라우터)
- * 2차: Groq Free (Llama 3.3 70B)
+ * 1차: Groq Free (Llama 3.3 70B)
+ * 2차: OpenRouter Free (자동 라우터)
  * 3차: Gemini Flash-Lite
  */
 
@@ -137,15 +137,15 @@ export const chatWithPet = functions
     const geminiKey = process.env.GEMINI_API_KEY ?? "";
 
     // 6. Provider 순회 (폴백)
+    // 순서: Groq → OpenRouter → Gemini (Phase 28-7에서 Groq를 1차로 승격)
+    //
+    // OpenRouter 무료 모델은 "데이터를 학습에 쓰는 대가로 무료"인 구조라
+    // 1차로 두면 모든 요청이 그 경로를 탄다. Groq는 무료·유료 모두
+    // API 프롬프트로 학습하지 않는다고 명시한다.
+    // 운영 지표도 같은 방향이었다 — OpenRouter 무료는 하루 50회 한도
+    // ($10 미충전 시)에 응답이 433ms~25초로 널뛰고 빈 응답 폴백이 잦았고,
+    // Groq는 14,400회/일에 1~2초로 안정적이다.
     const providers = [
-      {
-        name: "openrouter",
-        fn: () => callOpenRouter(
-          openrouterKey, systemPrompt, userMessage,
-          maxTokens, temperature
-        ),
-        available: !!openrouterKey,
-      },
       {
         name: "groq",
         fn: () => callGroq(
@@ -153,6 +153,14 @@ export const chatWithPet = functions
           maxTokens, temperature
         ),
         available: !!groqKey,
+      },
+      {
+        name: "openrouter",
+        fn: () => callOpenRouter(
+          openrouterKey, systemPrompt, userMessage,
+          maxTokens, temperature
+        ),
+        available: !!openrouterKey,
       },
       {
         name: "gemini",

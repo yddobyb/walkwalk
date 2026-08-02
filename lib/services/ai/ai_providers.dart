@@ -51,7 +51,7 @@ final rateLimiterProvider = Provider<RateLimiter>((ref) {
 /// LLM Provider 체인 (서버 전용)
 ///
 /// CloudFunction만 사용: API 키가 서버에만 존재하여 보안 강화
-/// chatWithPet Cloud Function 내부에서 OpenRouter → Groq → Gemini 폴백 처리
+/// chatWithPet Cloud Function 내부에서 Groq → OpenRouter → Gemini 폴백 처리
 /// 모든 provider 실패 시 → 클라이언트의 규칙 기반 폴백 (오프라인)
 final llmProviderChainProvider = Provider<List<LlmProvider>>((ref) {
   return [

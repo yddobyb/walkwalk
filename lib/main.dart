@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -19,7 +18,7 @@ import 'services/ai/ai_providers.dart';
 import 'services/notification/notification_service.dart';
 import 'services/storage/secure_storage_service.dart';
 import 'services/subscription/revenue_cat_service.dart';
-import 'services/ads/ad_service.dart';
+import 'services/ads/ad_gate.dart';
 import 'presentation/screens/splash/splash_screen.dart';
 
 void main() async {
@@ -47,16 +46,11 @@ void main() async {
   // Phase 7: RevenueCat 초기화 (로그인 후 → Firestore 동기화 가능)
   await RevenueCatService.initialize();
 
-  // AdMob(광고 SDK) 초기화 — ⚠️ App ID는 테스트값(manifest/Info.plist), 출시 전 실제 ID 교체
-  try {
-    await MobileAds.instance.initialize();
-    debugPrint('[Ads] ✅ MobileAds initialized');
-  } catch (e) {
-    debugPrint('[Ads] ❌ MobileAds init failed: $e');
-  }
-
-  // 광고 동의(UMP/ATT) + 리워드·전면 미리 로드 (비차단 — 백그라운드 진행)
-  AdService.instance.initialize();
+  // 광고 SDK 초기화는 여기서 하지 않는다 (Phase 28-8).
+  // 이 시점엔 아직 등급을 모르므로, 초기화하면 프리미엄 이용자에게도
+  // ATT 팝업이 뜨고 광고 요청이 나간다. 등급이 free로 확정된 뒤
+  // [AdGate]가 AdService.initialize()를 호출한다.
+  // ⚠️ App ID는 테스트값(manifest/Info.plist), 출시 전 실제 ID 교체
 
   // intl 패키지 한국어 locale 초기화
   await initializeDateFormatting('ko_KR', null);
@@ -140,7 +134,8 @@ class WalkDogApp extends ConsumerWidget {
         Locale('ko'), // 한국어
         Locale('en'), // 영어
       ],
-      home: const SplashScreen(),
+      // AdGate: 등급이 free로 확정된 뒤에만 광고 SDK를 초기화한다(Phase 28-8).
+      home: const AdGate(child: SplashScreen()),
     );
   }
 }
