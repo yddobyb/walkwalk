@@ -67,6 +67,14 @@ const _$PetAccessoryEnumMap = {
   PetAccessory.bowtie: 'bowtie',
   PetAccessory.hat: 'hat',
   PetAccessory.collar: 'collar',
+  PetAccessory.scarf: 'scarf',
+  PetAccessory.crown: 'crown',
+  PetAccessory.cap: 'cap',
+  PetAccessory.flowerCrown: 'flowerCrown',
+  PetAccessory.backpack: 'backpack',
+  PetAccessory.headphones: 'headphones',
+  PetAccessory.necktie: 'necktie',
+  PetAccessory.medal: 'medal',
 };
 
 const _$PetPersonalityEnumMap = {

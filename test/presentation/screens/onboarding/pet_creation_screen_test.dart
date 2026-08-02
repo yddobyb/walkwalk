@@ -328,18 +328,33 @@ void main() {
       });
     }
 
-    test('역매핑이 8개 l10n 키를 모두 사용함', () {
-      final reverseMapSection = customizeSource.substring(
-        customizeSource.indexOf('_reverseMapBreed'),
-        customizeSource.indexOf(
-          '}',
-          customizeSource.indexOf('_reverseMapBreed') + 200,
-        ),
-      );
-      final l10nCount = RegExp(r'l10n\.breed\w+')
+    // 개수를 박아두면 품종을 늘릴 때마다 깨진다(Phase 29-2에서 8→16).
+    // 지켜야 할 성질은 "_breeds의 모든 품종이 역매핑된다"는 것이므로 그걸 본다.
+    test('역매핑이 _breeds의 모든 품종을 다룸', () {
+      final start = customizeSource.indexOf('_reverseMapBreed');
+      final mapEnd = customizeSource.indexOf('};', start);
+      final reverseMapSection = customizeSource.substring(start, mapEnd);
+
+      final l10nKeys = RegExp(r'l10n\.(breed\w+)')
           .allMatches(reverseMapSection)
-          .length;
-      expect(l10nCount, equals(8), reason: '8개 l10n 품종 키가 모두 사용되어야 함');
+          .map((m) => m.group(1))
+          .toSet();
+
+      // _breeds 리스트가 선언한 l10n 키 전부
+      final breedsStart = customizeSource.indexOf('_breeds = [');
+      final breedsEnd = customizeSource.indexOf('];', breedsStart);
+      final declaredKeys = RegExp(r"'key': '(breed\w+)'")
+          .allMatches(customizeSource.substring(breedsStart, breedsEnd))
+          .map((m) => m.group(1))
+          .toSet();
+
+      expect(declaredKeys, isNotEmpty, reason: '_breeds를 파싱하지 못함');
+      expect(
+        declaredKeys.difference(l10nKeys),
+        isEmpty,
+        reason: '_breeds에 있는데 역매핑에 빠진 품종이 있으면 그 품종은 '
+            '온보딩에서 선택해도 커스터마이즈 기본값으로 복원되지 않는다',
+      );
     });
 
     test('_breeds 리스트와 역매핑의 영어 값이 일치함', () {

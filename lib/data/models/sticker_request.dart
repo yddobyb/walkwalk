@@ -57,6 +57,23 @@ enum StickerAccessory {
   hat,
   @JsonValue("collar")
   collar,
+  // Phase 29-2 추가 — 값 문자열은 서버 ALLOWED_ACCESSORIES와 일치해야 한다
+  @JsonValue("scarf")
+  scarf,
+  @JsonValue("crown")
+  crown,
+  @JsonValue("cap")
+  cap,
+  @JsonValue("flowerCrown")
+  flowerCrown,
+  @JsonValue("backpack")
+  backpack,
+  @JsonValue("headphones")
+  headphones,
+  @JsonValue("necktie")
+  necktie,
+  @JsonValue("medal")
+  medal,
 }
 
 /// 스티커 스타일
@@ -67,6 +84,13 @@ enum StickerStyle {
   sticker3d,
   @JsonValue("realistic")
   realistic,
+  // Phase 29-2 추가
+  @JsonValue("watercolor")
+  watercolor,
+  @JsonValue("pixel-art")
+  pixelArt,
+  @JsonValue("line-art")
+  lineArt,
 }
 
 /// 배경 종류
@@ -77,4 +101,15 @@ enum StickerBackground {
   white,
   @JsonValue("gradient")
   gradient,
+  // Phase 29-2 추가
+  @JsonValue("park")
+  park,
+  @JsonValue("beach")
+  beach,
+  @JsonValue("night")
+  night,
+  @JsonValue("snow")
+  snow,
+  @JsonValue("pastel")
+  pastel,
 }

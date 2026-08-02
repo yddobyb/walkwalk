@@ -28,6 +28,22 @@ class AccessoryAssets {
         return '🎩';
       case PetAccessory.collar:
         return '⭕';
+      case PetAccessory.scarf:
+        return '🧣';
+      case PetAccessory.crown:
+        return '👑';
+      case PetAccessory.cap:
+        return '🧢';
+      case PetAccessory.flowerCrown:
+        return '🌸';
+      case PetAccessory.backpack:
+        return '🎒';
+      case PetAccessory.headphones:
+        return '🎧';
+      case PetAccessory.necktie:
+        return '👔';
+      case PetAccessory.medal:
+        return '🏅';
     }
   }
 
@@ -46,6 +62,22 @@ class AccessoryAssets {
         return l10n.accessoryHat;
       case PetAccessory.collar:
         return l10n.accessoryCollar;
+      case PetAccessory.scarf:
+        return l10n.accessoryScarf;
+      case PetAccessory.crown:
+        return l10n.accessoryCrown;
+      case PetAccessory.cap:
+        return l10n.accessoryCap;
+      case PetAccessory.flowerCrown:
+        return l10n.accessoryFlowerCrown;
+      case PetAccessory.backpack:
+        return l10n.accessoryBackpack;
+      case PetAccessory.headphones:
+        return l10n.accessoryHeadphones;
+      case PetAccessory.necktie:
+        return l10n.accessoryNecktie;
+      case PetAccessory.medal:
+        return l10n.accessoryMedal;
     }
   }
 }

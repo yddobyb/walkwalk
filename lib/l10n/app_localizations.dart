@@ -3583,6 +3583,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Walks are tracked by step count. No location data is used.'**
   String get walkStepsOnlyTip;
+
+  /// Accessory - Scarf
+  ///
+  /// In en, this message translates to:
+  /// **'Scarf'**
+  String get accessoryScarf;
+
+  /// Accessory - Crown
+  ///
+  /// In en, this message translates to:
+  /// **'Crown'**
+  String get accessoryCrown;
+
+  /// Accessory - Cap
+  ///
+  /// In en, this message translates to:
+  /// **'Cap'**
+  String get accessoryCap;
+
+  /// Accessory - Flower crown
+  ///
+  /// In en, this message translates to:
+  /// **'Flower Crown'**
+  String get accessoryFlowerCrown;
+
+  /// Accessory - Backpack
+  ///
+  /// In en, this message translates to:
+  /// **'Backpack'**
+  String get accessoryBackpack;
+
+  /// Accessory - Headphones
+  ///
+  /// In en, this message translates to:
+  /// **'Headphones'**
+  String get accessoryHeadphones;
+
+  /// Accessory - Necktie
+  ///
+  /// In en, this message translates to:
+  /// **'Necktie'**
+  String get accessoryNecktie;
+
+  /// Accessory - Medal
+  ///
+  /// In en, this message translates to:
+  /// **'Medal'**
+  String get accessoryMedal;
+
+  /// Style - Watercolor
+  ///
+  /// In en, this message translates to:
+  /// **'Watercolor'**
+  String get styleWatercolor;
+
+  /// Style - Pixel art
+  ///
+  /// In en, this message translates to:
+  /// **'Pixel Art'**
+  String get stylePixelArt;
+
+  /// Style - Line art
+  ///
+  /// In en, this message translates to:
+  /// **'Line Art'**
+  String get styleLineArt;
+
+  /// Background - Park
+  ///
+  /// In en, this message translates to:
+  /// **'Park'**
+  String get bgPark;
+
+  /// Background - Beach
+  ///
+  /// In en, this message translates to:
+  /// **'Beach'**
+  String get bgBeach;
+
+  /// Background - Night sky
+  ///
+  /// In en, this message translates to:
+  /// **'Night Sky'**
+  String get bgNight;
+
+  /// Background - Snow
+  ///
+  /// In en, this message translates to:
+  /// **'Snow'**
+  String get bgSnow;
+
+  /// Background - Pastel
+  ///
+  /// In en, this message translates to:
+  /// **'Pastel'**
+  String get bgPastel;
+
+  /// Breed - Corgi
+  ///
+  /// In en, this message translates to:
+  /// **'Corgi'**
+  String get breedCorgi;
+
+  /// Breed - Maltese
+  ///
+  /// In en, this message translates to:
+  /// **'Maltese'**
+  String get breedMaltese;
+
+  /// Breed - Chihuahua
+  ///
+  /// In en, this message translates to:
+  /// **'Chihuahua'**
+  String get breedChihuahua;
+
+  /// Breed - Dachshund
+  ///
+  /// In en, this message translates to:
+  /// **'Dachshund'**
+  String get breedDachshund;
+
+  /// Breed - Border collie
+  ///
+  /// In en, this message translates to:
+  /// **'Border Collie'**
+  String get breedBorderCollie;
+
+  /// Breed - German shepherd
+  ///
+  /// In en, this message translates to:
+  /// **'German Shepherd'**
+  String get breedGermanShepherd;
+
+  /// Breed - Yorkshire terrier
+  ///
+  /// In en, this message translates to:
+  /// **'Yorkshire Terrier'**
+  String get breedYorkshire;
+
+  /// Breed - Bichon frise
+  ///
+  /// In en, this message translates to:
+  /// **'Bichon Frise'**
+  String get breedBichon;
+
+  /// Color - Tan
+  ///
+  /// In en, this message translates to:
+  /// **'Tan'**
+  String get colorTan;
+
+  /// Color - Apricot
+  ///
+  /// In en, this message translates to:
+  /// **'Apricot'**
+  String get colorApricot;
+
+  /// Color - Rust
+  ///
+  /// In en, this message translates to:
+  /// **'Rust'**
+  String get colorRust;
+
+  /// Color - Merle
+  ///
+  /// In en, this message translates to:
+  /// **'Merle'**
+  String get colorMerle;
 }
 
 class _AppLocalizationsDelegate

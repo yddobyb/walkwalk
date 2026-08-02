@@ -1928,4 +1928,88 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get walkStepsOnlyTip =>
       'Walks are tracked by step count. No location data is used.';
+
+  @override
+  String get accessoryScarf => 'Scarf';
+
+  @override
+  String get accessoryCrown => 'Crown';
+
+  @override
+  String get accessoryCap => 'Cap';
+
+  @override
+  String get accessoryFlowerCrown => 'Flower Crown';
+
+  @override
+  String get accessoryBackpack => 'Backpack';
+
+  @override
+  String get accessoryHeadphones => 'Headphones';
+
+  @override
+  String get accessoryNecktie => 'Necktie';
+
+  @override
+  String get accessoryMedal => 'Medal';
+
+  @override
+  String get styleWatercolor => 'Watercolor';
+
+  @override
+  String get stylePixelArt => 'Pixel Art';
+
+  @override
+  String get styleLineArt => 'Line Art';
+
+  @override
+  String get bgPark => 'Park';
+
+  @override
+  String get bgBeach => 'Beach';
+
+  @override
+  String get bgNight => 'Night Sky';
+
+  @override
+  String get bgSnow => 'Snow';
+
+  @override
+  String get bgPastel => 'Pastel';
+
+  @override
+  String get breedCorgi => 'Corgi';
+
+  @override
+  String get breedMaltese => 'Maltese';
+
+  @override
+  String get breedChihuahua => 'Chihuahua';
+
+  @override
+  String get breedDachshund => 'Dachshund';
+
+  @override
+  String get breedBorderCollie => 'Border Collie';
+
+  @override
+  String get breedGermanShepherd => 'German Shepherd';
+
+  @override
+  String get breedYorkshire => 'Yorkshire Terrier';
+
+  @override
+  String get breedBichon => 'Bichon Frise';
+
+  @override
+  String get colorTan => 'Tan';
+
+  @override
+  String get colorApricot => 'Apricot';
+
+  @override
+  String get colorRust => 'Rust';
+
+  @override
+  String get colorMerle => 'Merle';
 }

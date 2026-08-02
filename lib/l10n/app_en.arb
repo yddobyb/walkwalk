@@ -2991,5 +2991,124 @@
   "walkStepsOnlyTip": "Walks are tracked by step count. No location data is used.",
   "@walkStepsOnlyTip": {
     "description": "Tip shown where location features are unavailable (e.g. South Korea)"
+  },
+
+  "@_PHASE_29_2": { "description": "--- Phase 29-2: 커스터마이즈 옵션 확대 ---" },
+
+  "accessoryScarf": "Scarf",
+  "@accessoryScarf": {
+    "description": "Accessory - Scarf"
+  },
+  "accessoryCrown": "Crown",
+  "@accessoryCrown": {
+    "description": "Accessory - Crown"
+  },
+  "accessoryCap": "Cap",
+  "@accessoryCap": {
+    "description": "Accessory - Cap"
+  },
+  "accessoryFlowerCrown": "Flower Crown",
+  "@accessoryFlowerCrown": {
+    "description": "Accessory - Flower crown"
+  },
+  "accessoryBackpack": "Backpack",
+  "@accessoryBackpack": {
+    "description": "Accessory - Backpack"
+  },
+  "accessoryHeadphones": "Headphones",
+  "@accessoryHeadphones": {
+    "description": "Accessory - Headphones"
+  },
+  "accessoryNecktie": "Necktie",
+  "@accessoryNecktie": {
+    "description": "Accessory - Necktie"
+  },
+  "accessoryMedal": "Medal",
+  "@accessoryMedal": {
+    "description": "Accessory - Medal"
+  },
+
+  "styleWatercolor": "Watercolor",
+  "@styleWatercolor": {
+    "description": "Style - Watercolor"
+  },
+  "stylePixelArt": "Pixel Art",
+  "@stylePixelArt": {
+    "description": "Style - Pixel art"
+  },
+  "styleLineArt": "Line Art",
+  "@styleLineArt": {
+    "description": "Style - Line art"
+  },
+
+  "bgPark": "Park",
+  "@bgPark": {
+    "description": "Background - Park"
+  },
+  "bgBeach": "Beach",
+  "@bgBeach": {
+    "description": "Background - Beach"
+  },
+  "bgNight": "Night Sky",
+  "@bgNight": {
+    "description": "Background - Night sky"
+  },
+  "bgSnow": "Snow",
+  "@bgSnow": {
+    "description": "Background - Snow"
+  },
+  "bgPastel": "Pastel",
+  "@bgPastel": {
+    "description": "Background - Pastel"
+  },
+
+  "breedCorgi": "Corgi",
+  "@breedCorgi": {
+    "description": "Breed - Corgi"
+  },
+  "breedMaltese": "Maltese",
+  "@breedMaltese": {
+    "description": "Breed - Maltese"
+  },
+  "breedChihuahua": "Chihuahua",
+  "@breedChihuahua": {
+    "description": "Breed - Chihuahua"
+  },
+  "breedDachshund": "Dachshund",
+  "@breedDachshund": {
+    "description": "Breed - Dachshund"
+  },
+  "breedBorderCollie": "Border Collie",
+  "@breedBorderCollie": {
+    "description": "Breed - Border collie"
+  },
+  "breedGermanShepherd": "German Shepherd",
+  "@breedGermanShepherd": {
+    "description": "Breed - German shepherd"
+  },
+  "breedYorkshire": "Yorkshire Terrier",
+  "@breedYorkshire": {
+    "description": "Breed - Yorkshire terrier"
+  },
+  "breedBichon": "Bichon Frise",
+  "@breedBichon": {
+    "description": "Breed - Bichon frise"
+  },
+
+  "colorTan": "Tan",
+  "@colorTan": {
+    "description": "Color - Tan"
+  },
+  "colorApricot": "Apricot",
+  "@colorApricot": {
+    "description": "Color - Apricot"
+  },
+  "colorRust": "Rust",
+  "@colorRust": {
+    "description": "Color - Rust"
+  },
+  "colorMerle": "Merle",
+  "@colorMerle": {
+    "description": "Color - Merle"
   }
 }

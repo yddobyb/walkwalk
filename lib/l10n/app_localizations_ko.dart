@@ -1884,4 +1884,88 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get walkStepsOnlyTip => '걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요.';
+
+  @override
+  String get accessoryScarf => '목도리';
+
+  @override
+  String get accessoryCrown => '왕관';
+
+  @override
+  String get accessoryCap => '야구모자';
+
+  @override
+  String get accessoryFlowerCrown => '꽃관';
+
+  @override
+  String get accessoryBackpack => '배낭';
+
+  @override
+  String get accessoryHeadphones => '헤드폰';
+
+  @override
+  String get accessoryNecktie => '넥타이';
+
+  @override
+  String get accessoryMedal => '메달';
+
+  @override
+  String get styleWatercolor => '수채화';
+
+  @override
+  String get stylePixelArt => '픽셀아트';
+
+  @override
+  String get styleLineArt => '라인아트';
+
+  @override
+  String get bgPark => '공원';
+
+  @override
+  String get bgBeach => '해변';
+
+  @override
+  String get bgNight => '밤하늘';
+
+  @override
+  String get bgSnow => '눈';
+
+  @override
+  String get bgPastel => '파스텔';
+
+  @override
+  String get breedCorgi => '웰시코기';
+
+  @override
+  String get breedMaltese => '말티즈';
+
+  @override
+  String get breedChihuahua => '치와와';
+
+  @override
+  String get breedDachshund => '닥스훈트';
+
+  @override
+  String get breedBorderCollie => '보더콜리';
+
+  @override
+  String get breedGermanShepherd => '저먼셰퍼드';
+
+  @override
+  String get breedYorkshire => '요크셔테리어';
+
+  @override
+  String get breedBichon => '비숑프리제';
+
+  @override
+  String get colorTan => '황갈색';
+
+  @override
+  String get colorApricot => '살구색';
+
+  @override
+  String get colorRust => '적갈색';
+
+  @override
+  String get colorMerle => '멀';
 }

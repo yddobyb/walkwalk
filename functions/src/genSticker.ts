@@ -5,25 +5,15 @@ import axios from "axios";
 // sharp는 convertToWebP()에서 lazy require (다른 함수의 cold start 차단 방지)
 import {getUserTier} from "./utils/getUserTier";
 import {maskUid} from "./utils/maskUid";
-
-// Prompt injection 방지: 허용 목록 (H-3)
-const ALLOWED_BREEDS = [
-  "Golden Retriever", "Labrador", "Shiba Inu",
-  "Pomeranian", "Husky", "Beagle", "Bulldog", "Poodle",
-];
-const ALLOWED_COLORS = [
-  "golden", "brown", "black", "white", "gray", "cream",
-  "orange", // 기본값 호환
-];
-const ALLOWED_ACCESSORIES = [
-  "none", "bandana", "glasses", "bowtie", "hat", "collar",
-];
-const ALLOWED_STYLES = [
-  "sticker-flat", "sticker-3d", "realistic",
-];
-const ALLOWED_BGS = [
-  "transparent", "white", "gradient",
-];
+import {
+  ALLOWED_BREEDS,
+  ALLOWED_COLORS,
+  ALLOWED_ACCESSORIES,
+  ALLOWED_STYLES,
+  ALLOWED_BGS,
+  pick,
+  generatePrompt,
+} from "./utils/stickerPrompt";
 
 interface GenStickerRequest {
   petId: string;
@@ -101,17 +91,11 @@ export const genSticker = functions
 
     // 4. 입력 검증 + allowlist (H-3 prompt injection 방지)
     const {petId, size = 512, seed} = data;
-    const breed = ALLOWED_BREEDS.includes(data.breed ?? "") ?
-      data.breed! : "Shiba Inu";
-    const color = ALLOWED_COLORS.includes(data.color ?? "") ?
-      data.color! : "orange";
-    const accessory = ALLOWED_ACCESSORIES
-      .includes(data.accessory ?? "") ?
-      data.accessory! : "none";
-    const style = ALLOWED_STYLES.includes(data.style ?? "") ?
-      data.style! : "sticker-flat";
-    const bg = ALLOWED_BGS.includes(data.bg ?? "") ?
-      data.bg! : "transparent";
+    const breed = pick(ALLOWED_BREEDS, data.breed, "Shiba Inu");
+    const color = pick(ALLOWED_COLORS, data.color, "orange");
+    const accessory = pick(ALLOWED_ACCESSORIES, data.accessory, "none");
+    const style = pick(ALLOWED_STYLES, data.style, "sticker-flat");
+    const bg = pick(ALLOWED_BGS, data.bg, "transparent");
 
     console.log(`📝 petId=${petId}`);
 
@@ -192,25 +176,6 @@ export const genSticker = functions
 } */
 
 // 프롬프트 생성
-function generatePrompt(breed: string, color: string, accessory: string, style: string, bg: string): string {
-  let prompt = `${breed} dog, ${color} coat, cute sticker, front view, simple shading, 2D flat`;
-
-  if (accessory !== "none") {
-    const accessoryMap: Record<string, string> = {
-      bandana: "red bandana accessory",
-      glasses: "sunglasses accessory",
-      bowtie: "bow tie accessory",
-      hat: "top hat accessory",
-      collar: "decorative collar",
-    };
-    prompt += `, ${accessoryMap[accessory]}`;
-  }
-
-  prompt += `, ${bg} background`;
-
-  return prompt;
-}
-
 // Gemini 2.5 Flash Image API 호출
 async function callGeminiAPI(prompt: string, seed?: number): Promise<GeminiImageData> {
   const apiKey = process.env.GEMINI_API_KEY ?? "";

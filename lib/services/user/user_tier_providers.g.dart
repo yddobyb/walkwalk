@@ -40,7 +40,7 @@ final isPremiumUserProvider = AutoDisposeFutureProvider<bool>.internal(
 );
 
 typedef IsPremiumUserRef = AutoDisposeFutureProviderRef<bool>;
-String _$currentUserTierHash() => r'0bc0b6f3c0eb7dd7388b36e25180543c60950bf7';
+String _$currentUserTierHash() => r'7748f3b45f284a3f9317628d353ba6d473eac79d';
 
 /// 현재 사용자 등급 프로바이더
 ///

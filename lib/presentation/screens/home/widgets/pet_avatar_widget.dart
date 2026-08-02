@@ -24,6 +24,14 @@ class PetAvatarWidget extends ConsumerWidget {
       'Beagle': l10n.breedBeagle,
       'Bulldog': l10n.breedBulldog,
       'Poodle': l10n.breedPoodle,
+      'Corgi': l10n.breedCorgi,
+      'Maltese': l10n.breedMaltese,
+      'Chihuahua': l10n.breedChihuahua,
+      'Dachshund': l10n.breedDachshund,
+      'Border Collie': l10n.breedBorderCollie,
+      'German Shepherd': l10n.breedGermanShepherd,
+      'Yorkshire Terrier': l10n.breedYorkshire,
+      'Bichon Frise': l10n.breedBichon,
     };
     return mapping[breed] ?? breed;
   }

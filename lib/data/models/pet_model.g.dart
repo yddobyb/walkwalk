@@ -318,6 +318,14 @@ const _PetModelaccessoryEnumValueMap = {
   r'bowtie': r'bowtie',
   r'hat': r'hat',
   r'collar': r'collar',
+  r'scarf': r'scarf',
+  r'crown': r'crown',
+  r'cap': r'cap',
+  r'flowerCrown': r'flowerCrown',
+  r'backpack': r'backpack',
+  r'headphones': r'headphones',
+  r'necktie': r'necktie',
+  r'medal': r'medal',
 };
 const _PetModelaccessoryValueEnumMap = {
   r'none': PetAccessory.none,
@@ -326,6 +334,14 @@ const _PetModelaccessoryValueEnumMap = {
   r'bowtie': PetAccessory.bowtie,
   r'hat': PetAccessory.hat,
   r'collar': PetAccessory.collar,
+  r'scarf': PetAccessory.scarf,
+  r'crown': PetAccessory.crown,
+  r'cap': PetAccessory.cap,
+  r'flowerCrown': PetAccessory.flowerCrown,
+  r'backpack': PetAccessory.backpack,
+  r'headphones': PetAccessory.headphones,
+  r'necktie': PetAccessory.necktie,
+  r'medal': PetAccessory.medal,
 };
 const _PetModelpersonalityEnumValueMap = {
   r'cheerful': r'cheerful',

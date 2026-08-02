@@ -437,6 +437,22 @@ class ImageGenerationService {
         return 'hat';
       case StickerAccessory.collar:
         return 'collar';
+      case StickerAccessory.scarf:
+        return 'scarf';
+      case StickerAccessory.crown:
+        return 'crown';
+      case StickerAccessory.cap:
+        return 'cap';
+      case StickerAccessory.flowerCrown:
+        return 'flowerCrown';
+      case StickerAccessory.backpack:
+        return 'backpack';
+      case StickerAccessory.headphones:
+        return 'headphones';
+      case StickerAccessory.necktie:
+        return 'necktie';
+      case StickerAccessory.medal:
+        return 'medal';
     }
   }
 
@@ -448,6 +464,12 @@ class ImageGenerationService {
         return 'sticker-3d';
       case StickerStyle.realistic:
         return 'realistic';
+      case StickerStyle.watercolor:
+        return 'watercolor';
+      case StickerStyle.pixelArt:
+        return 'pixel-art';
+      case StickerStyle.lineArt:
+        return 'line-art';
     }
   }
 
@@ -459,6 +481,16 @@ class ImageGenerationService {
         return 'white';
       case StickerBackground.gradient:
         return 'gradient';
+      case StickerBackground.park:
+        return 'park';
+      case StickerBackground.beach:
+        return 'beach';
+      case StickerBackground.night:
+        return 'night';
+      case StickerBackground.snow:
+        return 'snow';
+      case StickerBackground.pastel:
+        return 'pastel';
     }
   }
 }

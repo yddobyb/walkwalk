@@ -60,7 +60,7 @@ final quotaServiceProvider = AutoDisposeProvider<QuotaService>.internal(
 );
 
 typedef QuotaServiceRef = AutoDisposeProviderRef<QuotaService>;
-String _$quotaHash() => r'fa66e66f3d799b003bdb1bfa1a6080daaa509c7c';
+String _$quotaHash() => r'af545192fcf8abd6ced1a9fa6ac7b04418cb149f';
 
 /// 할당량 조회 프로바이더
 ///

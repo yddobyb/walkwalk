@@ -22,6 +22,15 @@ class BreedAssets {
     'beagle': 'assets/breeds/beagle.svg',
     'bulldog': 'assets/breeds/bulldog.svg',
     'poodle': 'assets/breeds/poodle.svg',
+    // Phase 29-2 추가
+    'corgi': 'assets/breeds/corgi.svg',
+    'maltese': 'assets/breeds/maltese.svg',
+    'chihuahua': 'assets/breeds/chihuahua.svg',
+    'dachshund': 'assets/breeds/dachshund.svg',
+    'borderCollie': 'assets/breeds/border_collie.svg',
+    'germanShepherd': 'assets/breeds/german_shepherd.svg',
+    'yorkshire': 'assets/breeds/yorkshire.svg',
+    'bichon': 'assets/breeds/bichon.svg',
   };
 
   /// 영문 표준 품종명 → 품종 키
@@ -34,6 +43,14 @@ class BreedAssets {
     'Beagle': 'beagle',
     'Bulldog': 'bulldog',
     'Poodle': 'poodle',
+    'Corgi': 'corgi',
+    'Maltese': 'maltese',
+    'Chihuahua': 'chihuahua',
+    'Dachshund': 'dachshund',
+    'Border Collie': 'borderCollie',
+    'German Shepherd': 'germanShepherd',
+    'Yorkshire Terrier': 'yorkshire',
+    'Bichon Frise': 'bichon',
   };
 
   /// 품종 키로 에셋 경로 조회
@@ -62,6 +79,14 @@ class BreedAssets {
       l10n.breedBeagle: 'beagle',
       l10n.breedBulldog: 'bulldog',
       l10n.breedPoodle: 'poodle',
+      l10n.breedCorgi: 'corgi',
+      l10n.breedMaltese: 'maltese',
+      l10n.breedChihuahua: 'chihuahua',
+      l10n.breedDachshund: 'dachshund',
+      l10n.breedBorderCollie: 'borderCollie',
+      l10n.breedGermanShepherd: 'germanShepherd',
+      l10n.breedYorkshire: 'yorkshire',
+      l10n.breedBichon: 'bichon',
     };
     final localeKey = localeToKey[breed];
     if (localeKey != null) return _keyToAsset[localeKey];

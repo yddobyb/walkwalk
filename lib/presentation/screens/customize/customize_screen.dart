@@ -73,6 +73,14 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       l10n.breedBeagle: 'Beagle',
       l10n.breedBulldog: 'Bulldog',
       l10n.breedPoodle: 'Poodle',
+      l10n.breedCorgi: 'Corgi',
+      l10n.breedMaltese: 'Maltese',
+      l10n.breedChihuahua: 'Chihuahua',
+      l10n.breedDachshund: 'Dachshund',
+      l10n.breedBorderCollie: 'Border Collie',
+      l10n.breedGermanShepherd: 'German Shepherd',
+      l10n.breedYorkshire: 'Yorkshire Terrier',
+      l10n.breedBichon: 'Bichon Frise',
     };
     return mapping[localizedBreed];
   }
@@ -563,6 +571,15 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     {'value': 'Beagle', 'key': 'breedBeagle', 'emoji': '🐕'},
     {'value': 'Bulldog', 'key': 'breedBulldog', 'emoji': '🐶'},
     {'value': 'Poodle', 'key': 'breedPoodle', 'emoji': '🐩'},
+    // Phase 29-2 추가 — 값 문자열은 서버 ALLOWED_BREEDS와 일치해야 한다
+    {'value': 'Corgi', 'key': 'breedCorgi', 'emoji': '🐕'},
+    {'value': 'Maltese', 'key': 'breedMaltese', 'emoji': '🐶'},
+    {'value': 'Chihuahua', 'key': 'breedChihuahua', 'emoji': '🐕'},
+    {'value': 'Dachshund', 'key': 'breedDachshund', 'emoji': '🌭'},
+    {'value': 'Border Collie', 'key': 'breedBorderCollie', 'emoji': '🐕‍🦺'},
+    {'value': 'German Shepherd', 'key': 'breedGermanShepherd', 'emoji': '🐕‍🦺'},
+    {'value': 'Yorkshire Terrier', 'key': 'breedYorkshire', 'emoji': '🐶'},
+    {'value': 'Bichon Frise', 'key': 'breedBichon', 'emoji': '🐩'},
   ];
 
   String _getBreedName(String breedValue) {
@@ -584,6 +601,22 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return l10n.breedBulldog;
       case 'Poodle':
         return l10n.breedPoodle;
+      case 'Corgi':
+        return l10n.breedCorgi;
+      case 'Maltese':
+        return l10n.breedMaltese;
+      case 'Chihuahua':
+        return l10n.breedChihuahua;
+      case 'Dachshund':
+        return l10n.breedDachshund;
+      case 'Border Collie':
+        return l10n.breedBorderCollie;
+      case 'German Shepherd':
+        return l10n.breedGermanShepherd;
+      case 'Yorkshire Terrier':
+        return l10n.breedYorkshire;
+      case 'Bichon Frise':
+        return l10n.breedBichon;
       default:
         return breedValue;
     }
@@ -665,6 +698,11 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     {'value': 'white', 'key': 'colorWhite', 'color': Color(0xFFF5F5F5)},
     {'value': 'gray', 'key': 'colorGray', 'color': Color(0xFF808080)},
     {'value': 'cream', 'key': 'colorCream', 'color': Color(0xFFFFF8DC)},
+    // Phase 29-2 추가 — 값 문자열은 서버 ALLOWED_COLORS와 일치해야 한다
+    {'value': 'tan', 'key': 'colorTan', 'color': Color(0xFFD2B48C)},
+    {'value': 'apricot', 'key': 'colorApricot', 'color': Color(0xFFFFCBA4)},
+    {'value': 'rust', 'key': 'colorRust', 'color': Color(0xFFB7410E)},
+    {'value': 'merle', 'key': 'colorMerle', 'color': Color(0xFF7B8FA1)},
   ];
 
   String _getColorName(String colorValue) {
@@ -682,6 +720,14 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return l10n.colorGray;
       case 'cream':
         return l10n.colorCream;
+      case 'tan':
+        return l10n.colorTan;
+      case 'apricot':
+        return l10n.colorApricot;
+      case 'rust':
+        return l10n.colorRust;
+      case 'merle':
+        return l10n.colorMerle;
       default:
         return colorValue;
     }
@@ -774,6 +820,12 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return l10n.style3d;
       case StickerStyle.realistic:
         return l10n.styleRealistic;
+      case StickerStyle.watercolor:
+        return l10n.styleWatercolor;
+      case StickerStyle.pixelArt:
+        return l10n.stylePixelArt;
+      case StickerStyle.lineArt:
+        return l10n.styleLineArt;
     }
   }
 
@@ -785,68 +837,100 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return '🎲';
       case StickerStyle.realistic:
         return '📷';
+      case StickerStyle.watercolor:
+        return '💧';
+      case StickerStyle.pixelArt:
+        return '👾';
+      case StickerStyle.lineArt:
+        return '✏️';
     }
   }
 
-  Widget _buildStyleSelector(ThemeData theme) {
-    return Row(
-      children: StickerStyle.values.map((style) {
-        final isSelected = _style == style;
+  /// 옵션 선택 3열 그리드 (Phase 29-2).
+  ///
+  /// 스타일/배경이 3개일 땐 `Row` + `Expanded`로 한 줄에 넣었는데, 6~8개로
+  /// 늘면 칸이 찌그러지고 긴 이름(영어 "Yorkshire Terrier" 등)이 넘친다.
+  Widget _buildOptionGrid<T>({
+    required ThemeData theme,
+    required List<T> values,
+    required T selected,
+    required String Function(T) emojiOf,
+    required String Function(T) nameOf,
+    required void Function(T) onSelect,
+  }) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 1,
+      ),
+      itemCount: values.length,
+      itemBuilder: (context, index) {
+        final value = values[index];
+        final isSelected = value == selected;
 
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _style = style;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isSelected
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.outline.withValues(alpha: 0.2),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    if (isSelected)
-                      BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _getStyleEmoji(style),
-                      style: const TextStyle(fontSize: 32),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _getStyleName(style),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: isSelected ? Colors.white : theme.colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+        return GestureDetector(
+          onTap: () => setState(() => onSelect(value)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline.withValues(alpha: 0.2),
+                width: 2,
               ),
+              boxShadow: [
+                if (isSelected)
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(emojiOf(value), style: const TextStyle(fontSize: 30)),
+                const SizedBox(height: 6),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    nameOf(value),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ),
         );
-      }).toList(),
+      },
+    );
+  }
+
+  Widget _buildStyleSelector(ThemeData theme) {
+    return _buildOptionGrid<StickerStyle>(
+      theme: theme,
+      values: StickerStyle.values,
+      selected: _style,
+      emojiOf: _getStyleEmoji,
+      nameOf: _getStyleName,
+      onSelect: (v) => _style = v,
     );
   }
 
@@ -860,6 +944,16 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return l10n.bgWhite;
       case StickerBackground.gradient:
         return l10n.bgGradient;
+      case StickerBackground.park:
+        return l10n.bgPark;
+      case StickerBackground.beach:
+        return l10n.bgBeach;
+      case StickerBackground.night:
+        return l10n.bgNight;
+      case StickerBackground.snow:
+        return l10n.bgSnow;
+      case StickerBackground.pastel:
+        return l10n.bgPastel;
     }
   }
 
@@ -871,68 +965,27 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return '⬜';
       case StickerBackground.gradient:
         return '🌈';
+      case StickerBackground.park:
+        return '🌳';
+      case StickerBackground.beach:
+        return '🏖️';
+      case StickerBackground.night:
+        return '🌙';
+      case StickerBackground.snow:
+        return '❄️';
+      case StickerBackground.pastel:
+        return '🎨';
     }
   }
 
   Widget _buildBackgroundSelector(ThemeData theme) {
-    return Row(
-      children: StickerBackground.values.map((bg) {
-        final isSelected = _bg == bg;
-
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _bg = bg;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isSelected
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.outline.withValues(alpha: 0.2),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    if (isSelected)
-                      BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _getBackgroundEmoji(bg),
-                      style: const TextStyle(fontSize: 32),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _getBackgroundName(bg),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: isSelected ? Colors.white : theme.colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
+    return _buildOptionGrid<StickerBackground>(
+      theme: theme,
+      values: StickerBackground.values,
+      selected: _bg,
+      emojiOf: _getBackgroundEmoji,
+      nameOf: _getBackgroundName,
+      onSelect: (v) => _bg = v,
     );
   }
 
@@ -1107,6 +1160,22 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         return StickerAccessory.hat;
       case PetAccessory.collar:
         return StickerAccessory.collar;
+      case PetAccessory.scarf:
+        return StickerAccessory.scarf;
+      case PetAccessory.crown:
+        return StickerAccessory.crown;
+      case PetAccessory.cap:
+        return StickerAccessory.cap;
+      case PetAccessory.flowerCrown:
+        return StickerAccessory.flowerCrown;
+      case PetAccessory.backpack:
+        return StickerAccessory.backpack;
+      case PetAccessory.headphones:
+        return StickerAccessory.headphones;
+      case PetAccessory.necktie:
+        return StickerAccessory.necktie;
+      case PetAccessory.medal:
+        return StickerAccessory.medal;
     }
   }
 

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- floppy ears under the fluff -->
+  <ellipse cx="22" cy="58" rx="11" ry="19" fill="#EDE6DA"/>
+  <ellipse cx="78" cy="58" rx="11" ry="19" fill="#EDE6DA"/>
+  <!-- powder-puff fluff -->
+  <g fill="#FFFFFF">
+    <circle cx="26" cy="38" r="13"/>
+    <circle cx="74" cy="38" r="13"/>
+    <circle cx="36" cy="24" r="13"/>
+    <circle cx="64" cy="24" r="13"/>
+    <circle cx="50" cy="20" r="13"/>
+    <circle cx="24" cy="60" r="12"/>
+    <circle cx="76" cy="60" r="12"/>
+  </g>
+  <!-- head -->
+  <circle cx="50" cy="52" r="26" fill="#FFFFFF"/>
+  <!-- muzzle -->
+  <ellipse cx="50" cy="64" rx="14" ry="10" fill="#F7F2E9"/>
+  <!-- eyes -->
+  <circle cx="40" cy="50" r="3.6" fill="#241E1A"/>
+  <circle cx="60" cy="50" r="3.6" fill="#241E1A"/>
+  <!-- nose -->
+  <ellipse cx="50" cy="60" rx="4.7" ry="3.8" fill="#241E1A"/>
+  <!-- mouth -->
+  <path d="M50 63 Q50 69 45 69 M50 63 Q50 69 55 69" stroke="#241E1A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>

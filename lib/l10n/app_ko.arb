@@ -2704,5 +2704,124 @@
   "missionAdBonusGranted": "간식 {count}개를 더 받았어요! 🦴",
   "@missionAdBonusGranted": { "placeholders": { "count": { "type": "int" } } },
 
-  "walkStepsOnlyTip": "걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요."
+  "walkStepsOnlyTip": "걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요.",
+
+  "@_PHASE_29_2": { "description": "--- Phase 29-2: 커스터마이즈 옵션 확대 ---" },
+
+  "accessoryScarf": "목도리",
+  "@accessoryScarf": {
+    "description": "Accessory - Scarf"
+  },
+  "accessoryCrown": "왕관",
+  "@accessoryCrown": {
+    "description": "Accessory - Crown"
+  },
+  "accessoryCap": "야구모자",
+  "@accessoryCap": {
+    "description": "Accessory - Cap"
+  },
+  "accessoryFlowerCrown": "꽃관",
+  "@accessoryFlowerCrown": {
+    "description": "Accessory - Flower crown"
+  },
+  "accessoryBackpack": "배낭",
+  "@accessoryBackpack": {
+    "description": "Accessory - Backpack"
+  },
+  "accessoryHeadphones": "헤드폰",
+  "@accessoryHeadphones": {
+    "description": "Accessory - Headphones"
+  },
+  "accessoryNecktie": "넥타이",
+  "@accessoryNecktie": {
+    "description": "Accessory - Necktie"
+  },
+  "accessoryMedal": "메달",
+  "@accessoryMedal": {
+    "description": "Accessory - Medal"
+  },
+
+  "styleWatercolor": "수채화",
+  "@styleWatercolor": {
+    "description": "Style - Watercolor"
+  },
+  "stylePixelArt": "픽셀아트",
+  "@stylePixelArt": {
+    "description": "Style - Pixel art"
+  },
+  "styleLineArt": "라인아트",
+  "@styleLineArt": {
+    "description": "Style - Line art"
+  },
+
+  "bgPark": "공원",
+  "@bgPark": {
+    "description": "Background - Park"
+  },
+  "bgBeach": "해변",
+  "@bgBeach": {
+    "description": "Background - Beach"
+  },
+  "bgNight": "밤하늘",
+  "@bgNight": {
+    "description": "Background - Night sky"
+  },
+  "bgSnow": "눈",
+  "@bgSnow": {
+    "description": "Background - Snow"
+  },
+  "bgPastel": "파스텔",
+  "@bgPastel": {
+    "description": "Background - Pastel"
+  },
+
+  "breedCorgi": "웰시코기",
+  "@breedCorgi": {
+    "description": "Breed - Corgi"
+  },
+  "breedMaltese": "말티즈",
+  "@breedMaltese": {
+    "description": "Breed - Maltese"
+  },
+  "breedChihuahua": "치와와",
+  "@breedChihuahua": {
+    "description": "Breed - Chihuahua"
+  },
+  "breedDachshund": "닥스훈트",
+  "@breedDachshund": {
+    "description": "Breed - Dachshund"
+  },
+  "breedBorderCollie": "보더콜리",
+  "@breedBorderCollie": {
+    "description": "Breed - Border collie"
+  },
+  "breedGermanShepherd": "저먼셰퍼드",
+  "@breedGermanShepherd": {
+    "description": "Breed - German shepherd"
+  },
+  "breedYorkshire": "요크셔테리어",
+  "@breedYorkshire": {
+    "description": "Breed - Yorkshire terrier"
+  },
+  "breedBichon": "비숑프리제",
+  "@breedBichon": {
+    "description": "Breed - Bichon frise"
+  },
+
+  "colorTan": "황갈색",
+  "@colorTan": {
+    "description": "Color - Tan"
+  },
+  "colorApricot": "살구색",
+  "@colorApricot": {
+    "description": "Color - Apricot"
+  },
+  "colorRust": "적갈색",
+  "@colorRust": {
+    "description": "Color - Rust"
+  },
+  "colorMerle": "멀",
+  "@colorMerle": {
+    "description": "Color - Merle"
+  }
 }

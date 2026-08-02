@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- large upright rounded ears -->
+  <path d="M22 40 Q20 12 38 22 Q42 30 40 40 Z" fill="#C8813A"/>
+  <path d="M78 40 Q80 12 62 22 Q58 30 60 40 Z" fill="#C8813A"/>
+  <path d="M27 38 Q26 20 36 26 Q39 32 37 38 Z" fill="#F0C39B"/>
+  <path d="M73 38 Q74 20 64 26 Q61 32 63 38 Z" fill="#F0C39B"/>
+  <!-- head -->
+  <circle cx="50" cy="52" r="28" fill="#E09B4C"/>
+  <!-- white muzzle + blaze -->
+  <ellipse cx="50" cy="64" rx="17" ry="12" fill="#FFF6E8"/>
+  <path d="M50 30 Q45 44 46 56 L54 56 Q55 44 50 30 Z" fill="#FFF6E8"/>
+  <!-- eyes -->
+  <circle cx="39" cy="49" r="3.4" fill="#3D2A1A"/>
+  <circle cx="61" cy="49" r="3.4" fill="#3D2A1A"/>
+  <!-- nose -->
+  <ellipse cx="50" cy="59" rx="4.8" ry="3.9" fill="#3D2A1A"/>
+  <!-- mouth -->
+  <path d="M50 62 Q50 68 44.5 68 M50 62 Q50 68 55.5 68" stroke="#3D2A1A" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+</svg>

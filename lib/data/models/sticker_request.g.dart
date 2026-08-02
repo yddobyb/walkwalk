@@ -44,16 +44,32 @@ const _$StickerAccessoryEnumMap = {
   StickerAccessory.bowtie: 'bowtie',
   StickerAccessory.hat: 'hat',
   StickerAccessory.collar: 'collar',
+  StickerAccessory.scarf: 'scarf',
+  StickerAccessory.crown: 'crown',
+  StickerAccessory.cap: 'cap',
+  StickerAccessory.flowerCrown: 'flowerCrown',
+  StickerAccessory.backpack: 'backpack',
+  StickerAccessory.headphones: 'headphones',
+  StickerAccessory.necktie: 'necktie',
+  StickerAccessory.medal: 'medal',
 };
 
 const _$StickerStyleEnumMap = {
   StickerStyle.stickerFlat: 'sticker-flat',
   StickerStyle.sticker3d: 'sticker-3d',
   StickerStyle.realistic: 'realistic',
+  StickerStyle.watercolor: 'watercolor',
+  StickerStyle.pixelArt: 'pixel-art',
+  StickerStyle.lineArt: 'line-art',
 };
 
 const _$StickerBackgroundEnumMap = {
   StickerBackground.transparent: 'transparent',
   StickerBackground.white: 'white',
   StickerBackground.gradient: 'gradient',
+  StickerBackground.park: 'park',
+  StickerBackground.beach: 'beach',
+  StickerBackground.night: 'night',
+  StickerBackground.snow: 'snow',
+  StickerBackground.pastel: 'pastel',
 };
