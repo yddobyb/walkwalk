@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/mission.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/ads/ad_service.dart';
 import '../../services/mission/mission_service.dart';
+import '../../services/pet/pet_reward_service.dart';
+import '../../services/user/user_tier_providers.dart';
 import '../screens/home/widgets/pet_dialogue_widget.dart';
 
 /// 미션 완료 축하 토스트
@@ -304,6 +307,14 @@ class _MissionNotificationWidgetState
               contextData: {'title': mission.title},
             ),
             const SizedBox(height: 16),
+            // 선택형 리워드 광고 (Phase 28-10) — 무료 이용자에게만.
+            // 강제가 아니라 "원하면 보고 더 받는" 형태라 정책·리텐션 모두 안전하고,
+            // 이미지 생성 한도(구독 퍼널)와 분리된 인벤토리라 프리미엄 유인을 깎지 않는다.
+            if (mission.treatReward > 0)
+              _MissionAdBonusButton(
+                bonusTreats: mission.treatReward,
+                onGranted: () => Navigator.pop(context),
+              ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -377,6 +388,87 @@ class _RewardChip extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// 미션 완료 시트의 선택형 리워드 광고 버튼 (Phase 28-10).
+///
+/// 무료 이용자에게만 보이며, 광고를 끝까지 본 경우에만 보너스 간식을 지급한다.
+/// 보상은 로컬(Isar) 재화라 서버 검증이 없다 — 현금 가치가 없으므로
+/// 조작 리스크보다 구현 단순성을 택했다.
+class _MissionAdBonusButton extends ConsumerStatefulWidget {
+  const _MissionAdBonusButton({
+    required this.bonusTreats,
+    required this.onGranted,
+  });
+
+  final int bonusTreats;
+  final VoidCallback onGranted;
+
+  @override
+  ConsumerState<_MissionAdBonusButton> createState() =>
+      _MissionAdBonusButtonState();
+}
+
+class _MissionAdBonusButtonState
+    extends ConsumerState<_MissionAdBonusButton> {
+  bool _busy = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isPremium = ref.watch(isPremiumUserProvider).valueOrNull;
+    // 프리미엄은 광고를 없애려고 결제한 이용자다 — 제안 자체를 하지 않는다.
+    // 등급 미확정(null)일 때도 숨겨서, 잠깐이라도 잘못 노출되지 않게 한다.
+    if (isPremium == null || isPremium) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: _busy ? null : _watch,
+          icon: const Icon(Icons.movie_outlined, size: 18),
+          label: Text(l10n.missionAdBonusButton),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _watch() async {
+    setState(() => _busy = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = AppLocalizations.of(context);
+
+    await ref.read(adServiceProvider).showRewarded(
+      onReward: () async {
+        final rewardService = PetRewardService.instance;
+        final pet = await rewardService.getActivePet();
+        if (pet != null) {
+          await rewardService.addRewards(
+            pet.petId,
+            treats: widget.bonusTreats,
+          );
+        }
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(l10n.missionAdBonusGranted(widget.bonusTreats)),
+            backgroundColor: Colors.green,
+          ),
+        );
+        widget.onGranted();
+      },
+      onUnavailable: () {
+        if (mounted) setState(() => _busy = false);
+        messenger.showSnackBar(SnackBar(content: Text(l10n.adNotReady)));
+      },
     );
   }
 }

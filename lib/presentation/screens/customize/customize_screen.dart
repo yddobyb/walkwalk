@@ -18,6 +18,7 @@ import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
 import '../../../services/ai/ai_consent_service.dart';
 import '../../../services/moderation/content_report_service.dart';
+import '../../widgets/ad_banner.dart';
 import '../../widgets/ai_consent_sheet.dart';
 import '../../widgets/ai_generated_badge.dart';
 import '../../widgets/report_content_sheet.dart';
@@ -81,6 +82,10 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         title: Text(AppLocalizations.of(context).customizeTitle),
         centerTitle: true,
       ),
+      // 배너는 스크롤 영역 바깥 하단에 둔다 — 콘텐츠를 가리지 않고,
+      // 탭 가능한 버튼 옆에 붙지 않아 오클릭 위험이 낮다(AdMob 정책).
+      // 프리미엄이면 위젯이 공간을 차지하지 않는다.
+      bottomNavigationBar: const AdBanner(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

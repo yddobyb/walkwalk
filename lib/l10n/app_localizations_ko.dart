@@ -1875,5 +1875,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get locationTermsDescription => '위치정보 이용에 관한 약관';
 
   @override
+  String get missionAdBonusButton => '광고 보고 간식 2배 받기';
+
+  @override
+  String missionAdBonusGranted(int count) {
+    return '간식 $count개를 더 받았어요! 🦴';
+  }
+
+  @override
   String get walkStepsOnlyTip => '걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요.';
 }

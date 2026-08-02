@@ -2700,5 +2700,9 @@
   "locationTermsTitle": "위치기반서비스 이용약관",
   "locationTermsDescription": "위치정보 이용에 관한 약관",
 
+  "missionAdBonusButton": "광고 보고 간식 2배 받기",
+  "missionAdBonusGranted": "간식 {count}개를 더 받았어요! 🦴",
+  "@missionAdBonusGranted": { "placeholders": { "count": { "type": "int" } } },
+
   "walkStepsOnlyTip": "걸음 수만으로 산책이 기록돼요. 위치 정보는 사용하지 않아요."
 }

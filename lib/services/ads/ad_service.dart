@@ -6,6 +6,7 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/ad_constants.dart';
 
@@ -224,18 +225,54 @@ class AdService {
   }
 
   // ============ 산책 후 전면광고 ============
-  // 사용자 요청: 첫 산책 완료부터 매 산책마다 전면광고 (면제·N회마다·일일캡 없음).
-  // 프리미엄은 제외. 직전 광고 표시 후 재로드(~1-2초) 전이면 자연히 생략돼,
-  // 빠른 시작/종료 연타 시 광고 도배는 방지된다.
+  // 산책 완료마다 표시하되 **하루 [maxWalkInterstitialsPerDay]회까지**만.
+  // 프리미엄은 제외. 직전 광고 표시 후 재로드(~1-2초) 전이면 자연히 생략된다.
+  //
+  // 캡을 둔 이유(Phase 28-10): 원래는 매 산책마다 무제한이었는데,
+  // 하루 여러 번 걷는 이용자가 그만큼 전면광고를 보게 된다. 그런 이용자가
+  // 정확히 구독 전환 후보이자 리텐션 핵심이고, 무제한 전면광고는
+  // Google Play의 Disruptive Ads 정책에서도 위험 신호다.
 
-  /// 산책 완료 시마다 전면광고 표시 (프리미엄 제외, 레벨업 산책은 호출부에서 제외).
-  void maybeShowWalkInterstitial({required bool isPremium}) {
+  /// 하루 최대 전면광고 노출 수. 올리기 전에 리텐션·정책 영향을 함께 볼 것.
+  static const int maxWalkInterstitialsPerDay = 3;
+
+  static const String _interstitialCountKey = 'ad_interstitial_count';
+  static const String _interstitialDateKey = 'ad_interstitial_date';
+
+  /// 오늘 이미 보여준 전면광고 수 (날짜가 바뀌면 0으로 리셋).
+  Future<int> _todayInterstitialCount(SharedPreferences prefs) async {
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    if (prefs.getString(_interstitialDateKey) != today) {
+      await prefs.setString(_interstitialDateKey, today);
+      await prefs.setInt(_interstitialCountKey, 0);
+      return 0;
+    }
+    return prefs.getInt(_interstitialCountKey) ?? 0;
+  }
+
+  /// 산책 완료 시 전면광고 표시 (프리미엄 제외, 일일 캡 적용).
+  Future<void> maybeShowWalkInterstitial({required bool isPremium}) async {
     if (isPremium) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final shown = await _todayInterstitialCount(prefs);
+    if (shown >= maxWalkInterstitialsPerDay) {
+      debugPrint(
+        '[Ads] 전면광고 일일 캡 도달 ($shown/$maxWalkInterstitialsPerDay) — 생략',
+      );
+      return;
+    }
+
     if (!isInterstitialReady) {
       loadInterstitial();
       return;
     }
-    debugPrint('[Ads] Showing walk interstitial (every walk completion)');
+
+    // 실제로 보여줄 때만 카운트한다(로드 실패로 생략된 건 세지 않는다).
+    await prefs.setInt(_interstitialCountKey, shown + 1);
+    debugPrint(
+      '[Ads] Showing walk interstitial (${shown + 1}/$maxWalkInterstitialsPerDay today)',
+    );
     showInterstitial();
   }
 }

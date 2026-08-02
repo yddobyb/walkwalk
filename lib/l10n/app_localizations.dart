@@ -3566,6 +3566,18 @@ abstract class AppLocalizations {
   /// **'Terms for using location information'**
   String get locationTermsDescription;
 
+  /// Optional rewarded-ad offer on the mission complete sheet (free users only)
+  ///
+  /// In en, this message translates to:
+  /// **'Watch an ad to double your treats'**
+  String get missionAdBonusButton;
+
+  /// Confirmation after the mission bonus rewarded ad
+  ///
+  /// In en, this message translates to:
+  /// **'You earned {count} more treats! 🦴'**
+  String missionAdBonusGranted(int count);
+
   /// Tip shown where location features are unavailable (e.g. South Korea)
   ///
   /// In en, this message translates to:

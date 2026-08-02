@@ -2978,6 +2978,16 @@
     "description": "Settings tile subtitle for the location-based services terms"
   },
 
+  "missionAdBonusButton": "Watch an ad to double your treats",
+  "@missionAdBonusButton": {
+    "description": "Optional rewarded-ad offer on the mission complete sheet (free users only)"
+  },
+  "missionAdBonusGranted": "You earned {count} more treats! 🦴",
+  "@missionAdBonusGranted": {
+    "description": "Confirmation after the mission bonus rewarded ad",
+    "placeholders": { "count": { "type": "int" } }
+  },
+
   "walkStepsOnlyTip": "Walks are tracked by step count. No location data is used.",
   "@walkStepsOnlyTip": {
     "description": "Tip shown where location features are unavailable (e.g. South Korea)"

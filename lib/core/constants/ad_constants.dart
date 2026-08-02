@@ -28,6 +28,10 @@ class AdConstants {
       'ca-app-pub-3940256099942544/1033173712';
   static const String _testInterstitialIos =
       'ca-app-pub-3940256099942544/4411468910';
+  static const String _testBannerAndroid =
+      'ca-app-pub-3940256099942544/6300978111';
+  static const String _testBannerIos =
+      'ca-app-pub-3940256099942544/2934735716';
 
   // --- 실제 광고 단위 ID (AdMob 계정 생성 후 입력) ---
   static const String _realRewardedAndroid = 'TODO_REPLACE_REWARDED_ANDROID';
@@ -35,6 +39,8 @@ class AdConstants {
   static const String _realInterstitialAndroid =
       'TODO_REPLACE_INTERSTITIAL_ANDROID';
   static const String _realInterstitialIos = 'TODO_REPLACE_INTERSTITIAL_IOS';
+  static const String _realBannerAndroid = 'TODO_REPLACE_BANNER_ANDROID';
+  static const String _realBannerIos = 'TODO_REPLACE_BANNER_IOS';
 
   /// 리워드 광고 단위 ID (플랫폼 + 테스트 여부 자동 선택)
   static String get rewardedUnitId {
@@ -50,5 +56,13 @@ class AdConstants {
       return useTestAds ? _testInterstitialIos : _realInterstitialIos;
     }
     return useTestAds ? _testInterstitialAndroid : _realInterstitialAndroid;
+  }
+
+  /// 배너 광고 단위 ID (커스터마이즈 탭 하단, Phase 28-10)
+  static String get bannerUnitId {
+    if (Platform.isIOS) {
+      return useTestAds ? _testBannerIos : _realBannerIos;
+    }
+    return useTestAds ? _testBannerAndroid : _realBannerAndroid;
   }
 }

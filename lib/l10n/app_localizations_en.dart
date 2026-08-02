@@ -1918,6 +1918,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationTermsDescription => 'Terms for using location information';
 
   @override
+  String get missionAdBonusButton => 'Watch an ad to double your treats';
+
+  @override
+  String missionAdBonusGranted(int count) {
+    return 'You earned $count more treats! 🦴';
+  }
+
+  @override
   String get walkStepsOnlyTip =>
       'Walks are tracked by step count. No location data is used.';
 }
