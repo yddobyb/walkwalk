@@ -3115,5 +3115,22 @@
   "paywallBenefitCosmetics": "Exclusive accessories, styles & backgrounds",
   "@paywallBenefitCosmetics": {
     "description": "Paywall benefit - premium-only cosmetics"
+  },
+
+  "breedChangeWarningTitle": "Change your pet's breed?",
+  "@breedChangeWarningTitle": {
+    "description": "Title of the dialog warning a free user they will lose access to their current breed"
+  },
+  "breedChangeWarningBody": "Your pet is a {oldBreed}. Applying this sticker makes it a {newBreed}, and {oldBreed} will then need Premium to pick again.",
+  "@breedChangeWarningBody": {
+    "description": "Body of the breed-change warning for free users",
+    "placeholders": {
+      "oldBreed": { "type": "String" },
+      "newBreed": { "type": "String" }
+    }
+  },
+  "breedChangeKeep": "Keep current breed",
+  "@breedChangeKeep": {
+    "description": "Button that cancels the breed change"
   }
 }

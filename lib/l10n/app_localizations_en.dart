@@ -2016,4 +2016,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get paywallBenefitCosmetics =>
       'Exclusive accessories, styles & backgrounds';
+
+  @override
+  String get breedChangeWarningTitle => 'Change your pet\'s breed?';
+
+  @override
+  String breedChangeWarningBody(String oldBreed, String newBreed) {
+    return 'Your pet is a $oldBreed. Applying this sticker makes it a $newBreed, and $oldBreed will then need Premium to pick again.';
+  }
+
+  @override
+  String get breedChangeKeep => 'Keep current breed';
 }

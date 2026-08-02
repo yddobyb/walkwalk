@@ -2828,5 +2828,22 @@
   "paywallBenefitCosmetics": "전용 액세서리·스타일·배경",
   "@paywallBenefitCosmetics": {
     "description": "Paywall benefit - premium-only cosmetics"
+  },
+
+  "breedChangeWarningTitle": "품종을 바꿀까요?",
+  "@breedChangeWarningTitle": {
+    "description": "Title of the dialog warning a free user they will lose access to their current breed"
+  },
+  "breedChangeWarningBody": "지금 펫은 {oldBreed}예요. 이 스티커를 적용하면 {newBreed}(으)로 바뀌고, {oldBreed}는 프리미엄에서만 다시 고를 수 있게 됩니다.",
+  "@breedChangeWarningBody": {
+    "description": "Body of the breed-change warning for free users",
+    "placeholders": {
+      "oldBreed": { "type": "String" },
+      "newBreed": { "type": "String" }
+    }
+  },
+  "breedChangeKeep": "그대로 두기",
+  "@breedChangeKeep": {
+    "description": "Button that cancels the breed change"
   }
 }

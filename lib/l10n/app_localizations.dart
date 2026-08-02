@@ -3757,6 +3757,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exclusive accessories, styles & backgrounds'**
   String get paywallBenefitCosmetics;
+
+  /// Title of the dialog warning a free user they will lose access to their current breed
+  ///
+  /// In en, this message translates to:
+  /// **'Change your pet\'s breed?'**
+  String get breedChangeWarningTitle;
+
+  /// Body of the breed-change warning for free users
+  ///
+  /// In en, this message translates to:
+  /// **'Your pet is a {oldBreed}. Applying this sticker makes it a {newBreed}, and {oldBreed} will then need Premium to pick again.'**
+  String breedChangeWarningBody(String oldBreed, String newBreed);
+
+  /// Button that cancels the breed change
+  ///
+  /// In en, this message translates to:
+  /// **'Keep current breed'**
+  String get breedChangeKeep;
 }
 
 class _AppLocalizationsDelegate

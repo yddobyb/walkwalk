@@ -1971,4 +1971,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get paywallBenefitCosmetics => '전용 액세서리·스타일·배경';
+
+  @override
+  String get breedChangeWarningTitle => '품종을 바꿀까요?';
+
+  @override
+  String breedChangeWarningBody(String oldBreed, String newBreed) {
+    return '지금 펫은 $oldBreed예요. 이 스티커를 적용하면 $newBreed(으)로 바뀌고, $oldBreed는 프리미엄에서만 다시 고를 수 있게 됩니다.';
+  }
+
+  @override
+  String get breedChangeKeep => '그대로 두기';
 }

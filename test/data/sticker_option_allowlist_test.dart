@@ -273,6 +273,30 @@ void main() {
     expect(clientFreeStrings('freeColors'), contains(m!.group(1)));
   });
 
+  test('스티커 적용이 되돌릴 수 없는 품종 변경을 먼저 확인한다', () {
+    // 적용은 pet.breed를 덮어쓴다. 무료 이용자가 "무료 집합 밖이지만 자기
+    // 것이라 열려 있던" 품종에서 다른 품종으로 넘어가면 그 품종이 잠겨
+    // **결제 없이는 되돌릴 수 없다.** 가드를 빼면 경고 없이 잃는다.
+    final applyStart = customizeSource.indexOf('Future<void> _applySticker(');
+    expect(applyStart, greaterThanOrEqualTo(0));
+    final applyBody = customizeSource.substring(applyStart, applyStart + 400);
+
+    expect(
+      applyBody.contains('_confirmBreedChangeIfIrreversible'),
+      isTrue,
+      reason: '_applySticker가 품종 변경 확인 없이 적용한다',
+    );
+
+    // 가드 자체가 무료 집합을 보는지 (프리미엄은 통과, 무료만 경고)
+    final guardStart =
+        customizeSource.indexOf('_confirmBreedChangeIfIrreversible() async');
+    final guardBody = customizeSource.substring(guardStart, guardStart + 900);
+    expect(guardBody.contains('CosmeticTiers.freeBreeds'), isTrue,
+        reason: '가드가 무료 품종 집합을 확인하지 않는다');
+    expect(guardBody.contains('isPremiumUserProvider'), isTrue,
+        reason: '가드가 등급을 확인하지 않아 프리미엄에게도 경고가 뜬다');
+  });
+
   test('none을 뺀 모든 액세서리가 프롬프트 조각을 가짐', () {
     for (final a in enumJsonValues('StickerAccessory')) {
       if (a == 'none') continue;

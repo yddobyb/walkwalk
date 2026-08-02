@@ -1068,8 +1068,53 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     );
   }
 
+  /// 무료 이용자가 **되돌릴 수 없게** 품종을 잃기 직전인지 확인 (Phase 29-6).
+  ///
+  /// 스티커를 적용하면 `pet.breed`가 화면에서 고른 품종으로 갱신된다.
+  /// 무료 이용자에게 지금 품종이 "무료 3종 밖인데 자기 것이라 열려 있던"
+  /// 경우라면, 바꾸는 순간 그 품종이 잠겨 **다시 고를 수 없다.**
+  /// 경고 없이 넘기면 되돌릴 방법이 결제뿐이라 반드시 물어본다.
+  ///
+  /// 계속해도 되면 true.
+  Future<bool> _confirmBreedChangeIfIrreversible() async {
+    final isPremium = ref.read(isPremiumUserProvider).valueOrNull ?? true;
+    if (isPremium) return true;
+
+    final current = ref.read(activePetProvider).valueOrNull?.breed;
+    if (current == null || current == _breed) return true;
+
+    // 지금 품종이 무료 집합에 있으면 바꿔도 언제든 되돌릴 수 있다
+    if (CosmeticTiers.freeBreeds.contains(current)) return true;
+
+    final l10n = AppLocalizations.of(context);
+    final proceed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.breedChangeWarningTitle),
+        content: Text(l10n.breedChangeWarningBody(
+          _getBreedName(current),
+          _getBreedName(_breed),
+        )),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.breedChangeKeep),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.apply),
+          ),
+        ],
+      ),
+    );
+    return proceed ?? false;
+  }
+
   /// 스티커 적용 (저장 및 Pet 업데이트 + 품종 동기화)
   Future<void> _applySticker(Uint8List imageBytes) async {
+    if (!await _confirmBreedChangeIfIrreversible()) return;
+    if (!mounted) return;
+
     final success = await ref.read(stickerApplyProvider.notifier).applySticker(
       imageBytes,
       breed: _breed,
