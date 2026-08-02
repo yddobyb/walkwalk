@@ -902,30 +902,52 @@ void main() {
       rulesSource = file.readAsStringSync();
     });
 
-    test('subscription 필드 클라이언트 쓰기 차단 (create)', () {
+    // Phase 28: users 규칙이 "subscription 필드만 막는 조건부 허용"에서
+    // **클라이언트 쓰기 전면 차단**으로 바뀌었다. 예전 테스트는 옛 규칙의
+    // 조건문 문자열을 그대로 찾고 있어서, 더 강한 규칙으로 교체되자 깨졌다.
+    // 이제는 문자열이 아니라 **보장되는 성질**을 검사한다.
+    test('users 문서에 대한 클라이언트 쓰기가 전면 차단됨', () {
+      final usersBlock = RegExp(
+        r'match /users/\{userId\}\s*\{(.*?)\n    \}',
+        dotAll: true,
+      ).firstMatch(rulesSource)?.group(1);
+
+      expect(usersBlock, isNotNull, reason: 'users 규칙 블록이 존재해야 함');
       expect(
-        rulesSource.contains(
-          "!request.resource.data.keys().hasAny(['subscription'])",
-        ),
+        usersBlock!.contains('allow write: if false'),
         isTrue,
-        reason: '신규 문서에 subscription 필드 차단',
+        reason: '클라이언트 쓰기 전면 차단 — subscription 위조·임의 필드 주입 원천 봉쇄. '
+            '쓰기는 syncSubscription이 Admin SDK로만 수행한다.',
       );
     });
 
-    test('subscription 필드 클라이언트 쓰기 차단 (update)', () {
+    test('users 문서 읽기는 본인만 허용', () {
+      final usersBlock = RegExp(
+        r'match /users/\{userId\}\s*\{(.*?)\n    \}',
+        dotAll: true,
+      ).firstMatch(rulesSource)!.group(1)!;
+
       expect(
-        rulesSource.contains("affectedKeys().hasAny(['subscription'])"),
+        usersBlock.contains('request.auth.uid == userId'),
         isTrue,
-        reason: '기존 문서에서 subscription 필드 변경 차단',
+        reason: '등급 조회를 위해 본인 문서 읽기는 유지되어야 함',
       );
     });
 
-    test('isOwner 헬퍼 함수 사용', () {
-      expect(
-        rulesSource.contains('function isOwner()'),
-        isTrue,
-        reason: '인증 + 소유자 확인 헬퍼',
-      );
+    test('users 규칙에 쓰기를 여는 allow 구문이 남아있지 않음', () {
+      final usersBlock = RegExp(
+        r'match /users/\{userId\}\s*\{(.*?)\n    \}',
+        dotAll: true,
+      ).firstMatch(rulesSource)!.group(1)!;
+
+      // create/update/delete를 조건부로 여는 구문이 다시 들어오면 회귀다.
+      for (final verb in ['create', 'update', 'delete']) {
+        expect(
+          usersBlock.contains('allow $verb'),
+          isFalse,
+          reason: '$verb 를 다시 열면 필드 주입 경로가 부활한다',
+        );
+      }
     });
 
     test('monitoring 컬렉션 클라이언트 접근 차단', () {
