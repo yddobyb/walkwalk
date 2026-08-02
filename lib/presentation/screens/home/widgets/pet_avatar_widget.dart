@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import 'pet_dialogue_widget.dart';
 import '../../../../core/utils/breed_assets.dart';
+import '../../../widgets/accessory_badge.dart';
 
 class PetAvatarWidget extends ConsumerWidget {
   const PetAvatarWidget({super.key});
@@ -114,8 +115,25 @@ class PetAvatarWidget extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  child: Center(
-                    child: _buildPetAvatar(context, pet?.stickerPath, pet?.breed),
+                  // 착용 액세서리를 아바타 위에 겹쳐 보여준다 (Phase 29-1).
+                  // 스티커에는 *생성 당시* 액세서리가 그려져 있어서, 그 뒤
+                  // 액세서리를 바꿔도 다시 생성(하루 한도 소모)하기 전까지는
+                  // 반영되지 않았다. 뱃지는 "지금 장착한 것"을 바로 보여준다.
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Center(
+                          child: _buildPetAvatar(
+                              context, pet?.stickerPath, pet?.breed),
+                        ),
+                      ),
+                      if (pet != null)
+                        Positioned(
+                          right: 4,
+                          bottom: 4,
+                          child: AccessoryBadge(accessory: pet.accessory),
+                        ),
+                    ],
                   ),
                 ),
               ),

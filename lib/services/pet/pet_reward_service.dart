@@ -236,6 +236,22 @@ class PetRewardService {
     return updatedPet;
   }
 
+  /// 착용 액세서리 변경 (Phase 29-1)
+  ///
+  /// 예전엔 커스터마이즈 화면의 로컬 상태로만 들고 있어서 **앱을 껐다 켜면
+  /// 선택이 사라졌고**, `PetModel.accessory`는 온보딩에서 넣은 `none`에서
+  /// 갱신된 적이 없었다. 홈 아바타에 착용 액세서리를 보여주려면 펫에
+  /// 남아 있어야 해서 저장 경로를 만들었다.
+  Future<Pet?> updateAccessory(String petId, PetAccessory accessory) async {
+    final pet = await _databaseService.getPetById(petId);
+    if (pet == null) return null;
+    if (pet.accessory == accessory) return pet; // 불필요한 쓰기 방지
+
+    final updatedPet = pet.copyWith(accessory: accessory);
+    await _databaseService.savePet(updatedPet);
+    return updatedPet;
+  }
+
   /// 연속 산책 일수 업데이트
   Future<Pet?> updateWalkStreak(String petId) async {
     final pet = await _databaseService.getPetById(petId);

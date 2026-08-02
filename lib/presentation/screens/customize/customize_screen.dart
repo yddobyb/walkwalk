@@ -14,10 +14,12 @@ import '../../../services/firebase/image_generation_providers.dart';
 import '../../../services/firebase/image_generation_service.dart';
 import '../../../services/pet/pet_reward_service.dart';
 import '../../../services/sticker/sticker_save_service.dart';
+import '../../../core/utils/accessory_assets.dart';
 import '../../../core/utils/breed_assets.dart';
 import '../../../services/ads/ad_service.dart';
 import '../../../services/ai/ai_consent_service.dart';
 import '../../../services/moderation/content_report_service.dart';
+import '../../widgets/accessory_badge.dart';
 import '../../widgets/ad_banner.dart';
 import '../../widgets/ai_consent_sheet.dart';
 import '../../widgets/ai_generated_badge.dart';
@@ -43,6 +45,21 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
   StickerBackground _bg = StickerBackground.transparent;
 
   bool _breedInitialized = false;
+  bool _accessoryInitialized = false;
+
+  /// 선택한 액세서리를 펫에 저장 (Phase 29-1).
+  ///
+  /// 홈 아바타가 `activePetProvider`를 보고 그리므로, 저장 후 무효화해야
+  /// 탭을 옮기지 않아도 홈에 바로 반영된다. 실패해도 화면 상태는 이미
+  /// 바뀌어 있으니 조용히 무시 — 다음 선택 때 다시 시도된다.
+  Future<void> _persistAccessory(PetAccessory accessory) async {
+    final pet = ref.read(activePetProvider).valueOrNull;
+    if (pet == null) return;
+    await ref
+        .read(petRewardServiceProvider)
+        .updateAccessory(pet.petId, accessory);
+    ref.invalidate(activePetProvider);
+  }
 
   /// Pet.breed (로컬라이즈된 이름) → 영어 breed 값으로 역매핑
   String? _reverseMapBreed(String localizedBreed) {
@@ -75,6 +92,12 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         _breed = mappedBreed;
       }
       _breedInitialized = true;
+    }
+
+    // 저장된 착용 액세서리를 최초 1회 불러온다 (앱 재시작 후에도 유지).
+    if (!_accessoryInitialized && petAsync.hasValue && petAsync.value != null) {
+      _selectedAccessory = petAsync.value!.accessory;
+      _accessoryInitialized = true;
     }
 
     return Scaffold(
@@ -117,7 +140,6 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                         stickerPath: petAsync.valueOrNull?.stickerPath,
                         breed: _breed,
                         selectedAccessory: _selectedAccessory,
-                        getAccessoryEmoji: _getAccessoryEmoji,
                       ),
                     ],
                   ),
@@ -162,6 +184,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                     setState(() {
                       _selectedAccessory = accessory;
                     });
+                    _persistAccessory(accessory);
                     _showApplyDialog();
                   },
                   child: Container(
@@ -189,12 +212,12 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          _getAccessoryEmoji(accessory),
+                          AccessoryAssets.emojiFor(accessory),
                           style: const TextStyle(fontSize: 40),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          _getAccessoryName(accessory, context),
+                          AccessoryAssets.nameFor(accessory, AppLocalizations.of(context)),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: isSelected
                                 ? Colors.white
@@ -528,41 +551,6 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
         ),
       ),
     );
-  }
-
-  String _getAccessoryEmoji(PetAccessory accessory) {
-    switch (accessory) {
-      case PetAccessory.none:
-        return '🚫';
-      case PetAccessory.bandana:
-        return '🔴';
-      case PetAccessory.glasses:
-        return '🕶️';
-      case PetAccessory.bowtie:
-        return '🎀';
-      case PetAccessory.hat:
-        return '🎩';
-      case PetAccessory.collar:
-        return '⭕';
-    }
-  }
-
-  String _getAccessoryName(PetAccessory accessory, BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    switch (accessory) {
-      case PetAccessory.none:
-        return l10n.accessoryNone;
-      case PetAccessory.bandana:
-        return l10n.accessoryBandana;
-      case PetAccessory.glasses:
-        return l10n.accessoryGlasses;
-      case PetAccessory.bowtie:
-        return l10n.accessoryBowtie;
-      case PetAccessory.hat:
-        return l10n.accessoryHat;
-      case PetAccessory.collar:
-        return l10n.accessoryCollar;
-    }
   }
 
   // 견종 목록 및 이모지
@@ -950,7 +938,10 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
 
   void _showApplyDialog() {
     final l10n = AppLocalizations.of(context);
-    final accessoryName = _getAccessoryName(_selectedAccessory, context);
+    final accessoryName = AccessoryAssets.nameFor(
+      _selectedAccessory,
+      AppLocalizations.of(context),
+    );
 
     showDialog(
       context: context,
@@ -1624,22 +1615,39 @@ class _ProviderBadge extends StatelessWidget {
 
 /// 펫 미리보기 아바타 위젯
 ///
-/// 저장된 스티커가 있으면 표시, 없으면 이모지 표시
+/// 저장된 스티커가 있으면 표시, 없으면 품종 아이콘/이모지.
+/// 착용 액세서리는 **어느 쪽이든 뱃지로 겹쳐 보여준다** — 예전엔 폴백일 때만
+/// 그려서, 스티커를 한 번 만들고 나면 액세서리를 바꿔도 미리보기가 그대로였다.
 class _PetPreviewAvatar extends StatelessWidget {
   final String? stickerPath;
   final String? breed;
   final PetAccessory selectedAccessory;
-  final String Function(PetAccessory) getAccessoryEmoji;
 
   const _PetPreviewAvatar({
     required this.stickerPath,
     required this.breed,
     required this.selectedAccessory,
-    required this.getAccessoryEmoji,
   });
 
   @override
   Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: Stack(
+        children: [
+          Positioned.fill(child: Center(child: _buildBase(context))),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: AccessoryBadge(accessory: selectedAccessory),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBase(BuildContext context) {
     // 스티커가 있으면 이미지 표시
     if (stickerPath != null && stickerPath!.isNotEmpty) {
       final file = File(stickerPath!);
@@ -1656,45 +1664,31 @@ class _PetPreviewAvatar extends StatelessWidget {
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   // 이미지 로드 실패 시 폴백
-                  return _buildEmojiAvatar(context);
+                  return _buildBreedAvatar(context);
                 },
               ),
             );
           }
           // 파일이 존재하지 않으면 품종 아이콘/이모지
-          return _buildEmojiAvatar(context);
+          return _buildBreedAvatar(context);
         },
       );
     }
 
     // 스티커가 없으면 품종 아이콘/이모지 표시
-    return _buildEmojiAvatar(context);
+    return _buildBreedAvatar(context);
   }
 
-  Widget _buildEmojiAvatar(BuildContext context) {
+  Widget _buildBreedAvatar(BuildContext context) {
     final breedIcon = BreedAssets.iconForBreed(
       breed,
       AppLocalizations.of(context),
       size: 120,
     );
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        breedIcon ??
-            const Text(
-              '🐕',
-              style: TextStyle(fontSize: 100),
-            ),
-        // 액세서리 표시
-        if (selectedAccessory != PetAccessory.none)
-          Positioned(
-            top: 10,
-            child: Text(
-              getAccessoryEmoji(selectedAccessory),
-              style: const TextStyle(fontSize: 30),
-            ),
-          ),
-      ],
-    );
+    return breedIcon ??
+        const Text(
+          '🐕',
+          style: TextStyle(fontSize: 100),
+        );
   }
 }
