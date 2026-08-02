@@ -39,8 +39,49 @@ class CosmeticTiers {
     StickerBackground.gradient,
   };
 
+  /// 무료로 열어두는 품종 (Phase 29-5).
+  ///
+  /// `Shiba Inu`는 서버 기본값이기도 해서 반드시 포함되어야 한다.
+  static const Set<String> freeBreeds = {
+    'Golden Retriever',
+    'Labrador',
+    'Shiba Inu',
+  };
+
+  /// 무료로 열어두는 색상. `golden`은 UI 기본값이라 반드시 포함.
+  static const Set<String> freeColors = {
+    'golden',
+    'brown',
+    'black',
+  };
+
   static bool isAccessoryLocked(PetAccessory a, {required bool isPremium}) =>
       !isPremium && !freeAccessories.contains(a);
+
+  /// 품종 잠금 여부.
+  ///
+  /// ⚠️ **[currentPetBreed]는 절대 잠기지 않는다.** 온보딩은 8품종을 모두
+  /// 열어주므로, 무료 집합에 없는 품종(예: Husky)을 고른 사람이 나온다.
+  /// 그걸 잠그면 "내 개 품종을 내가 못 쓰는" 상태가 되고, 생성 시 서버가
+  /// 기본값(Shiba Inu)으로 바꿔 **자기 개가 조용히 다른 개가 된다.**
+  ///
+  /// ⚠️ 대신 품종·색상 잠금은 **클라이언트 전용**이다. 펫은 Isar(로컬)에만
+  /// 있어 서버가 "이 사람의 원래 품종"을 알 수 없어서, 액세서리처럼
+  /// 서버에서 강등할 수 없다(강등하면 위의 정당한 Husky 이용자가 깨진다).
+  /// 원가 영향이 없는 축이라 감수한 트레이드오프.
+  static bool isBreedLocked(
+    String breed, {
+    required bool isPremium,
+    String? currentPetBreed,
+  }) {
+    if (isPremium) return false;
+    if (freeBreeds.contains(breed)) return false;
+    if (currentPetBreed != null && breed == currentPetBreed) return false;
+    return true;
+  }
+
+  static bool isColorLocked(String color, {required bool isPremium}) =>
+      !isPremium && !freeColors.contains(color);
 
   static bool isStyleLocked(StickerStyle s, {required bool isPremium}) =>
       !isPremium && !freeStyles.contains(s);

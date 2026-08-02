@@ -220,6 +220,59 @@ void main() {
     );
   });
 
+  // ---- 품종·색상 잠금 (Phase 29-5) ----
+  //
+  // 이 둘은 **클라이언트 전용 잠금**이다. 펫이 Isar(로컬)에만 있어 서버가
+  // "이 이용자의 원래 품종"을 알 수 없고, 모른 채 강등하면 온보딩에서
+  // Husky를 고른 정당한 이용자의 개가 Shiba Inu로 바뀐다.
+  // 그래서 서버엔 FREE_BREEDS/FREE_COLORS가 없고, 대신 아래 불변식을 지킨다.
+
+  Set<String> clientFreeStrings(String field) {
+    final source =
+        File('lib/core/constants/cosmetic_tiers.dart').readAsStringSync();
+    final start = source.indexOf('$field = {');
+    expect(start, greaterThanOrEqualTo(0), reason: '$field를 찾지 못함');
+    final end = source.indexOf('};', start);
+    return RegExp(r"'([^']+)'")
+        .allMatches(source.substring(start, end))
+        .map((m) => m.group(1)!)
+        .toSet();
+  }
+
+  test('무료 품종이 전체 품종 목록의 부분집합', () {
+    final free = clientFreeStrings('freeBreeds');
+    expect(free, isNotEmpty);
+    expect(free.difference(listValues('_breeds')), isEmpty,
+        reason: '목록에 없는 품종을 무료로 열어봐야 화면에 뜨지 않는다');
+  });
+
+  test('무료 색상이 전체 색상 목록의 부분집합', () {
+    final free = clientFreeStrings('freeColors');
+    expect(free, isNotEmpty);
+    expect(free.difference(listValues('_colors')), isEmpty);
+  });
+
+  test('서버 기본 품종은 무료여야 한다', () {
+    // genStickerFree가 알 수 없는 품종을 이 값으로 대체한다.
+    // 이게 잠겨 있으면 강등된 이용자가 **선택할 수도 없는 품종**에 갇힌다.
+    expect(
+      clientFreeStrings('freeBreeds'),
+      contains('Shiba Inu'),
+      reason: '서버 fallback 품종이 무료 집합에 없다',
+    );
+  });
+
+  test('UI 기본 색상은 무료여야 한다', () {
+    // customize_screen의 `_color` 초기값. 잠겨 있으면 신규 무료 이용자가
+    // 시작부터 잠긴 색을 선택한 상태가 된다.
+    final source =
+        File('lib/presentation/screens/customize/customize_screen.dart')
+            .readAsStringSync();
+    final m = RegExp(r"String _color = '(\w+)'").firstMatch(source);
+    expect(m, isNotNull, reason: '_color 기본값을 파싱하지 못함');
+    expect(clientFreeStrings('freeColors'), contains(m!.group(1)));
+  });
+
   test('none을 뺀 모든 액세서리가 프롬프트 조각을 가짐', () {
     for (final a in enumJsonValues('StickerAccessory')) {
       if (a == 'none') continue;

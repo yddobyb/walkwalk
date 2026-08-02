@@ -266,7 +266,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildBreedSelector(theme),
+            _buildBreedSelector(theme, isPremium),
 
             const SizedBox(height: 32),
 
@@ -278,7 +278,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildColorSelector(theme),
+            _buildColorSelector(theme, isPremium),
 
             const SizedBox(height: 32),
 
@@ -638,7 +638,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
   }
 
-  Widget _buildBreedSelector(ThemeData theme) {
+  Widget _buildBreedSelector(ThemeData theme, bool isPremium) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -652,13 +652,22 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       itemBuilder: (context, index) {
         final breed = _breeds[index];
         final isSelected = _breed == breed['value'];
+        // 펫이 지금 가진 품종은 절대 잠그지 않는다 — 온보딩에서 고른
+        // 자기 개 품종을 못 쓰게 되면 생성 시 서버 기본값으로 바뀐다
+        final locked = CosmeticTiers.isBreedLocked(
+          breed['value']!,
+          isPremium: isPremium,
+          currentPetBreed: ref.read(activePetProvider).valueOrNull?.breed,
+        );
 
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _breed = breed['value']!;
-            });
-          },
+        final tile = GestureDetector(
+          onTap: locked
+              ? _openPaywall
+              : () {
+                  setState(() {
+                    _breed = breed['value']!;
+                  });
+                },
           child: Container(
             decoration: BoxDecoration(
               color: isSelected
@@ -702,6 +711,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
             ),
           ),
         );
+
+        return locked ? LockedOptionOverlay(child: tile) : tile;
       },
     );
   }
@@ -749,7 +760,7 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
   }
 
-  Widget _buildColorSelector(ThemeData theme) {
+  Widget _buildColorSelector(ThemeData theme, bool isPremium) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -763,13 +774,19 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
       itemBuilder: (context, index) {
         final colorData = _colors[index];
         final isSelected = _color == colorData['value'];
+        final locked = CosmeticTiers.isColorLocked(
+          colorData['value'] as String,
+          isPremium: isPremium,
+        );
 
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _color = colorData['value'] as String;
-            });
-          },
+        final tile = GestureDetector(
+          onTap: locked
+              ? _openPaywall
+              : () {
+                  setState(() {
+                    _color = colorData['value'] as String;
+                  });
+                },
           child: Container(
             decoration: BoxDecoration(
               color: isSelected
@@ -822,6 +839,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
             ),
           ),
         );
+
+        return locked ? LockedOptionOverlay(child: tile) : tile;
       },
     );
   }
