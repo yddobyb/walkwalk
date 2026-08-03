@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
+import 'core/services/crash_reporting_service.dart';
 import 'core/services/firebase_service.dart';
 import 'data/datasources/database_service.dart';
 import 'services/analytics/analytics_service.dart';
@@ -29,6 +30,11 @@ void main() async {
 
   // Week 3: Firebase 초기화
   await FirebaseService.initialize();
+
+  // 크래시 수집은 Firebase 직후, 나머지 서비스보다 먼저 건다.
+  // 아래 초기화들에서 터지는 오류도 잡아야 하기 때문.
+  await CrashReportingService.initialize();
+
   await RemoteConfigService.initialize();
   await AnalyticsService.initialize();
 

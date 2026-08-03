@@ -105,7 +105,7 @@
   <ul>
     <li>디바이스 식별자, OS 버전, 앱 버전</li>
     <li>화면 조회, 기능 사용 빈도(Firebase Analytics)</li>
-    <li>오류 및 크래시 로그</li>
+    <li>오류 및 크래시 로그(Firebase Crashlytics) — 진단 목적. 이용자가 입력한 내용이나 생성 프롬프트는 포함하지 않습니다</li>
     <li>광고 식별자(IDFA/광고 ID) 및 광고 상호작용 데이터 — 광고 제공·측정(Google AdMob, 무료 이용자 한정)</li>
   </ul>
   <h3>1-4. 단말기에만 저장되는 정보(서버 전송 안 함)</h3>
@@ -161,7 +161,7 @@
       <tr><th>이전받는 자</th><th>이전 국가</th><th>이전 항목</th><th>이전 목적</th><th>보유·이용 기간</th></tr>
     </thead>
     <tbody>
-      <tr><td>Google LLC (Firebase, Gemini, AdMob)</td><td>미국 등</td><td>UID, 펫 프로필, 사용량, 기기·분석 정보, 광고 식별자</td><td>인증·데이터 저장·AI 처리·통계·광고</td><td>이용 목적 달성 시까지(각사 정책에 따름)</td></tr>
+      <tr><td>Google LLC (Firebase, Crashlytics, Gemini, AdMob)</td><td>미국 등</td><td>UID, 펫 프로필, 사용량, 기기·분석 정보, 진단·크래시 정보, 광고 식별자</td><td>인증·데이터 저장·AI 처리·통계·오류 진단·광고</td><td>이용 목적 달성 시까지(각사 정책에 따름)</td></tr>
       <tr><td>OpenAI, L.L.C.</td><td>미국</td><td>이미지 생성 요청 파라미터(품종·색상·스타일 등)</td><td>이미지 생성(폴백)</td><td>처리 후 각사 정책에 따라 보관·삭제</td></tr>
       <tr><td>Cloudflare, Inc.</td><td>미국</td><td>이미지 생성 요청 파라미터</td><td>이미지 생성(1차)</td><td>처리 후 각사 정책에 따라 보관·삭제</td></tr>
       <tr><td>OpenRouter, Inc. / Groq, Inc.</td><td>미국</td><td>펫 이름·품종·행복도·상황 값</td><td>펫 한마디 문구 생성</td><td>처리 후 각사 정책에 따라 보관·삭제</td></tr>
@@ -248,7 +248,7 @@
   <ul>
     <li>Device identifier, OS version, app version</li>
     <li>Screen views and feature usage frequency (Firebase Analytics)</li>
-    <li>Error and crash logs</li>
+    <li>Error and crash logs (Firebase Crashlytics) — for diagnostics. User-entered content and generation prompts are not included</li>
     <li>Advertising identifier (IDFA / Advertising ID) and ad interaction data — ad serving and measurement (Google AdMob, free tier only)</li>
   </ul>
   <h3>1-4. Stored Locally Only (Never Sent to Servers)</h3>
@@ -304,7 +304,7 @@
       <tr><th>Recipient</th><th>Country</th><th>Data transferred</th><th>Purpose</th><th>Retention</th></tr>
     </thead>
     <tbody>
-      <tr><td>Google LLC (Firebase, Gemini, AdMob)</td><td>United States and others</td><td>UID, pet profile, usage counts, device/analytics data, advertising identifier</td><td>Authentication, storage, AI processing, analytics, ads</td><td>Until the purpose is fulfilled (per provider policy)</td></tr>
+      <tr><td>Google LLC (Firebase, Crashlytics, Gemini, AdMob)</td><td>United States and others</td><td>UID, pet profile, usage counts, device/analytics data, diagnostic/crash data, advertising identifier</td><td>Authentication, storage, AI processing, analytics, crash diagnostics, ads</td><td>Until the purpose is fulfilled (per provider policy)</td></tr>
       <tr><td>OpenAI, L.L.C.</td><td>United States</td><td>Image generation parameters (breed, color, style)</td><td>Image generation (fallback)</td><td>Retained/deleted per provider policy</td></tr>
       <tr><td>Cloudflare, Inc.</td><td>United States</td><td>Image generation parameters</td><td>Image generation (primary)</td><td>Retained/deleted per provider policy</td></tr>
       <tr><td>OpenRouter, Inc. / Groq, Inc.</td><td>United States</td><td>Pet name, breed, happiness level, context values</td><td>Generating pet remarks</td><td>Retained/deleted per provider policy</td></tr>
