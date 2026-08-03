@@ -83,6 +83,27 @@ class CosmeticTiers {
   static bool isColorLocked(String color, {required bool isPremium}) =>
       !isPremium && !freeColors.contains(color);
 
+  /// 지금 등급에서 **실제로 착용 중인 것으로 취급할** 액세서리 (Phase 29-8).
+  ///
+  /// 구독이 끝난 이용자는 `pet.accessory`에 프리미엄 액세서리(예: 왕관)가
+  /// 남는다. 그대로 두면 세 화면이 서로 다른 말을 했다 —
+  /// 홈 배지는 왕관을 보여주고, 커스터마이즈는 잠긴 채 선택돼 있고,
+  /// 정작 생성된 스티커엔 왕관이 없었다(서버가 `none`으로 강등).
+  /// **아무 안내도 없어서 "생성이 고장났다"로 읽힌다.**
+  ///
+  /// 그래서 표시·전송은 전부 이 함수를 거쳐 한 가지 답만 내놓는다.
+  ///
+  /// ⚠️ **저장된 값(`pet.accessory`)은 건드리지 않는다.** 권한은 만료돼도
+  /// 데이터는 남겨서, 재구독하면 왕관이 그대로 돌아온다.
+  /// (해지 시점에 `none`으로 밀어버리면 복구가 불가능해진다)
+  static PetAccessory effectiveAccessory(
+    PetAccessory stored, {
+    required bool isPremium,
+  }) =>
+      isAccessoryLocked(stored, isPremium: isPremium)
+          ? PetAccessory.none
+          : stored;
+
   static bool isStyleLocked(StickerStyle s, {required bool isPremium}) =>
       !isPremium && !freeStyles.contains(s);
 

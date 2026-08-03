@@ -7,6 +7,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../services/pet/pet_reward_service.dart';
 import 'pet_dialogue_widget.dart';
 import '../../../../core/utils/breed_assets.dart';
+import '../../../../core/constants/cosmetic_tiers.dart';
+import '../../../../services/user/user_tier_providers.dart';
 import '../../../widgets/accessory_badge.dart';
 
 class PetAvatarWidget extends ConsumerWidget {
@@ -83,6 +85,12 @@ class PetAvatarWidget extends ConsumerWidget {
     final theme = Theme.of(context);
     final activePetAsync = ref.watch(activePetProvider);
 
+    // 구독이 끝나면 프리미엄 액세서리는 표시에서도 빠진다 — 저장된 값은
+    // 그대로 남아 재구독 시 돌아온다 (CosmeticTiers.effectiveAccessory 참조).
+    // 등급 미확정이면 프리미엄으로 간주(결제자에게 잠깐이라도 사라져 보이는
+    // 게 더 나쁘다). AdBanner·커스터마이즈 잠금과 같은 규칙.
+    final isPremium = ref.watch(isPremiumUserProvider).valueOrNull ?? true;
+
     return activePetAsync.when(
       data: (pet) {
         final l10n = AppLocalizations.of(context);
@@ -139,7 +147,12 @@ class PetAvatarWidget extends ConsumerWidget {
                         Positioned(
                           right: 4,
                           bottom: 4,
-                          child: AccessoryBadge(accessory: pet.accessory),
+                          child: AccessoryBadge(
+                            accessory: CosmeticTiers.effectiveAccessory(
+                              pet.accessory,
+                              isPremium: isPremium,
+                            ),
+                          ),
                         ),
                     ],
                   ),

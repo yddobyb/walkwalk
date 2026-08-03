@@ -100,7 +100,8 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     // 등급 미확정(null)이면 잠금을 걸지 않는다 — 결제한 이용자에게 자물쇠가
     // 잠깐이라도 보이는 편이 더 나쁘고, 실제 차단은 서버가 한다
     // (`genStickerFree`의 restrictToFreeTier). AdBanner와 같은 규칙.
-    final isPremium = ref.watch(isPremiumUserProvider).valueOrNull ?? true;
+    final tierAsync = ref.watch(isPremiumUserProvider);
+    final isPremium = tierAsync.valueOrNull ?? true;
 
     // 온보딩에서 선택한 품종으로 이미지 생성 기본값 설정 (최초 1회)
     if (!_breedInitialized && petAsync.hasValue && petAsync.value != null) {
@@ -112,8 +113,20 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     }
 
     // 저장된 착용 액세서리를 최초 1회 불러온다 (앱 재시작 후에도 유지).
-    if (!_accessoryInitialized && petAsync.hasValue && petAsync.value != null) {
-      _selectedAccessory = petAsync.value!.accessory;
+    //
+    // ⚠️ **등급이 확정된 뒤에만** 초기화한다. 미확정일 땐 위 `isPremium`이
+    // true로 떨어지므로, 그때 읽으면 구독이 끝난 이용자의 잠긴 액세서리가
+    // 그대로 들어온 채 `_accessoryInitialized`가 잠겨 다시 평가되지 않는다.
+    if (!_accessoryInitialized &&
+        petAsync.hasValue &&
+        petAsync.value != null &&
+        tierAsync.hasValue) {
+      // 잠긴 액세서리는 착용하지 않은 것으로 취급 — 배지·미리보기·생성이
+      // 서로 다른 말을 하지 않게. 저장된 값은 그대로 두어 재구독 시 복귀.
+      _selectedAccessory = CosmeticTiers.effectiveAccessory(
+        petAsync.value!.accessory,
+        isPremium: isPremium,
+      );
       _accessoryInitialized = true;
     }
 
