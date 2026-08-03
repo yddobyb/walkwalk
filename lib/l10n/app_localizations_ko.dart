@@ -1982,4 +1982,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get breedChangeKeep => '그대로 두기';
+
+  @override
+  String get breedChangeApplyAnyway => '그래도 적용하기';
 }

@@ -29,6 +29,7 @@ import '../../widgets/ai_generated_badge.dart';
 import '../../widgets/report_content_sheet.dart';
 import '../../widgets/reset_countdown.dart';
 import '../subscription/paywall_screen.dart';
+import 'widgets/breed_change_sheet.dart';
 import 'widgets/out_of_quota_sheet.dart';
 
 class CustomizeScreen extends ConsumerStatefulWidget {
@@ -1086,28 +1087,13 @@ class _CustomizeScreenState extends ConsumerState<CustomizeScreen> {
     // 지금 품종이 무료 집합에 있으면 바꿔도 언제든 되돌릴 수 있다
     if (CosmeticTiers.freeBreeds.contains(current)) return true;
 
-    final l10n = AppLocalizations.of(context);
-    final proceed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.breedChangeWarningTitle),
-        content: Text(l10n.breedChangeWarningBody(
-          _getBreedName(current),
-          _getBreedName(_breed),
-        )),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.breedChangeKeep),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.apply),
-          ),
-        ],
-      ),
+    return BreedChangeSheet.show(
+      context,
+      currentBreedValue: current,
+      newBreedValue: _breed,
+      currentBreedName: _getBreedName(current),
+      newBreedName: _getBreedName(_breed),
     );
-    return proceed ?? false;
   }
 
   /// 스티커 적용 (저장 및 Pet 업데이트 + 품종 동기화)

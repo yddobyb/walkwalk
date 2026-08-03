@@ -2027,4 +2027,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get breedChangeKeep => 'Keep current breed';
+
+  @override
+  String get breedChangeApplyAnyway => 'Apply anyway';
 }

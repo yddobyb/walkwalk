@@ -3775,6 +3775,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep current breed'**
   String get breedChangeKeep;
+
+  /// Button that proceeds with the irreversible breed change
+  ///
+  /// In en, this message translates to:
+  /// **'Apply anyway'**
+  String get breedChangeApplyAnyway;
 }
 
 class _AppLocalizationsDelegate

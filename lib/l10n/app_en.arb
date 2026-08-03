@@ -3132,5 +3132,10 @@
   "breedChangeKeep": "Keep current breed",
   "@breedChangeKeep": {
     "description": "Button that cancels the breed change"
+  },
+
+  "breedChangeApplyAnyway": "Apply anyway",
+  "@breedChangeApplyAnyway": {
+    "description": "Button that proceeds with the irreversible breed change"
   }
 }

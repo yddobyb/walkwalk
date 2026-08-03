@@ -2845,5 +2845,10 @@
   "breedChangeKeep": "그대로 두기",
   "@breedChangeKeep": {
     "description": "Button that cancels the breed change"
+  },
+
+  "breedChangeApplyAnyway": "그래도 적용하기",
+  "@breedChangeApplyAnyway": {
+    "description": "Button that proceeds with the irreversible breed change"
   }
 }
